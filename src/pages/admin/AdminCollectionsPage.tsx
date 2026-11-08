@@ -99,10 +99,10 @@ export const AdminCollectionsPage: React.FC = () => {
             <label className="block text-charcoal-muted">Đường dẫn (slug)<input value={editingCol.slug || ''} onChange={e => setEditingCol({ ...editingCol, slug: e.target.value })} className="mt-1 w-full border border-paper-border bg-paper-warm px-3 py-2 text-charcoal" required/></label>
             <label className="block text-charcoal-muted">Mô tả<textarea rows={3} value={editingCol.description || ''} onChange={e => setEditingCol({ ...editingCol, description: e.target.value })} className="mt-1 w-full border border-paper-border bg-paper-warm px-3 py-2 text-charcoal" required/></label>
             <AdminImagePicker
-              label="URL ảnh bìa"
+              label="Ảnh bìa"
               value={editingCol.heroImage || ''}
               onChange={url => setEditingCol({ ...editingCol, heroImage: url })}
-              placeholder="/3D/chua-mot-cot-poster.webp hoặc dán link ảnh..."
+              placeholder="Dán liên kết ảnh tại đây"
               required
             />
             <div className="grid grid-cols-2 gap-3"><label className="block text-charcoal-muted">Thứ tự<input type="number" min="1" value={editingCol.displayOrder || 1} onChange={e => setEditingCol({ ...editingCol, displayOrder: Number(e.target.value) })} className="mt-1 w-full border border-paper-border bg-paper-warm px-3 py-2 text-charcoal"/></label><label className="block text-charcoal-muted">Trạng thái<select value={editingCol.status || 'published'} onChange={e => setEditingCol({ ...editingCol, status: e.target.value as Collection['status'] })} className="mt-1 w-full border border-paper-border bg-paper-warm px-3 py-2 text-charcoal"><option value="published">Xuất bản</option><option value="draft">Bản nháp</option><option value="hidden">Ẩn</option></select></label></div>

@@ -765,7 +765,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                     label="Hình Ảnh Tư Liệu / Hiện Vật Thực Địa"
                     value={editingBlock.mediaUrl || ''}
                     onChange={(url) => setEditingBlock({ ...editingBlock, mediaUrl: url })}
-                    placeholder="/3D/chua-mot-cot-poster.webp hoặc URL Cloudinary/web..."
+                    placeholder="Dán liên kết ảnh tại đây"
                   />
 
                   <div>

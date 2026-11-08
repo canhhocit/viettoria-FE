@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Box, 
@@ -9,7 +9,10 @@ import {
   XCircle, 
   ExternalLink,
   BookOpen,
-  X
+  X,
+  Upload,
+  Loader2,
+  Check,
 } from 'lucide-react';
 import { adminApi } from '../../services/api';
 import type { Product, Collection } from '../../types';
@@ -27,6 +30,11 @@ export const AdminProductsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Partial<Product> | null>(null);
+  const modelFileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingModel, setUploadingModel] = useState(false);
+  const [modelUploadMessage, setModelUploadMessage] = useState<string | null>(null);
+  const [editingModelLink, setEditingModelLink] = useState(false);
+  const [modelLinkDraft, setModelLinkDraft] = useState('');
 
   const loadData = async () => {
     setLoading(true);
@@ -47,6 +55,9 @@ export const AdminProductsPage: React.FC = () => {
   }, []);
 
   const handleOpenAdd = () => {
+    setEditingModelLink(false);
+    setModelLinkDraft('');
+    setModelUploadMessage(null);
     setEditingProduct({
       code: `VT-NEW-00${products.length + 1}`,
       name: '',
@@ -76,7 +87,35 @@ export const AdminProductsPage: React.FC = () => {
 
   const handleOpenEdit = (product: Product) => {
     setEditingProduct({ ...product });
+    setEditingModelLink(false);
+    setModelLinkDraft('');
+    setModelUploadMessage(null);
     setIsModalOpen(true);
+  };
+
+  const handleModelFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file || !editingProduct) return;
+    if (!file.name.toLowerCase().endsWith('.glb')) {
+      setModelUploadMessage('Chọn tệp mô hình 3D hợp lệ.');
+      return;
+    }
+
+    setUploadingModel(true);
+    setModelUploadMessage(null);
+    try {
+      const name = file.name.replace(/\.glb$/i, '');
+      const result = await adminApi.uploadMediaAsset(file, name, editingProduct.name || name);
+      setEditingProduct(current => current ? { ...current, model3dUrl: result.item.url } : current);
+      setModelLinkDraft('');
+      setEditingModelLink(false);
+      setModelUploadMessage('Đã tải mô hình lên.');
+    } catch {
+      setModelUploadMessage('Không thể tải mô hình lên. Vui lòng thử lại.');
+    } finally {
+      setUploadingModel(false);
+    }
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -415,21 +454,40 @@ export const AdminProductsPage: React.FC = () => {
 
               <div className="space-y-4">
                 <AdminImagePicker
-                  label="URL Ảnh Bìa Đại Diện"
+                  label="Ảnh bìa đại diện"
                   value={editingProduct.heroImage || ''}
                   onChange={url => setEditingProduct({ ...editingProduct, heroImage: url })}
-                  placeholder="/3D/chua-mot-cot-poster.webp hoặc URL Cloudinary..."
+                  placeholder="Dán liên kết ảnh tại đây"
                   required
                 />
                 <div>
-                  <label className="block text-charcoal-muted uppercase mb-1">Đường Dẫn Mô Hình 3D (.glb)</label>
-                  <input
-                    type="text"
-                    value={editingProduct.model3dUrl || ''}
-                    onChange={e => setEditingProduct({ ...editingProduct, model3dUrl: e.target.value })}
-                  placeholder="/3D/chua-mot-cot.glb hoặc URL Cloudinary/backend"
-                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border focus:border-brass focus:outline-none"
-                  />
+                  <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                    <label htmlFor="product-model-link" className="block text-charcoal-muted uppercase">Mô hình 3D</label>
+                    <button type="button" onClick={() => modelFileInputRef.current?.click()} disabled={uploadingModel} className="inline-flex items-center gap-1.5 border border-paper-border bg-paper-warm px-2.5 py-1.5 text-xs text-forest transition-colors hover:border-brass disabled:opacity-50">
+                      {uploadingModel ? <Loader2 className="h-3.5 w-3.5 animate-spin text-brass" /> : <Upload className="h-3.5 w-3.5 text-brass" />}
+                      Tải mô hình lên
+                    </button>
+                    <input ref={modelFileInputRef} type="file" accept=".glb,model/gltf-binary" onChange={event => void handleModelFileChange(event)} className="hidden" />
+                  </div>
+                  {editingProduct.model3dUrl && !editingModelLink ? (
+                    <div className="flex min-h-10 items-center justify-between gap-3 border border-paper-border bg-paper-warm px-3 py-2 text-xs text-charcoal">
+                      <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-brass" />Đang sử dụng mô hình đã chọn</span>
+                      <button type="button" onClick={() => { setModelLinkDraft(''); setEditingModelLink(true); }} className="shrink-0 text-brown underline-offset-2 hover:underline">Dán liên kết khác</button>
+                    </div>
+                  ) : (
+                    <div className="relative">
+                      <input
+                        id="product-model-link"
+                        type="text"
+                        value={modelLinkDraft}
+                        onChange={event => { setModelLinkDraft(event.target.value); setEditingModelLink(true); setEditingProduct({ ...editingProduct, model3dUrl: event.target.value }); }}
+                        placeholder="Dán liên kết mô hình tại đây"
+                        className="w-full border border-paper-border bg-paper-warm px-3 py-2 pr-9 text-sm focus:border-brass focus:outline-none"
+                      />
+                      {editingProduct.model3dUrl && <button type="button" onClick={() => { setEditingProduct({ ...editingProduct, model3dUrl: '' }); setModelLinkDraft(''); setEditingModelLink(false); }} className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-charcoal-muted hover:text-terracotta" title="Gỡ mô hình" aria-label="Gỡ mô hình"><X className="h-3.5 w-3.5" /></button>}
+                    </div>
+                  )}
+                  {modelUploadMessage && <p role="status" className="mt-1.5 text-xs text-charcoal-muted">{modelUploadMessage}</p>}
                 </div>
               </div>
 
@@ -443,7 +501,7 @@ export const AdminProductsPage: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  disabled={saving}
+                  disabled={saving || uploadingModel}
                   className="px-6 py-2 bg-forest text-paper hover:bg-brass uppercase tracking-wider font-bold shadow-md disabled:opacity-50"
                 >
                   {saving ? 'Đang lưu…' : 'Lưu Thông Tin'}

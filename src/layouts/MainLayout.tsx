@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
 import { QRScanModal } from '../components/common/QRScanModal';
+import { PageScrollProgress } from '../components/common/PageScrollProgress';
 
 export const MainLayout: React.FC = () => {
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
@@ -10,6 +11,7 @@ export const MainLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-paper text-charcoal font-sans selection:bg-brass selection:text-white">
+      <PageScrollProgress />
       {/* Editorial Header */}
       <Header onOpenQRModal={() => setIsQRModalOpen(true)} />
 

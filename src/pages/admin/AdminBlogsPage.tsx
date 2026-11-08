@@ -82,10 +82,10 @@ export const AdminBlogsPage: React.FC = () => {
           <label className="block text-charcoal-muted">Đoạn trích<textarea rows={2} value={editingBlog.excerpt || ''} onChange={e => setEditingBlog({ ...editingBlog, excerpt: e.target.value })} className="mt-1 w-full border border-paper-border bg-paper-warm px-3 py-2 text-charcoal" required/></label>
           <label className="block text-charcoal-muted">Nội dung<textarea rows={8} value={editingBlog.content || ''} onChange={e => setEditingBlog({ ...editingBlog, content: e.target.value })} className="mt-1 w-full border border-paper-border bg-paper-warm px-3 py-2 text-charcoal" required/></label>
           <AdminImagePicker
-            label="URL ảnh bìa"
+            label="Ảnh bìa"
             value={editingBlog.coverImage || ''}
             onChange={url => setEditingBlog({ ...editingBlog, coverImage: url })}
-            placeholder="/3D/chua-mot-cot-poster.webp hoặc dán link ảnh web..."
+            placeholder="Dán liên kết ảnh tại đây"
             required
           />
           {error && <div role="alert" className="text-terracotta">{error}</div>}

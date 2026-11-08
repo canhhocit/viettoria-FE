@@ -28,10 +28,10 @@ interface AdminImagePickerProps {
 }
 
 export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
-  label = 'URL ảnh bìa',
+  label = 'Ảnh minh họa',
   value,
   onChange,
-  placeholder = 'Nhập hoặc dán link ảnh (https://..., /3D/..., /viettoria_img/...)',
+  placeholder = 'Dán liên kết ảnh tại đây',
   required = false,
   helpText,
   disabled = false,
@@ -45,6 +45,8 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
+  const [isEditingLink, setIsEditingLink] = useState(false);
+  const [linkDraft, setLinkDraft] = useState('');
 
   // Library modal states
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
@@ -108,11 +110,9 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
       const displayName = file.name.replace(/\.[^.]+$/, '');
       const result = await adminApi.uploadMediaAsset(file, displayName, displayName);
       onChange(result.item.url);
-      setUploadSuccess(
-        result.storage === 'backend'
-          ? 'Đã lưu ảnh trên backend máy chủ'
-          : 'Đã tải ảnh lên Cloudinary thành công!'
-      );
+      setLinkDraft('');
+      setIsEditingLink(false);
+      setUploadSuccess('Đã tải ảnh lên.');
       setTimeout(() => setUploadSuccess(null), 4000);
     } catch (err) {
       setUploadError(err instanceof Error ? err.message : 'Không thể tải ảnh lên.');
@@ -142,8 +142,10 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
 
   const handleSelectFromLibrary = (url: string) => {
     onChange(url);
+    setLinkDraft('');
+    setIsEditingLink(false);
     setIsLibraryOpen(false);
-    setUploadSuccess('Đã chọn ảnh từ thư viện media!');
+    setUploadSuccess('Đã chọn ảnh.');
     setTimeout(() => setUploadSuccess(null), 3000);
   };
 
@@ -210,29 +212,40 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
         className="hidden"
       />
 
-      {/* URL text input */}
-      <div className="relative flex items-center">
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          required={required}
-          disabled={disabled}
-          className="w-full border border-paper-border bg-paper-warm px-3 py-2 pr-9 font-mono text-xs text-charcoal transition-colors placeholder:text-charcoal-muted/60 focus:border-brass focus:bg-paper focus:outline-none disabled:opacity-60"
-        />
-        {hasValue && !disabled && (
-          <button
-            type="button"
-            onClick={() => onChange('')}
-            className="absolute right-2 p-1 text-charcoal-muted transition-colors hover:text-terracotta"
-            title="Xóa link ảnh"
-            aria-label="Xóa link ảnh"
-          >
-            <X className="h-3.5 w-3.5" />
+      {hasValue && !isEditingLink ? (
+        <div className="flex min-h-10 items-center justify-between gap-3 border border-paper-border bg-paper-warm px-3 py-2 text-xs text-charcoal">
+          <span className="inline-flex min-w-0 items-center gap-2">
+            <ImageIcon className="h-4 w-4 shrink-0 text-brass" />
+            <span className="truncate">Đang sử dụng ảnh đã chọn</span>
+          </span>
+          <button type="button" onClick={() => { setLinkDraft(''); setIsEditingLink(true); }} className="shrink-0 text-brown underline-offset-2 hover:underline" disabled={disabled}>
+            Dán liên kết khác
           </button>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="relative flex items-center">
+          <input
+            type="text"
+            value={linkDraft}
+            onChange={(e) => { setLinkDraft(e.target.value); setIsEditingLink(true); onChange(e.target.value); }}
+            placeholder={placeholder}
+            required={required && !hasValue}
+            disabled={disabled}
+            className="w-full border border-paper-border bg-paper-warm px-3 py-2 pr-9 text-sm text-charcoal transition-colors placeholder:text-charcoal-muted/70 focus:border-brass focus:bg-paper focus:outline-none disabled:opacity-60"
+          />
+          {hasValue && !disabled && (
+            <button
+              type="button"
+              onClick={() => { onChange(''); setLinkDraft(''); setIsEditingLink(false); }}
+              className="absolute right-2 p-1 text-charcoal-muted transition-colors hover:text-terracotta"
+              title="Gỡ ảnh"
+              aria-label="Gỡ ảnh"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Status Messages */}
       {uploadError && (
@@ -261,25 +274,15 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
                 className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
               />
               <span className="absolute left-1 top-1 bg-forest/85 px-1 py-0.5 font-mono text-[9px] uppercase tracking-wider text-brass">
-                Preview
+                Ảnh hiện tại
               </span>
             </div>
 
             {/* Image Details & Quick Actions */}
             <div className="flex flex-1 flex-col justify-between w-full min-w-0 space-y-2">
               <div>
-                <p className="truncate font-mono text-[11px] text-charcoal" title={value}>
-                  {value}
-                </p>
-                <p className="font-mono text-[10px] text-charcoal-muted">
-                  {value.startsWith('http')
-                    ? 'Liên kết web / Cloudinary'
-                    : value.startsWith('/3D/')
-                    ? 'Tệp poster 3D nội bộ'
-                    : value.startsWith('/viettoria_img/')
-                    ? 'Ảnh di sản cục bộ'
-                    : 'Đường dẫn tệp'}
-                </p>
+                <p className="truncate font-serif text-sm font-semibold text-forest">Ảnh đã sẵn sàng</p>
+                <p className="text-xs text-charcoal-muted">Bạn có thể thay ảnh hoặc gỡ ảnh này.</p>
               </div>
 
               <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-paper-border/60">
@@ -288,10 +291,10 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-[11px] font-mono text-charcoal-muted transition-colors hover:text-forest"
-                  title="Mở xem kích thước gốc trong tab mới"
+                  title="Xem ảnh"
                 >
                   <ExternalLink className="h-3 w-3" />
-                  <span>Mở ảnh gốc</span>
+                  <span>Xem ảnh</span>
                 </a>
 
                 <span className="text-paper-border">|</span>
@@ -301,7 +304,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
                   onClick={() => fileInputRef.current?.click()}
                   className="text-[11px] font-mono text-charcoal-muted transition-colors hover:text-brass"
                 >
-                  Thay đổi
+                  Thay ảnh
                 </button>
 
                 <span className="text-paper-border">|</span>
@@ -401,7 +404,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
                   type="search"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Tìm theo tên tác phẩm, tên tệp hoặc URL..."
+                  placeholder="Tìm theo tên ảnh..."
                   className="w-full border border-paper-border bg-paper-warm py-2 pl-9 pr-3 font-mono text-xs text-charcoal focus:border-brass focus:outline-none"
                 />
               </div>

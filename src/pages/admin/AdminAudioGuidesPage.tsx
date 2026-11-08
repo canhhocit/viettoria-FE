@@ -24,6 +24,8 @@ export const AdminAudioGuidesPage: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [editingAudioLink, setEditingAudioLink] = useState(false);
+  const [audioLinkDraft, setAudioLinkDraft] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -51,6 +53,8 @@ export const AdminAudioGuidesPage: React.FC = () => {
   const selectProduct = (product: Product) => {
     setSelectedProductId(product.id);
     setGuide(product.audioGuide ? { ...product.audioGuide } : emptyGuide(product.name));
+    setEditingAudioLink(false);
+    setAudioLinkDraft('');
     setSelectedFile(null);
     setError(null);
     setNotice(null);
@@ -92,9 +96,9 @@ export const AdminAudioGuidesPage: React.FC = () => {
         `Bản thu hướng dẫn viên cho ${selectedProduct.name}`,
       );
       setGuide((current) => ({ ...current, audioUrl: result.item.url }));
-      setNotice(result.storage === 'backend'
-        ? `Cloudinary chưa sẵn sàng (${result.fallbackReason}); bản thu đã lưu tại backend.`
-        : 'Bản thu đã tải lên Cloudinary. Lưu hướng dẫn viên để gắn vào công trình.');
+      setEditingAudioLink(false);
+      setAudioLinkDraft('');
+      setNotice('Đã tải bản thu lên. Lưu hướng dẫn viên để gắn vào công trình.');
       setSelectedFile(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
     } catch (err) {
@@ -239,7 +243,7 @@ export const AdminAudioGuidesPage: React.FC = () => {
                   <div className="border border-brass/35 bg-paper p-2 text-brass"><Headphones className="h-4 w-4" /></div>
                   <div>
                     <h3 className="font-serif text-sm font-bold text-forest">Bản thu âm thanh</h3>
-                    <p className="mt-1 text-xs leading-relaxed text-charcoal-muted">MP3, WAV, M4A, OGG hoặc FLAC · ưu tiên Cloudinary, tự lưu backend nếu upload lỗi.</p>
+                    <p className="mt-1 text-xs leading-relaxed text-charcoal-muted">Tải bản thu lên hoặc dán liên kết âm thanh.</p>
                   </div>
                 </div>
                 <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
@@ -253,10 +257,17 @@ export const AdminAudioGuidesPage: React.FC = () => {
                   </button>
                 </div>
                 {selectedFile && <p className="mt-2 font-mono text-[10px] text-charcoal-muted">{selectedFile.name} · {(selectedFile.size / 1024 / 1024).toFixed(1)} MB</p>}
-                <label className="mt-4 block font-mono text-[10px] uppercase tracking-wider text-charcoal-muted">
-                  Hoặc nhập URL bản thu
-                  <input value={guide.audioUrl || ''} onChange={(event) => updateGuide('audioUrl', event.target.value)} disabled={isDemo} className="mt-1.5 w-full border border-paper-border bg-paper px-3 py-2.5 font-sans text-xs normal-case text-charcoal focus:border-brass focus:outline-none disabled:opacity-60" placeholder="URL Cloudinary hoặc /uploads/..." />
-                </label>
+                {guide.audioUrl && !editingAudioLink ? (
+                  <div className="mt-4 flex min-h-10 items-center justify-between gap-3 border border-paper-border bg-paper px-3 py-2 text-xs text-charcoal">
+                    <span className="inline-flex min-w-0 items-center gap-2"><Check className="h-4 w-4 shrink-0 text-brass" /><span className="truncate">Đang sử dụng bản thu đã chọn</span></span>
+                    {!isDemo && <button type="button" onClick={() => { setAudioLinkDraft(''); setEditingAudioLink(true); }} className="shrink-0 text-brown underline-offset-2 hover:underline">Dán liên kết khác</button>}
+                  </div>
+                ) : (
+                  <label className="mt-4 block font-mono text-[10px] uppercase tracking-wider text-charcoal-muted">
+                    Hoặc dán liên kết bản thu
+                    <input value={audioLinkDraft} onChange={(event) => { setAudioLinkDraft(event.target.value); setEditingAudioLink(true); updateGuide('audioUrl', event.target.value); }} disabled={isDemo} className="mt-1.5 w-full border border-paper-border bg-paper px-3 py-2.5 font-sans text-xs normal-case text-charcoal focus:border-brass focus:outline-none disabled:opacity-60" placeholder="Dán liên kết âm thanh tại đây" />
+                  </label>
+                )}
                 <audio
                   key={guide.audioUrl || 'sample-audio'}
                   controls

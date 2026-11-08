@@ -28,6 +28,29 @@ const persistAdminSession = (data: AdminLoginResult): AdminLoginResult => {
   return data;
 };
 
+const clearAdminSession = () => {
+  localStorage.removeItem('viettoria_admin_token');
+  localStorage.removeItem('viettoria_admin_user');
+  localStorage.removeItem('viettoria_admin_refresh_token');
+};
+
+const notifyAdminSessionExpired = () => {
+  clearAdminSession();
+  window.dispatchEvent(new Event('viettoria:unauthorized'));
+};
+
+const readTokenExpiry = (token: string): number | null => {
+  try {
+    const payload = token.split('.')[1];
+    if (!payload) return null;
+    const normalized = payload.replace(/-/g, '+').replace(/_/g, '/');
+    const decoded = JSON.parse(window.atob(normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '='))) as { exp?: number };
+    return typeof decoded.exp === 'number' ? decoded.exp * 1000 : null;
+  } catch {
+    return null;
+  }
+};
+
 const getAuthHeaders = (): Record<string, string> => {
   const token = localStorage.getItem('viettoria_admin_token');
   const headers: Record<string, string> = {
@@ -52,9 +75,8 @@ async function adminRequest<T>(path: string, init: RequestInit = {}): Promise<T>
   } | null;
 
   if (!response.ok || payload?.success === false) {
-    if (response.status === 401 || response.status === 403) {
-      localStorage.removeItem('viettoria_admin_token');
-      window.dispatchEvent(new Event('viettoria:unauthorized'));
+    if (response.status === 401) {
+      notifyAdminSessionExpired();
     }
     throw new Error(payload?.message || payload?.detail || `Yêu cầu thất bại (${response.status})`);
   }
@@ -77,9 +99,8 @@ async function adminMultipartRequest<T>(path: string, formData: FormData): Promi
   } | null;
 
   if (!response.ok || payload?.success === false) {
-    if (response.status === 401 || response.status === 403) {
-      localStorage.removeItem('viettoria_admin_token');
-      window.dispatchEvent(new Event('viettoria:unauthorized'));
+    if (response.status === 401) {
+      notifyAdminSessionExpired();
     }
     throw new Error(payload?.message || payload?.detail || `Yêu cầu thất bại (${response.status})`);
   }
@@ -312,12 +333,23 @@ export const adminApi = {
   },
 
   logout(): void {
-    localStorage.removeItem('viettoria_admin_token');
-    localStorage.removeItem('viettoria_admin_user');
+    clearAdminSession();
   },
 
   isAuthenticated(): boolean {
-    return Boolean(localStorage.getItem('viettoria_admin_token'));
+    const token = localStorage.getItem('viettoria_admin_token');
+    if (!token) return false;
+    const expiresAt = readTokenExpiry(token);
+    if (expiresAt !== null && expiresAt <= Date.now()) {
+      clearAdminSession();
+      return false;
+    }
+    return true;
+  },
+
+  getSessionExpiresAt(): number | null {
+    const token = localStorage.getItem('viettoria_admin_token');
+    return token ? readTokenExpiry(token) : null;
   },
 
   isDemoSession(): boolean {

@@ -35,9 +35,33 @@ export const AdminLayout: React.FC = () => {
         setUser({ fullName: 'Quản Trị Viên', username: '', avatarUrl: resolveAvatarUrl() });
       }
     }
-    const handleUnauthorized = () => navigate('/admin/login', { replace: true, state: { from: location } });
+    const handleUnauthorized = () => {
+      adminApi.logout();
+      navigate('/admin/login', { replace: true, state: { from: location } });
+    };
+    const expiresAt = adminApi.getSessionExpiresAt();
+    const expireIfNeeded = () => {
+      if (expiresAt !== null && Date.now() >= expiresAt) handleUnauthorized();
+    };
+    const expiryTimer = expiresAt === null
+      ? undefined
+      : window.setTimeout(expireIfNeeded, Math.max(0, expiresAt - Date.now()));
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') expireIfNeeded();
+    };
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === 'viettoria_admin_token' && !event.newValue) handleUnauthorized();
+    };
+
     window.addEventListener('viettoria:unauthorized', handleUnauthorized);
-    return () => window.removeEventListener('viettoria:unauthorized', handleUnauthorized);
+    window.addEventListener('storage', handleStorageChange);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      if (expiryTimer !== undefined) window.clearTimeout(expiryTimer);
+      window.removeEventListener('viettoria:unauthorized', handleUnauthorized);
+      window.removeEventListener('storage', handleStorageChange);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [navigate, location]);
 
   const handleLogout = () => {

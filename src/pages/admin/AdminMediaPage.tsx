@@ -63,16 +63,14 @@ export const AdminMediaPage: React.FC = () => {
       const displayName = assetName.trim() || getDisplayName(selectedFile.name);
       const description = altText.trim();
       const result = await adminApi.uploadMediaAsset(selectedFile, displayName, description);
-      setNotice(result.storage === 'backend'
-        ? `Cloudinary chưa sẵn sàng (${result.fallbackReason}); tệp đã được lưu trên backend.`
-        : 'Tệp đã được lưu trên Cloudinary và ghi vào thư viện.');
+      setNotice('Đã tải tệp lên thư viện.');
       setMediaList(current => [result.item, ...current]);
       setSelectedFile(null);
       setAssetName('');
       setAltText('');
       if (fileInputRef.current) fileInputRef.current.value = '';
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Không thể tải tệp lên Cloudinary.');
+      setError(err instanceof Error ? err.message : 'Không thể tải tệp lên. Vui lòng thử lại.');
     } finally {
       setUploading(false);
     }
