@@ -3,7 +3,13 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { 
   MapPin, 
   Ruler, 
-  CheckCircle 
+  CheckCircle,
+  Check,
+  Copy,
+  Download,
+  QrCode,
+  Share2,
+  X,
 } from 'lucide-react';
 import { publicApi } from '../services/api';
 import type { Product } from '../types';
@@ -20,6 +26,11 @@ export const ProductDetailPage: React.FC = () => {
   const codeParam = searchParams.get('code');
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [qrImage, setQrImage] = useState('');
+  const [qrLoading, setQrLoading] = useState(false);
+  const [qrError, setQrError] = useState('');
+  const [shareMessage, setShareMessage] = useState('');
 
   useEffect(() => {
     if (slug) {
@@ -30,6 +41,82 @@ export const ProductDetailPage: React.FC = () => {
       });
     }
   }, [slug]);
+
+  const shareUrl = product
+    ? new URL(`/products/${encodeURIComponent(product.slug)}`, window.location.origin).toString()
+    : '';
+
+  useEffect(() => {
+    if (!isShareOpen || !shareUrl) return;
+
+    let isActive = true;
+    const previousOverflow = document.body.style.overflow;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsShareOpen(false);
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+    setQrLoading(true);
+    setQrImage('');
+    setQrError('');
+    setShareMessage('');
+
+    const generateQrCode = async () => {
+      try {
+        const { default: QRCode } = await import('qrcode');
+        const image = await QRCode.toDataURL(shareUrl, {
+          errorCorrectionLevel: 'H',
+          margin: 2,
+          width: 280,
+          color: { dark: '#142820', light: '#FAF7F0' },
+        });
+        if (isActive) setQrImage(image);
+      } catch {
+        if (isActive) setQrError('Chưa tạo được mã QR. Vui lòng thử lại.');
+      } finally {
+        if (isActive) setQrLoading(false);
+      }
+    };
+    void generateQrCode();
+
+    return () => {
+      isActive = false;
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isShareOpen, shareUrl]);
+
+  const copyShareLink = async () => {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shareUrl);
+      } else {
+        const input = document.createElement('textarea');
+        input.value = shareUrl;
+        input.style.position = 'fixed';
+        input.style.opacity = '0';
+        document.body.appendChild(input);
+        input.select();
+        const copied = document.execCommand('copy');
+        input.remove();
+        if (!copied) throw new Error('Copy failed');
+      }
+      setShareMessage('Đã sao chép liên kết.');
+    } catch {
+      setShareMessage('Không sao chép được liên kết. Vui lòng thử lại.');
+    }
+  };
+
+  const downloadQrCode = () => {
+    if (!qrImage || !product) return;
+    const link = document.createElement('a');
+    link.href = qrImage;
+    link.download = `viettoria-${product.slug || 'tac-pham'}-qr.png`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
 
   if (loading) {
     return <PageLoadingHeritage message="Đang tải dữ liệu..." />;
@@ -107,7 +194,77 @@ export const ProductDetailPage: React.FC = () => {
           <p className="text-base sm:text-lg text-charcoal/85 font-normal leading-relaxed max-w-3xl">
             {product.shortDescription}
           </p>
+
+          <button
+            type="button"
+            onClick={() => setIsShareOpen(true)}
+            className="inline-flex items-center gap-2 border border-paper-border bg-paper-warm px-4 py-2.5 text-xs font-mono uppercase tracking-wider text-forest transition-colors hover:border-brass hover:bg-paper"
+          >
+            <Share2 className="h-4 w-4 text-brass" />
+            Chia sẻ tác phẩm
+          </button>
         </div>
+
+        {isShareOpen && (
+          <div
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-forest-dark/65 p-4 backdrop-blur-sm"
+            onMouseDown={(event) => { if (event.target === event.currentTarget) setIsShareOpen(false); }}
+          >
+            <section
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="product-share-title"
+              className="relative max-h-[90vh] w-full max-w-md overflow-y-auto border border-brass/70 bg-paper p-5 shadow-2xl sm:p-7"
+            >
+              <button
+                type="button"
+                onClick={() => setIsShareOpen(false)}
+                aria-label="Đóng cửa sổ chia sẻ"
+                className="absolute right-3 top-3 p-1.5 text-charcoal-muted transition-colors hover:text-forest"
+              >
+                <X className="h-5 w-5" />
+              </button>
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brass">Viettoria · Di sản Việt</p>
+              <h2 id="product-share-title" className="mt-2 pr-8 font-serif text-2xl font-bold text-forest">Chia sẻ tác phẩm</h2>
+              <p className="mt-1 text-sm text-charcoal-muted">{product.name}</p>
+
+              <div className="my-5 flex min-h-52 items-center justify-center border border-paper-border bg-paper-warm p-4">
+                {qrLoading ? (
+                  <div className="flex flex-col items-center gap-3 text-xs text-charcoal-muted" role="status">
+                    <QrCode className="h-8 w-8 animate-pulse text-brass" />
+                    <span>Đang tạo mã QR…</span>
+                  </div>
+                ) : qrImage ? (
+                  <img src={qrImage} alt={`Mã QR mở trang ${product.name}`} className="h-48 w-48 border border-paper-border bg-paper p-2" />
+                ) : (
+                  <p role="status" className="text-center text-xs text-charcoal-muted">{qrError || 'Chưa tạo được mã QR.'}</p>
+                )}
+              </div>
+
+              <div className="grid gap-2 sm:grid-cols-2">
+                <button
+                  type="button"
+                  onClick={() => void copyShareLink()}
+                  className="inline-flex min-h-11 items-center justify-center gap-2 border border-forest bg-forest px-3 py-2 text-xs font-mono uppercase tracking-wider text-paper transition-colors hover:bg-forest/90"
+                >
+                  {shareMessage === 'Đã sao chép liên kết.' ? <Check className="h-4 w-4 text-brass" /> : <Copy className="h-4 w-4 text-brass" />}
+                  {shareMessage === 'Đã sao chép liên kết.' ? 'Đã sao chép' : 'Sao chép liên kết'}
+                </button>
+                <button
+                  type="button"
+                  onClick={downloadQrCode}
+                  disabled={!qrImage || qrLoading}
+                  className="inline-flex min-h-11 items-center justify-center gap-2 border border-brass bg-brass px-3 py-2 text-xs font-mono uppercase tracking-wider text-forest transition-colors hover:bg-brass/85 disabled:cursor-wait disabled:opacity-50"
+                >
+                  <Download className="h-4 w-4" />
+                  Tải mã QR
+                </button>
+              </div>
+              {shareMessage && <p role="status" className="mt-3 text-center text-xs text-charcoal-muted">{shareMessage}</p>}
+              <p className="mt-3 break-all text-center font-mono text-[10px] text-charcoal-muted">{shareUrl}</p>
+            </section>
+          </div>
+        )}
 
         {/* Architectural Inspection Frame */}
         <section className="space-y-4">
