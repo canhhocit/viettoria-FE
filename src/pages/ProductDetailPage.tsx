@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { 
   MapPin, 
@@ -205,7 +206,7 @@ export const ProductDetailPage: React.FC = () => {
           </button>
         </div>
 
-        {isShareOpen && (
+        {isShareOpen && createPortal(
           <div
             className="fixed inset-0 z-[70] flex items-center justify-center bg-forest-dark/65 p-4 backdrop-blur-sm"
             onMouseDown={(event) => { if (event.target === event.currentTarget) setIsShareOpen(false); }}
@@ -263,7 +264,8 @@ export const ProductDetailPage: React.FC = () => {
               {shareMessage && <p role="status" className="mt-3 text-center text-xs text-charcoal-muted">{shareMessage}</p>}
               <p className="mt-3 break-all text-center font-mono text-[10px] text-charcoal-muted">{shareUrl}</p>
             </section>
-          </div>
+          </div>,
+          document.body,
         )}
 
         {/* Architectural Inspection Frame */}
