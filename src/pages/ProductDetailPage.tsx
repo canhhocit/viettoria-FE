@@ -278,13 +278,13 @@ export const ProductDetailPage: React.FC = () => {
         {/* Audio Guide Section */}
         {product.audioGuide && (
           <section className="mx-auto max-w-5xl space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="font-serif text-xl sm:text-2xl font-bold text-forest">
-                Audio Guide Thuyết Minh Lịch Sử
+            <div className="space-y-1">
+              <h2 className="font-serif text-xl font-bold text-forest sm:text-2xl">
+                Câu chuyện lịch sử
               </h2>
-              <span className="text-xs font-mono text-brass uppercase font-semibold">
-                Độc quyền cho chủ sở hữu mô hình
-              </span>
+              <p className="text-sm text-charcoal-muted">
+                Lắng nghe câu chuyện về {product.name} qua lời kể của hướng dẫn viên.
+              </p>
             </div>
 
             <AudioPlayer audioGuide={product.audioGuide} heritageName={product.name} />
