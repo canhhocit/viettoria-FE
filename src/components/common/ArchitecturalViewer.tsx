@@ -2,11 +2,9 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Box,
   Eye,
-  Layers,
   Maximize2,
   Pause,
   Play,
-  Ruler,
   X,
   ZoomIn,
 } from 'lucide-react';
@@ -179,10 +177,6 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
           </button>
         </div>
 
-        <div className="flex items-center gap-3 font-mono text-[10px] text-charcoal-muted sm:gap-4 sm:text-xs">
-          <span className="inline-flex items-center gap-1.5"><Ruler className="h-3.5 w-3.5 text-brass" />Tỷ lệ {product.modelSpecs.scale}</span>
-          <span className="inline-flex items-center gap-1.5"><Layers className="h-3.5 w-3.5 text-brass" />{product.modelSpecs.partsCount} cấu kiện</span>
-        </div>
       </header>
 
       {activeTab === '3d' ? (
