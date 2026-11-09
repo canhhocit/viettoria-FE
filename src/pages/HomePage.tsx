@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowDown, ArrowRight, Pause, Play } from 'lucide-react';
+import { ArrowDown, ArrowRight, BookOpen, Pause, Play } from 'lucide-react';
 import { publicApi } from '../services/api';
 import type { Product, Collection, BlogPost } from '../types';
 import { FALLBACK_BLOGS, FALLBACK_COLLECTIONS, FALLBACK_PRODUCTS } from '../data/fallbackData';
@@ -446,8 +446,12 @@ export const HomePage: React.FC = () => {
               <Link to="/collections" className="animate-gold-glint inline-flex min-h-12 items-center gap-3 bg-brass px-6 py-3 text-sm font-semibold text-forest transition-all hover:bg-brass-light shadow-[0_0_20px_rgba(184,138,68,0.25)] hover:shadow-[0_0_35px_rgba(184,138,68,0.5)]">
                 {t('home.heroCtaCollection', 'Khám phá bộ sưu tập')} <ArrowRight size={16} strokeWidth={1.7} />
               </Link>
-              <Link to="/about" className="inline-flex min-h-12 items-center gap-2 border border-white/45 px-5 py-3 text-sm text-paper transition-colors hover:border-brass-subtle hover:text-brass-subtle">
-                {t('home.heroCtaStory', 'Câu chuyện Viettoria')}
+              <Link
+                to="/about"
+                className="group relative inline-flex min-h-12 items-center gap-2.5 border-2 border-brass bg-paper px-6 py-3 text-sm font-semibold text-forest shadow-[0_0_25px_rgba(184,138,68,0.35)] transition-all duration-300 hover:bg-white hover:border-brass-light hover:text-brown hover:shadow-[0_0_35px_rgba(184,138,68,0.6)] hover:-translate-y-0.5"
+              >
+                <BookOpen size={16} strokeWidth={1.8} className="text-brass transition-transform duration-300 group-hover:scale-110" />
+                <span>{t('home.heroCtaStory', 'Câu chuyện Viettoria')}</span>
               </Link>
             </div>
             <div className="mt-11 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/25 pt-4 text-xs tracking-wide text-white/75">
