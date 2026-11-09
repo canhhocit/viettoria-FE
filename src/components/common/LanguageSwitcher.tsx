@@ -74,7 +74,7 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   if (variant === 'footer') {
     return (
       <div className={`flex items-center gap-3 text-xs font-mono ${className}`}>
-        <span className="flex items-center gap-1.5 text-charcoal-muted">
+        <span className="flex items-center gap-1.5 text-paper/70">
           <Globe className="w-3.5 h-3.5 text-brass" />
           <span className="hidden sm:inline">{t('footer.languageLabel', 'Ngôn ngữ:')}</span>
         </span>
@@ -83,14 +83,14 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
             const isActive = lang.code === language;
             return (
               <React.Fragment key={lang.code}>
-                {idx > 0 && <span className="text-paper-border">·</span>}
+                {idx > 0 && <span className="text-white/20">·</span>}
                 <button
                   type="button"
                   onClick={() => setLanguage(lang.code)}
                   className={`px-1.5 py-0.5 transition-colors uppercase tracking-wider ${
                     isActive
-                      ? 'text-brown font-bold underline underline-offset-4 decoration-brass'
-                      : 'text-charcoal-muted hover:text-ink'
+                      ? 'text-brass font-bold underline underline-offset-4 decoration-brass'
+                      : 'text-paper/70 hover:text-paper'
                   }`}
                   aria-pressed={isActive}
                 >

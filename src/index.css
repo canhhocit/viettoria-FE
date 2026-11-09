@@ -231,38 +231,38 @@
 
 @layer base {
   :root {
-    --heritage-paper: #E2D3BA;        /* Nền Footer - Sand Beige */
+    --heritage-paper: #FAF7F0;        /* Nền Giấy Dó Ấm Áp - Do Paper Warm Beige */
     --heritage-paper-light: #FFFFFF;  /* Nền Trắng ấm / Canvas */
-    --heritage-paper-card: #F3EBDD;   /* Khối Thẻ/Card - Soft Oat */
-    --heritage-header: #F9F4E8;       /* Nền Header - Warm Cream */
-    --heritage-outer: #15171C;        /* Nền ngoài - Dark Slate */
-    --heritage-ink: #3B2B1D;          /* Chữ chính - Deep Espresso */
-    --heritage-brown: #735735;        /* Earthy brown */
-    --heritage-brown-dark: #5B432A;
+    --heritage-paper-card: #F6F0E4;   /* Khối Thẻ/Card - Warm Parchment Beige */
+    --heritage-header: #FAF7F0;       /* Nền Header - Do Paper Warm Cream */
+    --heritage-outer: #0D1C16;        /* Nền ngoài - Deep Imperial Forest Green */
+    --heritage-ink: #1B1E1B;          /* Chữ chính - Chinese Ink Charcoal (sắc nét, đậm đà) */
+    --heritage-brown: #5F4A38;        /* Earthy brown */
+    --heritage-brown-dark: #3B2B1D;
     --heritage-button-text: #FFFFFF;  /* Chữ trên nút */
-    --heritage-paper-deep: #D8C7A5;
+    --heritage-paper-deep: #E8DCC8;
     --heritage-bronze: #8F6E4A;
     --heritage-sepia: #5F4A38;
     --heritage-line: #D8CCB8;
-    --heritage-muted: #796857;
+    --heritage-muted: #6B5B4E;
     --heritage-brass: #B88A38;
     --heritage-brass-light: #D4AF37;
-    --heritage-cinnabar: #98281A;
+    --heritage-cinnabar: #9C3D28;
     --heritage-cinnabar-dark: #7A1D12;
-    --heritage-forest: #142820;
-    --heritage-forest-dark: #0D1C16;
+    --heritage-forest: #142820;        /* Imperial Lacquer Moss Green */
+    --heritage-forest-dark: #0D1C16;   /* Deep Imperial Forest Green */
 
     /* Backward compatibility tokens */
     --color-paper: #FAF7F0;
-    --color-paper-warm: #F3EFE6;
-    --color-paper-muted: #E8E1D3;
+    --color-paper-warm: #F6F0E4;
+    --color-paper-muted: #ECE3D4;
     --color-paper-border: #D8CCB8;
     --color-forest: #142820;
     --color-forest-dark: #0D1C16;
     --color-brass: #B88A38;
     --color-brass-light: #D4AF37;
-    --color-charcoal: #3B2B1D;
-    --color-terracotta: #98281A;
+    --color-charcoal: #1B1E1B;
+    --color-terracotta: #9C3D28;
   }
 
   html {

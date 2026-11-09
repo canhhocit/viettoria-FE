@@ -221,10 +221,10 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
         {/* Header Section */}
         <div data-home-reveal className="mb-8 flex flex-col justify-between gap-5 sm:mb-10 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
-            <p className="mb-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-brass-dark">
+            <p className="mb-2.5 font-cinzel text-xs font-bold uppercase tracking-[0.2em] text-brass">
               {t('home.scrollyEyebrow', 'Một vòng qua di sản Việt')}
             </p>
-            <h2 className="font-display text-3xl leading-tight text-ink sm:text-4xl lg:text-5xl">
+            <h2 className="font-display text-3xl font-bold leading-tight text-forest sm:text-4xl lg:text-5xl">
               {t('home.scrollyHeading', 'Mỗi công trình, một câu chuyện')}
             </h2>
             <p className="mt-3.5 max-w-xl text-sm leading-relaxed text-charcoal-muted sm:text-base">
@@ -242,11 +242,11 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
                 aria-pressed={activeMobileIndex === index}
                 className={`inline-flex items-center gap-1.5 border px-3 py-1.5 text-xs font-sans transition-all ${
                   activeMobileIndex === index
-                    ? 'border-brown bg-brown text-paper-light font-medium shadow-xs'
-                    : 'border-paper-border bg-paper-warm text-brown-dark hover:border-brass hover:text-forest'
+                    ? 'border-forest bg-forest text-brass font-bold shadow-xs'
+                    : 'border-paper-border bg-paper text-forest hover:border-brass hover:text-forest hover:bg-paper-warm font-medium'
                 }`}
               >
-                <span className={`font-cinzel text-[10px] font-bold ${activeMobileIndex === index ? 'text-paper-light' : 'text-brass'}`}>
+                <span className={`font-cinzel text-[10px] font-bold ${activeMobileIndex === index ? 'text-brass-light' : 'text-brass'}`}>
                   0{index + 1}
                 </span>
                 <span>{product.name}</span>
@@ -272,16 +272,16 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
                 data-home-reveal
                 className="home-story-card corner-frame group flex h-full flex-col border border-paper-border bg-paper-card shadow-xs transition-all duration-300 hover:border-brass/70 hover:shadow-xl"
               >
-                {/* Card Plaque Top Bar */}
-                <div className="flex items-center justify-between border-b border-paper-border bg-paper-warm/60 px-4 py-2.5 text-xs">
-                  <div className="flex items-center gap-2 text-brown">
+                {/* Card Plaque Top Bar - Imperial Forest Green & Brass */}
+                <div className="flex items-center justify-between border-b border-brass/40 bg-forest px-4 py-2.5 text-xs text-paper">
+                  <div className="flex items-center gap-2">
                     <span className="font-cinzel text-xs font-bold text-brass">0{index + 1}</span>
-                    <span className="h-2.5 w-px bg-paper-deep" />
-                    <span className="truncate max-w-[150px] font-sans text-[11px] uppercase tracking-wider text-charcoal/80 font-medium">
+                    <span className="h-2.5 w-px bg-brass/40" />
+                    <span className="truncate max-w-[150px] font-sans text-[11px] uppercase tracking-wider text-paper/90 font-medium">
                       {product.location}
                     </span>
                   </div>
-                  <span className="font-cinzel text-[10px] uppercase tracking-widest text-brass-dark font-bold">
+                  <span className="font-cinzel text-[10px] uppercase tracking-widest text-brass-light font-bold">
                     {product.epoch}
                   </span>
                 </div>
@@ -307,30 +307,30 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
                 {/* Card Information Body */}
                 <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
                   <div>
-                    <h3 className="font-display text-xl sm:text-2xl font-bold leading-snug text-ink transition-colors group-hover:text-brown">
+                    <h3 className="font-display text-xl sm:text-2xl font-bold leading-snug text-forest transition-colors group-hover:text-brass-dark">
                       <Link to={`/products/${product.slug}`}>
                         {product.name}
                       </Link>
                     </h3>
-                    <p className="mt-1 font-display text-xs sm:text-sm italic text-brown">
+                    <p className="mt-1 font-display text-xs sm:text-sm italic text-brass-dark font-medium">
                       {product.subName}
                     </p>
-                    <p className="mt-3.5 text-xs sm:text-sm leading-relaxed text-charcoal-muted line-clamp-3">
+                    <p className="mt-3.5 text-xs sm:text-sm leading-relaxed text-charcoal/85 line-clamp-3">
                       {product.shortDescription}
                     </p>
                   </div>
 
                   {/* Card Action Link */}
                   <div className="mt-6 flex items-center justify-between border-t border-paper-border pt-4">
-                    <span className="font-cinzel text-[10px] font-bold uppercase tracking-wider text-brown-dark/70">
+                    <span className="font-cinzel text-[10px] font-bold uppercase tracking-wider text-charcoal-muted">
                       {product.epoch}
                     </span>
                     <Link
                       to={`/products/${product.slug}`}
-                      className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-wider text-brown transition-colors hover:text-terracotta"
+                      className="inline-flex items-center gap-1.5 text-xs font-sans font-bold uppercase tracking-wider text-forest transition-colors hover:text-brass"
                     >
                       <span>{t('common.exploreMonument', 'Tìm hiểu công trình')}</span>
-                      <ArrowRight size={13} strokeWidth={1.8} className="transition-transform group-hover:translate-x-1" />
+                      <ArrowRight size={13} strokeWidth={2} className="transition-transform group-hover:translate-x-1 text-brass" />
                     </Link>
                   </div>
                 </div>
@@ -434,9 +434,9 @@ export const HomePage: React.FC = () => {
 
         <div className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center px-5 pb-24 pt-16 sm:px-8 lg:px-16">
           <div className="max-w-[880px] animate-fade-up py-10">
-            <h1 className="font-display text-[clamp(2.75rem,5.8vw,5.5rem)] font-normal leading-[1.12] tracking-[-0.015em] text-paper">
+            <h1 className="font-display text-[clamp(2.75rem,5.8vw,5.5rem)] font-normal leading-[1.18] tracking-normal text-paper">
               <span className="block">{t('home.heroTitleLine1', 'Văn Minh')}</span>
-              <span className="heritage-gold-foil font-normal italic">{t('home.heroTitleLine2', 'Di Sản Việt')}</span>
+              <span className="heritage-gold-foil font-normal italic pb-1">{t('home.heroTitleLine2', 'Di Sản Việt')}</span>
             </h1>
             <p className="mt-6 max-w-[700px] text-lg leading-8 text-white/90 sm:text-xl sm:leading-9">
               {t('home.heroSubtitle', 'Hành trình số hóa bảo tàng, di tích và ký ức văn hóa Việt Nam qua các câu chuyện lịch sử')}
@@ -473,10 +473,10 @@ export const HomePage: React.FC = () => {
         <div data-home-reveal className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-paper-border pb-5 sm:mb-10">
           <div>
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-brass-dark">{t('home.collectionEyebrow', 'Chọn theo câu chuyện bạn yêu thích')}</p>
-            <h2 className="font-display text-3xl text-ink sm:text-4xl">{t('home.collectionHeading', 'Bộ sưu tập di sản')}</h2>
+            <h2 className="font-display text-3xl font-bold text-forest sm:text-4xl">{t('home.collectionHeading', 'Bộ sưu tập di sản')}</h2>
           </div>
-          <Link to="/collections" className="inline-flex items-center gap-2 pb-1 text-sm font-semibold text-brown hover:text-terracotta">
-            {t('common.viewAll', 'Xem tất cả')} <ArrowRight size={15} strokeWidth={1.6} />
+          <Link to="/collections" className="inline-flex items-center gap-2 pb-1 text-sm font-bold text-forest hover:text-brass transition-colors">
+            {t('common.viewAll', 'Xem tất cả')} <ArrowRight size={15} strokeWidth={2} />
           </Link>
         </div>
 
@@ -486,7 +486,7 @@ export const HomePage: React.FC = () => {
             const poster = imageFor(representative?.heroImage || collection.heroImage, representative?.slug);
             return (
               <Link key={collection.id} to={`/collections/${collection.slug}`} data-home-reveal className="group block border-b border-paper-border pb-5">
-                <div className="corner-frame relative mb-4 flex aspect-[1.32/0.9] items-center justify-center overflow-hidden border border-brass/25 bg-paper-card shadow-sm transition-all duration-300 group-hover:border-brass/70 group-hover:shadow-lg">
+                <div className="corner-frame relative mb-4 flex aspect-[1.32/0.9] items-center justify-center overflow-hidden border border-brass/30 bg-paper-card shadow-sm transition-all duration-300 group-hover:border-forest group-hover:shadow-xl">
                   <img
                     src={poster}
                     alt={collection.name}
@@ -494,14 +494,14 @@ export const HomePage: React.FC = () => {
                     onError={(event) => handleImageFallback(event, '/3D/chua-mot-cot-poster.webp')}
                     className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.035]"
                   />
-                  <span className="absolute left-3 top-3 bg-header/90 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.13em] text-brown">{collection.productsCount || 1} {t('common.monumentCount', 'tác phẩm')}</span>
+                  <span className="absolute left-3 top-3 border border-brass/40 bg-forest px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.13em] text-brass">{collection.productsCount || 1} {t('common.monumentCount', 'tác phẩm')}</span>
                 </div>
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <h3 className="font-display text-2xl text-ink transition-colors group-hover:text-brown">{collection.name}</h3>
-                    <p className="mt-1.5 line-clamp-2 text-sm leading-6 text-charcoal-muted">{collection.description}</p>
+                    <h3 className="font-display text-2xl font-bold text-forest transition-colors group-hover:text-brass-dark">{collection.name}</h3>
+                    <p className="mt-1.5 line-clamp-2 text-sm leading-6 text-charcoal/85">{collection.description}</p>
                   </div>
-                  <ArrowRight size={17} strokeWidth={1.4} className="mt-1 shrink-0 text-brass-dark transition-transform group-hover:translate-x-1" />
+                  <ArrowRight size={17} strokeWidth={2} className="mt-1 shrink-0 text-forest transition-transform group-hover:translate-x-1 group-hover:text-brass" />
                 </div>
               </Link>
             );
@@ -509,20 +509,24 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      <section className="border-y border-paper-border bg-paper-muted">
-        <div className="mx-auto grid max-w-[1440px] gap-8 px-5 py-14 sm:px-8 md:grid-cols-[0.8fr_1.2fr] lg:px-16">
+      <section className="border-y-2 border-brass/40 bg-forest text-paper">
+        <div className="mx-auto grid max-w-[1440px] gap-8 px-5 py-16 sm:px-8 md:grid-cols-[0.8fr_1.2fr] lg:px-16">
           <div data-home-reveal>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brass-dark">Ghi chép về di sản</p>
-            <h2 className="mt-3 font-display text-3xl text-ink sm:text-4xl">Câu chuyện phía sau công trình</h2>
-            <p className="mt-3 max-w-sm text-sm leading-6 text-charcoal-muted">Đọc thêm về kiến trúc, con người và những dấu mốc làm nên từng di sản.</p>
-            <Link to="/blogs" className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brown hover:text-terracotta">Đọc bài viết <ArrowRight size={14} /></Link>
+            <p className="text-xs font-cinzel font-bold uppercase tracking-[0.2em] text-brass">Ghi chép về di sản</p>
+            <h2 className="mt-3 font-display text-3xl font-bold text-paper sm:text-4xl">Câu chuyện phía sau công trình</h2>
+            <p className="mt-3 max-w-sm text-sm leading-6 text-paper/80 font-normal">Đọc thêm về kiến trúc, con người và những dấu mốc làm nên từng di sản.</p>
+            <Link to="/blogs" className="mt-6 inline-flex items-center gap-2 border border-brass bg-brass px-5 py-2.5 text-xs font-sans font-bold uppercase tracking-wider text-forest transition-all hover:bg-brass-light hover:shadow-lg">
+              Đọc bài viết <ArrowRight size={14} strokeWidth={2} />
+            </Link>
           </div>
           <div className="grid gap-5 sm:grid-cols-2">
             {blogs.slice(0, 2).map((blog, index) => (
-              <article key={blog.id} data-home-reveal className="border-t border-paper-border pt-4">
-                <p className="text-[11px] uppercase tracking-[0.14em] text-brown">{blog.category} · 0{index + 1}</p>
-                <h3 className="mt-3 font-display text-2xl leading-snug text-ink"><Link to={`/blogs/${blog.slug}`} className="transition-colors hover:text-brown">{blog.title}</Link></h3>
-                <p className="mt-2 line-clamp-2 text-sm leading-6 text-charcoal-muted">{blog.excerpt}</p>
+              <article key={blog.id} data-home-reveal className="group border-t border-brass/30 pt-4">
+                <p className="font-cinzel text-xs font-bold uppercase tracking-[0.14em] text-brass">{blog.category} · 0{index + 1}</p>
+                <h3 className="mt-3 font-display text-2xl leading-snug text-paper">
+                  <Link to={`/blogs/${blog.slug}`} className="transition-colors group-hover:text-brass-light">{blog.title}</Link>
+                </h3>
+                <p className="mt-2 line-clamp-2 text-sm leading-6 text-paper/75">{blog.excerpt}</p>
               </article>
             ))}
           </div>

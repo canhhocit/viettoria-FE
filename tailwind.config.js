@@ -52,14 +52,14 @@ export default {
           subtle: '#E2CFA8',
         },
         charcoal: {
-          DEFAULT: '#3B2B1D',
-          light: '#554231',
-          muted: '#796857',
+          DEFAULT: '#1B1E1B',
+          light: '#3B2B1D',
+          muted: '#6B5B4E',
         },
         ink: {
-          DEFAULT: '#3B2B1D',
-          light: '#554231',
-          muted: '#796857',
+          DEFAULT: '#1B1E1B',
+          light: '#3B2B1D',
+          muted: '#6B5B4E',
         },
         terracotta: {
           DEFAULT: '#98281A',

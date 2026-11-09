@@ -226,7 +226,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
             type="button"
             aria-pressed={activeTab === '3d'}
             onClick={() => setActiveTab('3d')}
-            className={`inline-flex min-h-9 items-center gap-2 border px-3 text-xs font-sans uppercase tracking-wider font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass ${activeTab === '3d' ? 'border-forest bg-forest text-paper' : 'border-transparent bg-paper-warm text-brown-dark hover:border-paper-border'}`}
+            className={`inline-flex min-h-9 items-center gap-2 border px-3 text-xs font-sans uppercase tracking-wider font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass ${activeTab === '3d' ? 'border-forest bg-forest text-paper' : 'border-paper-border bg-paper text-forest hover:border-brass hover:bg-paper-warm'}`}
           >
             <Box className="h-3.5 w-3.5" />
             {t('product.tab3d', 'Mô hình 3D')}
@@ -235,7 +235,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
             type="button"
             aria-pressed={activeTab === 'photos'}
             onClick={() => setActiveTab('photos')}
-            className={`inline-flex min-h-9 items-center gap-2 border px-3 text-xs font-sans uppercase tracking-wider font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass ${activeTab === 'photos' ? 'border-forest bg-forest text-paper' : 'border-transparent bg-paper-warm text-brown-dark hover:border-paper-border'}`}
+            className={`inline-flex min-h-9 items-center gap-2 border px-3 text-xs font-sans uppercase tracking-wider font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass ${activeTab === 'photos' ? 'border-forest bg-forest text-paper' : 'border-paper-border bg-paper text-forest hover:border-brass hover:bg-paper-warm'}`}
           >
             <Eye className="h-3.5 w-3.5" />
             {t('product.tabPhotos', 'Ảnh thực địa')}

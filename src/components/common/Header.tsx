@@ -62,8 +62,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQRModal }) => {
                 className={({ isActive }) =>
                   `whitespace-nowrap border-b-2 px-2.5 py-2 transition-colors duration-200 ${
                     isActive
-                      ? 'border-brass text-brown'
-                      : 'border-transparent text-ink hover:border-paper-border hover:text-brown'
+                      ? 'border-forest text-forest font-bold'
+                      : 'border-transparent text-ink/80 hover:border-forest/50 hover:text-forest'
                   }`
                 }
               >
@@ -102,8 +102,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQRModal }) => {
                 className={({ isActive }) =>
                   `border-l-2 px-3 py-2.5 transition-colors ${
                     isActive
-                      ? 'border-brass bg-paper-warm text-brown'
-                      : 'border-transparent text-brown-dark hover:text-brown hover:bg-paper-deep/40'
+                      ? 'border-forest bg-forest text-brass font-bold'
+                      : 'border-transparent text-charcoal hover:text-forest hover:bg-paper-warm font-medium'
                   }`
                 }
               >
