@@ -418,13 +418,12 @@ export const HomePage: React.FC = () => {
             preload="metadata"
             poster="/videos/hero-background-poster.webp"
             aria-hidden="true"
-            onLoadedMetadata={(event) => {
-              if (event.currentTarget.currentTime < 1) event.currentTarget.currentTime = 1;
-            }}
-            onSeeked={() => setHeroVideoReady(true)}
+            onLoadedData={() => setHeroVideoReady(true)}
+            onCanPlay={() => setHeroVideoReady(true)}
             className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${heroVideoReady ? 'opacity-100' : 'opacity-0'}`}
           >
             <source src="/videos/hero-background.webm" type="video/webm" />
+            <source src="/videos/hero-background.mp4" type="video/mp4" />
           </video>
         )}
         <div className="home-hero-scrim absolute inset-0" aria-hidden="true" />
