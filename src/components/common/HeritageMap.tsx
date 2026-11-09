@@ -7,15 +7,19 @@ import {
   Compass, 
   Box, 
   Maximize2, 
-  Minimize2, 
-  RotateCw, 
   Layers, 
   Eye, 
-  X, 
-  Sparkles 
+  X
 } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { getLocalizedProduct } from '../../utils/localizedEntities';
+import {
+  resolve3DModelUrl,
+  resolve3DPreview,
+  resolveImageUrl,
+  handleImageFallback,
+  VIETTORIA_IMAGES,
+} from '../../utils/mediaResolver';
 
 export interface HeritageSiteLocation {
   id: string;
@@ -136,14 +140,12 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
   const markersRef = useRef<{ [key: string]: L.Marker }>({});
 
   const [activeSite, setActiveSite] = useState<HeritageSiteLocation>(
-    HERITAGE_SITES.find(s => s.id === initialSiteId) || HERITAGE_SITES[0]
+    HERITAGE_SITES.find(s => s.id === initialSiteId) || HERITAGE_SITES[1] // Mặc định Khuê Văn Các
   );
   const [activeRegion, setActiveRegion] = useState<'all' | 'hanoi' | 'hue' | 'saigon'>('all');
-  const [is3DMode, setIs3DMode] = useState<boolean>(true);
-  const [show3DModelCard, setShow3DModelCard] = useState<boolean>(true);
-  const [is3DCardExpanded, setIs3DCardExpanded] = useState<boolean>(false);
-  const [isAutoRotating, setIsAutoRotating] = useState<boolean>(true);
-  const [mapLayerType, setMapLayerType] = useState<'satellite' | 'standard'>('satellite');
+  const [mapLayerType, setMapLayerType] = useState<'standard' | 'satellite'>('standard');
+  const [previewTab, setPreviewTab] = useState<'photo' | '3d'>('photo');
+  const [isFullscreen3D, setIsFullscreen3D] = useState<boolean>(false);
 
   const getLocalizedSite = (site: HeritageSiteLocation): HeritageSiteLocation => {
     if (language === 'vi') return site;
@@ -174,7 +176,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
     saigon: { vi: 'Sài Gòn', en: 'Saigon', fr: 'Saïgon', zh: '西贡', ko: '사이공', ja: 'サイゴン' },
   };
 
-  // Switch between Tile Layers
+  // Chuyển đổi giữa các lớp bản đồ
   const toggleMapLayer = (type: 'standard' | 'satellite') => {
     setMapLayerType(type);
     const map = mapRef.current;
@@ -189,25 +191,16 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
     }
   };
 
-  // Focus on a specific heritage site
+  // Tập trung vào một công trình di sản cụ thể
   const focusSite = (site: HeritageSiteLocation) => {
     setActiveSite(site);
-    setIs3DMode(true);
-    setShow3DModelCard(true);
 
     const map = mapRef.current;
     if (!map) return;
 
-    // Switch to satellite for realistic 3D architectural topography
-    if (tileLayersRef.current) {
-      map.removeLayer(tileLayersRef.current.osmStandard);
-      map.addLayer(tileLayersRef.current.esriSatellite);
-      setMapLayerType('satellite');
-    }
+    map.flyTo([site.lat, site.lng], 16.5, { duration: 1.1 });
 
-    map.flyTo([site.lat, site.lng], 16.5, { duration: 1.2 });
-
-    // Update pin marker selection beacon
+    // Cập nhật beacon viền vàng cho marker đang chọn
     Object.entries(markersRef.current).forEach(([id, marker]) => {
       const el = marker.getElement();
       if (!el) return;
@@ -227,14 +220,13 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
     }
   };
 
-  // Fly to region or overview
+  // Bay đến vùng miền hoặc toàn cảnh
   const flyToRegion = (region: 'all' | 'hanoi' | 'hue' | 'saigon') => {
     setActiveRegion(region);
     const map = mapRef.current;
     if (!map) return;
 
     if (region === 'all') {
-      setIs3DMode(false);
       const allBounds = L.latLngBounds(HERITAGE_SITES.map(s => [s.lat, s.lng]));
       map.flyToBounds(allBounds, { padding: [50, 50], duration: 1.2 });
     } else if (region === 'hanoi') {
@@ -252,7 +244,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
-    if (mapRef.current) return; // Map already initialized
+    if (mapRef.current) return;
 
     const osmStandard = L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -269,26 +261,23 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
 
     tileLayersRef.current = { osmStandard, esriSatellite };
 
-    // Default to Satellite layer for 3D aerial perspective
+    // Khởi tạo bản đồ với OpenStreetMap tiêu chuẩn (ấm áp, rõ đường phố, không bị lóa)
     const map = L.map(mapContainerRef.current, {
       center: [activeSite.lat, activeSite.lng],
       zoom: 16.5,
       zoomControl: false,
       scrollWheelZoom: true,
       attributionControl: true,
-      layers: [esriSatellite],
+      layers: [osmStandard],
     });
-
-    L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
     mapRef.current = map;
 
-    // Handle container resize cleanly
     setTimeout(() => {
       map.invalidateSize();
     }, 250);
 
-    // Create markers for each heritage site
+    // Tạo các điểm ghim di sản trên bản đồ
     HERITAGE_SITES.forEach((site) => {
       const isInitialActive = site.id === activeSite.id;
       
@@ -313,32 +302,32 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
         zIndexOffset: isInitialActive ? 1000 : 100 - parseInt(site.id),
       }).addTo(map);
 
-      // Tooltip on hover
-      marker.bindTooltip(`<b>${site.mapLabel} · ${site.name}</b> (${site.epoch})`, {
+      // Tooltip khi di chuột
+      marker.bindTooltip(`<b>${site.mapLabel} · ${site.name}</b> (${site.epoch.split('(')[0].trim()})`, {
         direction: 'top',
         offset: [0, -44],
         className: 'heritage-map-tooltip',
       });
 
-      // Popup with Heritage Atelier styling
+      // Popup thông tin thanh lịch
       const popupHtml = `
         <div style="
           font-family: 'Be Vietnam Pro', sans-serif;
-          min-width: 220px;
-          padding: 8px 4px;
-          background: var(--color-paper);
-          color: var(--heritage-ink);
+          min-width: 210px;
+          padding: 6px 2px;
+          background: #FAF7F0;
+          color: #1B1E1B;
         ">
-          <div style="font-family: 'Playfair Display', serif; font-size: 11px; color: var(--heritage-brass); letter-spacing: 0.05em; text-transform: uppercase; font-weight: 600; margin-bottom: 4px;">
-            ${site.mapLabel} · ${site.epoch}
+          <div style="font-family: 'Cinzel', serif; font-size: 10px; color: #B88A44; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;">
+            ${site.mapLabel} · ${site.epoch.split('(')[0].trim()}
           </div>
-          <h4 style="font-family: 'Playfair Display', serif; font-size: 16px; font-weight: bold; color: var(--heritage-forest); margin: 0 0 4px 0;">
+          <h4 style="font-family: 'Playfair Display', serif; font-size: 15px; font-weight: bold; color: #142820; margin: 3px 0;">
             ${site.name}
           </h4>
-          <p style="font-size: 11px; color: #525952; margin: 0 0 8px 0; line-height: 1.4;">
+          <p style="font-size: 11px; color: #4A4A4A; margin: 0 0 6px 0; line-height: 1.35;">
             ${site.location}
           </p>
-          <div style="font-size: 10px; color: var(--heritage-forest); border-top: 1px solid var(--heritage-line); padding-top: 6px; font-family: 'Roboto Mono', monospace;">
+          <div style="font-size: 9.5px; color: #8A7246; font-family: monospace; border-top: 1px solid rgba(184, 138, 68, 0.2); padding-top: 4px;">
             Tọa độ: ${formatCoordinates(site)}
           </div>
         </div>
@@ -364,298 +353,365 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
 
   return (
     <div className="heritage-map bg-paper border border-brass/40 corner-frame shadow-xl overflow-hidden flex flex-col lg:flex-row">
-      {/* Left Sidebar: Heritage Site Navigator */}
-      <div className="w-full lg:w-96 bg-paper-warm border-b lg:border-b-0 lg:border-r border-paper-border p-5 sm:p-6 flex flex-col justify-between space-y-5 shrink-0 z-20">
-        <div className="space-y-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 text-brass text-xs font-mono uppercase tracking-widest font-semibold">
-              <Compass className="w-4 h-4" />
-              <span>{t('mapPage.subtitle', 'Bản Đồ Di Sản')}</span>
-            </div>
-            <h3 className="font-display text-2xl font-bold text-forest">
-              {t('mapPage.selectedMonument', 'Tọa độ di sản')}
-            </h3>
-            <p className="text-xs text-charcoal/80 font-normal leading-relaxed">
-              Chọn công trình để chuyển sang phối cảnh 3D và khám phá mô hình số hóa.
-            </p>
+      {/* Cột Trái: Bộ điều hướng danh sách & Hồ sơ chi tiết Spotlight di sản */}
+      <div className="w-full lg:w-[400px] xl:w-[430px] bg-paper-warm border-b lg:border-b-0 lg:border-r border-paper-border p-4 sm:p-5 flex flex-col shrink-0 z-20 space-y-4">
+        {/* 1. Header */}
+        <div className="space-y-1">
+          <div className="flex items-center gap-1.5 text-brass text-[11px] font-mono uppercase tracking-widest font-semibold">
+            <Compass className="w-3.5 h-3.5" />
+            <span>{t('mapPage.subtitle', 'Định Vị Tọa Độ Địa Lý')}</span>
           </div>
-
-          {/* Quick Region Selector Pills */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 p-1 bg-paper border border-paper-border text-xs font-mono">
-            <button
-              type="button"
-              onClick={() => flyToRegion('all')}
-              className={`py-1.5 px-2 text-center transition-colors ${
-                activeRegion === 'all'
-                  ? 'bg-forest text-brass font-bold'
-                  : 'text-charcoal-muted hover:text-forest'
-              }`}
-            >
-              {t('mapPage.allVietnam', 'Toàn Cảnh')}
-            </button>
-            <button
-              type="button"
-              onClick={() => flyToRegion('hanoi')}
-              className={`py-1.5 px-2 text-center transition-colors ${
-                activeRegion === 'hanoi'
-                  ? 'bg-forest text-brass font-bold'
-                  : 'text-charcoal-muted hover:text-forest'
-              }`}
-            >
-              {cityLabels.hanoi[language] || 'Hà Nội'} (3)
-            </button>
-            <button
-              type="button"
-              onClick={() => flyToRegion('hue')}
-              className={`py-1.5 px-2 text-center transition-colors ${
-                activeRegion === 'hue'
-                  ? 'bg-forest text-brass font-bold'
-                  : 'text-charcoal-muted hover:text-forest'
-              }`}
-            >
-              {cityLabels.hue[language] || 'Huế'} (1)
-            </button>
-            <button
-              type="button"
-              onClick={() => flyToRegion('saigon')}
-              className={`py-1.5 px-2 text-center transition-colors ${
-                activeRegion === 'saigon'
-                  ? 'bg-forest text-brass font-bold'
-                  : 'text-charcoal-muted hover:text-forest'
-              }`}
-            >
-              {cityLabels.saigon[language] || 'Sài Gòn'} (1)
-            </button>
-          </div>
-
-          {/* Heritage Sites Mini List */}
-          <div className="space-y-2 max-h-56 lg:max-h-64 overflow-y-auto pr-1 no-scrollbar">
-            {HERITAGE_SITES.map((site) => {
-              const isSelected = activeSite.id === site.id;
-              const locSite = getLocalizedSite(site);
-              return (
-                <button
-                  key={site.id}
-                  type="button"
-                  onClick={() => focusSite(site)}
-                  className={`w-full text-left p-3 border transition-all flex items-start justify-between gap-3 ${
-                    isSelected
-                      ? 'bg-forest text-paper border-brass font-semibold shadow-sm'
-                      : 'bg-paper border-paper-border text-charcoal hover:border-brass/70'
-                  }`}
-                >
-                  <div className="min-w-0 space-y-1">
-                    <div className="flex items-center gap-1.5 text-[11px]">
-                      <span className={`font-cinzel uppercase tracking-wider font-bold ${isSelected ? 'text-brass' : 'text-brass-dark'}`}>
-                        {cityLabels[site.city]?.[language] || site.cityName.split('—')[0].trim()}
-                      </span>
-                      <span className={isSelected ? 'text-paper/60' : 'text-charcoal-muted'}>
-                        • {locSite.epoch.split('(')[0].trim()}
-                      </span>
-                    </div>
-                    <div className="font-display text-sm font-bold truncate">
-                      {locSite.name}
-                    </div>
-                  </div>
-
-                  <span className={`text-[10px] font-mono px-1.5 py-0.5 border ${
-                    isSelected 
-                      ? 'border-brass/50 bg-forest-dark text-brass font-bold' 
-                      : 'border-paper-border bg-paper-warm text-charcoal-muted'
-                  }`}>
-                    {site.mapLabel}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+          <h3 className="font-display text-xl sm:text-2xl font-bold text-forest">
+            {t('mapPage.selectedMonument', 'Bản Đồ Di Sản')}
+          </h3>
+          <p className="text-xs text-charcoal/80 font-normal leading-relaxed">
+            {t('home.mapDesc', 'Khảo cứu tọa độ địa lý, niên đại lịch sử và cấu trúc kiến trúc của các biểu tượng văn hóa.')}
+          </p>
         </div>
 
-        {/* Selected Heritage Spotlight Card */}
-        <div className="border-t border-paper-border pt-4 text-forest">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <h4 className="truncate font-display text-lg font-bold">{currentSite.name}</h4>
-              <p className="mt-1 truncate text-xs text-charcoal-muted">{currentSite.location}</p>
+        {/* 2. Bộ lọc vùng miền */}
+        <div className="grid grid-cols-4 gap-1 p-1 bg-paper border border-paper-border text-xs font-mono">
+          <button
+            type="button"
+            onClick={() => flyToRegion('all')}
+            className={`py-1.5 px-1 text-center transition-colors text-[11px] ${
+              activeRegion === 'all'
+                ? 'bg-forest text-brass font-bold shadow-xs'
+                : 'text-charcoal-muted hover:text-forest'
+            }`}
+          >
+            {t('mapPage.allVietnam', 'Toàn Cảnh')}
+          </button>
+          <button
+            type="button"
+            onClick={() => flyToRegion('hanoi')}
+            className={`py-1.5 px-1 text-center transition-colors text-[11px] ${
+              activeRegion === 'hanoi'
+                ? 'bg-forest text-brass font-bold shadow-xs'
+                : 'text-charcoal-muted hover:text-forest'
+            }`}
+          >
+            {cityLabels.hanoi[language] || 'Hà Nội'} (3)
+          </button>
+          <button
+            type="button"
+            onClick={() => flyToRegion('hue')}
+            className={`py-1.5 px-1 text-center transition-colors text-[11px] ${
+              activeRegion === 'hue'
+                ? 'bg-forest text-brass font-bold shadow-xs'
+                : 'text-charcoal-muted hover:text-forest'
+            }`}
+          >
+            {cityLabels.hue[language] || 'Huế'} (1)
+          </button>
+          <button
+            type="button"
+            onClick={() => flyToRegion('saigon')}
+            className={`py-1.5 px-1 text-center transition-colors text-[11px] ${
+              activeRegion === 'saigon'
+                ? 'bg-forest text-brass font-bold shadow-xs'
+                : 'text-charcoal-muted hover:text-forest'
+            }`}
+          >
+            {cityLabels.saigon[language] || 'Sài Gòn'} (1)
+          </button>
+        </div>
+
+        {/* 3. Danh sách công trình thu gọn */}
+        <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1 no-scrollbar border-b border-paper-border pb-3">
+          {HERITAGE_SITES.map((site) => {
+            const isSelected = activeSite.id === site.id;
+            const locSite = getLocalizedSite(site);
+            return (
+              <button
+                key={site.id}
+                type="button"
+                onClick={() => focusSite(site)}
+                className={`w-full text-left px-3 py-2 border transition-all flex items-center justify-between gap-3 cursor-pointer ${
+                  isSelected
+                    ? 'bg-forest text-paper border-brass font-semibold shadow-xs'
+                    : 'bg-paper border-paper-border text-charcoal hover:border-brass/70'
+                }`}
+              >
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5 text-[10px]">
+                    <span className={`font-cinzel uppercase tracking-wider font-bold ${isSelected ? 'text-brass' : 'text-brass-dark'}`}>
+                      {cityLabels[site.city]?.[language] || site.cityName.split('—')[0].trim()}
+                    </span>
+                    <span className={isSelected ? 'text-paper/60' : 'text-charcoal-muted'}>
+                      • {locSite.epoch.split('(')[0].trim()}
+                    </span>
+                  </div>
+                  <div className="font-display text-xs sm:text-sm font-bold truncate">
+                    {locSite.name}
+                  </div>
+                </div>
+
+                <span className={`text-[10px] font-mono px-1.5 py-0.5 border ${
+                  isSelected 
+                    ? 'border-brass/50 bg-forest-dark text-brass font-bold' 
+                    : 'border-paper-border bg-paper-warm text-charcoal-muted'
+                }`}>
+                  {site.mapLabel}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* 4. Hồ Sơ Di Sản Spotlight (Tích hợp trong sidebar, không che bản đồ) */}
+        <div className="space-y-3 pt-1">
+          {/* Nút chuyển đổi chế độ xem Ảnh thực địa / Mô hình 3D */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1 border border-paper-border bg-paper p-0.5">
+              <button
+                type="button"
+                onClick={() => setPreviewTab('photo')}
+                className={`px-2.5 py-1 text-[11px] font-sans font-medium transition-colors flex items-center gap-1 cursor-pointer ${
+                  previewTab === 'photo'
+                    ? 'bg-forest text-paper font-semibold'
+                    : 'text-charcoal-muted hover:text-forest'
+                }`}
+              >
+                <Eye className="w-3 h-3" />
+                <span>{t('product.tabPhotos', 'Ảnh thực địa')}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setPreviewTab('3d')}
+                className={`px-2.5 py-1 text-[11px] font-sans font-medium transition-colors flex items-center gap-1 cursor-pointer ${
+                  previewTab === '3d'
+                    ? 'bg-forest text-paper font-semibold'
+                    : 'text-charcoal-muted hover:text-forest'
+                }`}
+              >
+                <Box className="w-3 h-3 text-brass" />
+                <span>{t('product.tab3d', 'Mô hình 3D')}</span>
+              </button>
             </div>
-            <Link
-              to={`/products/${activeSite.slug}`}
-              className="shrink-0 inline-flex items-center gap-1 pt-1 text-xs font-semibold text-brass-dark hover:text-forest group"
-            >
-              <span>{t('mapPage.viewDetails', 'Mở di sản')}</span>
-              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-            </Link>
+
+            {previewTab === '3d' && (
+              <button
+                type="button"
+                onClick={() => setIsFullscreen3D(true)}
+                className="text-[11px] font-sans text-brass-dark hover:text-forest flex items-center gap-1 p-1 transition-colors cursor-pointer"
+                title={t('mapPage.expand', 'Mở toàn màn hình')}
+              >
+                <Maximize2 className="w-3 h-3" />
+                <span className="hidden sm:inline">{t('mapPage.expand', 'Phóng to')}</span>
+              </button>
+            )}
           </div>
-          <p className="mt-2 border-t border-paper-border pt-2 font-mono text-[10px] text-charcoal-muted">
-            {formatCoordinates(activeSite)}
-          </p>
+
+          {/* Khung hiển thị Ảnh hoặc Mô hình 3D tinh xảo */}
+          <div className="relative aspect-[16/10] w-full overflow-hidden border border-brass/40 bg-[#121814] shadow-inner rounded-[2px]">
+            {previewTab === 'photo' ? (
+              <div className="relative w-full h-full">
+                <img
+                  src={resolveImageUrl(activeSite.heroImage, VIETTORIA_IMAGES.productHighlight)}
+                  alt={currentSite.name}
+                  onError={(e) => handleImageFallback(e, VIETTORIA_IMAGES.productHighlight)}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-2 left-2 right-2 text-paper text-[10px] font-mono flex justify-between items-center">
+                  <span className="bg-black/60 px-1.5 py-0.5 backdrop-blur-xs border border-white/20">
+                    {currentSite.cityName}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className="relative w-full h-full heritage-3d-dark-stage">
+                <div className="heritage-3d-stage-glow pointer-events-none" aria-hidden="true" />
+                <model-viewer
+                  key={`${activeSite.slug}-sidebar-3d`}
+                  src={resolve3DModelUrl(activeSite.slug)}
+                  poster={resolve3DPreview(activeSite.slug)?.poster || resolveImageUrl(activeSite.heroImage, VIETTORIA_IMAGES.productHighlight)}
+                  alt={`Mô hình 3D ${currentSite.name}`}
+                  camera-controls
+                  auto-rotate=""
+                  rotation-per-second="6deg"
+                  shadow-intensity="1.2"
+                  shadow-softness="0.75"
+                  exposure="1.05"
+                  loading="lazy"
+                  reveal="auto"
+                  interaction-prompt="none"
+                  style={{ width: '100%', height: '100%', backgroundColor: 'transparent', touchAction: 'pan-y' }}
+                  className="absolute inset-0 h-full w-full"
+                />
+                <div className="absolute bottom-1.5 left-2 right-2 pointer-events-none flex justify-between items-center text-[9.5px] font-sans text-paper/75 bg-black/60 px-2 py-0.5 backdrop-blur-xs border border-white/10">
+                  <span>Kéo để xoay 360°</span>
+                  <span className="font-cinzel text-brass">{currentSite.epoch.split('(')[0].trim()}</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Chi tiết di sản */}
+          <div className="space-y-1">
+            <div>
+              <h4 className="font-display text-base font-bold text-forest leading-snug">
+                {currentSite.name}
+              </h4>
+              <p className="font-display text-xs italic text-brass-dark">
+                {currentSite.subName}
+              </p>
+            </div>
+            <p className="text-[11px] text-charcoal/80 leading-relaxed line-clamp-2">
+              {currentSite.description}
+            </p>
+            <div className="flex items-center gap-2 pt-1 font-mono text-[10px] text-charcoal-muted border-t border-paper-border">
+              <span className="text-brass">📍 Tọa độ GPS:</span>
+              <span>{formatCoordinates(activeSite)}</span>
+            </div>
+          </div>
+
+          {/* Nút hành động chính: Mở trang khảo cứu 3D chi tiết */}
+          <Link
+            to={`/products/${activeSite.slug}`}
+            className="w-full inline-flex items-center justify-center gap-2 border border-brass bg-forest text-paper px-4 py-2.5 text-xs font-cinzel font-bold tracking-wider uppercase hover:bg-forest-muted transition-colors shadow-sm group"
+          >
+            <span>{t('mapPage.exploreMonument3D', 'Khảo Cứu 3D Toàn Cảnh')}</span>
+            <ArrowRight className="w-3.5 h-3.5 text-brass transition-transform group-hover:translate-x-1" />
+          </Link>
         </div>
       </div>
 
-      {/* Right: Leaflet Map Viewport with 3D Perspective & Digital Twin Pedestal */}
+      {/* Cột Phải: Khung nhìn Bản đồ Leaflet (100% THOÁNG ĐÃNG, KHÔNG BỊ CHE) */}
       <div 
         className={`relative flex-1 bg-paper-warm overflow-hidden ${
-          is3DMode ? 'heritage-map-viewport--3d' : ''
-        } ${compactHeight ? 'min-h-[440px] lg:min-h-[520px]' : 'min-h-[500px] lg:min-h-[640px]'}`}
+          compactHeight ? 'min-h-[440px] lg:min-h-[520px]' : 'min-h-[500px] lg:min-h-[640px]'
+        }`}
       >
-        {/* Leaflet DOM container */}
+        {/* Container DOM Bản đồ Leaflet */}
         <div 
           ref={mapContainerRef} 
-          className={`absolute inset-0 w-full h-full z-10 ${
-            is3DMode ? 'heritage-map-canvas--3d' : 'heritage-map-canvas--2d'
-          }`}
+          className="absolute inset-0 w-full h-full z-10 heritage-map-canvas"
         />
 
-        {/* Floating Map Mode Control Bar */}
-        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 flex flex-wrap items-center gap-1.5 bg-forest-dark/90 p-1.5 border border-brass/40 shadow-lg backdrop-blur-sm">
-          <button
-            type="button"
-            onClick={() => setIs3DMode(prev => !prev)}
-            aria-pressed={is3DMode}
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-sans font-medium transition-all ${
-              is3DMode 
-                ? 'bg-brass text-forest font-bold shadow-xs' 
-                : 'bg-forest/80 text-paper/85 hover:text-brass hover:border-brass'
-            }`}
-            title="Bật/Tắt góc nghiêng phối cảnh 3D"
-          >
-            <Box className="w-3.5 h-3.5" />
-            <span>{is3DMode ? t('mapPage.mode3D', 'Góc 3D Nghiêng') : t('mapPage.mode2D', 'Bản Đồ Phẳng')}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setShow3DModelCard(prev => !prev)}
-            aria-pressed={show3DModelCard}
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-sans font-medium transition-all ${
-              show3DModelCard 
-                ? 'bg-brass/25 border border-brass text-brass font-bold' 
-                : 'bg-forest/80 text-paper/85 hover:text-brass'
-            }`}
-            title="Hiện/Ẩn bục mô hình 3D"
-          >
-            <Eye className="w-3.5 h-3.5" />
-            <span>{t('mapPage.pedestal3D', 'Bục 3D')}</span>
-          </button>
-
+        {/* Cụm điều khiển nổi góc trên bên phải (Tối giản, không che bản đồ) */}
+        <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 flex items-center gap-1.5 bg-paper/95 p-1 border border-paper-border shadow-md backdrop-blur-sm">
           <button
             type="button"
             onClick={() => toggleMapLayer(mapLayerType === 'satellite' ? 'standard' : 'satellite')}
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-sans font-medium transition-all ${
-              mapLayerType === 'satellite' 
-                ? 'bg-forest text-paper border border-brass/60' 
-                : 'bg-forest/80 text-paper/85 hover:text-brass'
-            }`}
-            title="Đổi lớp bản đồ vệ tinh / tiêu chuẩn"
+            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-sans font-medium text-charcoal hover:text-forest hover:bg-paper-warm transition-colors cursor-pointer"
+            title={mapLayerType === 'satellite' ? 'Chuyển sang bản đồ phẳng' : 'Chuyển sang ảnh vệ tinh'}
           >
-            <Layers className="w-3.5 h-3.5" />
-            <span>{mapLayerType === 'satellite' ? t('mapPage.satelliteView', 'Vệ Tinh') : t('mapPage.standardView', 'Bản Đồ')}</span>
+            <Layers className="w-3.5 h-3.5 text-brass" />
+            <span>{mapLayerType === 'satellite' ? t('mapPage.standardView', 'Bản Đồ') : t('mapPage.satelliteView', 'Vệ Tinh')}</span>
+          </button>
+
+          <span className="w-px h-3.5 bg-paper-border" aria-hidden="true" />
+
+          <button
+            type="button"
+            onClick={() => flyToRegion('all')}
+            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-sans font-medium text-charcoal hover:text-forest hover:bg-paper-warm transition-colors cursor-pointer"
+            title={t('mapPage.allVietnam', 'Toàn cảnh Việt Nam')}
+          >
+            <Compass className="w-3.5 h-3.5 text-brass" />
+            <span>{t('mapPage.allVietnam', 'Toàn Cảnh')}</span>
+          </button>
+
+          <span className="w-px h-3.5 bg-paper-border" aria-hidden="true" />
+
+          <button
+            type="button"
+            onClick={() => mapRef.current?.zoomIn()}
+            className="p-1 text-charcoal hover:text-forest transition-colors font-bold text-sm px-1.5 leading-none cursor-pointer"
+            title="Phóng to"
+          >
+            +
+          </button>
+          <button
+            type="button"
+            onClick={() => mapRef.current?.zoomOut()}
+            className="p-1 text-charcoal hover:text-forest transition-colors font-bold text-sm px-1.5 leading-none cursor-pointer"
+            title="Thu nhỏ"
+          >
+            −
           </button>
         </div>
 
-        {/* Floating 3D Digital Twin Model Stage Overlay */}
-        {show3DModelCard && activeSite && (
-          <div 
-            className={`absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-20 border-2 border-brass/70 bg-forest/95 text-paper shadow-2xl backdrop-blur-md transition-all duration-300 corner-frame ${
-              is3DCardExpanded 
-                ? 'inset-x-3 bottom-3 top-14 sm:inset-x-auto sm:left-4 sm:right-4 sm:top-14 sm:bottom-4' 
-                : 'w-[calc(100%-1.5rem)] sm:w-[360px] lg:w-[380px]'
-            }`}
-          >
-            {/* Header */}
-            <div className="flex items-start justify-between gap-3 border-b border-brass/30 p-3 sm:p-3.5 bg-forest-dark/70">
-              <div className="min-w-0">
-                <div className="flex items-center gap-1.5 text-brass">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span className="font-cinzel text-[10px] font-bold uppercase tracking-widest text-brass">
-                    {t('mapPage.pedestal3D', 'Mô Hình 3D Địa Phương')}
-                  </span>
-                </div>
-                <h4 className="mt-1 font-display text-base font-bold text-paper truncate">
+        {/* Huy hiệu thông báo công trình đang chọn góc dưới bên trái (Gọn gàng, không che bản đồ) */}
+        <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-20 pointer-events-none bg-paper/95 border border-paper-border px-3.5 py-2 shadow-md backdrop-blur-sm flex items-center gap-2.5 text-xs text-forest max-w-[calc(100%-2rem)] sm:max-w-md">
+          <span className="h-2 w-2 rounded-full bg-brass shrink-0 animate-ping" />
+          <div className="min-w-0 truncate">
+            <span className="font-display font-bold">{currentSite.name}</span>
+            <span className="text-charcoal-muted ml-1.5 text-[11px] truncate hidden sm:inline">({currentSite.location})</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Modal Triển Lãm 3D Toàn Màn Hình (Khi người dùng bấm Phóng To 3D) */}
+      {isFullscreen3D && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-md animate-fade-in"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Mô hình 3D ${currentSite.name}`}
+        >
+          <div className="relative w-full max-w-4xl h-[85vh] border border-brass/50 bg-[#121915] flex flex-col overflow-hidden shadow-2xl rounded-[3px]">
+            {/* Header Modal */}
+            <div className="flex items-center justify-between border-b border-brass/30 px-5 py-3.5 bg-forest-dark/80">
+              <div>
+                <span className="font-cinzel text-[10px] font-bold uppercase tracking-widest text-brass block">
+                  {currentSite.epoch} · {currentSite.cityName}
+                </span>
+                <h3 className="font-display text-xl font-bold text-paper mt-0.5">
                   {currentSite.name}
-                </h4>
-                <p className="font-display text-xs italic text-brass-subtle truncate">
-                  {currentSite.subName}
-                </p>
+                </h3>
               </div>
 
-              <div className="flex items-center gap-1 shrink-0 text-paper/70">
-                <button
-                  type="button"
-                  onClick={() => setIsAutoRotating(prev => !prev)}
-                  title={t('mapPage.autoRotate', 'Tự Xoay')}
-                  className={`p-1.5 border transition-colors ${
-                    isAutoRotating ? 'border-brass bg-brass text-forest' : 'border-paper/20 hover:text-paper hover:border-paper/40'
-                  }`}
-                >
-                  <RotateCw className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIs3DCardExpanded(prev => !prev)}
-                  title={is3DCardExpanded ? t('mapPage.minimize', 'Thu Nhỏ') : t('mapPage.expand', 'Mở Rộng')}
-                  className="p-1.5 border border-paper/20 hover:text-paper hover:border-paper/40 transition-colors"
-                >
-                  {is3DCardExpanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShow3DModelCard(false)}
-                  title={t('common.close', 'Đóng')}
-                  className="p-1.5 border border-paper/20 hover:text-terracotta hover:border-terracotta transition-colors"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => setIsFullscreen3D(false)}
+                className="p-2 text-paper/70 hover:text-paper hover:bg-white/10 rounded transition-colors cursor-pointer"
+                aria-label={t('common.close', 'Đóng')}
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
-            {/* 3D Model Viewport */}
-            <div className={`relative w-full overflow-hidden bg-forest-dark/90 ${
-              is3DCardExpanded ? 'h-[calc(100%-135px)] min-h-[300px]' : 'h-48 sm:h-56'
-            }`}>
-              {/* Exhibition Pedestal Spotlight */}
-              <div className="heritage-pedestal-light pointer-events-none absolute inset-0 z-[1]" aria-hidden="true" />
-
+            {/* Sân khấu 3D bảo tàng tối */}
+            <div className="relative flex-1 heritage-3d-dark-stage overflow-hidden">
+              <div className="heritage-3d-stage-glow pointer-events-none" aria-hidden="true" />
               <model-viewer
-                key={`${activeSite.slug}-map-3d`}
-                src={`/3D/${activeSite.slug}.glb`}
-                poster={`/3D/${activeSite.slug}-poster.webp`}
-                alt={`Mô hình 3D của ${currentSite.name}`}
+                key={`${activeSite.slug}-fullscreen-3d`}
+                src={resolve3DModelUrl(activeSite.slug)}
+                poster={resolve3DPreview(activeSite.slug)?.poster || resolveImageUrl(activeSite.heroImage, VIETTORIA_IMAGES.productHighlight)}
+                alt={`Mô hình 3D ${currentSite.name}`}
                 camera-controls
-                auto-rotate={isAutoRotating ? '' : undefined}
-                rotation-per-second="25deg"
-                shadow-intensity="0.85"
-                exposure="1"
-                loading="lazy"
+                auto-rotate=""
+                rotation-per-second="6deg"
+                shadow-intensity="1.2"
+                shadow-softness="0.75"
+                exposure="1.05"
+                loading="eager"
                 reveal="auto"
                 interaction-prompt="none"
                 style={{ width: '100%', height: '100%', backgroundColor: 'transparent', touchAction: 'pan-y' }}
                 className="absolute inset-0 h-full w-full"
               />
-
-              {/* Interaction Hint Overlay */}
-              <div className="pointer-events-none absolute bottom-2 left-2 right-2 z-10 flex items-center justify-between text-[10px] text-paper/70 font-sans px-2 py-1 bg-forest/80 backdrop-blur-xs border border-brass/20">
-                <span>{t('mapPage.dragToRotate', 'Kéo để xoay 360° · Cuộn để thu phóng')}</span>
-                <span className="font-cinzel text-brass font-bold">{currentSite.epoch.split('(')[0].trim()}</span>
-              </div>
             </div>
 
-            {/* Card Action Link */}
-            <div className="flex items-center justify-between gap-3 border-t border-brass/30 p-2.5 sm:p-3 bg-forest-dark/80">
-              <span className="font-mono text-[10px] text-paper/60 truncate">
-                {formatCoordinates(activeSite)}
+            {/* Footer Modal */}
+            <div className="flex items-center justify-between border-t border-brass/30 px-5 py-3 bg-forest-dark/90">
+              <span className="font-mono text-xs text-brass">
+                📍 {formatCoordinates(activeSite)}
               </span>
               <Link
                 to={`/products/${activeSite.slug}`}
-                className="inline-flex items-center gap-1.5 border border-brass bg-brass px-3 py-1.5 text-xs font-semibold text-forest shadow-xs hover:bg-brass-light transition-colors shrink-0"
+                className="inline-flex items-center gap-2 border border-brass bg-brass px-4 py-2 text-xs font-semibold text-forest hover:bg-brass-light transition-colors"
               >
-                <span>{t('mapPage.exploreMonument3D', 'Khảo Cứu Tác Phẩm 3D')}</span>
+                <span>{t('mapPage.exploreMonument3D', 'Khảo Cứu Tác Phẩm Có Chỉ Dẫn Chi Tiết')}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
