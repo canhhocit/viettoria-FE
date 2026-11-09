@@ -30,7 +30,7 @@ interface ArchitecturalViewerProps {
 }
 
 export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ product }) => {
-  const { t } = useLanguage();
+  const { t, localizeHotspot } = useLanguage();
   const [activeTab, setActiveTab] = useState<'3d' | 'photos'>('3d');
   const [isPhotoZoomOpen, setIsPhotoZoomOpen] = useState(false);
   const [viewerAvailable, setViewerAvailable] = useState(() =>
@@ -51,8 +51,9 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
   const modelViewerRef = useRef<HTMLElement | null>(null);
 
   const hotspots = useMemo(() => {
-    return getHotspotsForProduct(product.slug || product.code || product.id);
-  }, [product.slug, product.code, product.id]);
+    const raw = getHotspotsForProduct(product.slug || product.code || product.id);
+    return raw.map((h) => localizeHotspot(h));
+  }, [product.slug, product.code, product.id, localizeHotspot]);
 
   const activeHotspot = useMemo(() => {
     return hotspots.find((h) => h.id === activeHotspotId) || null;

@@ -8,7 +8,7 @@ import { resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
 import { useLanguage } from '../contexts/LanguageContext';
 
 export const ProductsPage: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, localizeProduct, localizeCollection } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [collections, setCollections] = useState<Collection[]>([]);
@@ -83,7 +83,9 @@ export const ProductsPage: React.FC = () => {
             >
               {t('common.all', 'Tất Cả')} ({products.length})
             </button>
-            {collections.map((col) => (
+            {collections.map((rawCol) => {
+              const col = localizeCollection(rawCol);
+              return (
               <button
                 key={col.id}
                 onClick={() => handleCollectionSelect(col.id)}
@@ -95,7 +97,8 @@ export const ProductsPage: React.FC = () => {
               >
                 {col.name}
               </button>
-            ))}
+            );
+          })}
           </div>
 
           {/* Search Input */}
@@ -141,7 +144,9 @@ export const ProductsPage: React.FC = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {products.map((product) => (
+            {products.map((rawProduct) => {
+              const product = localizeProduct(rawProduct);
+              return (
               <TiltCard key={product.id} className="h-full">
                 <div
                   className="h-full bg-paper-warm border border-paper-border hover:border-brass transition-all corner-frame overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-xl"
@@ -215,7 +220,8 @@ export const ProductsPage: React.FC = () => {
                   </div>
                 </div>
               </TiltCard>
-            ))}
+            );
+          })}
           </div>
         )}
       </div>

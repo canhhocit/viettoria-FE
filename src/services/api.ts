@@ -14,6 +14,24 @@ import {
   FALLBACK_BLOGS,
 } from '../data/fallbackData';
 import { API_BASE_URL } from '../utils/apiConfig';
+import {
+  getLocalizedProduct,
+  getLocalizedProducts,
+  getLocalizedCollection,
+  getLocalizedCollections,
+  getLocalizedBlog,
+  getLocalizedBlogs,
+} from '../utils/localizedEntities';
+import type { LanguageCode } from '../locales';
+
+const getActiveLanguage = (): LanguageCode => {
+  if (typeof window === 'undefined') return 'vi';
+  try {
+    return (localStorage.getItem('viettoria_language') as LanguageCode) || 'vi';
+  } catch {
+    return 'vi';
+  }
+};
 
 const API_BASE = API_BASE_URL;
 
@@ -111,24 +129,35 @@ async function adminMultipartRequest<T>(path: string, formData: FormData): Promi
 // --- PUBLIC API ---
 export const publicApi = {
   async getCollections(): Promise<Collection[]> {
+    const lang = getActiveLanguage();
     try {
-      const res = await fetch(`${API_BASE}/public/collections`);
+      const res = await fetch(`${API_BASE}/public/collections`, {
+        headers: { 'Accept-Language': lang }
+      });
       if (res.ok) {
         const json = await res.json();
-        return json.data;
+        return getLocalizedCollections(json.data, lang);
       }
     } catch {
       // Fallback
     }
-    return FALLBACK_COLLECTIONS.filter(c => c.status === 'published');
+    const list = FALLBACK_COLLECTIONS.filter(c => c.status === 'published');
+    return getLocalizedCollections(list, lang);
   },
 
   async getCollectionBySlug(slug: string): Promise<(Collection & { products: Product[] }) | null> {
+    const lang = getActiveLanguage();
     try {
-      const res = await fetch(`${API_BASE}/public/collections/${slug}`);
+      const res = await fetch(`${API_BASE}/public/collections/${slug}`, {
+        headers: { 'Accept-Language': lang }
+      });
       if (res.ok) {
         const json = await res.json();
-        return json.data;
+        const localized = getLocalizedCollection(json.data, lang);
+        if (localized && Array.isArray(json.data?.products)) {
+          localized.products = getLocalizedProducts(json.data.products, lang);
+        }
+        return localized;
       }
     } catch {
       // Fallback
@@ -136,18 +165,22 @@ export const publicApi = {
     const col = FALLBACK_COLLECTIONS.find(c => c.slug === slug);
     if (!col) return null;
     const prods = FALLBACK_PRODUCTS.filter(p => p.collectionId === col.id && p.status === 'published');
-    return { ...col, products: prods };
+    const localized = getLocalizedCollection(col, lang);
+    return { ...localized, products: getLocalizedProducts(prods, lang) };
   },
 
   async getProducts(params?: { collectionId?: string; search?: string }): Promise<Product[]> {
+    const lang = getActiveLanguage();
     try {
       const query = new URLSearchParams();
       if (params?.collectionId) query.set('collectionId', params.collectionId);
       if (params?.search) query.set('search', params.search);
-      const res = await fetch(`${API_BASE}/public/products?${query.toString()}`);
+      const res = await fetch(`${API_BASE}/public/products?${query.toString()}`, {
+        headers: { 'Accept-Language': lang }
+      });
       if (res.ok) {
         const json = await res.json();
-        return json.data;
+        return getLocalizedProducts(json.data, lang);
       }
     } catch {
       // Fallback
@@ -164,15 +197,18 @@ export const publicApi = {
         p.location.toLowerCase().includes(q)
       );
     }
-    return list;
+    return getLocalizedProducts(list, lang);
   },
 
   async getProductBySlugOrCode(slugOrCode: string): Promise<Product | null> {
+    const lang = getActiveLanguage();
     try {
-      const res = await fetch(`${API_BASE}/public/products/${slugOrCode}`);
+      const res = await fetch(`${API_BASE}/public/products/${slugOrCode}`, {
+        headers: { 'Accept-Language': lang }
+      });
       if (res.ok) {
         const json = await res.json();
-        return json.data;
+        return getLocalizedProduct(json.data, lang);
       }
     } catch {
       // Fallback
@@ -187,22 +223,26 @@ export const publicApi = {
     const storyBlocks = FALLBACK_STORY_BLOCKS.filter(b => b.productId === prod.id && b.status === 'published');
     const relatedProducts = FALLBACK_PRODUCTS.filter(p => p.collectionId === prod.collectionId && p.id !== prod.id).slice(0, 3);
 
-    return {
+    const fullProd: Product = {
       ...prod,
       collection: col,
       storyBlocks,
       relatedProducts
     };
+    return getLocalizedProduct(fullProd, lang);
   },
 
   async resolveQR(code: string): Promise<{ targetUrl: string; product: Product } | null> {
+    const lang = getActiveLanguage();
     try {
-      const res = await fetch(`${API_BASE}/public/qr-resolve?code=${encodeURIComponent(code)}`);
+      const res = await fetch(`${API_BASE}/public/qr-resolve?code=${encodeURIComponent(code)}`, {
+        headers: { 'Accept-Language': lang }
+      });
       if (res.ok) {
         const json = await res.json();
         const fullProd = await this.getProductBySlugOrCode(json.data.slug);
         if (fullProd) {
-          return { targetUrl: json.data.targetUrl, product: fullProd };
+          return { targetUrl: json.data.targetUrl, product: getLocalizedProduct(fullProd, lang) };
         }
       }
     } catch {
@@ -212,35 +252,42 @@ export const publicApi = {
     if (!prod) return null;
     return {
       targetUrl: `/products/${prod.slug}?code=${encodeURIComponent(prod.code)}`,
-      product: prod
+      product: getLocalizedProduct(prod, lang)
     };
   },
 
   async getBlogs(): Promise<BlogPost[]> {
+    const lang = getActiveLanguage();
     try {
-      const res = await fetch(`${API_BASE}/public/blogs`);
+      const res = await fetch(`${API_BASE}/public/blogs`, {
+        headers: { 'Accept-Language': lang }
+      });
       if (res.ok) {
         const json = await res.json();
-        return json.data;
+        return getLocalizedBlogs(json.data, lang);
       }
     } catch {
       // Fallback
     }
-    return FALLBACK_BLOGS.filter(b => b.status === 'published');
+    const list = FALLBACK_BLOGS.filter(b => b.status === 'published');
+    return getLocalizedBlogs(list, lang);
   },
 
   async getBlogBySlug(slug: string): Promise<BlogPost | null> {
+    const lang = getActiveLanguage();
     try {
-      const res = await fetch(`${API_BASE}/public/blogs/${slug}`);
+      const res = await fetch(`${API_BASE}/public/blogs/${slug}`, {
+        headers: { 'Accept-Language': lang }
+      });
       if (res.ok) {
         const json = await res.json();
-        return json.data;
+        return getLocalizedBlog(json.data, lang);
       }
     } catch {
       // Fallback
     }
     const blog = FALLBACK_BLOGS.find(b => b.slug === slug);
-    return blog || null;
+    return blog ? getLocalizedBlog(blog, lang) : null;
   },
 
   async getFeatured(): Promise<{
@@ -249,11 +296,19 @@ export const publicApi = {
     collections: Collection[];
     latestBlogs: BlogPost[];
   }> {
+    const lang = getActiveLanguage();
     try {
-      const res = await fetch(`${API_BASE}/public/featured`);
+      const res = await fetch(`${API_BASE}/public/featured`, {
+        headers: { 'Accept-Language': lang }
+      });
       if (res.ok) {
         const json = await res.json();
-        return json.data;
+        return {
+          heroProduct: getLocalizedProduct(json.data.heroProduct, lang),
+          featuredProducts: getLocalizedProducts(json.data.featuredProducts || [], lang),
+          collections: getLocalizedCollections(json.data.collections || [], lang),
+          latestBlogs: getLocalizedBlogs(json.data.latestBlogs || [], lang),
+        };
       }
     } catch {
       // Fallback
@@ -263,7 +318,12 @@ export const publicApi = {
     const collections = FALLBACK_COLLECTIONS.slice(0, 3);
     const latestBlogs = FALLBACK_BLOGS.slice(0, 3);
 
-    return { heroProduct, featuredProducts, collections, latestBlogs };
+    return {
+      heroProduct: getLocalizedProduct(heroProduct, lang),
+      featuredProducts: getLocalizedProducts(featuredProducts, lang),
+      collections: getLocalizedCollections(collections, lang),
+      latestBlogs: getLocalizedBlogs(latestBlogs, lang),
+    };
   }
 };
 

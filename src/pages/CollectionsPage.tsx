@@ -9,7 +9,7 @@ import { resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
 import { useLanguage } from '../contexts/LanguageContext';
 
 export const CollectionsPage: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, localizeCollection } = useLanguage();
   const [collections, setCollections] = useState<Collection[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -58,7 +58,9 @@ export const CollectionsPage: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {collections.map((col) => (
+            {collections.map((rawCol) => {
+              const col = localizeCollection(rawCol);
+              return (
               <div
                 key={col.id}
                 className="h-full bg-paper-card border border-brass/25 hover:border-brass transition-all corner-frame overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-md duration-300"
@@ -102,7 +104,8 @@ export const CollectionsPage: React.FC = () => {
                   </div>
                 </div>
               </div>
-            ))}
+            );
+          })}
           </div>
         </section>
       </div>

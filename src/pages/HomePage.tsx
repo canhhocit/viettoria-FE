@@ -195,7 +195,7 @@ const InteractiveModelStage: React.FC<{ product: Product; reducedMotion: boolean
 };
 
 const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
-  const { t } = useLanguage();
+  const { t, localizeProduct } = useLanguage();
   const reducedMotion = useReducedMotionPreference();
   const [activeMobileIndex, setActiveMobileIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -234,24 +234,27 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
 
           {/* Quick Monument Navigation Pills */}
           <nav className="flex flex-wrap items-center gap-2" aria-label={t('home.selectMonument', 'Chọn công trình đang xem')}>
-            {products.map((product, index) => (
-              <button
-                key={product.id}
-                type="button"
-                onClick={() => scrollToCard(index)}
-                aria-pressed={activeMobileIndex === index}
-                className={`inline-flex items-center gap-1.5 border px-3 py-1.5 text-xs font-sans transition-all ${
-                  activeMobileIndex === index
-                    ? 'border-forest bg-forest text-brass font-bold shadow-xs'
-                    : 'border-paper-border bg-paper text-forest hover:border-brass hover:text-forest hover:bg-paper-warm font-medium'
-                }`}
-              >
-                <span className={`font-cinzel text-[10px] font-bold ${activeMobileIndex === index ? 'text-brass-light' : 'text-brass'}`}>
-                  0{index + 1}
-                </span>
-                <span>{product.name}</span>
-              </button>
-            ))}
+            {products.map((rawProduct, index) => {
+              const product = localizeProduct(rawProduct);
+              return (
+                <button
+                  key={product.id}
+                  type="button"
+                  onClick={() => scrollToCard(index)}
+                  aria-pressed={activeMobileIndex === index}
+                  className={`inline-flex items-center gap-1.5 border px-3 py-1.5 text-xs font-sans transition-all ${
+                    activeMobileIndex === index
+                      ? 'border-forest bg-forest text-brass font-bold shadow-xs'
+                      : 'border-paper-border bg-paper text-forest hover:border-brass hover:text-forest hover:bg-paper-warm font-medium'
+                  }`}
+                >
+                  <span className={`font-cinzel text-[10px] font-bold ${activeMobileIndex === index ? 'text-brass-light' : 'text-brass'}`}>
+                    0{index + 1}
+                  </span>
+                  <span>{product.name}</span>
+                </button>
+              );
+            })}
           </nav>
         </div>
 
@@ -260,18 +263,20 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
           ref={scrollContainerRef}
           className="flex overflow-x-auto snap-x snap-mandatory gap-5 pb-4 no-scrollbar sm:gap-6 lg:grid lg:grid-cols-3 lg:gap-8 lg:overflow-visible lg:pb-0"
         >
-          {products.map((product, index) => (
-            <TiltCard
-              key={product.id}
-              className="min-w-[85vw] sm:min-w-[360px] lg:min-w-0 snap-center h-full"
-              glareEffect={true}
-              tiltAmount={1.8}
-            >
-              <article
-                id={`di-san-${product.slug}`}
-                data-home-reveal
-                className="home-story-card corner-frame group flex h-full flex-col border border-paper-border bg-paper-card shadow-xs transition-all duration-300 hover:border-brass/70 hover:shadow-xl"
+          {products.map((rawProduct, index) => {
+            const product = localizeProduct(rawProduct);
+            return (
+              <TiltCard
+                key={product.id}
+                className="min-w-[85vw] sm:min-w-[360px] lg:min-w-0 snap-center h-full"
+                glareEffect={true}
+                tiltAmount={1.8}
               >
+                <article
+                  id={`di-san-${product.slug}`}
+                  data-home-reveal
+                  className="home-story-card corner-frame group flex h-full flex-col border border-paper-border bg-paper-card shadow-xs transition-all duration-300 hover:border-brass/70 hover:shadow-xl"
+                >
                 {/* Card Plaque Top Bar - Imperial Forest Green & Brass */}
                 <div className="flex items-center justify-between border-b border-brass/40 bg-forest px-4 py-2.5 text-xs text-paper">
                   <div className="flex items-center gap-2">
@@ -336,7 +341,8 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
                 </div>
               </article>
             </TiltCard>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
@@ -344,7 +350,7 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
 };
 
 export const HomePage: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, localizeCollection, localizeBlog } = useLanguage();
   const mainRef = useRef<HTMLElement>(null);
   const initialHero = FALLBACK_PRODUCTS.find((product) => product.isHeroRelease) || FALLBACK_PRODUCTS[0];
   const [heroProduct, setHeroProduct] = useState<Product | null>(initialHero || null);
@@ -481,8 +487,9 @@ export const HomePage: React.FC = () => {
         </div>
 
         <div className="grid gap-x-5 gap-y-9 sm:grid-cols-2 lg:grid-cols-3">
-          {collections.map((collection) => {
-            const representative = storyProducts.find((product) => product.collectionId === collection.id);
+          {collections.map((rawCollection) => {
+            const collection = localizeCollection(rawCollection);
+            const representative = storyProducts.find((product) => product.collectionId === rawCollection.id);
             const poster = imageFor(representative?.heroImage || collection.heroImage, representative?.slug);
             return (
               <Link key={collection.id} to={`/collections/${collection.slug}`} data-home-reveal className="group block border-b border-paper-border pb-5">
@@ -520,15 +527,18 @@ export const HomePage: React.FC = () => {
             </Link>
           </div>
           <div className="grid gap-5 sm:grid-cols-2">
-            {blogs.slice(0, 2).map((blog, index) => (
-              <article key={blog.id} data-home-reveal className="group border-t border-brass/30 pt-4">
-                <p className="font-cinzel text-xs font-bold uppercase tracking-[0.14em] text-brass">{blog.category} · 0{index + 1}</p>
-                <h3 className="mt-3 font-display text-2xl leading-snug text-paper">
-                  <Link to={`/blogs/${blog.slug}`} className="transition-colors group-hover:text-brass-light">{blog.title}</Link>
-                </h3>
-                <p className="mt-2 line-clamp-2 text-sm leading-6 text-paper/75">{blog.excerpt}</p>
-              </article>
-            ))}
+            {blogs.slice(0, 2).map((rawBlog, index) => {
+              const blog = localizeBlog(rawBlog);
+              return (
+                <article key={blog.id} data-home-reveal className="group border-t border-brass/30 pt-4">
+                  <p className="font-cinzel text-xs font-bold uppercase tracking-[0.14em] text-brass">{blog.category} · 0{index + 1}</p>
+                  <h3 className="mt-3 font-display text-2xl leading-snug text-paper">
+                    <Link to={`/blogs/${blog.slug}`} className="transition-colors group-hover:text-brass-light">{blog.title}</Link>
+                  </h3>
+                  <p className="mt-2 line-clamp-2 text-sm leading-6 text-paper/75">{blog.excerpt}</p>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>

@@ -4,18 +4,22 @@ import { FileText, ArrowRight, Clock, User } from 'lucide-react';
 import { publicApi } from '../services/api';
 import type { BlogPost } from '../types';
 import { resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export const BlogsPage: React.FC = () => {
-  const [blogs, setBlogs] = useState<BlogPost[]>([]);
+  const { localizeBlog } = useLanguage();
+  const [rawBlogs, setRawBlogs] = useState<BlogPost[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     publicApi.getBlogs().then((data) => {
-      setBlogs(data);
+      setRawBlogs(data);
       setLoading(false);
     });
   }, []);
+
+  const blogs = (rawBlogs || []).map((b) => localizeBlog(b));
 
   const categories = ['all', ...Array.from(new Set(blogs.map(b => b.category)))];
 

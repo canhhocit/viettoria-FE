@@ -5,9 +5,11 @@ import { publicApi } from '../services/api';
 import type { Collection, Product } from '../types';
 import { PageLoadingHeritage } from '../components/common/HeritageSkeleton';
 import { resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export const CollectionDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { t, localizeCollection, localizeProduct } = useLanguage();
   const [collection, setCollection] = useState<(Collection & { products: Product[] }) | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -21,7 +23,7 @@ export const CollectionDetailPage: React.FC = () => {
   }, [slug]);
 
   if (loading) {
-    return <PageLoadingHeritage message="Đang tải chi tiết bộ sưu tập kiến trúc..." />;
+    return <PageLoadingHeritage message={t('common.loading', 'Đang tải chi tiết bộ sưu tập kiến trúc...')} />;
   }
 
   if (!collection) {
@@ -30,11 +32,14 @@ export const CollectionDetailPage: React.FC = () => {
         <h2 className="font-serif text-2xl font-bold text-forest mb-2">Không tìm thấy bộ sưu tập</h2>
         <p className="text-sm text-charcoal-muted mb-6">Bộ sưu tập bạn tìm kiếm không tồn tại hoặc đã được chuyển dời.</p>
         <Link to="/collections" className="px-5 py-2.5 bg-forest text-paper font-mono text-xs uppercase tracking-wider">
-          Quay lại danh mục bộ sưu tập
+          {t('common.back', 'Quay lại danh mục bộ sưu tập')}
         </Link>
       </div>
     );
   }
+
+  const currentCollection = localizeCollection(collection);
+  const currentProducts = (collection.products || []).map((p) => localizeProduct(p));
 
   return (
     <div className="bg-paper min-h-screen py-12">
@@ -61,11 +66,11 @@ export const CollectionDetailPage: React.FC = () => {
             </div>
 
             <h1 className="font-serif text-3xl sm:text-5xl font-bold tracking-wide">
-              {collection.name}
+              {currentCollection.name}
             </h1>
 
             <p className="text-sm sm:text-base text-paper/85 font-normal leading-relaxed">
-              {collection.description}
+              {currentCollection.description}
             </p>
           </div>
         </div>
@@ -74,12 +79,12 @@ export const CollectionDetailPage: React.FC = () => {
         <div className="space-y-6">
           <div className="border-b border-paper-border pb-4 flex items-center justify-between">
             <h2 className="font-serif text-2xl font-bold text-forest">
-              Các Tác Phẩm Trong Bộ Sưu Tập ({collection.products?.length || 0})
+              Các Tác Phẩm Trong Bộ Sưu Tập ({currentProducts.length})
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {collection.products?.map((product) => (
+            {currentProducts.map((product) => (
               <div
                 key={product.id}
                 className="bg-paper-card border border-brass/25 hover:border-brass transition-all corner-frame overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-md duration-300"

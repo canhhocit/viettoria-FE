@@ -5,21 +5,25 @@ import { publicApi } from '../services/api';
 import type { BlogPost } from '../types';
 import { PageLoadingHeritage } from '../components/common/HeritageSkeleton';
 import { resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export const BlogDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [blog, setBlog] = useState<BlogPost | null>(null);
+  const { localizeBlog } = useLanguage();
+  const [rawBlog, setRawBlog] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (slug) {
       setLoading(true);
       publicApi.getBlogBySlug(slug).then((data) => {
-        setBlog(data);
+        setRawBlog(data);
         setLoading(false);
       });
     }
   }, [slug]);
+
+  const blog = rawBlog ? localizeBlog(rawBlog) : null;
 
   if (loading) {
     return <PageLoadingHeritage message="Đang tải bài viết khảo cứu di sản..." />;

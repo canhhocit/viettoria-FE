@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { 
@@ -13,7 +13,7 @@ import {
   X,
 } from 'lucide-react';
 import { publicApi } from '../services/api';
-import type { Product } from '../types';
+import type { Product, StoryBlock } from '../types';
 import { ArchitecturalViewer } from '../components/common/ArchitecturalViewer';
 import { AudioPlayer } from '../components/common/AudioPlayer';
 import { StoryBlockRenderer } from '../components/story/StoryBlockRenderer';
@@ -26,24 +26,26 @@ export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [searchParams] = useSearchParams();
   const codeParam = searchParams.get('code');
-  const [product, setProduct] = useState<Product | null>(null);
+  const [rawProduct, setRawProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [qrImage, setQrImage] = useState('');
   const [qrLoading, setQrLoading] = useState(false);
   const [qrError, setQrError] = useState('');
   const [shareMessage, setShareMessage] = useState('');
-  const { t } = useLanguage();
+  const { t, localizeProduct } = useLanguage();
 
   useEffect(() => {
     if (slug) {
       setLoading(true);
       publicApi.getProductBySlugOrCode(slug).then((data) => {
-        setProduct(data);
+        setRawProduct(data);
         setLoading(false);
       });
     }
   }, [slug]);
+
+  const product = useMemo(() => (rawProduct ? localizeProduct(rawProduct) : null), [rawProduct, localizeProduct]);
 
   const shareUrl = product
     ? new URL(`/products/${encodeURIComponent(product.slug)}`, window.location.origin).toString()
@@ -308,7 +310,7 @@ export const ProductDetailPage: React.FC = () => {
             </div>
 
             <div className="space-y-8">
-              {product.storyBlocks.map((block) => (
+              {product.storyBlocks.map((block: StoryBlock) => (
                 <StoryBlockRenderer 
                   key={block.id} 
                   block={block} 
@@ -374,7 +376,7 @@ export const ProductDetailPage: React.FC = () => {
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {product.relatedProducts.map((rel) => (
+              {product.relatedProducts.map((rel: Product) => (
                 <Link
                   key={rel.id}
                   to={`/products/${rel.slug}`}
