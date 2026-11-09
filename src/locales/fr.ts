@@ -62,10 +62,10 @@ export const fr: TranslationSchema = {
     heroBadge3: 'Expérience 3D',
     scrollDown: 'Faites défiler pour explorer',
 
-    // Scrollytelling Section
+    // Showcase Section
     scrollyEyebrow: 'Un tour du patrimoine vietnamien',
     scrollyHeading: 'Chaque édifice, une histoire vivante',
-    scrollyDesc: 'Faites défiler pour admirer les modèles 3D interactifs et percer les secrets de l’architecture ancestrale.',
+    scrollyDesc: 'Admirez les maquettes 3D numérisées et découvrez les récits historiques derrière chaque chef-d’œuvre architectural.',
     dragToRotate: 'Modèle 3D · Glisser pour pivoter',
     previewVideo: 'Vidéo aperçu',
     previewPhoto: 'Photo aperçu',

@@ -60,10 +60,10 @@ export const vi = {
     heroBadge3: 'Trải nghiệm 3D',
     scrollDown: 'Cuộn để khám phá',
 
-    // Scrollytelling Section
+    // Showcase Section
     scrollyEyebrow: 'Một vòng qua di sản Việt',
     scrollyHeading: 'Mỗi công trình, một câu chuyện',
-    scrollyDesc: 'Cuộn trang để lần lượt ngắm các mô hình 3D và khám phá câu chuyện phía sau từng dấu ấn kiến trúc văn hiến.',
+    scrollyDesc: 'Chiêm ngưỡng các mô hình 3D số hóa và khám phá câu chuyện lịch sử phía sau từng dấu ấn kiến trúc văn hiến.',
     dragToRotate: 'Mô hình 3D · Kéo để xoay',
     previewVideo: 'Video xem trước',
     previewPhoto: 'Ảnh xem trước',

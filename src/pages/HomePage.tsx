@@ -160,7 +160,7 @@ const InteractiveModelStage: React.FC<{ product: Product; reducedMotion: boolean
           shadow-intensity="0.75"
           exposure="1"
           interaction-prompt="none"
-          loading="eager"
+          loading="lazy"
           reveal="auto"
           ref={modelViewerRef}
           style={{ width: '100%', height: '100%', backgroundColor: 'var(--heritage-paper-card)', touchAction: 'pan-y' }}
@@ -195,107 +195,138 @@ const InteractiveModelStage: React.FC<{ product: Product; reducedMotion: boolean
 const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
   const { t } = useLanguage();
   const reducedMotion = useReducedMotionPreference();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const chapterRefs = useRef<Array<HTMLElement | null>>([]);
-  const activeProduct = products[activeIndex] || products[0];
+  const [activeMobileIndex, setActiveMobileIndex] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const chapters = chapterRefs.current.filter((chapter): chapter is HTMLElement => chapter !== null);
-    if (chapters.length === 0 || typeof IntersectionObserver === 'undefined') return;
+  if (products.length === 0) return null;
 
-    const observer = new IntersectionObserver((entries) => {
-      const closestChapter = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((first, second) => {
-          const firstDistance = Math.abs(first.boundingClientRect.top + first.boundingClientRect.height / 2 - window.innerHeight / 2);
-          const secondDistance = Math.abs(second.boundingClientRect.top + second.boundingClientRect.height / 2 - window.innerHeight / 2);
-          return firstDistance - secondDistance;
-        })[0];
-
-      if (closestChapter) {
-        setActiveIndex(Number(closestChapter.target.getAttribute('data-chapter-index')));
-      }
-    }, { rootMargin: '-40% 0px -40% 0px', threshold: 0 });
-
-    chapters.forEach((chapter) => observer.observe(chapter));
-    return () => observer.disconnect();
-  }, [products]);
-
-  if (products.length === 0 || !activeProduct) return null;
-
-  const jumpToChapter = (index: number) => {
-    chapterRefs.current[index]?.scrollIntoView({
-      behavior: reducedMotion ? 'auto' : 'smooth',
-      block: 'center',
-    });
+  const scrollToCard = (index: number) => {
+    setActiveMobileIndex(index);
+    if (!scrollContainerRef.current) return;
+    const cards = scrollContainerRef.current.children;
+    if (cards[index]) {
+      (cards[index] as HTMLElement).scrollIntoView({
+        behavior: reducedMotion ? 'auto' : 'smooth',
+        inline: 'center',
+        block: 'nearest',
+      });
+    }
   };
 
   return (
     <section id="hanh-trinh-di-san" className="home-story-section border-y border-paper-border bg-header">
-      <div className="mx-auto max-w-[1440px] px-5 py-16 sm:px-8 sm:py-20 lg:px-16 lg:py-24">
-        <header data-home-reveal className="mb-9 max-w-2xl sm:mb-12">
-          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-brass-dark">{t('home.scrollyEyebrow', 'Một vòng qua di sản Việt')}</p>
-          <h2 className="font-display text-3xl leading-tight text-ink sm:text-4xl lg:text-5xl">{t('home.scrollyHeading', 'Mỗi công trình, một câu chuyện')}</h2>
-          <p className="mt-4 max-w-xl text-sm leading-7 text-charcoal-muted sm:text-base">
-            {t('home.scrollyDesc', 'Cuộn trang để lần lượt ngắm các mô hình 3D và khám phá câu chuyện phía sau từng dấu ấn kiến trúc.')}
-          </p>
-        </header>
-
-        <div className="grid items-start gap-7 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
-          <div data-home-reveal className="home-story-stage sticky top-[76px] z-10 h-[min(62vw,390px)] min-h-[250px] overflow-hidden border border-paper-border bg-paper-card shadow-sm lg:top-24 lg:h-[min(68vh,650px)] lg:min-h-[480px]">
-            <InteractiveModelStage product={activeProduct} reducedMotion={reducedMotion} />
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-forest-dark/85 via-forest-dark/35 to-transparent px-5 pb-5 pt-16 text-paper-light sm:px-7 sm:pb-7">
-              <div>
-                <p className="mt-1 font-display text-xl sm:text-2xl">{activeProduct.name}</p>
-              </div>
-              <span className="font-cinzel text-xs tracking-[0.14em] text-white/90 font-bold">0{activeIndex + 1} / 0{products.length}</span>
-            </div>
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[2px] bg-white/25" aria-hidden="true">
-              <div className="h-full bg-brass-light transition-[width] duration-700" style={{ width: `${((activeIndex + 1) / products.length) * 100}%` }} />
-            </div>
+      <div className="mx-auto max-w-[1440px] px-5 py-14 sm:px-8 sm:py-20 lg:px-16 lg:py-24">
+        {/* Header Section */}
+        <div data-home-reveal className="mb-8 flex flex-col justify-between gap-5 sm:mb-10 lg:flex-row lg:items-end">
+          <div className="max-w-2xl">
+            <p className="mb-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-brass-dark">
+              {t('home.scrollyEyebrow', 'Một vòng qua di sản Việt')}
+            </p>
+            <h2 className="font-display text-3xl leading-tight text-ink sm:text-4xl lg:text-5xl">
+              {t('home.scrollyHeading', 'Mỗi công trình, một câu chuyện')}
+            </h2>
+            <p className="mt-3.5 max-w-xl text-sm leading-relaxed text-charcoal-muted sm:text-base">
+              {t('home.scrollyDesc', 'Chiêm ngưỡng các mô hình 3D số hóa và khám phá câu chuyện lịch sử phía sau từng dấu ấn kiến trúc văn hiến.')}
+            </p>
           </div>
 
-          <div className="home-story-chapters">
+          {/* Quick Monument Navigation Pills */}
+          <nav className="flex flex-wrap items-center gap-2" aria-label={t('home.selectMonument', 'Chọn công trình đang xem')}>
             {products.map((product, index) => (
-              <article
+              <button
                 key={product.id}
-                id={`di-san-${product.slug}`}
-                data-chapter-index={index}
-                ref={(element) => { chapterRefs.current[index] = element; }}
-                className={`home-story-chapter flex min-h-[58vh] flex-col justify-center border-b border-paper-border py-10 transition-all duration-700 last:border-0 lg:min-h-[68vh] ${activeIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-60'}`}
+                type="button"
+                onClick={() => scrollToCard(index)}
+                aria-pressed={activeMobileIndex === index}
+                className={`inline-flex items-center gap-1.5 border px-3 py-1.5 text-xs font-sans transition-all ${
+                  activeMobileIndex === index
+                    ? 'border-brown bg-brown text-paper-light font-medium shadow-xs'
+                    : 'border-paper-border bg-paper-warm text-brown-dark hover:border-brass hover:text-forest'
+                }`}
               >
-                <div className="mb-5 flex items-center gap-3 text-[11px] uppercase tracking-[0.16em] text-brown">
-                  <span className="font-cinzel font-bold text-xs">0{index + 1}</span>
-                  <span className="h-px w-8 bg-paper-deep" />
-                  <span>{product.location}</span>
-                </div>
-                <h3 className="font-display text-3xl leading-tight text-ink sm:text-4xl">{product.name}</h3>
-                <p className="mt-2 font-display text-base italic text-brown">{product.subName}</p>
-                <p className="mt-5 max-w-lg text-sm leading-7 text-charcoal-muted sm:text-base">{product.shortDescription}</p>
-                <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-paper-border pt-4 text-xs text-charcoal-muted">
-                  <span>{product.epoch}</span>
-                  <Link to={`/products/${product.slug}`} className="inline-flex items-center gap-2 font-semibold text-brown transition-colors hover:text-terracotta">
-                    {t('common.exploreMonument', 'Tìm hiểu công trình')} <ArrowRight size={14} strokeWidth={1.6} />
-                  </Link>
-                </div>
-              </article>
+                <span className={`font-cinzel text-[10px] font-bold ${activeMobileIndex === index ? 'text-paper-light' : 'text-brass'}`}>
+                  0{index + 1}
+                </span>
+                <span>{product.name}</span>
+              </button>
             ))}
-          </div>
+          </nav>
         </div>
 
-        <nav className="mt-7 flex flex-wrap gap-2 lg:ml-[calc(52.5%-1rem)]" aria-label={t('home.selectMonument', 'Chọn công trình đang xem')}>
+        {/* Horizontal Model Cards: Grid on Desktop, Swipe Track on Mobile */}
+        <div
+          ref={scrollContainerRef}
+          className="flex overflow-x-auto snap-x snap-mandatory gap-5 pb-4 no-scrollbar sm:gap-6 lg:grid lg:grid-cols-3 lg:gap-8 lg:overflow-visible lg:pb-0"
+        >
           {products.map((product, index) => (
-            <button
+            <article
               key={product.id}
-              type="button"
-              onClick={() => jumpToChapter(index)}
-              aria-pressed={activeIndex === index}
-              className={`border px-3 py-2 text-xs transition-colors ${activeIndex === index ? 'border-brown bg-brown text-paper-light' : 'border-paper-border text-brown-dark hover:border-brown'}`}
+              id={`di-san-${product.slug}`}
+              data-home-reveal
+              className="home-story-card group flex min-w-[85vw] sm:min-w-[360px] lg:min-w-0 snap-center flex-col border border-paper-border bg-paper-card shadow-xs transition-all duration-300 hover:border-brass/70 hover:shadow-md"
             >
-              0{index + 1} · {product.name}
-            </button>
+              {/* Card Plaque Top Bar */}
+              <div className="flex items-center justify-between border-b border-paper-border bg-paper-warm/60 px-4 py-2.5 text-xs">
+                <div className="flex items-center gap-2 text-brown">
+                  <span className="font-cinzel text-xs font-bold text-brass">0{index + 1}</span>
+                  <span className="h-2.5 w-px bg-paper-deep" />
+                  <span className="truncate max-w-[150px] font-sans text-[11px] uppercase tracking-wider text-charcoal/80 font-medium">
+                    {product.location}
+                  </span>
+                </div>
+                <span className="font-cinzel text-[10px] uppercase tracking-widest text-brass-dark font-bold">
+                  {product.epoch}
+                </span>
+              </div>
+
+              {/* 3D Model Viewport */}
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-paper sm:aspect-[1.18/1]">
+                <InteractiveModelStage product={product} reducedMotion={reducedMotion} />
+
+                {/* Bottom Overlay with Monument Name and Index */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between bg-gradient-to-t from-forest-dark/85 via-forest-dark/35 to-transparent px-4 pb-3 pt-12 text-paper-light">
+                  <p className="font-display text-base sm:text-lg font-bold text-paper drop-shadow-xs">
+                    {product.name}
+                  </p>
+                  <span className="font-cinzel text-[11px] font-bold text-white/90">
+                    0{index + 1} / 0{products.length}
+                  </span>
+                </div>
+              </div>
+
+              {/* Card Information Body */}
+              <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
+                <div>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold leading-snug text-ink transition-colors group-hover:text-brown">
+                    <Link to={`/products/${product.slug}`}>
+                      {product.name}
+                    </Link>
+                  </h3>
+                  <p className="mt-1 font-display text-xs sm:text-sm italic text-brown">
+                    {product.subName}
+                  </p>
+                  <p className="mt-3.5 text-xs sm:text-sm leading-relaxed text-charcoal-muted line-clamp-3">
+                    {product.shortDescription}
+                  </p>
+                </div>
+
+                {/* Card Action Link */}
+                <div className="mt-6 flex items-center justify-between border-t border-paper-border pt-4">
+                  <span className="font-cinzel text-[10px] font-bold uppercase tracking-wider text-brown-dark/70">
+                    {product.epoch}
+                  </span>
+                  <Link
+                    to={`/products/${product.slug}`}
+                    className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-wider text-brown transition-colors hover:text-terracotta"
+                  >
+                    <span>{t('common.exploreMonument', 'Tìm hiểu công trình')}</span>
+                    <ArrowRight size={13} strokeWidth={1.8} className="transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </div>
+              </div>
+            </article>
           ))}
-        </nav>
+        </div>
       </div>
     </section>
   );
