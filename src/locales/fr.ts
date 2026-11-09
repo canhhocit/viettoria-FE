@@ -164,6 +164,19 @@ export const fr: TranslationSchema = {
     notFound: 'Le code sceau QR est introuvable dans l’écosystème Viettoria.',
   },
 
+  // 3D Hotspots & Architectural Inspection
+  hotspots: {
+    toggleTitle: 'Détails Architecturaux',
+    toggleActive: 'Masquer les points',
+    toggleInactive: 'Afficher les points',
+    pointsCount: 'points d\'inspection',
+    focusCamera: 'Centrer la vue',
+    resetCamera: 'Réinitialiser la vue',
+    inspectHint: 'Appuyez ou cliquez sur les repères pour explorer les éléments architecturaux uniques',
+    close: 'Fermer',
+    fullscreenMode: 'Mode Inspection Plein Écran 3D',
+  },
+
   // Footer
   footer: {
     brandDesc: 'Sublimer les chefs-d’œuvre architecturaux vietnamiens sous forme de maquettes d’art 3D associées à des plateformes numériques sensorielles, rapprochant l’histoire ancestrale des voyageurs du monde entier.',

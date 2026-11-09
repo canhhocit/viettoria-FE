@@ -1,0 +1,237 @@
+/**
+ * VIETTORIA — Dữ liệu Điểm Khảo Cứu Cấu Kiện Kiến Trúc 3D (3D Architectural Hotspots)
+ * Tọa độ 3D (x y z) chuẩn xác được căn chuẩn theo kích thước mô hình glTF.
+ */
+
+export interface ArchitecturalHotspot {
+  id: string;
+  number: string;
+  title: string;
+  category: string;
+  detail: string;
+  position: string; // "x y z" in meters
+  normal: string; // "nx ny nz"
+  orbit?: string; // "theta phi radius" e.g. "0deg 75deg 1.8m"
+  target?: string; // "x y z" in meters e.g. "0m 0.28m 0m"
+}
+
+export const ARCHITECTURAL_HOTSPOTS: Record<string, ArchitecturalHotspot[]> = {
+  // 1. Chùa Một Cột (VT-HN-001)
+  'chua-mot-cot': [
+    {
+      id: 'tru-da',
+      number: '01',
+      title: 'Trụ Đá Đơn Nguyên Khối',
+      category: 'KẾT CẤU CHỊU LỰC CỐT LÕI',
+      detail: 'Hai thớt đá xanh nguyên khối ghép khít bằng mộng đá (đường kính 1.25m, cao 4m), dựng đứng vững chãi giữa lòng hồ Linh Chiểu nâng đỡ toàn bộ ngôi chùa.',
+      position: '0.00 0.24 0.18',
+      normal: '0 0 1',
+      orbit: '0deg 78deg 1.7m',
+      target: '0m 0.24m 0m',
+    },
+    {
+      id: 'xa-nach',
+      number: '02',
+      title: 'Hệ Xà Nách 8 Cánh Gỗ Lim',
+      category: 'TINH HOA MỘNG GỖ ĐẠI VIỆT',
+      detail: 'Tám thanh gỗ lim xẻ xiên 45 độ ăn khớp vào ngọn cột đá, liên kết mộng giằng chịu tải trọng rung chấn, xòe rộng tựa đài hoa sen nâng đỡ gian thờ.',
+      position: '0.28 0.48 0.22',
+      normal: '1 0.5 1',
+      orbit: '45deg 70deg 1.7m',
+      target: '0.12m 0.48m 0.12m',
+    },
+    {
+      id: 'gian-tho',
+      number: '03',
+      title: 'Gian Thờ Liên Hoa Đài',
+      category: 'KHÔNG GIAN TÂM LINH THIÊNG LIÊNG',
+      detail: 'Không gian thờ tượng Phật Bà Quan Thế Âm ngự trên tòa sen vàng sơn then, mô phỏng lại giấc mơ điềm lành của vua Lý Thái Tông năm 1049.',
+      position: '0.00 0.62 0.30',
+      normal: '0 0 1',
+      orbit: '0deg 75deg 1.5m',
+      target: '0m 0.62m 0.15m',
+    },
+    {
+      id: 'mai-cong',
+      number: '04',
+      title: 'Bờ Mái Đao Cong Vút & Ngói Mũi Hài',
+      category: 'ĐIÊU KHẮC MÁI THỜI LÝ',
+      detail: 'Bốn góc mái đao uốn cong thanh thoát, lợp ngói mũi hài nung thủ công với sống mái đắp hình hoa sen và vân mây uốn lượn đặc trưng nghệ thuật thời Lý.',
+      position: '0.00 0.88 0.42',
+      normal: '0 1 1',
+      orbit: '20deg 60deg 1.9m',
+      target: '0m 0.80m 0m',
+    },
+  ],
+
+  // 2. Khuê Văn Các (VT-HN-002)
+  'khue-van-cac': [
+    {
+      id: 'cua-so-sao-khue',
+      number: '01',
+      title: 'Ô Cửa Tròn Sao Khuê Tỏa Sáng',
+      category: 'BIỂU TƯỢNG VĂN HIẾN TRÀNG AN',
+      detail: 'Cửa sổ tròn bốn mặt với các thanh gỗ xòe đều như tia sáng của sao Khuê - ngôi sao chủ về văn học, nghệ thuật và tinh thần hiếu học dân tộc.',
+      position: '0.00 0.68 0.38',
+      normal: '0 0 1',
+      orbit: '0deg 75deg 1.6m',
+      target: '0m 0.68m 0m',
+    },
+    {
+      id: 'tru-gach-vuong',
+      number: '02',
+      title: 'Bốn Trụ Gạch Vuông Đỡ Tầng Lầu',
+      category: 'TRIẾT LÝ TRỜI TRÒN ĐẤT VUÔNG',
+      detail: 'Tầng dưới gồm 4 cột gạch vuông vức tượng trưng cho Đất vuông, nâng đỡ tầng lầu gỗ tròn bên trên tượng trưng cho Trời tròn (Âm Dương giao hòa).',
+      position: '0.24 0.22 0.24',
+      normal: '1 0 1',
+      orbit: '45deg 80deg 1.8m',
+      target: '0m 0.22m 0m',
+    },
+    {
+      id: 'mai-chong-diem',
+      number: '03',
+      title: 'Mái Chồng Diêm Hai Tầng Tám Mái',
+      category: 'KẾT CẤU GỖ TRUYỀN THỐNG',
+      detail: 'Kiến trúc hai tầng mái chồng diêm duyên dáng lợp ngói ống, các đầu đao cong vút nhẹ nhàng, bờ nóc đắp dải hoa chanh tinh xảo thời Nguyễn.',
+      position: '0.00 0.90 0.32',
+      normal: '0 1 1',
+      orbit: '20deg 60deg 1.7m',
+      target: '0m 0.85m 0m',
+    },
+  ],
+
+  // 3. Cột Cờ Hà Nội (VT-HN-003)
+  'cot-co-ha-noi': [
+    {
+      id: 'vong-canh-dinh',
+      number: '01',
+      title: 'Vọng Canh Bát Giác & Đỉnh Cột',
+      category: 'ĐIỂM CAO QUAN SÁT HOÀNG THÀNH',
+      detail: 'Lầu quan sát hình bát giác trên đỉnh cột cờ với 8 ô cửa sổ nhìn bao quát toàn bộ thành lũy và phố phường Hà Nội, nơi cắm quốc kỳ thiêng liêng.',
+      position: '0.00 0.92 0.08',
+      normal: '0 1 0',
+      orbit: '0deg 60deg 1.8m',
+      target: '0m 0.90m 0m',
+    },
+    {
+      id: 'than-thap-bat-giac',
+      number: '02',
+      title: 'Thân Tháp Gạch Vồ Thăng Long',
+      category: 'CÔNG TRÌNH PHÒNG THỦ KIÊN CỐ',
+      detail: 'Thân tháp xây bằng gạch vồ nung đỏ cao hơn 18m, thon dần lên đỉnh với 39 lỗ hoa thị xẻ rãnh hoa cúc đón gió và lấy ánh sáng cho cầu thang xoắn ốc.',
+      position: '0.08 0.60 0.12',
+      normal: '1 0 1',
+      orbit: '45deg 75deg 1.7m',
+      target: '0m 0.58m 0m',
+    },
+    {
+      id: 'ba-tang-de',
+      number: '03',
+      title: 'Ba Tầng Bệ Vuông Giật Cấp',
+      category: 'NỀN MÓNG THÀNH QUÁCH THỜI NGUYỄN',
+      detail: '3 tầng đế vuông xây giật cấp kiên cố có lan can bao quanh, bốn phía trổ vòm cuốn khắc tên chữ Hán: Nghênh Húc (đón nắng sớm), Hướng Minh, Hồi Quang.',
+      position: '0.30 0.18 0.30',
+      normal: '1 0.5 1',
+      orbit: '45deg 80deg 2.0m',
+      target: '0m 0.18m 0m',
+    },
+  ],
+
+  // 4. Ngọ Môn Huế (VT-HUE-004)
+  'ngo-mon-hue': [
+    {
+      id: 'lau-ngu-phung',
+      number: '01',
+      title: 'Lầu Ngũ Phụng Uy Nghiêm',
+      category: 'ĐỈNH CAO CUNG ĐÌNH HUẾ',
+      detail: 'Công trình 2 tầng 9 nóc tựa năm con chim phụng xòe cánh che chở hoàng thành, lợp xen kẽ ngói hoàng lưu ly vàng rực rỡ và thanh lưu ly xanh biếc.',
+      position: '0.00 0.72 0.35',
+      normal: '0 1 1',
+      orbit: '0deg 65deg 2.2m',
+      target: '0m 0.70m 0m',
+    },
+    {
+      id: 'cong-chinh-ngo-mon',
+      number: '02',
+      title: 'Cửa Cuốn Chính Giữa Dành Cho Vua',
+      category: 'LỐI ĐI ĐỘC TÔN CỦA HOÀNG ĐẾ',
+      detail: 'Cửa vòm chính giữa xây cuốn bằng đá hoa cương chỉ mở khi Hoàng đế ngự giá xuất cung, tôn nghiêm bậc nhất Đại Nội Huế.',
+      position: '0.00 0.22 0.45',
+      normal: '0 0 1',
+      orbit: '0deg 80deg 2.0m',
+      target: '0m 0.22m 0.2m',
+    },
+    {
+      id: 'ta-huu-giap-mon',
+      number: '03',
+      title: 'Tả Giáp Môn & Hữu Giáp Môn',
+      category: 'HÀNH LANG QUAN VĂN QUAN VÕ',
+      detail: 'Hai cổng phụ hai bên cổng chính dành riêng cho các quan văn, quan võ và binh lính triều đình theo nghi thức triều hội nghiêm ngặt.',
+      position: '0.65 0.22 0.45',
+      normal: '0 0 1',
+      orbit: '30deg 80deg 2.0m',
+      target: '0.5m 0.22m 0.2m',
+    },
+  ],
+
+  // 5. Bến Nhà Rồng (VT-SG-005)
+  'ben-nha-rong': [
+    {
+      id: 'luong-long-chau-nguyet',
+      number: '01',
+      title: 'Lưỡng Long Chầu Nguyệt',
+      category: 'BIỂU TƯỢNG PHƯƠNG NAM',
+      detail: 'Đôi rồng đất nung tráng men xanh uốn lượn chầu mặt trăng trên đỉnh nóc tòa nhà, nguồn gốc tạo nên tên gọi lịch sử Bến Nhà Rồng năm 1863.',
+      position: '0.00 0.88 0.05',
+      normal: '0 1 0',
+      orbit: '0deg 60deg 1.9m',
+      target: '0m 0.85m 0m',
+    },
+    {
+      id: 'hanh-lang-vom-phap',
+      number: '02',
+      title: 'Hành Lang Vòm Cung Cổ Điển',
+      category: 'GIAO THOA KIẾN TRÚC Á - ÂU',
+      detail: 'Dãy hành lang vòm cuốn mở thoáng đãng phong cách tân cổ điển Pháp đón trọn luồng gió mát từ sông Sài Gòn thổi vào.',
+      position: '0.45 0.38 0.38',
+      normal: '0 0 1',
+      orbit: '30deg 75deg 1.8m',
+      target: '0.2m 0.38m 0m',
+    },
+  ],
+};
+
+/**
+ * Trả về danh sách điểm khảo cứu kiến trúc dựa theo slug, code hoặc id
+ */
+export function getHotspotsForProduct(identifier?: string): ArchitecturalHotspot[] {
+  if (!identifier) return ARCHITECTURAL_HOTSPOTS['chua-mot-cot'];
+
+  const clean = identifier.toLowerCase().trim();
+
+  // Tra cứu trực tiếp theo slug
+  if (ARCHITECTURAL_HOTSPOTS[clean]) {
+    return ARCHITECTURAL_HOTSPOTS[clean];
+  }
+
+  // Tra cứu theo mã di sản
+  if (clean.includes('001') || clean.includes('chua-mot-cot') || clean.includes('mot-cot')) {
+    return ARCHITECTURAL_HOTSPOTS['chua-mot-cot'];
+  }
+  if (clean.includes('002') || clean.includes('khue-van-cac')) {
+    return ARCHITECTURAL_HOTSPOTS['khue-van-cac'];
+  }
+  if (clean.includes('003') || clean.includes('cot-co')) {
+    return ARCHITECTURAL_HOTSPOTS['cot-co-ha-noi'];
+  }
+  if (clean.includes('004') || clean.includes('ngo-mon') || clean.includes('hue')) {
+    return ARCHITECTURAL_HOTSPOTS['ngo-mon-hue'];
+  }
+  if (clean.includes('005') || clean.includes('nha-rong') || clean.includes('ben-nha-rong')) {
+    return ARCHITECTURAL_HOTSPOTS['ben-nha-rong'];
+  }
+
+  // Mặc định trả về cấu kiện tiêu chuẩn
+  return ARCHITECTURAL_HOTSPOTS['chua-mot-cot'];
+}

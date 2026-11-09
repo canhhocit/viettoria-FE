@@ -152,7 +152,6 @@ const InteractiveModelStage: React.FC<{ product: Product; reducedMotion: boolean
         />
       )}
       {viewerAvailable && !modelFailed && (
-        // @ts-expect-error Custom element is registered by model-viewer.min.js in index.html.
         <model-viewer
           key={`${product.slug}-model`}
           src={modelUrl}

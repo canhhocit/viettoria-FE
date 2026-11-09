@@ -89,6 +89,67 @@
   background-color: var(--heritage-paper-card);
 }
 
+/* 3D Model Interactive Hotspots & Architectural Inspection Nodes */
+.heritage-hotspot-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  background-color: #142820;
+  border: 1.5px solid #C49A45;
+  color: #FAF7F0;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(13, 28, 22, 0.5), 0 0 0 1px rgba(196, 154, 69, 0.35);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, background-color 0.2s ease, border-color 0.2s ease;
+  user-select: none;
+  touch-action: manipulation;
+  pointer-events: auto;
+}
+
+.heritage-hotspot-node:hover,
+.heritage-hotspot-node.is-active {
+  transform: scale(1.18);
+  border-color: #FAF7F0;
+  background-color: #B88A38;
+  color: #142820;
+  z-index: 30;
+}
+
+/* Radar pulse animation for active/available hotspots */
+.heritage-hotspot-ping {
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(196, 154, 69, 0.7);
+  animation: heritage-hotspot-pulse 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes heritage-hotspot-pulse {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* model-viewer automatically removes data-visible attribute when a hotspot is occluded */
+.heritage-hotspot-node:not([data-visible]) {
+  opacity: 0.25;
+  transform: scale(0.75);
+  pointer-events: none;
+}
+
+.heritage-hotspot-node:not([data-visible]) .heritage-hotspot-ping {
+  display: none;
+}
+
 .audio-guide-emblem.is-speaking {
   box-shadow: 0 0 0 5px rgba(184, 138, 68, 0.08);
 }

@@ -162,6 +162,19 @@ export const vi = {
     notFound: 'Mã tem QR không tồn tại trong hệ sinh thái di sản Viettoria.',
   },
 
+  // 3D Hotspots & Architectural Inspection
+  hotspots: {
+    toggleTitle: 'Khảo cứu cấu kiện',
+    toggleActive: 'Ẩn điểm chi tiết',
+    toggleInactive: 'Hiện điểm chi tiết',
+    pointsCount: 'điểm khảo cứu',
+    focusCamera: 'Tập trung góc nhìn',
+    resetCamera: 'Đặt lại góc nhìn',
+    inspectHint: 'Chạm hoặc nhấp vào các điểm đánh dấu trên mô hình để khám phá chi tiết kiến trúc độc bản',
+    close: 'Đóng chi tiết',
+    fullscreenMode: 'Chế độ khảo cứu toàn cảnh 3D',
+  },
+
   // Footer
   footer: {
     brandDesc: 'Tái hiện kiệt tác kiến trúc Việt Nam dưới dạng mô hình in 3D tinh xảo kết hợp nền tảng số hóa tương tác đa giác quan, đưa câu chuyện sử Việt đến gần hơn với mọi thế hệ du khách trong nước và quốc tế.',

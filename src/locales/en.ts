@@ -164,6 +164,19 @@ export const en: TranslationSchema = {
     notFound: 'QR seal code was not found in the Viettoria heritage ecosystem.',
   },
 
+  // 3D Hotspots & Architectural Inspection
+  hotspots: {
+    toggleTitle: 'Architectural Details',
+    toggleActive: 'Hide Hotspots',
+    toggleInactive: 'Show Hotspots',
+    pointsCount: 'inspection points',
+    focusCamera: 'Focus View',
+    resetCamera: 'Reset View',
+    inspectHint: 'Tap or click on the highlighted markers to inspect unique architectural components',
+    close: 'Close detail',
+    fullscreenMode: '3D Fullscreen Inspection Mode',
+  },
+
   // Footer
   footer: {
     brandDesc: 'Reimagining Vietnamese architectural masterpieces as fine 3D printed collectibles paired with sensory digital archives, bringing ancient history closer to generations of domestic and global travelers.',
