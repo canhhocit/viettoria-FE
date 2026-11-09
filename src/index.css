@@ -396,10 +396,22 @@
 .heritage-gold-foil {
   background: linear-gradient(135deg, #FAF7F0 0%, #D4AF37 30%, #FFF3B0 50%, #B88A38 80%, #9C6F2A 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   background-size: 200% auto;
   animation: goldFoilShift 8s ease infinite alternate;
   filter: drop-shadow(0 2px 14px rgba(212, 175, 55, 0.3));
+  display: inline-block;
+  padding-right: 0.12em;
+  padding-bottom: 0.06em;
+  margin-right: -0.12em;
+  overflow: visible;
+}
+
+.heritage-gold-foil::selection {
+  -webkit-text-fill-color: #142820 !important;
+  background-color: #E2CFA8 !important;
+  color: #142820 !important;
 }
 
 @keyframes goldFoilShift {

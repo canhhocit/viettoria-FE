@@ -433,9 +433,9 @@ export const HomePage: React.FC = () => {
         </div>
 
         <div className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center px-5 pb-24 pt-16 sm:px-8 lg:px-16">
-          <div className="max-w-[760px] animate-fade-up py-10">
-            <h1 className="font-display text-[clamp(3.25rem,8vw,7rem)] font-normal leading-[0.94] tracking-[-0.045em] text-paper">
-              {t('home.heroTitleLine1', 'Văn Minh')}<br />
+          <div className="max-w-[880px] animate-fade-up py-10">
+            <h1 className="font-display text-[clamp(2.75rem,5.8vw,5.5rem)] font-normal leading-[1.12] tracking-[-0.015em] text-paper">
+              <span className="block">{t('home.heroTitleLine1', 'Văn Minh')}</span>
               <span className="heritage-gold-foil font-normal italic">{t('home.heroTitleLine2', 'Di Sản Việt')}</span>
             </h1>
             <p className="mt-6 max-w-[700px] text-lg leading-8 text-white/90 sm:text-xl sm:leading-9">
