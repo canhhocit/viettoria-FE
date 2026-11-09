@@ -32,7 +32,6 @@ interface ArchitecturalViewerProps {
 export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ product }) => {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'3d' | 'photos'>('3d');
-  const [selectedPhoto, setSelectedPhoto] = useState(0);
   const [isPhotoZoomOpen, setIsPhotoZoomOpen] = useState(false);
   const [viewerAvailable, setViewerAvailable] = useState(() =>
     typeof window !== 'undefined' && Boolean(window.customElements?.get('model-viewer')),
@@ -118,16 +117,10 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
   const posterUrl = preview?.poster || resolveImageUrl(product.heroImage, VIETTORIA_IMAGES.productHighlight);
   const turntableUrl = preview?.turntable;
 
-  const photos = useMemo(() => {
-    const candidates = [product.heroImage, ...(product.galleryImages || [])]
-      .filter((image): image is string => Boolean(image?.trim()));
-    const uniqueImages = [...new Set(candidates)];
-    return uniqueImages.map((image, index) => ({
-      label: `Ảnh ${String(index + 1).padStart(2, '0')}`,
-      src: resolveImageUrl(image, VIETTORIA_IMAGES.productHighlight),
-    }));
-  }, [product.galleryImages, product.heroImage]);
-  const currentPhoto = photos[selectedPhoto] || photos[0];
+  const thumbnailPhoto = useMemo(() => ({
+    label: product.name,
+    src: resolveImageUrl(product.heroImage, VIETTORIA_IMAGES.productHighlight),
+  }), [product.heroImage, product.name]);
 
   useEffect(() => {
     if (window.customElements.get('model-viewer')) {
@@ -164,7 +157,6 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
     setModelFailed(false);
     setPreviewFailed(false);
     setPreviewPlaying(false);
-    setSelectedPhoto(0);
   }, [modelUrl, product.id]);
 
   useEffect(() => {
@@ -506,7 +498,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                 <p className="font-display text-lg sm:text-xl">{product.name}</p>
                 <p className="mt-1 text-[10px] text-paper/75 sm:text-xs">{modelLoaded ? 'Kéo mô hình để xoay · cuộn để thu phóng' : stageLabel}</p>
               </div>
-              {photos.length > 0 && (
+              {thumbnailPhoto.src && (
                 <button
                   type="button"
                   onClick={() => setActiveTab('photos')}
@@ -520,17 +512,17 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
           )}
         </div>
       ) : (
-        <div className="relative aspect-[4/3] overflow-hidden bg-paper sm:aspect-[16/10]">
-          {currentPhoto && (
+        <div className="relative aspect-[16/10] overflow-hidden bg-paper">
+          {thumbnailPhoto && (
             <button
               type="button"
               onClick={() => setIsPhotoZoomOpen(true)}
               className="group relative flex h-full w-full cursor-zoom-in items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-brass"
-              aria-label={`Phóng to ${currentPhoto.label} của ${product.name}`}
+              aria-label={`Phóng to ảnh ${product.name}`}
             >
               <img
-                src={currentPhoto.src}
-                alt={`${currentPhoto.label} · ${product.name}`}
+                src={thumbnailPhoto.src}
+                alt={`${product.name} · ${t('product.tabPhotos', 'Ảnh thực địa')}`}
                 onError={(event) => handleImageFallback(event, VIETTORIA_IMAGES.productHighlight)}
                 className="h-full w-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.025]"
               />
@@ -543,31 +535,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
         </div>
       )}
 
-      {photos.length > 1 && (
-        <nav className="flex items-center gap-2 overflow-x-auto border-t border-paper-border bg-header p-3" aria-label="Chọn ảnh sản phẩm">
-          {photos.map((photo, index) => (
-            <button
-              key={`${photo.src}-${index}`}
-              type="button"
-              onClick={() => { setSelectedPhoto(index); setActiveTab('photos'); }}
-              aria-label={photo.label}
-              aria-pressed={activeTab === 'photos' && selectedPhoto === index}
-              className={`group relative h-14 w-20 shrink-0 overflow-hidden border bg-paper transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass sm:h-16 sm:w-24 ${activeTab === 'photos' && selectedPhoto === index ? 'border-brown' : 'border-paper-border hover:border-brass'}`}
-            >
-              <img
-                src={photo.src}
-                alt=""
-                aria-hidden="true"
-                onError={(event) => handleImageFallback(event, VIETTORIA_IMAGES.productHighlight)}
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <span className="absolute inset-x-0 bottom-0 bg-forest/75 px-1 py-0.5 text-center font-sans text-[10px] uppercase tracking-wider text-paper font-medium">{photo.label}</span>
-            </button>
-          ))}
-        </nav>
-      )}
-
-      {isPhotoZoomOpen && currentPhoto && (
+      {isPhotoZoomOpen && thumbnailPhoto && (
         <div
           className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-forest-dark/95 p-4 backdrop-blur-sm sm:p-8"
           onClick={() => setIsPhotoZoomOpen(false)}
@@ -584,13 +552,13 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
             <X className="h-5 w-5" />
           </button>
           <img
-            src={currentPhoto.src}
-            alt={`${currentPhoto.label} · ${product.name}`}
+            src={thumbnailPhoto.src}
+            alt={`${product.name} · ${thumbnailPhoto.label}`}
             onError={(event) => handleImageFallback(event, VIETTORIA_IMAGES.productHighlight)}
             onClick={(event) => event.stopPropagation()}
             className="max-h-[82vh] max-w-full border border-brass/50 object-contain shadow-2xl"
           />
-          <p className="mt-3 text-center font-sans text-xs uppercase tracking-wider text-paper/75">{product.name} · {currentPhoto.label}</p>
+          <p className="mt-3 text-center font-sans text-xs uppercase tracking-wider text-paper/75">{product.name}</p>
         </div>
       )}
     </div>

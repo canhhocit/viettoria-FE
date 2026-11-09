@@ -59,10 +59,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
     heroImage: '/3D/chua-mot-cot-poster.webp',
     model3dUrl: '/3D/chua-mot-cot.glb',
     galleryImages: [
-      '/3D/chua-mot-cot-poster.webp',
-      '/viettoria_img/IMG_6026.PNG',
-      '/viettoria_img/IMG_6361.PNG',
-      '/viettoria_img/IMG_6368.PNG'
+      '/3D/chua-mot-cot-poster.webp'
     ],
     audioGuide: {
       title: 'Hào Khí Thăng Long & Giấc Mơ Đài Sen',
@@ -97,10 +94,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
     heroImage: '/3D/khue-van-cac-poster.webp',
     model3dUrl: '/3D/khue-van-cac.glb',
     galleryImages: [
-      '/3D/khue-van-cac-poster.webp',
-      '/viettoria_img/IMG_6362.PNG',
-      '/viettoria_img/IMG_6363.PNG',
-      '/viettoria_img/IMG_6370.PNG'
+      '/3D/khue-van-cac-poster.webp'
     ],
     audioGuide: {
       title: 'Sao Khuê Tỏa Sáng Đất Tràng An',
@@ -135,9 +129,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
     heroImage: '/3D/cot-co-ha-noi-poster.webp',
     model3dUrl: '/3D/cot-co-ha-noi.glb',
     galleryImages: [
-      '/3D/cot-co-ha-noi-poster.webp',
-      '/viettoria_img/IMG_6364.PNG',
-      '/viettoria_img/IMG_6371.PNG'
+      '/3D/cot-co-ha-noi-poster.webp'
     ],
     audioGuide: {
       title: 'Hào Khí Kỳ Đài Thăng Long',
@@ -172,10 +164,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
     heroImage: '/3D/ngo-mon-hue-poster.webp',
     model3dUrl: '/3D/ngo-mon-hue.glb',
     galleryImages: [
-      '/3D/ngo-mon-hue-poster.webp',
-      '/viettoria_img/IMG_6365.PNG',
-      '/viettoria_img/IMG_6366.PNG',
-      '/viettoria_img/IMG_6372.PNG'
+      '/3D/ngo-mon-hue-poster.webp'
     ],
     audioGuide: {
       title: 'Âm Sắc Cung Đình Bên Dòng Hương Giang',
@@ -210,10 +199,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
     heroImage: '/3D/ben-nha-rong-poster.webp',
     model3dUrl: '/3D/ben-nha-rong.glb',
     galleryImages: [
-      '/3D/ben-nha-rong-poster.webp',
-      '/viettoria_img/IMG_6367.PNG',
-      '/viettoria_img/IMG_5825.PNG',
-      '/viettoria_img/IMG_5826.PNG'
+      '/3D/ben-nha-rong-poster.webp'
     ],
     audioGuide: {
       title: 'Khúc Tráng Ca Trên Bến Cảng Sài Gòn',
