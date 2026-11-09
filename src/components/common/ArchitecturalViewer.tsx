@@ -571,7 +571,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
           )}
 
           {/* Stage Loading Status */}
-          <div className="absolute left-3 top-3 z-10 flex items-center gap-2 border border-brass/30 bg-[#121814]/85 px-3 py-1.5 text-xs font-cinzel uppercase tracking-[0.15em] text-paper/90 font-semibold shadow-sm backdrop-blur-sm sm:left-4 sm:top-4">
+          <div className="absolute left-3 top-3 z-10 flex items-center gap-2 border border-brass/40 bg-[#121814]/90 px-3 py-1.5 text-xs font-cinzel uppercase tracking-[0.15em] text-paper font-bold shadow-sm backdrop-blur-sm sm:left-4 sm:top-4">
             <span className={`h-1.5 w-1.5 bg-brass ${!modelLoaded && !modelFailed && viewerAvailable ? 'animate-pulse' : ''}`} />
             <span role="status" aria-live="polite">{stageLabel}</span>
           </div>
