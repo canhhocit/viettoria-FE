@@ -138,6 +138,17 @@ export const fr: TranslationSchema = {
     selectedMonument: 'Édifice sélectionné',
     viewDetails: 'Explorer l’édifice',
     noResults: 'Aucun monument ne correspond à vos filtres.',
+    mode3D: 'Perspective 3D',
+    mode2D: 'Carte 2D Plane',
+    pedestal3D: 'Socle 3D Virtuel',
+    satelliteView: 'Satellite',
+    standardView: 'Standard',
+    allVietnam: 'Vue d’ensemble',
+    dragToRotate: 'Faire glisser pour pivoter à 360° · Défiler pour zoomer',
+    autoRotate: 'Rotation auto',
+    minimize: 'Réduire',
+    expand: 'Agrandir',
+    exploreMonument3D: 'Explorer le monument 3D en détail',
   },
 
   // Collections Page

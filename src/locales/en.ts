@@ -138,6 +138,17 @@ export const en: TranslationSchema = {
     selectedMonument: 'Selected Monument',
     viewDetails: 'Inspect Monument',
     noResults: 'No monuments found matching your filter criteria.',
+    mode3D: '3D Tilt Perspective',
+    mode2D: '2D Flat Map',
+    pedestal3D: '3D Digital Twin',
+    satelliteView: 'Satellite',
+    standardView: 'Standard',
+    allVietnam: 'Vietnam Overview',
+    dragToRotate: 'Drag to orbit 360° · Scroll to zoom',
+    autoRotate: 'Auto Rotate',
+    minimize: 'Minimize',
+    expand: 'Expand',
+    exploreMonument3D: 'Explore Full 3D Monument & Hotspots',
   },
 
   // Collections Page

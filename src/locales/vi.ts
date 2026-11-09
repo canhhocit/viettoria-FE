@@ -136,6 +136,17 @@ export const vi = {
     selectedMonument: 'Công trình được chọn',
     viewDetails: 'Khảo Cứu Chi Tiết',
     noResults: 'Không tìm thấy công trình phù hợp với bộ lọc.',
+    mode3D: 'Góc 3D Nghiêng',
+    mode2D: 'Bản Đồ Phẳng',
+    pedestal3D: 'Bục Mô Hình 3D',
+    satelliteView: 'Vệ Tinh',
+    standardView: 'Bản Đồ',
+    allVietnam: 'Toàn Cảnh VN',
+    dragToRotate: 'Kéo để xoay 360° · Cuộn để thu phóng',
+    autoRotate: 'Tự Xoay',
+    minimize: 'Thu Nhỏ',
+    expand: 'Mở Rộng',
+    exploreMonument3D: 'Khảo Cứu Công Trình 3D Chi Tiết',
   },
 
   // Collections Page
