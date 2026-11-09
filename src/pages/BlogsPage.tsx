@@ -7,7 +7,7 @@ import { resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
 import { useLanguage } from '../contexts/LanguageContext';
 
 export const BlogsPage: React.FC = () => {
-  const { localizeBlog } = useLanguage();
+  const { t, localizeBlog } = useLanguage();
   const [rawBlogs, setRawBlogs] = useState<BlogPost[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [loading, setLoading] = useState(true);
@@ -32,15 +32,15 @@ export const BlogsPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Header */}
         <div className="max-w-3xl space-y-4">
-          <div className="flex items-center gap-2 text-brass text-xs font-mono uppercase tracking-widest">
+          <div className="flex items-center gap-2 text-brass text-xs font-mono uppercase tracking-widest font-semibold">
             <FileText className="w-4 h-4" />
-            <span>Nghiên Cứu Lịch Sử & Kỹ Thuật Số Hóa</span>
+            <span>{t('blogsPage.eyebrow')}</span>
           </div>
           <h1 className="font-serif text-3xl sm:text-5xl font-bold text-forest leading-tight">
-            Góc Nhìn Di Sản
+            {t('blogsPage.title')}
           </h1>
           <p className="text-base text-charcoal/80 font-normal leading-relaxed">
-            Các khảo cứu chuyên sâu về kiến trúc cổ, kỹ nghệ chế tác mộng gỗ truyền thống và hành trình đưa di sản nghìn năm hòa nhịp vào đời sống đương đại.
+            {t('blogsPage.desc')}
           </p>
         </div>
 
@@ -56,7 +56,7 @@ export const BlogsPage: React.FC = () => {
                   : 'bg-paper-warm text-charcoal border-paper-border hover:border-brass'
               }`}
             >
-              {cat === 'all' ? 'Tất Cả Bài Viết' : cat}
+              {cat === 'all' ? t('blogsPage.allPosts') : cat}
             </button>
           ))}
         </div>
@@ -123,7 +123,7 @@ export const BlogsPage: React.FC = () => {
                       to={`/blogs/${blog.slug}`}
                       className="inline-flex items-center gap-1 text-brass font-bold hover:underline"
                     >
-                      <span>Đọc tiếp</span>
+                      <span>{t('blogsPage.readMore')}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                 </div>

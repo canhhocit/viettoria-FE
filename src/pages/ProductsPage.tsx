@@ -57,15 +57,15 @@ export const ProductsPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Header */}
         <div className="max-w-3xl space-y-4">
-          <div className="flex items-center gap-2 text-brass text-xs font-mono uppercase tracking-widest">
+          <div className="flex items-center gap-2 text-brass text-xs font-mono uppercase tracking-widest font-semibold">
             <Box className="w-4 h-4" />
-            <span>Danh Mục Tác Phẩm Khảo Cứu & Mô Hình 3D</span>
+            <span>{t('productsPage.eyebrow')}</span>
           </div>
           <h1 className="font-serif text-3xl sm:text-5xl font-bold text-forest leading-tight">
-            Tác Phẩm Di Sản Việt Nam
+            {t('productsPage.title')}
           </h1>
           <p className="text-base text-charcoal/80 font-normal leading-relaxed">
-            Tuyển tập 5 công trình kiến trúc tiêu biểu của đất Việt được số hóa và phục chế dưới dạng mô hình 3D tinh xảo. Mỗi tác phẩm đi kèm tài liệu lịch sử và bản thuyết minh âm thanh độc quyền.
+            {t('productsPage.subtitle')}
           </p>
         </div>
 
@@ -130,8 +130,8 @@ export const ProductsPage: React.FC = () => {
           </div>
         ) : products.length === 0 ? (
           <div className="py-20 text-center space-y-3 bg-paper-warm border border-paper-border p-8">
-            <p className="font-serif text-lg font-bold text-forest">Không tìm thấy tác phẩm phù hợp</p>
-            <p className="text-xs text-charcoal-muted">Hãy thử tìm kiếm với từ khóa khác hoặc bỏ chọn bộ lọc.</p>
+            <p className="font-serif text-lg font-bold text-forest">{t('productsPage.notFoundTitle')}</p>
+            <p className="text-xs text-charcoal-muted">{t('productsPage.notFoundDesc')}</p>
             <button
               onClick={() => {
                 setSelectedCollectionId('all');
@@ -139,7 +139,7 @@ export const ProductsPage: React.FC = () => {
               }}
               className="px-4 py-2 bg-forest text-paper text-xs font-mono uppercase tracking-wider"
             >
-              Xem tất cả tác phẩm
+              {t('productsPage.viewAllBtn')}
             </button>
           </div>
         ) : (
@@ -165,7 +165,7 @@ export const ProductsPage: React.FC = () => {
                         </div>
                       ) : (
                         <div className="absolute top-3 right-3 bg-forest/80 text-paper/80 px-2.5 py-1 text-[11px] font-sans uppercase">
-                          Khảo Cứu Lưu Trữ
+                          {t('productsPage.archivalResearch')}
                         </div>
                       )}
                     </div>
@@ -206,7 +206,7 @@ export const ProductsPage: React.FC = () => {
                   <div className="p-6 pt-0 border-t border-paper-border mt-4">
                     <div className="pt-4 flex items-center justify-between">
                       <span className="text-xs font-mono text-charcoal-muted">
-                        Cao {product.modelSpecs.heightCm}cm
+                        {t('product.height', 'Cao')} {product.modelSpecs.heightCm}cm
                       </span>
 
                       <Link

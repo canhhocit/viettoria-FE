@@ -78,7 +78,7 @@ export const ProductDetailPage: React.FC = () => {
         });
         if (isActive) setQrImage(image);
       } catch {
-        if (isActive) setQrError('Chưa tạo được mã QR. Vui lòng thử lại.');
+        if (isActive) setQrError(t('product.copyFailed', 'Chưa tạo được mã QR. Vui lòng thử lại.'));
       } finally {
         if (isActive) setQrLoading(false);
       }
@@ -90,7 +90,7 @@ export const ProductDetailPage: React.FC = () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isShareOpen, shareUrl]);
+  }, [isShareOpen, shareUrl, t]);
 
   const copyShareLink = async () => {
     try {
@@ -107,9 +107,9 @@ export const ProductDetailPage: React.FC = () => {
         input.remove();
         if (!copied) throw new Error('Copy failed');
       }
-      setShareMessage('Đã sao chép liên kết.');
+      setShareMessage(t('product.copiedLink', 'Đã sao chép liên kết.'));
     } catch {
-      setShareMessage('Không sao chép được liên kết. Vui lòng thử lại.');
+      setShareMessage(t('product.copyFailed', 'Không sao chép được liên kết. Vui lòng thử lại.'));
     }
   };
 
@@ -130,8 +130,8 @@ export const ProductDetailPage: React.FC = () => {
   if (!product) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center bg-paper text-center px-4">
-        <h2 className="font-serif text-2xl font-bold text-forest mb-2">Không tìm thấy tác phẩm di sản</h2>
-        <p className="text-sm text-charcoal-muted mb-6">Mã tác phẩm hoặc đường dẫn không hợp lệ.</p>
+        <h2 className="font-serif text-2xl font-bold text-forest mb-2">{t('product.notFoundTitle', 'Không tìm thấy tác phẩm di sản')}</h2>
+        <p className="text-sm text-charcoal-muted mb-6">{t('product.notFoundDesc', 'Mã tác phẩm hoặc đường dẫn không hợp lệ.')}</p>
         <Link to="/products" className="px-5 py-2.5 bg-forest text-paper font-mono text-xs uppercase tracking-wider">
           {t('common.viewAll', 'Xem danh mục tác phẩm')}
         </Link>
@@ -161,17 +161,17 @@ export const ProductDetailPage: React.FC = () => {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs uppercase tracking-wider text-brass font-bold">
-                    Xác Thực Thành Công Tem QR Di Sản Độc Bản
+                    {t('product.qrDeepLinkTitle')}
                   </span>
                 </div>
                 <p className="text-xs sm:text-sm text-paper/90 font-normal mt-0.5">
-                  Chào mừng bạn đến với mô hình <strong className="font-semibold text-brass-subtle">{product.name}</strong> trên tay bạn! Không gian số và Audio Guide độc quyền đã được mở khóa.
+                  {t('product.qrDeepLinkDesc')}
                 </p>
               </div>
             </div>
 
             <div className="text-xs font-cinzel text-brass-subtle uppercase tracking-widest shrink-0 font-bold">
-              Định Danh Vật Lý 1:120
+              {t('product.qrDeepLinkIdBadge')}
             </div>
           </div>
         )}
@@ -230,19 +230,19 @@ export const ProductDetailPage: React.FC = () => {
                 <X className="h-5 w-5" />
               </button>
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brass">Viettoria · Di sản Việt</p>
-              <h2 id="product-share-title" className="mt-2 pr-8 font-serif text-2xl font-bold text-forest">Chia sẻ tác phẩm</h2>
+              <h2 id="product-share-title" className="mt-2 pr-8 font-serif text-2xl font-bold text-forest">{t('product.shareTitle')}</h2>
               <p className="mt-1 text-sm text-charcoal-muted">{product.name}</p>
 
               <div className="my-5 flex min-h-52 items-center justify-center border border-paper-border bg-paper-warm p-4">
                 {qrLoading ? (
                   <div className="flex flex-col items-center gap-3 text-xs text-charcoal-muted" role="status">
                     <QrCode className="h-8 w-8 animate-pulse text-brass" />
-                    <span>Đang tạo mã QR…</span>
+                    <span>{t('product.generatingQr')}</span>
                   </div>
                 ) : qrImage ? (
                   <img src={qrImage} alt={`Mã QR mở trang ${product.name}`} className="h-48 w-48 border border-paper-border bg-paper p-2" />
                 ) : (
-                  <p role="status" className="text-center text-xs text-charcoal-muted">{qrError || 'Chưa tạo được mã QR.'}</p>
+                  <p role="status" className="text-center text-xs text-charcoal-muted">{qrError || t('product.copyFailed')}</p>
                 )}
               </div>
 
@@ -252,8 +252,8 @@ export const ProductDetailPage: React.FC = () => {
                   onClick={() => void copyShareLink()}
                   className="inline-flex min-h-11 items-center justify-center gap-2 border border-forest bg-forest px-3 py-2 text-xs font-mono uppercase tracking-wider text-paper transition-colors hover:bg-forest/90"
                 >
-                  {shareMessage === 'Đã sao chép liên kết.' ? <Check className="h-4 w-4 text-brass" /> : <Copy className="h-4 w-4 text-brass" />}
-                  {shareMessage === 'Đã sao chép liên kết.' ? 'Đã sao chép' : 'Sao chép liên kết'}
+                  {shareMessage === t('product.copiedLink') ? <Check className="h-4 w-4 text-brass" /> : <Copy className="h-4 w-4 text-brass" />}
+                  {shareMessage === t('product.copiedLink') ? t('product.copiedLink') : t('product.copyLink')}
                 </button>
                 <button
                   type="button"
@@ -262,7 +262,7 @@ export const ProductDetailPage: React.FC = () => {
                   className="inline-flex min-h-11 items-center justify-center gap-2 border border-brass bg-brass px-3 py-2 text-xs font-mono uppercase tracking-wider text-forest transition-colors hover:bg-brass/85 disabled:cursor-wait disabled:opacity-50"
                 >
                   <Download className="h-4 w-4" />
-                  Tải mã QR
+                  {t('product.downloadQr')}
                 </button>
               </div>
               {shareMessage && <p role="status" className="mt-3 text-center text-xs text-charcoal-muted">{shareMessage}</p>}
@@ -284,10 +284,10 @@ export const ProductDetailPage: React.FC = () => {
           <section className="mx-auto max-w-5xl space-y-4">
             <div className="space-y-1">
               <h2 className="font-serif text-xl font-bold text-forest sm:text-2xl">
-                Câu chuyện lịch sử
+                {t('product.historyStory')}
               </h2>
               <p className="text-sm text-charcoal-muted">
-                Lắng nghe câu chuyện về {product.name} qua lời kể của hướng dẫn viên.
+                {t('product.listenStoryPrompt')}
               </p>
             </div>
 
@@ -301,10 +301,10 @@ export const ProductDetailPage: React.FC = () => {
             <div className="border-b border-paper-border pb-4 flex items-center justify-between">
               <div>
                 <span className="text-xs font-mono uppercase tracking-widest text-brass font-semibold block mb-1">
-                  Khảo Luận Chuyên Sâu
+                  {t('product.inDepthEssay')}
                 </span>
                 <h2 className="font-serif text-2xl sm:text-3xl font-bold text-forest">
-                  Hành Trình Di Sản Qua Các Thế Kỷ
+                  {t('product.journeyThroughCenturies')}
                 </h2>
               </div>
             </div>
@@ -372,11 +372,13 @@ export const ProductDetailPage: React.FC = () => {
         {product.relatedProducts && product.relatedProducts.length > 0 && (
           <section className="space-y-6 pt-8 border-t border-paper-border">
             <h2 className="font-serif text-2xl font-bold text-forest">
-              Các Tác Phẩm Cùng Thời Kỳ
+              {t('product.relatedEra')}
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {product.relatedProducts.map((rel: Product) => (
+              {product.relatedProducts.map((rawRel: Product) => {
+                const rel = localizeProduct(rawRel);
+                return (
                 <Link
                   key={rel.id}
                   to={`/products/${rel.slug}`}
@@ -398,7 +400,8 @@ export const ProductDetailPage: React.FC = () => {
                     <p className="text-xs text-charcoal-muted font-normal">{rel.location}</p>
                   </div>
                 </Link>
-              ))}
+                );
+              })}
             </div>
           </section>
         )}

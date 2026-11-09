@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Ruler, Hand, Info } from 'lucide-react';
 import type { ModelSpecifications } from '../../types';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface ScaleRulerProps {
   modelSpecs: ModelSpecifications;
@@ -8,6 +9,7 @@ interface ScaleRulerProps {
 }
 
 export const ScaleRuler: React.FC<ScaleRulerProps> = ({ modelSpecs, heritageName }) => {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'ruler' | 'hand'>('ruler');
   
   // Height in cm (default 12 for Chua Mot Cot if missing)
@@ -22,12 +24,12 @@ export const ScaleRuler: React.FC<ScaleRulerProps> = ({ modelSpecs, heritageName
     <div className="bg-paper-warm border border-brass/40 corner-frame p-6 sm:p-8 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-paper-border pb-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-2 text-brass text-xs font-mono uppercase tracking-widest">
+          <div className="flex items-center gap-2 text-brass text-xs font-mono uppercase tracking-widest font-semibold">
             <Ruler className="w-4 h-4" />
-            <span>Khảo Cứu Tỷ Lệ Vật Lý Thực Địa</span>
+            <span>{t('scaleRuler.eyebrow')}</span>
           </div>
           <h3 className="font-serif text-xl sm:text-2xl font-bold text-forest">
-            Thước Đo Kích Thước & Tương Quan Bàn Tay
+            {t('scaleRuler.title')}
           </h3>
         </div>
 
@@ -42,7 +44,7 @@ export const ScaleRuler: React.FC<ScaleRulerProps> = ({ modelSpecs, heritageName
             }`}
           >
             <Ruler className="w-3.5 h-3.5" />
-            <span>Thước Đo Chuẩn</span>
+            <span>{t('scaleRuler.rulerTab')}</span>
           </button>
           <button
             onClick={() => setActiveTab('hand')}
@@ -53,7 +55,7 @@ export const ScaleRuler: React.FC<ScaleRulerProps> = ({ modelSpecs, heritageName
             }`}
           >
             <Hand className="w-3.5 h-3.5" />
-            <span>Tương Quan Trên Tay</span>
+            <span>{t('scaleRuler.handTab')}</span>
           </button>
         </div>
       </div>
@@ -62,7 +64,7 @@ export const ScaleRuler: React.FC<ScaleRulerProps> = ({ modelSpecs, heritageName
         /* Ruler View */
         <div className="space-y-4">
           <p className="text-xs text-charcoal/80 font-normal">
-            Mô hình được thu phóng chuẩn xác theo tỷ lệ <strong className="text-forest font-semibold">{modelSpecs.scale}</strong>. Chiều cao đo được là <strong className="text-brass-dark font-semibold">{height} cm</strong> và chiều rộng cơ sở là <strong className="text-brass-dark font-semibold">{width} cm</strong>.
+            {t('scaleRuler.descRuler')} <strong className="text-forest font-semibold">{modelSpecs.scale}</strong>. {t('scaleRuler.heightLabel')} <strong className="text-brass-dark font-semibold">{height} cm</strong> {t('scaleRuler.widthLabel')} <strong className="text-brass-dark font-semibold">{width} cm</strong>.
           </p>
 
           {/* Graphical SVG Scale Ruler */}
@@ -120,8 +122,8 @@ export const ScaleRuler: React.FC<ScaleRulerProps> = ({ modelSpecs, heritageName
               </svg>
 
               <div className="flex justify-between text-[10px] font-mono text-charcoal-muted uppercase pt-1">
-                <span>0 cm (Gốc mặt hồ)</span>
-                <span>Vạch chuẩn Milimet (Dung sai quang học &lt; 0.08mm)</span>
+                <span>{t('scaleRuler.lakeOrigin')}</span>
+                <span>{t('scaleRuler.opticalTolerance')}</span>
                 <span>{maxRulerCm} cm</span>
               </div>
             </div>
@@ -135,9 +137,9 @@ export const ScaleRuler: React.FC<ScaleRulerProps> = ({ modelSpecs, heritageName
             <div className="flex flex-col items-center space-y-2 text-center">
               <div className="w-24 h-36 border border-dashed border-paper-border flex flex-col items-center justify-center p-3 text-charcoal-muted">
                 <Hand className="w-12 h-12 text-forest/40 mb-1" />
-                <span className="text-[10px] font-mono">Bàn tay chuẩn (~18cm)</span>
+                <span className="text-[10px] font-mono">{t('scaleRuler.standardHand')}</span>
               </div>
-              <span className="text-[11px] font-mono text-charcoal-muted">Tham Chiếu Nhân Trắc</span>
+              <span className="text-[11px] font-mono text-charcoal-muted">{t('scaleRuler.humanScaleRef')}</span>
             </div>
 
             {/* Model Height Comparison */}
@@ -149,7 +151,7 @@ export const ScaleRuler: React.FC<ScaleRulerProps> = ({ modelSpecs, heritageName
                 <span className="font-serif font-bold text-xs">{heritageName}</span>
                 <span className="font-mono text-sm font-bold text-brass-dark">{height} cm</span>
               </div>
-              <span className="text-[11px] font-mono text-brass font-bold">Mô Hình Thu Nhỏ</span>
+              <span className="text-[11px] font-mono text-brass font-bold">{t('scaleRuler.miniatureModel')}</span>
             </div>
 
             {/* Tactile Highlights */}
@@ -157,11 +159,11 @@ export const ScaleRuler: React.FC<ScaleRulerProps> = ({ modelSpecs, heritageName
               <div className="flex items-start gap-2">
                 <Info className="w-4 h-4 text-brass shrink-0 mt-0.5" />
                 <span>
-                  Vừa vặn hoàn hảo trong lòng hai bàn tay mở rộng, thích hợp đặt trên bàn trà, tủ sách cổ điển hoặc kệ sưu tập bảo tàng.
+                  {t('scaleRuler.tactileDesc')}
                 </span>
               </div>
               <div className="p-2 bg-paper-warm border border-paper-border text-[11px] font-mono">
-                Khối lượng tịnh: <strong>{modelSpecs.weightGrams} gram</strong> (cảm giác đầm tay tự nhiên của vật liệu khoáng đá BioPETG).
+                {t('scaleRuler.netWeightLabel')} <strong>{modelSpecs.weightGrams} gram</strong> {t('scaleRuler.materialBioDesc')}
               </div>
             </div>
           </div>

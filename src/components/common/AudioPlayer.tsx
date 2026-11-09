@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUp, ChevronDown, ChevronUp, Pause, Play, RotateCcw, Volume2, VolumeX, X } from 'lucide-react';
 import type { AudioGuideData } from '../../types';
 import { resolveAudioUrl } from '../../utils/mediaResolver';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface AudioPlayerProps {
   audioGuide: AudioGuideData;
@@ -30,6 +31,7 @@ const formatTime = (seconds: number) => {
 };
 
 export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageName }) => {
+  const { t } = useLanguage();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [audioFallbackActive, setAudioFallbackActive] = useState(false);
@@ -39,7 +41,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
     : audioFallbackActive
       ? SAMPLE_AUDIO_URL
       : '';
-  const titleLabel = audioGuide.title || `Lời kể về ${heritageName}`;
+  const titleLabel = audioGuide.title || `${t('audioPlayer.speaking', 'Lời kể về')} ${heritageName}`;
   const transcriptLabel = audioGuide.transcript?.trim() || SAMPLE_TRANSCRIPT;
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -162,7 +164,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
               <div className="min-w-0">
                 <p className="truncate font-serif text-sm font-semibold text-paper sm:text-base">{titleLabel}</p>
                 <p className="mt-1 truncate font-mono text-[9px] text-brass-light sm:text-[10px]">
-                  Hướng dẫn viên Viettoria <span className="mx-1 text-brass">·</span>{durationLabel}
+                  {t('audioPlayer.narrator', 'Hướng dẫn viên Viettoria')} <span className="mx-1 text-brass">·</span>{durationLabel}
                 </p>
               </div>
             </div>
@@ -181,24 +183,24 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
 
             {!hasAudio || audioError ? (
               <p className="mt-2 text-xs text-paper/75" role="status">
-                {audioError ? 'Không mở được bản thu.' : 'Đang cập nhật âm thanh.'}
+                {audioError ? t('audioPlayer.audioError', 'Không mở được bản thu.') : t('audioPlayer.audioUpdating', 'Đang cập nhật âm thanh.')}
               </p>
             ) : null}
 
             <div className="mt-3 flex items-center justify-between gap-2">
               <div className="flex items-center gap-1.5">
-                <button type="button" onClick={toggleMute} disabled={!hasAudio || audioError} className="flex h-8 w-8 items-center justify-center border border-paper/15 text-paper/75 hover:border-brass hover:text-brass-light disabled:opacity-35" title={isMuted ? 'Bật âm thanh' : 'Tắt tiếng'} aria-label={isMuted ? 'Bật âm thanh' : 'Tắt tiếng'}>
+                <button type="button" onClick={toggleMute} disabled={!hasAudio || audioError} className="flex h-8 w-8 items-center justify-center border border-paper/15 text-paper/75 hover:border-brass hover:text-brass-light disabled:opacity-35" title={isMuted ? t('audioPlayer.unmute') : t('audioPlayer.mute')} aria-label={isMuted ? t('audioPlayer.unmute') : t('audioPlayer.mute')}>
                   {isMuted ? <VolumeX className="h-4 w-4" strokeWidth={1.5} /> : <Volume2 className="h-4 w-4" strokeWidth={1.5} />}
                 </button>
-                <button type="button" onClick={handleReset} disabled={!hasAudio || audioError} className="flex h-8 w-8 items-center justify-center border border-paper/15 text-paper/75 hover:border-brass hover:text-brass-light disabled:opacity-35 sm:w-auto sm:gap-1.5 sm:px-2" title="Phát lại từ đầu">
-                  <RotateCcw className="h-3.5 w-3.5" strokeWidth={1.5} /><span className="hidden sm:inline">Phát lại</span>
+                <button type="button" onClick={handleReset} disabled={!hasAudio || audioError} className="flex h-8 w-8 items-center justify-center border border-paper/15 text-paper/75 hover:border-brass hover:text-brass-light disabled:opacity-35 sm:w-auto sm:gap-1.5 sm:px-2" title={t('audioPlayer.replay')}>
+                  <RotateCcw className="h-3.5 w-3.5" strokeWidth={1.5} /><span className="hidden sm:inline">{t('audioPlayer.replay')}</span>
                 </button>
-                <button type="button" onClick={() => setShowTranscript((shown) => !shown)} aria-expanded={showTranscript} className="flex h-8 w-8 items-center justify-center border border-paper/15 text-paper/75 hover:border-brass hover:text-brass-light" title={showTranscript ? 'Thu gọn lời dẫn' : 'Xem toàn bộ lời dẫn'} aria-label={showTranscript ? 'Thu gọn lời dẫn' : 'Xem toàn bộ lời dẫn'}>
+                <button type="button" onClick={() => setShowTranscript((shown) => !shown)} aria-expanded={showTranscript} className="flex h-8 w-8 items-center justify-center border border-paper/15 text-paper/75 hover:border-brass hover:text-brass-light" title={showTranscript ? t('audioPlayer.collapseTranscript') : t('audioPlayer.expandTranscript')} aria-label={showTranscript ? t('audioPlayer.collapseTranscript') : t('audioPlayer.expandTranscript')}>
                   {showTranscript ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </button>
               </div>
-              <button type="button" onClick={() => void togglePlay()} disabled={!hasAudio || audioError} className="flex h-10 w-10 items-center justify-center gap-2 bg-brass text-xs font-semibold text-forest-dark transition-colors hover:bg-brass-light disabled:opacity-45 sm:w-auto sm:px-4" aria-label={isPlaying ? 'Tạm dừng thuyết minh' : 'Nghe thuyết minh'}>
-                {isPlaying ? <><Pause className="h-4 w-4 fill-current" /><span className="hidden sm:inline">Tạm dừng</span></> : <><Play className="h-4 w-4 fill-current" /><span className="hidden sm:inline">Nghe</span></>}
+              <button type="button" onClick={() => void togglePlay()} disabled={!hasAudio || audioError} className="flex h-10 w-10 items-center justify-center gap-2 bg-brass text-xs font-semibold text-forest-dark transition-colors hover:bg-brass-light disabled:opacity-45 sm:w-auto sm:px-4" aria-label={isPlaying ? t('audioPlayer.pause') : t('audioPlayer.listen')}>
+                {isPlaying ? <><Pause className="h-4 w-4 fill-current" /><span className="hidden sm:inline">{t('audioPlayer.pause')}</span></> : <><Play className="h-4 w-4 fill-current" /><span className="hidden sm:inline">{t('audioPlayer.listen')}</span></>}
               </button>
             </div>
           </div>
@@ -209,8 +211,8 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
               onClick={() => void togglePlay()}
               disabled={!hasAudio || audioError}
               className="h-full w-full cursor-pointer border-0 bg-transparent p-0 disabled:cursor-not-allowed"
-              aria-label={isPlaying ? 'Tạm dừng thuyết minh' : 'Bắt đầu thuyết minh'}
-              title={isPlaying ? 'Tạm dừng thuyết minh' : 'Bắt đầu thuyết minh'}
+              aria-label={isPlaying ? t('audioPlayer.pause') : t('audioPlayer.listen')}
+              title={isPlaying ? t('audioPlayer.pause') : t('audioPlayer.listen')}
             >
               <img
                 src={isPlaying ? '/images/guide/guide-speaking.webp' : '/images/guide/guide-idle.png'}
@@ -230,11 +232,11 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
             <img src="/images/guide/guide-idle.png" alt="" className="hidden h-10 w-8 shrink-0 object-contain object-bottom sm:block" />
             <div className="min-w-0 flex-1">
               <p className="truncate font-serif text-sm font-semibold">{titleLabel}</p>
-              <p className="mt-0.5 truncate font-mono text-[9px] uppercase tracking-wider text-brass-light">Đang dẫn chuyện · {heritageName}</p>
+              <p className="mt-0.5 truncate font-mono text-[9px] uppercase tracking-wider text-brass-light">{t('audioPlayer.speaking')} · {heritageName}</p>
             </div>
             <span className="hidden font-mono text-[10px] text-paper/65 md:block">{formatTime(currentTime)} / {durationLabel}</span>
-            <button type="button" onClick={() => void togglePlay()} className="flex h-9 w-9 shrink-0 items-center justify-center bg-brass text-forest" aria-label="Tạm dừng thuyết minh"><Pause className="h-4 w-4 fill-current" /></button>
-            <button type="button" onClick={scrollToPlayer} className="hidden items-center gap-1 border border-paper/20 px-2.5 py-2 font-mono text-[9px] uppercase tracking-wider text-paper/75 hover:border-brass sm:flex" title="Quay lại trình phát"><ArrowUp className="h-3 w-3" />Trình phát</button>
+            <button type="button" onClick={() => void togglePlay()} className="flex h-9 w-9 shrink-0 items-center justify-center bg-brass text-forest" aria-label={t('audioPlayer.pause')}><Pause className="h-4 w-4 fill-current" /></button>
+            <button type="button" onClick={scrollToPlayer} className="hidden items-center gap-1 border border-paper/20 px-2.5 py-2 font-mono text-[9px] uppercase tracking-wider text-paper/75 hover:border-brass sm:flex" title={t('audioPlayer.player')}><ArrowUp className="h-3 w-3" />{t('audioPlayer.player')}</button>
             <button type="button" onClick={() => setDismissSticky(true)} className="px-1.5 text-paper/45 hover:text-paper" aria-label="Ẩn trình phát thu gọn"><X className="h-4 w-4" strokeWidth={1.5} /></button>
           </div>
           <div className="absolute inset-x-0 top-0 h-px bg-paper/10"><div className="h-full bg-brass transition-[width]" style={{ width: `${duration > 0 ? Math.min(100, (currentTime / duration) * 100) : 0}%` }} /></div>

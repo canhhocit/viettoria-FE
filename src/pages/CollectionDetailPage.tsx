@@ -29,8 +29,8 @@ export const CollectionDetailPage: React.FC = () => {
   if (!collection) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center bg-paper text-center px-4">
-        <h2 className="font-serif text-2xl font-bold text-forest mb-2">Không tìm thấy bộ sưu tập</h2>
-        <p className="text-sm text-charcoal-muted mb-6">Bộ sưu tập bạn tìm kiếm không tồn tại hoặc đã được chuyển dời.</p>
+        <h2 className="font-serif text-2xl font-bold text-forest mb-2">{t('collectionsPage.notFoundTitle', 'Không tìm thấy bộ sưu tập')}</h2>
+        <p className="text-sm text-charcoal-muted mb-6">{t('collectionsPage.notFoundDesc', 'Bộ sưu tập bạn tìm kiếm không tồn tại hoặc đã được chuyển dời.')}</p>
         <Link to="/collections" className="px-5 py-2.5 bg-forest text-paper font-mono text-xs uppercase tracking-wider">
           {t('common.back', 'Quay lại danh mục bộ sưu tập')}
         </Link>
@@ -50,7 +50,7 @@ export const CollectionDetailPage: React.FC = () => {
           className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-charcoal-muted hover:text-forest transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Tất cả bộ sưu tập</span>
+          <span>{t('collectionsPage.allCollections', 'Tất cả bộ sưu tập')}</span>
         </Link>
 
         {/* Collection Banner */}
@@ -58,10 +58,10 @@ export const CollectionDetailPage: React.FC = () => {
           <div className="relative z-10 max-w-3xl space-y-4">
             <div className="flex items-center gap-3">
               <span className="px-3 py-1 bg-brass text-forest text-xs font-serif uppercase tracking-widest font-bold">
-                Tuyển Tập Di Sản
+                {t('collectionsPage.collectionTag', 'Tuyển Tập Di Sản')}
               </span>
               <span className="text-xs text-brass-subtle uppercase tracking-widest">
-                Thời kỳ lịch sử
+                {t('collectionsPage.historicEra', 'Thời kỳ lịch sử')}
               </span>
             </div>
 
@@ -79,7 +79,7 @@ export const CollectionDetailPage: React.FC = () => {
         <div className="space-y-6">
           <div className="border-b border-paper-border pb-4 flex items-center justify-between">
             <h2 className="font-serif text-2xl font-bold text-forest">
-              Các Tác Phẩm Trong Bộ Sưu Tập ({currentProducts.length})
+              {t('collectionsPage.worksInCollection', 'Các Tác Phẩm Trong Bộ Sưu Tập')} ({currentProducts.length})
             </h2>
           </div>
 
@@ -131,14 +131,14 @@ export const CollectionDetailPage: React.FC = () => {
                 <div className="p-6 pt-0 border-t border-paper-border mt-4">
                   <div className="pt-4 flex items-center justify-between">
                     <span className="text-xs font-mono text-charcoal-muted">
-                      Tỷ lệ {product.modelSpecs.scale}
+                      {t('product.specScale', 'Tỷ lệ')} {product.modelSpecs.scale}
                     </span>
 
                     <Link
                       to={`/products/${product.slug}`}
                       className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-forest font-bold group-hover:text-brass transition-colors"
                     >
-                      <span>Xem tác phẩm</span>
+                      <span>{t('common.viewDetails', 'Xem chi tiết')}</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </div>

@@ -1,11 +1,24 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, MapPin, Share2, Camera, HelpingHandIcon } from 'lucide-react';
+import { Mail, MapPin, HelpingHandIcon, Share2, Camera } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { getLocalizedProduct } from '../../utils/localizedEntities';
 
 export const Footer: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+
+  const footerMonuments = [
+    { slug: 'chua-mot-cot', name: 'Chùa Một Cột', city: 'hanoi' },
+    { slug: 'khue-van-cac', name: 'Khuê Văn Các', city: 'hanoi' },
+    { slug: 'cot-co-ha-noi', name: 'Cột Cờ Hà Nội', city: 'hanoi' },
+    { slug: 'ngo-mon-hue', name: 'Ngọ Môn Huế', city: 'hue' },
+  ];
+
+  const cityLabels: Record<string, Record<string, string>> = {
+    hanoi: { vi: 'Hà Nội', en: 'Hanoi', fr: 'Hanoï', zh: '河内', ko: '하노이', ja: 'ハノイ' },
+    hue: { vi: 'Huế', en: 'Hue', fr: 'Hué', zh: '顺化', ko: '후에', ja: 'フエ' },
+  };
 
   return (
     <footer className="border-t-2 border-brass/45 bg-forest-dark text-paper px-4 py-12 sm:px-6 lg:px-8 select-none">
@@ -32,42 +45,22 @@ export const Footer: React.FC = () => {
               {t('footer.monumentsCol')}
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm font-serif">
-              <li>
-                <Link
-                  to="/products/chua-mot-cot"
-                  className="text-paper/80 hover:text-brass-light transition-colors flex items-center justify-between pr-4"
-                >
-                  <span>Chùa Một Cột</span>
-                  <span className="font-sans text-[11px] text-brass/80">Hà Nội</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/products/khue-van-cac"
-                  className="text-paper/80 hover:text-brass-light transition-colors flex items-center justify-between pr-4"
-                >
-                  <span>Khuê Văn Các</span>
-                  <span className="font-sans text-[11px] text-brass/80">Hà Nội</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/products/cot-co-ha-noi"
-                  className="text-paper/80 hover:text-brass-light transition-colors flex items-center justify-between pr-4"
-                >
-                  <span>Cột Cờ Hà Nội</span>
-                  <span className="font-sans text-[11px] text-brass/80">Hà Nội</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/products/ngo-mon-hue"
-                  className="text-paper/80 hover:text-brass-light transition-colors flex items-center justify-between pr-4"
-                >
-                  <span>Ngọ Môn Huế</span>
-                  <span className="font-sans text-[11px] text-brass/80">Thừa Thiên Huế</span>
-                </Link>
-              </li>
+              {footerMonuments.map((m) => {
+                const loc = getLocalizedProduct({ slug: m.slug, name: m.name } as any, language);
+                return (
+                  <li key={m.slug}>
+                    <Link
+                      to={`/products/${m.slug}`}
+                      className="text-paper/80 hover:text-brass-light transition-colors flex items-center justify-between pr-4"
+                    >
+                      <span>{loc.name || m.name}</span>
+                      <span className="font-sans text-[11px] text-brass/80">
+                        {cityLabels[m.city]?.[language] || 'Hà Nội'}
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
               <li>
                 <Link
                   to="/products"

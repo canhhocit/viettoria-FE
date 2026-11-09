@@ -410,7 +410,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                 className="flex h-9 items-center gap-1.5 border border-paper-border bg-paper/90 px-2.5 text-xs font-sans uppercase tracking-wider text-brown-dark shadow-sm backdrop-blur-sm transition-colors hover:border-brass hover:text-forest focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass font-medium"
               >
                 {previewPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
-                {previewPlaying ? 'Dừng' : 'Video mẫu'}
+                {previewPlaying ? t('product.playingSampleVideo', 'Dừng') : t('product.sampleVideo', 'Video mẫu')}
               </button>
             )}
             <button
@@ -439,7 +439,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
             <div className="pointer-events-none absolute inset-x-0 top-[4.2rem] z-[5] flex justify-center px-4">
               <div className="flex items-center gap-2 border border-brass/30 bg-paper-card/95 px-3 py-2 text-xs text-forest shadow-sm backdrop-blur-sm">
                 <span className="h-1.5 w-1.5 bg-brass" aria-hidden="true" />
-                <span className="font-sans font-medium">Đang mở mô hình 3D…</span>
+                <span className="font-sans font-medium">{t('product.loading3d', 'Đang nạp mô hình 3D...')}</span>
               </div>
             </div>
           )}
@@ -500,7 +500,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
             <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-4 bg-gradient-to-t from-forest/80 via-forest/25 to-transparent px-4 pb-4 pt-16 text-paper sm:px-6 sm:pb-5">
               <div>
                 <p className="font-display text-lg sm:text-xl">{product.name}</p>
-                <p className="mt-1 text-[10px] text-paper/75 sm:text-xs">{modelLoaded ? 'Kéo mô hình để xoay · cuộn để thu phóng' : stageLabel}</p>
+                <p className="mt-1 text-[10px] text-paper/75 sm:text-xs">{modelLoaded ? t('product.dragToRotatePrompt', 'Kéo mô hình để xoay · cuộn để thu phóng') : stageLabel}</p>
               </div>
               {thumbnailPhoto.src && (
                 <button
@@ -509,7 +509,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                   className="pointer-events-auto inline-flex shrink-0 items-center gap-2 border border-paper/35 bg-forest/65 px-3 py-2 text-xs font-sans uppercase tracking-wider text-paper backdrop-blur-sm transition-colors hover:border-brass hover:text-brass-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass font-medium"
                 >
                   <ZoomIn className="h-3.5 w-3.5" />
-                  Xem ảnh
+                  {t('product.viewPhotoBtn', 'Xem ảnh')}
                 </button>
               )}
             </div>
@@ -532,7 +532,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
               />
               <span className="pointer-events-none absolute bottom-4 left-4 inline-flex items-center gap-2 border border-paper/20 bg-forest/80 px-3 py-2 text-xs font-sans uppercase tracking-wider text-paper opacity-0 shadow-sm backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100 font-medium">
                 <ZoomIn className="h-3.5 w-3.5 text-brass-light" />
-                Phóng to ảnh
+                {t('product.zoomPhotoBtn', 'Phóng to ảnh')}
               </span>
             </button>
           )}

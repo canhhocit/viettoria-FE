@@ -8,44 +8,33 @@ export const vi = {
     blogs: 'Góc Nhìn Di Sản',
     about: 'Về Viettoria',
     scanQr: 'Quét Tem QR',
-    cmsPortal: 'Cổng Quản Trị CMS',
-    menu: 'Menu',
-    close: 'Đóng',
+    cmsPortal: 'Quản Trị CMS',
+    menu: 'Menu chính',
+    close: 'Đóng menu',
   },
 
-  // Header & Brand
   header: {
-    brandSubtitle: 'Nền Tảng Tái Hiện Di Sản Kiến Trúc 3D',
-    scanQrTitle: 'Mở trình quét tem QR trên đế mô hình',
     openNavigation: 'Mở danh mục điều hướng',
-    selectLanguage: 'Chọn ngôn ngữ',
   },
 
-  // Common Actions & Labels
+  // Common UI Elements
   common: {
     viewAll: 'Xem tất cả',
-    exploreNow: 'Khám phá ngay',
-    exploreMonument: 'Tìm hiểu công trình',
-    learnMore: 'Xem chi tiết',
+    viewDetails: 'Xem chi tiết',
+    learnMore: 'Khám phá chi tiết',
     back: 'Quay lại',
     search: 'Tìm kiếm...',
     loading: 'Đang tải dữ liệu di sản...',
     all: 'Tất cả',
-    north: 'Miền Bắc',
-    central: 'Miền Trung',
-    south: 'Miền Nam',
-    monumentCount: 'tác phẩm',
-    share: 'Chia sẻ di sản',
-    photoLibrary: 'Thư viện hình ảnh',
-    dynasty: 'Niên đại',
-    location: 'Địa điểm',
-    scale: 'Tỷ lệ',
-    material: 'Vật liệu',
-    parts: 'Số chi tiết',
+    close: 'Đóng',
     dimensions: 'Kích thước',
-    weight: 'Trọng lượng',
-    finishing: 'Hoàn thiện',
-    status: 'Trạng thái',
+    weight: 'Khối lượng',
+    era: 'Thời kỳ',
+    location: 'Địa điểm',
+    exploreMonument: 'Khám phá công trình',
+    monumentCount: 'tác phẩm',
+    share: 'Chia sẻ tác phẩm',
+    copied: 'Đã sao chép liên kết!',
   },
 
   // Home Page
@@ -86,6 +75,62 @@ export const vi = {
     // Manifesto & Values
     manifestoQuote: 'Chúng tôi không chỉ in 3D những khối kiến trúc; chúng tôi hồi sinh hồn thiêng sông núi, chạm khắc niềm tự hào văn hiến vào từng thớ vật liệu và dữ liệu số hóa.',
     manifestoAuthor: 'VIETTORIA ATELIER · DI SẢN PHYGITAL',
+
+    // Blog preview section
+    blogEyebrow: 'Ghi chép về di sản',
+    blogHeading: 'Câu chuyện phía sau công trình',
+    blogDesc: 'Đọc thêm về kiến trúc, con người và những dấu mốc làm nên từng di sản.',
+    readBlogCta: 'Đọc bài viết',
+  },
+
+  // About Page
+  aboutPage: {
+    heroEyebrow: 'Câu Chuyện Khởi Nguồn & Sứ Mệnh',
+    heroTitleLine1: 'Khắc Dấu Thời Gian,',
+    heroTitleLine2: 'Nối Dài Hồn Cốt Dân Tộc',
+    quote: '"VIETTORIA không bán một mô hình thu nhỏ đơn thuần. VIETTORIA mang đến một cách mới để khám phá, hiểu và lưu giữ những câu chuyện của di sản Việt Nam."',
+    intro: 'Xuất phát từ niềm đau đáu trước nguy cơ mai một của các công trình kiến trúc cổ kính qua thăng trầm thời gian và khói lửa chiến tranh, VIETTORIA được thành lập như một xưởng chế tác di sản kết hợp công nghệ vật lý và số hóa (Phygital Heritage Atelier). Chúng tôi biến những di sản trầm mặc nghìn năm thành những hiện vật sống động có thể chạm vào, cảm nhận và lắng nghe ngay trên lòng bàn tay.',
+    brandMeaningEyebrow: 'Ý Nghĩa Tên Gọi VIETTORIA',
+    brandMeaningTitle: 'Giao Thoa Giữa Bản Sắc Việt & Khát Vọng Trường Tồn',
+    vietLabel: '"VIET":',
+    vietDesc: 'Tượng trưng cho non sông gấm vóc, cốt cách kiên cường và bề dày văn hóa ngàn năm của người Việt Nam.',
+    toriaLabel: '"TORIA" (Từ gốc Victoria / Khải Hoàn):',
+    toriaDesc: 'Biểu trưng cho sự chiến thắng của ký ức trước thời gian, sự tôn vinh vĩnh cửu những giá trị thủ công và kiến trúc mà tiền nhân đã dày công kiến tạo.',
+    commitmentEyebrow: 'Cam Kết Atelier',
+    commitmentTitle: 'Khảo Cứu Tư Liệu & Đối Chiếu Tỷ Lệ',
+    commitmentDesc: 'Tất cả chi tiết kiến trúc—từ vòm cuốn gạch vồ, con sơn kẻ chuyền, đến từng đầu đao mái ngói—đều được đối sánh trực tiếp với hồ sơ trùng tu và bản vẽ khảo cổ học.',
+    pillarsEyebrow: 'Kỹ Nghệ & Công Nghệ',
+    pillarsTitle: 'Quy Trình Chế Tác Độc Bản',
+    pillar1Title: '1. Vật Liệu Xanh BioPETG',
+    pillar1Desc: 'Ứng dụng sợi sinh học BioPETG kết hợp bột khoáng tự nhiên, đạt độ bền cơ học cao, chịu ẩm nhiệt đới và an toàn tuyệt đối với sức khỏe con người cũng như môi trường.',
+    pillar2Title: '2. Mộng Gỗ Không Dùng Keo',
+    pillar2Desc: 'Kế thừa trọn vẹn trí tuệ của thợ mộc xưa: cấu kiện ghép nối hoàn toàn bằng khớp mộng âm dương chính xác đến từng micro-mét, cho phép tháo lắp và khám phá cấu trúc rường cột bên trong.',
+    pillar3Title: '3. Trải Nghiệm Thuyết Minh Số',
+    pillar3Desc: 'Tích hợp mã QR độc bản dẫn đến không gian số hoá riêng biệt. Người sở hữu được lắng nghe bản thu âm độc quyền và đọc các tư liệu lịch sử lưu trữ chuyên sâu.',
+    workshopEyebrow: 'Thực Địa & Chế Tác',
+    workshopTitle: 'Không Gian Nghiên Cứu & Hiện Vật Thực Tế',
+    workshopArchive: 'Tư liệu lưu trữ xưởng Viettoria Atelier',
+    workshopCard1Title: 'Mô Hình Khảo Cứu Thực Tế',
+    workshopCard1Desc: 'Tái hiện chân thực đường cong mái đao và kết cấu cột trụ đá',
+    workshopCard2Title: 'Bao Bì & Thẻ Định Danh Độc Bản',
+    workshopCard2Desc: 'Mỗi mô hình được cấp một số hiệu bảo chứng và tem QR riêng',
+    workshopCard3Title: 'Chi Tiết Cấu Kiện Mộng Khớp',
+    workshopCard3Desc: 'Độ chuẩn xác cao, tái hiện kỹ thuật mộng truyền thống của tiền nhân',
+    ctaEyebrow: 'Khám phá Viettoria',
+    ctaTitle: 'Mang một phần di sản về gần hơn',
+    ctaDesc: 'Mỗi tác phẩm kết hợp hình dáng kiến trúc, câu chuyện lịch sử và mô hình số để bạn có thể ngắm nhìn di sản theo cách gần gũi hơn.',
+    ctaButton: 'Xem bộ sưu tập',
+  },
+
+  // Products Page
+  productsPage: {
+    eyebrow: 'Danh Mục Tác Phẩm Khảo Cứu & Mô Hình 3D',
+    title: 'Tác Phẩm Di Sản Việt Nam',
+    subtitle: 'Tuyển tập 5 công trình kiến trúc tiêu biểu của đất Việt được số hóa và phục chế dưới dạng mô hình 3D tinh xảo. Mỗi tác phẩm đi kèm tài liệu lịch sử và bản thuyết minh âm thanh độc quyền.',
+    archivalResearch: 'Khảo Cứu Lưu Trữ',
+    notFoundTitle: 'Không tìm thấy tác phẩm phù hợp',
+    notFoundDesc: 'Hãy thử tìm kiếm với từ khóa khác hoặc bỏ chọn bộ lọc.',
+    viewAllBtn: 'Xem tất cả tác phẩm',
   },
 
   // Product Detail Page (Heritage Explorer)
@@ -100,6 +145,7 @@ export const vi = {
     specMaterial: 'Chất liệu đúc',
     specParts: 'Số cấu kiện ráp',
     specFinishing: 'Xử lý bề mặt',
+    height: 'Cao',
 
     // 3D & Viewer Tabs
     tab3d: 'Mô hình 3D Tương tác',
@@ -109,6 +155,11 @@ export const vi = {
     fullscreen: 'Toàn màn hình',
     loading3d: 'Đang nạp mô hình 3D Draco...',
     view3dHint: 'Dùng chuột hoặc ngón tay để xoay 360°, phóng to chi tiết kiến trúc',
+    dragToRotatePrompt: 'Kéo mô hình để xoay · cuộn để thu phóng',
+    viewPhotoBtn: 'Xem ảnh',
+    zoomPhotoBtn: 'Phóng to ảnh',
+    sampleVideo: 'Video mẫu',
+    playingSampleVideo: 'Dừng',
 
     // Audio Guide
     audioTitle: 'Hướng Dẫn Viên Âm Thanh',
@@ -118,12 +169,146 @@ export const vi = {
     playAudio: 'Nghe thuyết minh di sản',
     pauseAudio: 'Tạm dừng',
 
+    // Story & Context
+    historyStory: 'Câu chuyện lịch sử',
+    listenStoryPrompt: 'Lắng nghe câu chuyện qua lời kể của hướng dẫn viên.',
+    inDepthEssay: 'Khảo Luận Chuyên Sâu',
+    journeyThroughCenturies: 'Hành Trình Di Sản Qua Các Thế Kỷ',
+    relatedEra: 'Các Tác Phẩm Cùng Thời Kỳ',
+
+    // Share Modal & QR Deep Link
+    shareTitle: 'Chia sẻ tác phẩm',
+    generatingQr: 'Đang tạo mã QR…',
+    copyLink: 'Sao chép liên kết',
+    copiedLink: 'Đã sao chép',
+    copyFailed: 'Không sao chép được liên kết. Vui lòng thử lại.',
+    downloadQr: 'Tải mã QR',
+    qrDeepLinkTitle: 'Xác Thực Thành Công Tem QR Di Sản Độc Bản',
+    qrDeepLinkDesc: 'Chào mừng bạn đến với mô hình trên tay bạn! Không gian số và Audio Guide độc quyền đã được mở khóa.',
+    qrDeepLinkIdBadge: 'Định Danh Vật Lý 1:120',
+    notFoundTitle: 'Không tìm thấy tác phẩm di sản',
+    notFoundDesc: 'Mã tác phẩm hoặc đường dẫn không hợp lệ.',
+
     // Story Blocks
     storyHeading: 'Hồ Sơ Khảo Cứu & Dòng Thời Gian Di Sản',
     storySubheading: 'Tìm hiểu ngọn nguồn lịch sử, cấu trúc gỗ và ý nghĩa văn hóa trường tồn',
     timelineTitle: 'Biến thiên ngàn năm',
     verifiedHeritage: 'Chứng nhận Di sản Phygital Viettoria',
     certificateId: 'Mã định danh tác phẩm',
+  },
+
+  // Collections Page
+  collectionsPage: {
+    title: 'Các Tuyển Tập Di Sản',
+    subtitle: 'Những dòng tác phẩm phục dựng theo từng giai đoạn văn hóa và triều đại lịch sử',
+    worksCount: 'tác phẩm',
+    loading: 'Đang tải các bộ sưu tập di sản kiến trúc...',
+    eyebrow: 'Phân Loại Niên Đại & Kiến Trúc',
+    pageSubtitle: 'Mỗi bộ sưu tập đại diện cho một thời kỳ hoàng kim của kiến trúc Việt Nam. Chúng tôi tái hiện từng cấu kiện với lòng thành kính và tiêu chuẩn kỹ thuật số bảo tàng học.',
+    gridTitle: 'Danh Mục Bộ Sưu Tập Theo Thời Kỳ',
+    collectionTag: 'Tuyển Tập',
+    monumentResearch: 'công trình nghiên cứu',
+    allCollections: 'Tất cả bộ sưu tập',
+    historicEra: 'Thời kỳ lịch sử',
+    worksInCollection: 'Các Tác Phẩm Trong Bộ Sưu Tập',
+    notFoundTitle: 'Không tìm thấy bộ sưu tập',
+    notFoundDesc: 'Bộ sưu tập bạn tìm kiếm không tồn tại hoặc đã được chuyển dời.',
+  },
+
+  // Blogs & Culture Page
+  blogsPage: {
+    title: 'Góc Nhìn Di Sản & Khảo Cứu',
+    subtitle: 'Bài viết chuyên sâu về kỹ nghệ kiến trúc cổ truyền và ký ức lịch sử',
+    readTime: 'phút đọc',
+    author: 'Tác giả',
+    eyebrow: 'Nghiên Cứu Lịch Sử & Kỹ Thuật Số Hóa',
+    desc: 'Các khảo cứu chuyên sâu về kiến trúc cổ, kỹ nghệ chế tác mộng gỗ truyền thống và hành trình đưa di sản nghìn năm hòa nhịp vào đời sống đương đại.',
+    allPosts: 'Tất Cả Bài Viết',
+    readMore: 'Đọc tiếp',
+    loadingDetail: 'Đang tải bài viết khảo cứu di sản...',
+    notFoundTitle: 'Không tìm thấy bài viết',
+    notFoundDesc: 'Bài viết không tồn tại hoặc đã được chuyển dời.',
+    backToBlogs: 'Quay lại góc nhìn di sản',
+    allBlogs: 'Tất cả bài viết',
+    inCategory: 'Thuộc chuyên mục:',
+    readMoreOther: 'Đọc thêm các bài khảo cứu khác',
+  },
+
+  // QR Resolver & Modal
+  qr: {
+    resolvingTitle: 'Đang Xác Thực Mã Di Sản',
+    resolvingSub: 'Kết nối hệ sinh thái Phygital Viettoria...',
+    inputPlaceholder: 'Nhập mã tem (ví dụ: VT-HN-001)...',
+    btnVerify: 'Xác Thực Tác Phẩm',
+    notFound: 'Mã tem QR không tồn tại trong hệ sinh thái di sản Viettoria.',
+    modalTitle: 'Mở Khóa Không Gian Số',
+    modalDesc: 'Nhập mã sản phẩm in trên tem QR dưới đế mô hình của bạn để mở trực tiếp trang chi tiết và thuyết minh âm thanh.',
+    inputLabel: 'Mã Định Danh Di Sản (VD: VT-HN-001)',
+    inputPlaceholderFull: 'Nhập mã tem xác thực hoặc chọn bên dưới...',
+    presetLabel: 'Tác phẩm di sản mẫu:',
+    btnUnlock: 'Kích Hoạt Trải Nghiệm Số',
+    phygitalBadge: 'Xác thực tiêu chuẩn Phygital',
+    audioExclusive: 'Audio Guide độc quyền',
+    pageTitle: 'Xác Thực Tem QR Mô Hình',
+    pageSubtitle: 'Nhập mã in dưới đế mô hình thu nhỏ của bạn để truy cập ngay bản thu âm thuyết minh và khảo cứu kiến trúc.',
+    pageInputLabel: 'Mã Xác Thực / Tác Phẩm',
+    pageUnlockBtn: 'Mở Khóa Trải Nghiệm',
+    pageBackToProducts: '← Xem toàn bộ tác phẩm',
+    pageErrorGeneric: 'Có lỗi xảy ra khi xác thực tem QR. Vui lòng thử lại.',
+  },
+
+  // Architectural Timeline
+  timeline: {
+    eyebrow: 'Biên Niên Sử Di Sản Kiến Trúc',
+    title: 'Hành Trình Gần Một Thiên Niên Kỷ (1049 — 1863)',
+    badge: '5 Tuyệt Tác Khảo Cứu',
+    yearPrefix: 'Năm',
+    exploreBtn: 'Khảo Cứu Tác Phẩm',
+  },
+
+  // Scale Ruler
+  scaleRuler: {
+    eyebrow: 'Khảo Cứu Tỷ Lệ Vật Lý Thực Địa',
+    title: 'Thước Đo Kích Thước & Tương Quan Bàn Tay',
+    rulerTab: 'Thước Đo Chuẩn',
+    handTab: 'Tương Quan Trên Tay',
+    descRuler: 'Mô hình được thu phóng chuẩn xác theo tỷ lệ',
+    heightLabel: 'Chiều cao đo được là',
+    widthLabel: 'và chiều rộng cơ sở là',
+    lakeOrigin: '0 cm (Gốc mặt hồ)',
+    opticalTolerance: 'Vạch chuẩn Milimet (Dung sai quang học < 0.08mm)',
+    standardHand: 'Bàn tay chuẩn (~18cm)',
+    humanScaleRef: 'Tham Chiếu Nhân Trắc',
+    miniatureModel: 'Mô Hình Thu Nhỏ',
+    tactileDesc: 'Vừa vặn hoàn hảo trong lòng hai bàn tay mở rộng, thích hợp đặt trên bàn trà, tủ sách cổ điển hoặc kệ sưu tập bảo tàng.',
+    netWeightLabel: 'Khối lượng tịnh:',
+    materialBioDesc: '(cảm giác đầm tay tự nhiên của vật liệu khoáng đá BioPETG).',
+  },
+
+  // Audio Player
+  audioPlayer: {
+    narrator: 'Hướng dẫn viên Viettoria',
+    audioError: 'Không mở được bản thu.',
+    audioUpdating: 'Đang cập nhật âm thanh.',
+    replay: 'Phát lại',
+    pause: 'Tạm dừng',
+    listen: 'Nghe',
+    speaking: 'Đang dẫn chuyện',
+    player: 'Trình phát',
+    unmute: 'Bật âm thanh',
+    mute: 'Tắt tiếng',
+    expandTranscript: 'Xem toàn bộ lời dẫn',
+    collapseTranscript: 'Thu gọn lời dẫn',
+  },
+
+  // Assembly Guide
+  assemblyGuide: {
+    eyebrow: 'Kỹ Nghệ Khớp Mộng Gỗ Truyền Thống',
+    title: 'Cơ Chế Lắp Ráp Thủ Công',
+    badge: 'Không Keo Dán • Thuần Mộng Âm Dương',
+    stepPrefix: 'Bước',
+    prevStep: 'Bước Trước',
+    nextStep: 'Bước Kế Tiếp',
   },
 
   // Map Page
@@ -147,30 +332,6 @@ export const vi = {
     minimize: 'Thu Nhỏ',
     expand: 'Mở Rộng',
     exploreMonument3D: 'Khảo Cứu Công Trình 3D Chi Tiết',
-  },
-
-  // Collections Page
-  collectionsPage: {
-    title: 'Các Bộ Sưu Tập Di Sản',
-    subtitle: 'Những dòng tác phẩm phục dựng theo từng giai đoạn văn hóa và triều đại lịch sử',
-    worksCount: 'tác phẩm',
-  },
-
-  // Blogs & Culture Page
-  blogsPage: {
-    title: 'Góc Nhìn Di Sản & Khảo Cứu',
-    subtitle: 'Bài viết chuyên sâu về kỹ nghệ kiến trúc cổ truyền và ký ức lịch sử',
-    readTime: 'phút đọc',
-    author: 'Tác giả',
-  },
-
-  // QR Resolver
-  qr: {
-    resolvingTitle: 'Đang Xác Thực Mã Di Sản',
-    resolvingSub: 'Kết nối hệ sinh thái Phygital Viettoria...',
-    inputPlaceholder: 'Nhập mã tem (ví dụ: VT-HN-001)...',
-    btnVerify: 'Xác Thực Tác Phẩm',
-    notFound: 'Mã tem QR không tồn tại trong hệ sinh thái di sản Viettoria.',
   },
 
   // 3D Hotspots & Architectural Inspection
@@ -203,4 +364,3 @@ export const vi = {
 };
 
 export type TranslationSchema = typeof vi;
-

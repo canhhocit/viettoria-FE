@@ -519,11 +519,17 @@ export const HomePage: React.FC = () => {
       <section className="border-y-2 border-brass/40 bg-forest text-paper">
         <div className="mx-auto grid max-w-[1440px] gap-8 px-5 py-16 sm:px-8 md:grid-cols-[0.8fr_1.2fr] lg:px-16">
           <div data-home-reveal>
-            <p className="text-xs font-cinzel font-bold uppercase tracking-[0.2em] text-brass">Ghi chép về di sản</p>
-            <h2 className="mt-3 font-display text-3xl font-bold text-paper sm:text-4xl">Câu chuyện phía sau công trình</h2>
-            <p className="mt-3 max-w-sm text-sm leading-6 text-paper/80 font-normal">Đọc thêm về kiến trúc, con người và những dấu mốc làm nên từng di sản.</p>
+            <p className="text-xs font-cinzel font-bold uppercase tracking-[0.2em] text-brass">
+              {t('home.blogEyebrow', 'Ghi chép về di sản')}
+            </p>
+            <h2 className="mt-3 font-display text-3xl font-bold text-paper sm:text-4xl">
+              {t('home.blogHeading', 'Câu chuyện phía sau công trình')}
+            </h2>
+            <p className="mt-3 max-w-sm text-sm leading-6 text-paper/80 font-normal">
+              {t('home.blogDesc', 'Đọc thêm về kiến trúc, con người và những dấu mốc làm nên từng di sản.')}
+            </p>
             <Link to="/blogs" className="mt-6 inline-flex items-center gap-2 border border-brass bg-brass px-5 py-2.5 text-xs font-sans font-bold uppercase tracking-wider text-forest transition-all hover:bg-brass-light hover:shadow-lg">
-              Đọc bài viết <ArrowRight size={14} strokeWidth={2} />
+              {t('home.readBlogCta', 'Đọc bài viết')} <ArrowRight size={14} strokeWidth={2} />
             </Link>
           </div>
           <div className="grid gap-5 sm:grid-cols-2">

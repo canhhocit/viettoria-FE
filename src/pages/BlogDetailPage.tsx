@@ -9,7 +9,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 export const BlogDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { localizeBlog } = useLanguage();
+  const { t, localizeBlog } = useLanguage();
   const [rawBlog, setRawBlog] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -26,16 +26,16 @@ export const BlogDetailPage: React.FC = () => {
   const blog = rawBlog ? localizeBlog(rawBlog) : null;
 
   if (loading) {
-    return <PageLoadingHeritage message="Đang tải bài viết khảo cứu di sản..." />;
+    return <PageLoadingHeritage message={t('blogsPage.loadingDetail')} />;
   }
 
   if (!blog) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center bg-paper text-center px-4">
-        <h2 className="font-serif text-2xl font-bold text-forest mb-2">Không tìm thấy bài viết</h2>
-        <p className="text-sm text-charcoal-muted mb-6">Bài viết không tồn tại hoặc đã được chuyển dời.</p>
+        <h2 className="font-serif text-2xl font-bold text-forest mb-2">{t('blogsPage.notFoundTitle')}</h2>
+        <p className="text-sm text-charcoal-muted mb-6">{t('blogsPage.notFoundDesc')}</p>
         <Link to="/blogs" className="px-5 py-2.5 bg-forest text-paper font-mono text-xs uppercase tracking-wider">
-          Quay lại góc nhìn di sản
+          {t('blogsPage.backToBlogs')}
         </Link>
       </div>
     );
@@ -50,7 +50,7 @@ export const BlogDetailPage: React.FC = () => {
           className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-charcoal-muted hover:text-forest transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Tất cả bài viết</span>
+          <span>{t('blogsPage.allBlogs')}</span>
         </Link>
 
         {/* Article Header */}
@@ -106,14 +106,14 @@ export const BlogDetailPage: React.FC = () => {
         {/* Footer & Attribution */}
         <footer className="pt-8 border-t border-paper-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="text-xs font-mono text-charcoal-muted">
-            Thuộc chuyên mục: <span className="text-forest font-semibold">{blog.category}</span>
+            {t('blogsPage.inCategory')} <span className="text-forest font-semibold">{blog.category}</span>
           </div>
 
           <Link
             to="/blogs"
             className="px-5 py-2.5 bg-forest text-paper hover:bg-brass transition-colors font-mono text-xs uppercase tracking-wider font-semibold"
           >
-            Đọc thêm các bài khảo cứu khác
+            {t('blogsPage.readMoreOther')}
           </Link>
         </footer>
       </div>
