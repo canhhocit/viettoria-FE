@@ -15,6 +15,7 @@ import {
   Sparkles 
 } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { getLocalizedProduct } from '../../utils/localizedEntities';
 
 export interface HeritageSiteLocation {
   id: string;
@@ -128,7 +129,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
   initialSiteId, 
   compactHeight = false 
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const tileLayersRef = useRef<{ osmStandard: L.TileLayer; esriSatellite: L.TileLayer } | null>(null);
@@ -143,6 +144,35 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
   const [is3DCardExpanded, setIs3DCardExpanded] = useState<boolean>(false);
   const [isAutoRotating, setIsAutoRotating] = useState<boolean>(true);
   const [mapLayerType, setMapLayerType] = useState<'satellite' | 'standard'>('satellite');
+
+  const getLocalizedSite = (site: HeritageSiteLocation): HeritageSiteLocation => {
+    if (language === 'vi') return site;
+    const localized = getLocalizedProduct({
+      id: site.id,
+      slug: site.slug,
+      name: site.name,
+      subName: site.subName,
+      shortDescription: site.description,
+      location: site.location,
+      epoch: site.epoch,
+    } as any, language);
+    return {
+      ...site,
+      name: localized.name || site.name,
+      subName: localized.subName || site.subName,
+      description: localized.shortDescription || site.description,
+      location: localized.location || site.location,
+      epoch: localized.epoch || site.epoch,
+    };
+  };
+
+  const currentSite = getLocalizedSite(activeSite);
+
+  const cityLabels: Record<string, Record<string, string>> = {
+    hanoi: { vi: 'Hà Nội', en: 'Hanoi', fr: 'Hanoï', zh: '河内', ko: '하노이', ja: 'ハノイ' },
+    hue: { vi: 'Huế', en: 'Hue', fr: 'Hué', zh: '顺化', ko: '후에', ja: 'フエ' },
+    saigon: { vi: 'Sài Gòn', en: 'Saigon', fr: 'Saïgon', zh: '西贡', ko: '사이공', ja: 'サイゴン' },
+  };
 
   // Switch between Tile Layers
   const toggleMapLayer = (type: 'standard' | 'satellite') => {
@@ -372,7 +402,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
                   : 'text-charcoal-muted hover:text-forest'
               }`}
             >
-              Hà Nội (3)
+              {cityLabels.hanoi[language] || 'Hà Nội'} (3)
             </button>
             <button
               type="button"
@@ -383,7 +413,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
                   : 'text-charcoal-muted hover:text-forest'
               }`}
             >
-              Huế (1)
+              {cityLabels.hue[language] || 'Huế'} (1)
             </button>
             <button
               type="button"
@@ -394,7 +424,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
                   : 'text-charcoal-muted hover:text-forest'
               }`}
             >
-              Sài Gòn (1)
+              {cityLabels.saigon[language] || 'Sài Gòn'} (1)
             </button>
           </div>
 
@@ -402,6 +432,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
           <div className="space-y-2 max-h-56 lg:max-h-64 overflow-y-auto pr-1 no-scrollbar">
             {HERITAGE_SITES.map((site) => {
               const isSelected = activeSite.id === site.id;
+              const locSite = getLocalizedSite(site);
               return (
                 <button
                   key={site.id}
@@ -416,14 +447,14 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
                   <div className="min-w-0 space-y-1">
                     <div className="flex items-center gap-1.5 text-[11px]">
                       <span className={`font-cinzel uppercase tracking-wider font-bold ${isSelected ? 'text-brass' : 'text-brass-dark'}`}>
-                        {site.cityName.split('—')[0].trim()}
+                        {cityLabels[site.city]?.[language] || site.cityName.split('—')[0].trim()}
                       </span>
                       <span className={isSelected ? 'text-paper/60' : 'text-charcoal-muted'}>
-                        • {site.epoch.split('(')[0].trim()}
+                        • {locSite.epoch.split('(')[0].trim()}
                       </span>
                     </div>
                     <div className="font-display text-sm font-bold truncate">
-                      {site.name}
+                      {locSite.name}
                     </div>
                   </div>
 
@@ -444,8 +475,8 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
         <div className="border-t border-paper-border pt-4 text-forest">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <h4 className="truncate font-display text-lg font-bold">{activeSite.name}</h4>
-              <p className="mt-1 truncate text-xs text-charcoal-muted">{activeSite.location}</p>
+              <h4 className="truncate font-display text-lg font-bold">{currentSite.name}</h4>
+              <p className="mt-1 truncate text-xs text-charcoal-muted">{currentSite.location}</p>
             </div>
             <Link
               to={`/products/${activeSite.slug}`}
@@ -541,10 +572,10 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
                   </span>
                 </div>
                 <h4 className="mt-1 font-display text-base font-bold text-paper truncate">
-                  {activeSite.name}
+                  {currentSite.name}
                 </h4>
                 <p className="font-display text-xs italic text-brass-subtle truncate">
-                  {activeSite.subName}
+                  {currentSite.subName}
                 </p>
               </div>
 
@@ -589,7 +620,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
                 key={`${activeSite.slug}-map-3d`}
                 src={`/3D/${activeSite.slug}.glb`}
                 poster={`/3D/${activeSite.slug}-poster.webp`}
-                alt={`Mô hình 3D của ${activeSite.name}`}
+                alt={`Mô hình 3D của ${currentSite.name}`}
                 camera-controls
                 auto-rotate={isAutoRotating ? '' : undefined}
                 rotation-per-second="25deg"
@@ -605,7 +636,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
               {/* Interaction Hint Overlay */}
               <div className="pointer-events-none absolute bottom-2 left-2 right-2 z-10 flex items-center justify-between text-[10px] text-paper/70 font-sans px-2 py-1 bg-forest/80 backdrop-blur-xs border border-brass/20">
                 <span>{t('mapPage.dragToRotate', 'Kéo để xoay 360° · Cuộn để thu phóng')}</span>
-                <span className="font-cinzel text-brass font-bold">{activeSite.epoch.split('(')[0].trim()}</span>
+                <span className="font-cinzel text-brass font-bold">{currentSite.epoch.split('(')[0].trim()}</span>
               </div>
             </div>
 

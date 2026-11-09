@@ -58,13 +58,16 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     if (typeof window === 'undefined') return 'vi';
     try {
       const stored = localStorage.getItem(STORAGE_KEY) as LanguageCode | null;
-      if (stored && (stored === 'vi' || stored === 'en' || stored === 'fr')) {
+      if (stored && (stored === 'vi' || stored === 'en' || stored === 'fr' || stored === 'zh' || stored === 'ko' || stored === 'ja')) {
         return stored;
       }
       // Check browser language
       const browserLang = navigator.language.slice(0, 2).toLowerCase();
       if (browserLang === 'en') return 'en';
       if (browserLang === 'fr') return 'fr';
+      if (browserLang === 'zh') return 'zh';
+      if (browserLang === 'ko') return 'ko';
+      if (browserLang === 'ja') return 'ja';
       return 'vi';
     } catch {
       return 'vi';
