@@ -322,6 +322,12 @@ export const en: TranslationSchema = {
     inspectHint: 'Tap or click markers on the model to examine unique architectural craftsmanship',
     close: 'Close details',
     fullscreenMode: '3D Architectural Inspection Mode',
+    startTour: 'Auto Tour',
+    pauseTour: 'Pause Tour',
+    prev: 'Previous',
+    next: 'Next Component',
+    componentStep: 'Component',
+    autoTourHint: 'Automatically explores each architectural part',
   },
 
   footer: {

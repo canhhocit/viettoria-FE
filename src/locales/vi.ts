@@ -345,6 +345,12 @@ export const vi = {
     inspectHint: 'Chạm hoặc nhấp vào các điểm đánh dấu trên mô hình để khám phá chi tiết kiến trúc độc bản',
     close: 'Đóng chi tiết',
     fullscreenMode: 'Chế độ khảo cứu toàn cảnh 3D',
+    startTour: 'Tour tự động',
+    pauseTour: 'Tạm dừng',
+    prev: 'Cấu kiện trước',
+    next: 'Cấu kiện tiếp theo',
+    componentStep: 'Cấu kiện',
+    autoTourHint: 'Tự động thuyết minh lần lượt từng cấu kiện',
   },
 
   // Footer

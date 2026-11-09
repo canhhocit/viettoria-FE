@@ -322,6 +322,12 @@ export const ko: TranslationSchema = {
     inspectHint: '모형 위의 마커를 클릭하여 전통 목구조의 독창적인 결구 기법을 확인해 보세요',
     close: '상세 닫기',
     fullscreenMode: '3D 건축 전경 고증 모드',
+    startTour: '자동 투어',
+    pauseTour: '일시 정지',
+    prev: '이전 부재',
+    next: '다음 부재',
+    componentStep: '건축 부재',
+    autoTourHint: '각 건축 부재를 순서대로 자동 해설합니다',
   },
 
   footer: {

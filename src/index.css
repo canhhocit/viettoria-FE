@@ -91,33 +91,107 @@
 
 /* 3D Model Interactive Hotspots & Architectural Inspection Nodes */
 .heritage-hotspot-node {
+  position: relative;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  pointer-events: auto;
+  outline: none;
+  transition: opacity 0.3s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.heritage-hotspot-pin {
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   border-radius: 9999px;
   background-color: #142820;
   border: 1.5px solid #C49A45;
   color: #FAF7F0;
-  cursor: pointer;
   box-shadow: 0 4px 14px rgba(13, 28, 22, 0.5), 0 0 0 1px rgba(196, 154, 69, 0.35);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease;
-  user-select: none;
-  touch-action: manipulation;
-  pointer-events: auto;
-  animation: floatSlow 4s ease-in-out infinite;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease, color 0.2s ease;
 }
 
-.heritage-hotspot-node:hover,
-.heritage-hotspot-node.is-active {
-  transform: scale(1.22);
+.heritage-hotspot-node:hover .heritage-hotspot-pin,
+.heritage-hotspot-node.is-active .heritage-hotspot-pin {
+  transform: scale(1.18);
   border-color: #FAF7F0;
   background-color: #B88A38;
   color: #142820;
-  box-shadow: 0 0 0 4px rgba(196, 154, 69, 0.35), 0 0 25px rgba(212, 175, 55, 0.7);
+  box-shadow: 0 0 0 3px rgba(196, 154, 69, 0.4), 0 0 20px rgba(212, 175, 55, 0.7);
   z-index: 30;
+}
+
+/* Callout annotation label floating beside the pin */
+.heritage-hotspot-callout {
+  position: absolute;
+  left: calc(100% + 6px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  pointer-events: auto;
+  white-space: nowrap;
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 25;
+}
+
+.heritage-hotspot-callout-line {
+  width: 10px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(196, 154, 69, 0.9), rgba(196, 154, 69, 0.4));
+  flex-shrink: 0;
+}
+
+.heritage-hotspot-callout-box {
+  background: rgba(20, 40, 32, 0.92);
+  border: 1px solid rgba(196, 154, 69, 0.55);
+  padding: 3px 8px;
+  text-align: left;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  transition: all 0.2s ease;
+  pointer-events: auto;
+}
+
+.heritage-hotspot-callout-cat {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 8.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #C49A45;
+  line-height: 1.15;
+}
+
+.heritage-hotspot-callout-title {
+  display: block;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #FAF7F0;
+  line-height: 1.25;
+}
+
+.heritage-hotspot-node:hover .heritage-hotspot-callout-box,
+.heritage-hotspot-node.is-active .heritage-hotspot-callout-box {
+  border-color: #FAF7F0;
+  background: rgba(20, 40, 32, 0.98);
+  box-shadow: 0 0 0 1px rgba(196, 154, 69, 0.6), 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(212, 175, 55, 0.35);
+}
+
+.heritage-hotspot-node.is-active .heritage-hotspot-callout-title {
+  color: #FFF3B0;
 }
 
 /* Radar pulse animation for active/available hotspots */
@@ -143,13 +217,33 @@
 
 /* model-viewer automatically removes data-visible attribute when a hotspot is occluded */
 .heritage-hotspot-node:not([data-visible]) {
-  opacity: 0.25;
+  opacity: 0.15;
   transform: scale(0.75);
   pointer-events: none;
 }
 
 .heritage-hotspot-node:not([data-visible]) .heritage-hotspot-ping {
   display: none;
+}
+
+.heritage-hotspot-node:not([data-visible]) .heritage-hotspot-callout {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .heritage-hotspot-callout-cat {
+    display: none;
+  }
+  .heritage-hotspot-callout-box {
+    padding: 2px 6px;
+  }
+  .heritage-hotspot-callout-title {
+    font-size: 10px;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .audio-guide-emblem.is-speaking {

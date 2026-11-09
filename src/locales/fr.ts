@@ -322,6 +322,12 @@ export const fr: TranslationSchema = {
     inspectHint: 'Touchez les repères sur le modèle pour révéler les secrets de construction',
     close: 'Fermer les détails',
     fullscreenMode: 'Mode Examen Architectural 3D',
+    startTour: 'Visite guidée',
+    pauseTour: 'Pause',
+    prev: 'Précédent',
+    next: 'Composant suivant',
+    componentStep: 'Composant',
+    autoTourHint: 'Explore automatiquement chaque élément architectural',
   },
 
   footer: {

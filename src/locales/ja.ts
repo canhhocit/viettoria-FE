@@ -322,6 +322,12 @@ export const ja: TranslationSchema = {
     inspectHint: '模型上のマーカーをクリックして、伝統大工の独創的な接合構造をご覧ください',
     close: '詳細を閉じる',
     fullscreenMode: '3D建築全景考証モード',
+    startTour: '自動ツアー',
+    pauseTour: '一時停止',
+    prev: '前の部材',
+    next: '次の部材',
+    componentStep: '建築部材',
+    autoTourHint: '各建築部材を順に自動解説します',
   },
 
   footer: {

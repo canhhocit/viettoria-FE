@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Box,
+  ChevronLeft,
+  ChevronRight,
   Eye,
   Maximize2,
   Pause,
@@ -45,8 +47,12 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
   );
   const [autoRotate, setAutoRotate] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [showHotspots, setShowHotspots] = useState(false);
+  const [showHotspots, setShowHotspots] = useState(true);
   const [activeHotspotId, setActiveHotspotId] = useState<string | null>(null);
+  const [isTourActive, setIsTourActive] = useState(false);
+  const [tourTimerProgress, setTourTimerProgress] = useState(0);
+  const TOUR_DURATION_MS = 6000;
+
   const viewportRef = useRef<HTMLDivElement>(null);
   const modelViewerRef = useRef<HTMLElement | null>(null);
 
@@ -58,6 +64,76 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
   const activeHotspot = useMemo(() => {
     return hotspots.find((h) => h.id === activeHotspotId) || null;
   }, [hotspots, activeHotspotId]);
+
+  const currentHotspotIndex = useMemo(() => {
+    return hotspots.findIndex((h) => h.id === activeHotspotId);
+  }, [hotspots, activeHotspotId]);
+
+  const goToHotspotByIndex = (index: number) => {
+    if (index < 0 || index >= hotspots.length) return;
+    const target = hotspots[index];
+    setActiveHotspotId(target.id);
+    setShowHotspots(true);
+    if (modelViewerRef.current && target.orbit && target.target) {
+      // @ts-expect-error model-viewer properties
+      modelViewerRef.current.cameraOrbit = target.orbit;
+      // @ts-expect-error model-viewer properties
+      modelViewerRef.current.cameraTarget = target.target;
+    }
+  };
+
+  const handleNextHotspot = () => {
+    if (hotspots.length === 0) return;
+    const nextIdx = currentHotspotIndex === -1 ? 0 : (currentHotspotIndex + 1) % hotspots.length;
+    goToHotspotByIndex(nextIdx);
+  };
+
+  const handlePrevHotspot = () => {
+    if (hotspots.length === 0) return;
+    const prevIdx = currentHotspotIndex === -1 ? hotspots.length - 1 : (currentHotspotIndex - 1 + hotspots.length) % hotspots.length;
+    goToHotspotByIndex(prevIdx);
+  };
+
+  const toggleTour = () => {
+    setIsTourActive((prev) => {
+      const next = !prev;
+      if (next) {
+        setShowHotspots(true);
+        if (currentHotspotIndex === -1) {
+          goToHotspotByIndex(0);
+        }
+      }
+      return next;
+    });
+  };
+
+  // Auto Tour Timer effect
+  useEffect(() => {
+    if (!isTourActive || hotspots.length === 0) {
+      setTourTimerProgress(0);
+      return;
+    }
+
+    setTourTimerProgress(0);
+    const intervalMs = 60;
+    const stepIncrement = (intervalMs / TOUR_DURATION_MS) * 100;
+
+    const timer = window.setInterval(() => {
+      setTourTimerProgress((prev) => {
+        if (prev + stepIncrement >= 100) {
+          window.clearInterval(timer);
+          const nextIdx = (currentHotspotIndex === -1 ? 0 : currentHotspotIndex + 1) % hotspots.length;
+          goToHotspotByIndex(nextIdx);
+          return 0;
+        }
+        return prev + stepIncrement;
+      });
+    }, intervalMs);
+
+    return () => {
+      window.clearInterval(timer);
+    };
+  }, [isTourActive, currentHotspotIndex, hotspots]);
 
   // Khi người dùng phóng to hoặc vào chế độ toàn màn hình: Tự động kích hoạt điểm khảo cứu cấu kiện
   useEffect(() => {
@@ -92,6 +168,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
   const handleSelectHotspot = (hs: ArchitecturalHotspot) => {
     if (activeHotspotId === hs.id) {
       setActiveHotspotId(null);
+      setIsTourActive(false);
       return;
     }
     setActiveHotspotId(hs.id);
@@ -105,6 +182,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
 
   const handleResetCamera = () => {
     setActiveHotspotId(null);
+    setIsTourActive(false);
     if (modelViewerRef.current) {
       // @ts-expect-error model-viewer properties
       modelViewerRef.current.cameraOrbit = '0deg 75deg 105%';
@@ -243,28 +321,55 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
           </button>
         </div>
 
-        {/* Nút bật/tắt điểm khảo cứu cấu kiện kiến trúc */}
-        {activeTab === '3d' && (
-          <button
-            type="button"
-            onClick={() => {
-              setShowHotspots((current) => !current);
-              if (showHotspots) setActiveHotspotId(null);
-            }}
-            aria-pressed={showHotspots}
-            title={showHotspots ? t('hotspots.toggleActive', 'Ẩn điểm chi tiết') : t('hotspots.toggleInactive', 'Hiện điểm chi tiết')}
-            className={`inline-flex min-h-9 items-center gap-1.5 border px-3 text-xs font-sans uppercase tracking-wider font-semibold transition-all ${
-              showHotspots
-                ? 'border-brass bg-brass text-forest shadow-xs'
-                : 'border-paper-border bg-paper-warm text-brown-dark hover:border-brass hover:text-forest'
-            }`}
-          >
-            <Target className="h-3.5 w-3.5" />
-            <span>{t('hotspots.toggleTitle', 'Khảo cứu cấu kiện')}</span>
-            <span className={`px-1.5 py-0.2 font-cinzel text-[10px] font-bold ${showHotspots ? 'bg-forest text-brass' : 'bg-paper text-charcoal'}`}>
-              {hotspots.length}
-            </span>
-          </button>
+        {/* Nút bật/tắt điểm khảo cứu cấu kiện kiến trúc & Tour tự động */}
+        {activeTab === '3d' && hotspots.length > 0 && (
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={toggleTour}
+              aria-pressed={isTourActive}
+              title={isTourActive ? t('hotspots.pauseTour', 'Tạm dừng tour') : t('hotspots.startTour', 'Bắt đầu tour tự động')}
+              className={`inline-flex min-h-9 items-center gap-1.5 border px-3 text-xs font-sans uppercase tracking-wider font-semibold transition-all ${
+                isTourActive
+                  ? 'border-brass bg-brass text-forest shadow-xs'
+                  : 'border-paper-border bg-paper-warm text-brown-dark hover:border-brass hover:text-forest'
+              }`}
+            >
+              {isTourActive ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5 text-brass" />}
+              <span>{isTourActive ? t('hotspots.pauseTour', 'Tạm dừng') : t('hotspots.startTour', 'Tour tự động')}</span>
+              {isTourActive && (
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-forest opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-forest"></span>
+                </span>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setShowHotspots((current) => !current);
+                if (showHotspots) {
+                  setActiveHotspotId(null);
+                  setIsTourActive(false);
+                }
+              }}
+              aria-pressed={showHotspots}
+              title={showHotspots ? t('hotspots.toggleActive', 'Ẩn điểm chi tiết') : t('hotspots.toggleInactive', 'Hiện điểm chi tiết')}
+              className={`inline-flex min-h-9 items-center gap-1.5 border px-3 text-xs font-sans uppercase tracking-wider font-semibold transition-all ${
+                showHotspots
+                  ? 'border-brass bg-brass text-forest shadow-xs'
+                  : 'border-paper-border bg-paper-warm text-brown-dark hover:border-brass hover:text-forest'
+              }`}
+            >
+              <Target className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">{t('hotspots.toggleTitle', 'Khảo cứu cấu kiện')}</span>
+              <span className="sm:hidden">{t('hotspots.toggleTitle', 'Cấu kiện')}</span>
+              <span className={`px-1.5 py-0.2 font-cinzel text-[10px] font-bold ${showHotspots ? 'bg-forest text-brass' : 'bg-paper text-charcoal'}`}>
+                {hotspots.length}
+              </span>
+            </button>
+          </div>
         )}
       </header>
 
@@ -336,8 +441,17 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                   type="button"
                 >
                   <span className="heritage-hotspot-ping" />
-                  <span className="font-cinzel text-[10px] font-bold leading-none select-none">
-                    {String(index + 1).padStart(2, '0')}
+                  <span className="heritage-hotspot-pin">
+                    <span className="font-cinzel text-[10px] font-bold leading-none select-none">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                  </span>
+                  <span className="heritage-hotspot-callout">
+                    <span className="heritage-hotspot-callout-line" />
+                    <span className="heritage-hotspot-callout-box">
+                      <span className="heritage-hotspot-callout-cat">{hs.category}</span>
+                      <span className="heritage-hotspot-callout-title">{hs.title}</span>
+                    </span>
                   </span>
                 </button>
               ))}
@@ -346,9 +460,74 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
 
           {/* Biển khảo cứu cấu kiện chi tiết */}
           {showHotspots && activeHotspot && (
-            <div className="absolute left-3 top-14 sm:left-4 sm:top-16 z-30 max-w-sm w-[calc(100%-1.5rem)] sm:w-88 border border-brass/60 bg-forest/95 p-3.5 sm:p-4 text-paper shadow-2xl backdrop-blur-md animate-fade-up">
-              <div className="flex items-start justify-between gap-3 border-b border-brass/30 pb-2">
-                <div>
+            <div className="absolute left-3 top-14 sm:left-4 sm:top-16 z-30 max-w-sm w-[calc(100%-1.5rem)] sm:w-92 border border-brass/60 bg-forest/95 text-paper shadow-2xl backdrop-blur-md animate-fade-up overflow-hidden">
+              {/* Tour Progress Line */}
+              {isTourActive && (
+                <div className="h-1 bg-paper/20 w-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-brass via-brass-light to-yellow-200 transition-all duration-75 ease-linear"
+                    style={{ width: `${tourTimerProgress}%` }}
+                  />
+                </div>
+              )}
+
+              <div className="p-3.5 sm:p-4">
+                {/* Stepper Header with Prev, Step Count, Next, Tour Toggle, and Close */}
+                <div className="flex items-center justify-between gap-2 border-b border-brass/30 pb-2.5">
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={handlePrevHotspot}
+                      className="p-1 border border-paper/20 hover:border-brass hover:bg-forest-muted text-paper transition-colors"
+                      aria-label={t('hotspots.prev', 'Cấu kiện trước')}
+                      title={t('hotspots.prev', 'Cấu kiện trước')}
+                    >
+                      <ChevronLeft className="h-3.5 w-3.5" />
+                    </button>
+                    <span className="font-cinzel text-[11px] font-bold text-brass px-1.5 py-0.5 border border-brass/40 bg-forest-dark/80">
+                      {String((currentHotspotIndex >= 0 ? currentHotspotIndex : 0) + 1).padStart(2, '0')} / {String(hotspots.length).padStart(2, '0')}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleNextHotspot}
+                      className="p-1 border border-paper/20 hover:border-brass hover:bg-forest-muted text-paper transition-colors"
+                      aria-label={t('hotspots.next', 'Cấu kiện tiếp theo')}
+                      title={t('hotspots.next', 'Cấu kiện tiếp theo')}
+                    >
+                      <ChevronRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={toggleTour}
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 border text-[10px] font-sans font-semibold uppercase tracking-wider transition-all ${
+                        isTourActive
+                          ? 'border-brass bg-brass text-forest'
+                          : 'border-brass/40 bg-forest-dark text-brass hover:border-brass hover:text-paper'
+                      }`}
+                      title={isTourActive ? t('hotspots.pauseTour', 'Tạm dừng tour') : t('hotspots.startTour', 'Bật tour tự động')}
+                    >
+                      {isTourActive ? <Pause className="h-2.5 w-2.5" /> : <Play className="h-2.5 w-2.5" />}
+                      <span>{isTourActive ? t('hotspots.pauseTour', 'Dừng') : t('hotspots.startTour', 'Tour')}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveHotspotId(null);
+                        setIsTourActive(false);
+                      }}
+                      className="p-1 text-paper/60 hover:text-paper transition-colors"
+                      aria-label={t('hotspots.close', 'Đóng chi tiết')}
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="mt-2.5">
                   <div className="flex items-center gap-1.5">
                     <Sparkles className="h-3 w-3 text-brass" />
                     <span className="font-cinzel text-[10px] uppercase tracking-widest text-brass font-bold">
@@ -359,37 +538,29 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                     {activeHotspot.title}
                   </h4>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setActiveHotspotId(null)}
-                  className="p-1 text-paper/60 hover:text-paper transition-colors"
-                  aria-label={t('hotspots.close', 'Đóng chi tiết')}
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
 
-              <p className="mt-2.5 font-sans text-xs text-paper/90 leading-relaxed">
-                {activeHotspot.detail}
-              </p>
+                <p className="mt-2 font-sans text-xs text-paper/90 leading-relaxed">
+                  {activeHotspot.detail}
+                </p>
 
-              <div className="mt-3.5 flex items-center justify-between gap-2 border-t border-paper/15 pt-2.5">
-                <button
-                  type="button"
-                  onClick={() => handleSelectHotspot(activeHotspot)}
-                  className="inline-flex items-center gap-1.5 border border-brass/50 bg-brass/20 px-2.5 py-1 text-[11px] font-sans text-brass-light hover:bg-brass hover:text-forest transition-colors font-medium"
-                >
-                  <Target className="h-3 w-3" />
-                  {t('hotspots.focusCamera', 'Tập trung góc nhìn')}
-                </button>
-                <button
-                  type="button"
-                  onClick={handleResetCamera}
-                  className="inline-flex items-center gap-1.5 border border-paper/20 bg-paper/5 px-2 py-1 text-[11px] font-sans text-paper/75 hover:text-paper hover:border-paper/40 transition-colors"
-                >
-                  <RotateCcw className="h-3 w-3" />
-                  {t('hotspots.resetCamera', 'Góc nhìn toàn cảnh')}
-                </button>
+                <div className="mt-3.5 flex items-center justify-between gap-2 border-t border-paper/15 pt-2.5">
+                  <button
+                    type="button"
+                    onClick={() => handleSelectHotspot(activeHotspot)}
+                    className="inline-flex items-center gap-1.5 border border-brass/50 bg-brass/20 px-2.5 py-1 text-[11px] font-sans text-brass-light hover:bg-brass hover:text-forest transition-colors font-medium"
+                  >
+                    <Target className="h-3 w-3" />
+                    {t('hotspots.focusCamera', 'Tập trung góc nhìn')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleResetCamera}
+                    className="inline-flex items-center gap-1.5 border border-paper/20 bg-paper/5 px-2 py-1 text-[11px] font-sans text-paper/75 hover:text-paper hover:border-paper/40 transition-colors"
+                  >
+                    <RotateCcw className="h-3 w-3" />
+                    {t('hotspots.resetCamera', 'Góc nhìn toàn cảnh')}
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -458,16 +629,52 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                       ({hotspots.length} {t('hotspots.pointsCount', 'điểm khảo cứu')})
                     </span>
                   </div>
-                  {activeHotspotId && (
+                  <div className="flex items-center gap-2">
                     <button
                       type="button"
-                      onClick={handleResetCamera}
-                      className="inline-flex items-center gap-1 text-[11px] font-sans text-paper/70 hover:text-brass transition-colors"
+                      onClick={toggleTour}
+                      className={`inline-flex items-center gap-1.5 text-[11px] font-sans px-2.5 py-0.5 border transition-all ${
+                        isTourActive
+                          ? 'border-brass bg-brass text-forest font-semibold shadow-xs'
+                          : 'border-brass/40 bg-forest text-brass hover:border-brass hover:text-paper'
+                      }`}
                     >
-                      <RotateCcw className="h-3 w-3" />
-                      <span>{t('hotspots.resetCamera', 'Góc nhìn toàn cảnh')}</span>
+                      {isTourActive ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
+                      <span>{isTourActive ? t('hotspots.pauseTour', 'Tạm dừng') : t('hotspots.startTour', 'Tour tự động')}</span>
                     </button>
-                  )}
+
+                    <div className="flex items-center gap-0.5">
+                      <button
+                        type="button"
+                        onClick={handlePrevHotspot}
+                        className="p-1 border border-paper/20 hover:border-brass hover:bg-forest-muted text-paper transition-colors"
+                        aria-label={t('hotspots.prev', 'Cấu kiện trước')}
+                        title={t('hotspots.prev', 'Cấu kiện trước')}
+                      >
+                        <ChevronLeft className="h-3 w-3" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleNextHotspot}
+                        className="p-1 border border-paper/20 hover:border-brass hover:bg-forest-muted text-paper transition-colors"
+                        aria-label={t('hotspots.next', 'Cấu kiện tiếp theo')}
+                        title={t('hotspots.next', 'Cấu kiện tiếp theo')}
+                      >
+                        <ChevronRight className="h-3 w-3" />
+                      </button>
+                    </div>
+
+                    {activeHotspotId && (
+                      <button
+                        type="button"
+                        onClick={handleResetCamera}
+                        className="inline-flex items-center gap-1 text-[11px] font-sans text-paper/70 hover:text-brass transition-colors"
+                      >
+                        <RotateCcw className="h-3 w-3" />
+                        <span className="hidden sm:inline">{t('hotspots.resetCamera', 'Góc nhìn toàn cảnh')}</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">

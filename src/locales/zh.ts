@@ -322,6 +322,12 @@ export const zh: TranslationSchema = {
     inspectHint: '轻触或点击模型上的标记点，探究传统大木构独特节点机巧',
     close: '关闭细部',
     fullscreenMode: '3D 建筑全景考据模式',
+    startTour: '自动导览',
+    pauseTour: '暂停导览',
+    prev: '上一个构件',
+    next: '下一个构件',
+    componentStep: '构件',
+    autoTourHint: '自动巡览解读每一处精妙建筑构件',
   },
 
   footer: {
