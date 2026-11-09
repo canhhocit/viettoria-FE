@@ -85,7 +85,7 @@ export const CollectionDetailPage: React.FC = () => {
                 className="bg-paper-card border border-brass/25 hover:border-brass transition-all corner-frame overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-md duration-300"
               >
                 <div>
-                  <div className="aspect-[4/3] overflow-hidden bg-forest relative">
+                  <div className="aspect-[16/10] overflow-hidden bg-forest relative">
                     <img
                       src={resolveImageUrl(product.heroImage)}
                       alt={product.name}

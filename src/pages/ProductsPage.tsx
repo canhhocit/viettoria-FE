@@ -116,7 +116,7 @@ export const ProductsPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-4">
             {[1, 2, 3].map((n) => (
               <div key={n} className="bg-paper-warm border border-paper-border corner-frame overflow-hidden p-0 space-y-4 shadow-sm">
-                <div className="aspect-[4/3] heritage-shimmer" />
+                <div className="aspect-[16/10] heritage-shimmer" />
                 <div className="p-6 space-y-3">
                   <div className="h-4 w-24 heritage-shimmer" />
                   <div className="h-6 w-3/4 heritage-shimmer" />
@@ -147,7 +147,7 @@ export const ProductsPage: React.FC = () => {
                   className="h-full bg-paper-warm border border-paper-border hover:border-brass transition-all corner-frame overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-xl"
                 >
                   <div>
-                    <div className="aspect-[4/3] overflow-hidden bg-forest relative">
+                    <div className="aspect-[16/10] overflow-hidden bg-forest relative">
                       <img
                         src={resolveImageUrl(product.heroImage)}
                         alt={product.name}

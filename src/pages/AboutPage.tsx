@@ -119,62 +119,62 @@ export const AboutPage: React.FC = () => {
         <section className="space-y-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-paper-border pb-4">
             <div className="space-y-2">
-              <span className="text-xs font-mono uppercase tracking-widest text-brass font-semibold flex items-center gap-2">
+              <span className="text-xs font-cinzel uppercase tracking-widest text-brass font-bold flex items-center gap-2">
                 <Camera className="w-4 h-4 text-brass" />
                 <span>Thực Địa & Chế Tác</span>
               </span>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-forest">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-forest">
                 Không Gian Nghiên Cứu & Hiện Vật Thực Tế
               </h2>
             </div>
-            <p className="text-xs font-mono text-charcoal-muted uppercase">
+            <p className="text-xs font-cinzel text-charcoal-muted uppercase tracking-wider">
               Tư liệu lưu trữ xưởng Viettoria Atelier
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-paper-warm border border-paper-border p-3 space-y-3 corner-frame group shadow-xs">
-              <div className="aspect-[4/3] overflow-hidden bg-forest-dark">
+            <div className="bg-paper-warm border border-paper-border p-3 space-y-3 corner-frame group shadow-xs hover:border-brass/60 transition-colors">
+              <div className="aspect-[16/10] overflow-hidden bg-paper-card border border-paper-border">
                 <img
                   src={VIETTORIA_IMAGES.productHighlight}
                   alt="Mô hình in 3D hoàn thiện"
                   onError={(e) => handleImageFallback(e)}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
               <div className="px-1">
-                <p className="font-serif font-bold text-base text-forest">Mô Hình Khảo Cứu Thực Tế</p>
-                <p className="text-sm text-charcoal/75 font-normal leading-6">Tái hiện chân thực đường cong mái đao và kết cấu cột trụ đá</p>
+                <p className="font-display font-bold text-base text-forest">Mô Hình Khảo Cứu Thực Tế</p>
+                <p className="text-sm font-sans text-charcoal/75 font-normal leading-relaxed mt-1">Tái hiện chân thực đường cong mái đao và kết cấu cột trụ đá</p>
               </div>
             </div>
 
-            <div className="bg-paper-warm border border-paper-border p-3 space-y-3 corner-frame group shadow-xs">
-              <div className="aspect-[4/3] overflow-hidden bg-forest-dark">
+            <div className="bg-paper-warm border border-paper-border p-3 space-y-3 corner-frame group shadow-xs hover:border-brass/60 transition-colors">
+              <div className="aspect-[16/10] overflow-hidden bg-paper-card border border-paper-border">
                 <img
                   src={VIETTORIA_IMAGES.certificateCard}
                   alt="Thẻ chứng nhận và bao bì"
                   onError={(e) => handleImageFallback(e)}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
               <div className="px-1">
-                <p className="font-serif font-bold text-base text-forest">Bao Bì & Thẻ Định Danh Độc Bản</p>
-                <p className="text-sm text-charcoal/75 font-normal leading-6">Mỗi mô hình được cấp một số hiệu bảo chứng và tem QR riêng</p>
+                <p className="font-display font-bold text-base text-forest">Bao Bì & Thẻ Định Danh Độc Bản</p>
+                <p className="text-sm font-sans text-charcoal/75 font-normal leading-relaxed mt-1">Mỗi mô hình được cấp một số hiệu bảo chứng và tem QR riêng</p>
               </div>
             </div>
 
-            <div className="bg-paper-warm border border-paper-border p-3 space-y-3 corner-frame group shadow-xs">
-              <div className="aspect-[4/3] overflow-hidden bg-forest-dark">
+            <div className="bg-paper-warm border border-paper-border p-3 space-y-3 corner-frame group shadow-xs hover:border-brass/60 transition-colors">
+              <div className="aspect-[16/10] overflow-hidden bg-paper-card border border-paper-border">
                 <img
                   src={VIETTORIA_IMAGES.monumentDetail1}
                   alt="Chi tiết mộng gỗ"
                   onError={(e) => handleImageFallback(e)}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
               <div className="px-1">
-                <p className="font-serif font-bold text-base text-forest">Chi Tiết Cấu Kiện Mộng Khớp</p>
-                <p className="text-sm text-charcoal/75 font-normal leading-6">Độ chuẩn xác cao, tái hiện kỹ thuật mộng truyền thống của tiền nhân</p>
+                <p className="font-display font-bold text-base text-forest">Chi Tiết Cấu Kiện Mộng Khớp</p>
+                <p className="text-sm font-sans text-charcoal/75 font-normal leading-relaxed mt-1">Độ chuẩn xác cao, tái hiện kỹ thuật mộng truyền thống của tiền nhân</p>
               </div>
             </div>
           </div>
