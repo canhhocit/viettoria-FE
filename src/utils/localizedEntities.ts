@@ -40,8 +40,10 @@ interface LocalizedStoryBlockFields {
 
 interface LocalizedHotspotFields {
   title: string;
+  shortTitle?: string;
   category: string;
   detail: string;
+  shortDesc?: string;
 }
 
 // -------------------------------------------------------------
@@ -962,8 +964,10 @@ export function getLocalizedHotspot(
   return {
     ...hotspot,
     title: tr.title || hotspot.title,
+    shortTitle: tr.shortTitle || tr.title || hotspot.shortTitle || hotspot.title,
     category: tr.category || hotspot.category,
     detail: tr.detail || hotspot.detail,
+    shortDesc: tr.shortDesc || hotspot.shortDesc || tr.detail || hotspot.detail,
   };
 }
 

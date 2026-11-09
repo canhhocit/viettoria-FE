@@ -8,10 +8,10 @@ import {
   Pause,
   Play,
   RotateCcw,
-  Sparkles,
   Target,
   X,
   ZoomIn,
+  ZoomOut,
 } from 'lucide-react';
 import type { Product } from '../../types';
 import {
@@ -50,11 +50,29 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
   const [showHotspots, setShowHotspots] = useState(true);
   const [activeHotspotId, setActiveHotspotId] = useState<string | null>(null);
   const [isTourActive, setIsTourActive] = useState(false);
+  const [isChronicleOpen, setIsChronicleOpen] = useState(false);
   const [tourTimerProgress, setTourTimerProgress] = useState(0);
   const TOUR_DURATION_MS = 6000;
 
   const viewportRef = useRef<HTMLDivElement>(null);
   const modelViewerRef = useRef<HTMLElement | null>(null);
+
+  const handleZoom = (direction: 'in' | 'out') => {
+    const modelViewer = modelViewerRef.current;
+    if (!modelViewer) return;
+    try {
+      // @ts-expect-error model-viewer method
+      const orbit = modelViewer.getCameraOrbit?.();
+      if (orbit && typeof orbit.radius === 'number') {
+        const factor = direction === 'in' ? 0.82 : 1.22;
+        const newRadius = Math.max(0.6, Math.min(6, orbit.radius * factor));
+        // @ts-expect-error model-viewer properties
+        modelViewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${newRadius}m`;
+      }
+    } catch (err) {
+      console.warn('Zoom error', err);
+    }
+  };
 
   const hotspots = useMemo(() => {
     const raw = getHotspotsForProduct(product.slug || product.code || product.id);
@@ -376,9 +394,10 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
       {activeTab === '3d' ? (
         <div
           ref={viewportRef}
-          className={`architectural-3d-stage group relative isolate aspect-[4/3] overflow-hidden sm:aspect-[16/10] ${isFullscreen ? 'architectural-3d-stage-fullscreen' : ''}`}
+          className={`architectural-3d-stage heritage-3d-dark-stage group relative isolate aspect-[4/3] overflow-hidden sm:aspect-[16/10] ${isFullscreen ? 'architectural-3d-stage-fullscreen' : ''}`}
         >
-          {/* Ambient Museum Pedestal Spotlight */}
+          {/* Ambient Museum Pedestal Spotlight & Glow */}
+          <div className="heritage-3d-stage-glow pointer-events-none" aria-hidden="true" />
           <div className="heritage-pedestal-light pointer-events-none absolute inset-0 z-[2]" aria-hidden="true" />
 
           <img
@@ -414,163 +433,151 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
               camera-controls
               auto-rotate={isAutoRotating ? '' : undefined}
               rotation-per-second="8deg"
-              shadow-intensity="0.75"
-              exposure="1"
+              shadow-intensity="1.2"
+              shadow-softness="0.75"
+              exposure="1.05"
               loading="eager"
               reveal="auto"
               interaction-prompt="none"
               ref={modelViewerRef}
-              style={{ width: '100%', height: '100%', backgroundColor: 'var(--heritage-paper-card)', touchAction: 'pan-y' }}
+              style={{ width: '100%', height: '100%', backgroundColor: 'transparent', touchAction: 'pan-y' }}
               className={`architectural-model-viewer absolute inset-0 h-full w-full transition-opacity duration-700 ease-out ${modelLoaded ? 'opacity-100' : 'opacity-0'}`}
             >
-              {showHotspots && modelLoaded && hotspots.map((hs, index) => (
-                <button
-                  key={hs.id}
-                  slot={`hotspot-${hs.id}`}
-                  data-position={hs.position}
-                  data-normal={hs.normal}
-                  data-orbit={hs.orbit}
-                  data-target={hs.target}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleSelectHotspot(hs);
-                  }}
-                  className={`heritage-hotspot-node ${activeHotspotId === hs.id ? 'is-active' : ''}`}
-                  aria-label={hs.title}
-                  title={`${hs.category}: ${hs.title}`}
-                  type="button"
-                >
-                  <span className="heritage-hotspot-ping" />
-                  <span className="heritage-hotspot-pin">
-                    <span className="font-cinzel text-[10px] font-bold leading-none select-none">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                  </span>
-                  <span className="heritage-hotspot-callout">
-                    <span className="heritage-hotspot-callout-line" />
-                    <span className="heritage-hotspot-callout-box">
-                      <span className="heritage-hotspot-callout-cat">{hs.category}</span>
-                      <span className="heritage-hotspot-callout-title">{hs.title}</span>
-                    </span>
-                  </span>
-                </button>
-              ))}
+              {/* Simultaneous Floating Architectural Annotations with Dashed Leader Lines */}
+              {showHotspots && modelLoaded && hotspots.map((hs) => {
+                const dx = hs.dx ?? 140;
+                const dy = hs.dy ?? 0;
+                const isRight = dx >= 0;
+                const elbowOffset = isRight ? -24 : 24;
+                const jointX = dx + elbowOffset;
+                const jointY = dy;
+                const pathD = `M 0 0 L ${jointX} ${jointY} L ${dx} ${dy}`;
+
+                return (
+                  <div
+                    key={hs.id}
+                    slot={`hotspot-${hs.id}`}
+                    data-position={hs.position}
+                    data-normal={hs.normal}
+                    data-orbit={hs.orbit}
+                    data-target={hs.target}
+                    className={`heritage-annotation-slot ${activeHotspotId === hs.id ? 'is-active' : ''}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSelectHotspot(hs);
+                    }}
+                  >
+                    {/* 1. Target Beacon on the model surface (Concentric Rings) */}
+                    <div
+                      className="heritage-anchor-beacon"
+                      title={`${hs.category || ''}: ${hs.title}`}
+                      aria-label={hs.title}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.stopPropagation();
+                          handleSelectHotspot(hs);
+                        }
+                      }}
+                    >
+                      <span className="heritage-anchor-pulse" />
+                      <span className="heritage-anchor-ring" />
+                      <span className="heritage-anchor-core" />
+                    </div>
+
+                    {/* 2. SVG Dashed Golden Leader Line */}
+                    <svg className="heritage-leader-svg" aria-hidden="true">
+                      <path d={pathD} className="heritage-leader-path" />
+                      <circle cx={jointX} cy={jointY} r="3" className="heritage-leader-joint" />
+                    </svg>
+
+                    {/* 3. Floating Callout Card */}
+                    <div
+                      className="heritage-callout-card"
+                      style={{
+                        left: `${dx}px`,
+                        top: `${dy}px`,
+                        transform: isRight ? 'translate(0, -50%)' : 'translate(-100%, -50%)',
+                      }}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.stopPropagation();
+                          handleSelectHotspot(hs);
+                        }
+                      }}
+                    >
+                      <div className="heritage-callout-header">
+                        <span className="heritage-callout-diamond">◇</span>
+                        <span className="heritage-callout-title">
+                          {hs.shortTitle || hs.title}
+                        </span>
+                      </div>
+                      <p className="heritage-callout-desc">
+                        {hs.shortDesc || hs.detail}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
             </model-viewer>
           )}
 
-          {/* Biển khảo cứu cấu kiện chi tiết */}
-          {showHotspots && activeHotspot && (
-            <div className="absolute left-3 top-14 sm:left-4 sm:top-16 z-30 max-w-sm w-[calc(100%-1.5rem)] sm:w-92 border border-brass/60 bg-forest/95 text-paper shadow-2xl backdrop-blur-md animate-fade-up overflow-hidden">
-              {/* Tour Progress Line */}
-              {isTourActive && (
-                <div className="h-1 bg-paper/20 w-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-brass via-brass-light to-yellow-200 transition-all duration-75 ease-linear"
-                    style={{ width: `${tourTimerProgress}%` }}
-                  />
-                </div>
-              )}
-
-              <div className="p-3.5 sm:p-4">
-                {/* Stepper Header with Prev, Step Count, Next, Tour Toggle, and Close */}
-                <div className="flex items-center justify-between gap-2 border-b border-brass/30 pb-2.5">
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      onClick={handlePrevHotspot}
-                      className="p-1 border border-paper/20 hover:border-brass hover:bg-forest-muted text-paper transition-colors"
-                      aria-label={t('hotspots.prev', 'Cấu kiện trước')}
-                      title={t('hotspots.prev', 'Cấu kiện trước')}
-                    >
-                      <ChevronLeft className="h-3.5 w-3.5" />
-                    </button>
-                    <span className="font-cinzel text-[11px] font-bold text-brass px-1.5 py-0.5 border border-brass/40 bg-forest-dark/80">
-                      {String((currentHotspotIndex >= 0 ? currentHotspotIndex : 0) + 1).padStart(2, '0')} / {String(hotspots.length).padStart(2, '0')}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={handleNextHotspot}
-                      className="p-1 border border-paper/20 hover:border-brass hover:bg-forest-muted text-paper transition-colors"
-                      aria-label={t('hotspots.next', 'Cấu kiện tiếp theo')}
-                      title={t('hotspots.next', 'Cấu kiện tiếp theo')}
-                    >
-                      <ChevronRight className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={toggleTour}
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 border text-[10px] font-sans font-semibold uppercase tracking-wider transition-all ${
-                        isTourActive
-                          ? 'border-brass bg-brass text-forest'
-                          : 'border-brass/40 bg-forest-dark text-brass hover:border-brass hover:text-paper'
-                      }`}
-                      title={isTourActive ? t('hotspots.pauseTour', 'Tạm dừng tour') : t('hotspots.startTour', 'Bật tour tự động')}
-                    >
-                      {isTourActive ? <Pause className="h-2.5 w-2.5" /> : <Play className="h-2.5 w-2.5" />}
-                      <span>{isTourActive ? t('hotspots.pauseTour', 'Dừng') : t('hotspots.startTour', 'Tour')}</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setActiveHotspotId(null);
-                        setIsTourActive(false);
-                      }}
-                      className="p-1 text-paper/60 hover:text-paper transition-colors"
-                      aria-label={t('hotspots.close', 'Đóng chi tiết')}
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-
-                <div className="mt-2.5">
-                  <div className="flex items-center gap-1.5">
-                    <Sparkles className="h-3 w-3 text-brass" />
-                    <span className="font-cinzel text-[10px] uppercase tracking-widest text-brass font-bold">
-                      {activeHotspot.category}
-                    </span>
-                  </div>
-                  <h4 className="mt-1 font-display text-base font-bold text-paper">
-                    {activeHotspot.title}
-                  </h4>
-                </div>
-
-                <p className="mt-2 font-sans text-xs text-paper/90 leading-relaxed">
-                  {activeHotspot.detail}
-                </p>
-
-                <div className="mt-3.5 flex items-center justify-between gap-2 border-t border-paper/15 pt-2.5">
-                  <button
-                    type="button"
-                    onClick={() => handleSelectHotspot(activeHotspot)}
-                    className="inline-flex items-center gap-1.5 border border-brass/50 bg-brass/20 px-2.5 py-1 text-[11px] font-sans text-brass-light hover:bg-brass hover:text-forest transition-colors font-medium"
-                  >
-                    <Target className="h-3 w-3" />
-                    {t('hotspots.focusCamera', 'Tập trung góc nhìn')}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleResetCamera}
-                    className="inline-flex items-center gap-1.5 border border-paper/20 bg-paper/5 px-2 py-1 text-[11px] font-sans text-paper/75 hover:text-paper hover:border-paper/40 transition-colors"
-                  >
-                    <RotateCcw className="h-3 w-3" />
-                    {t('hotspots.resetCamera', 'Góc nhìn toàn cảnh')}
-                  </button>
-                </div>
+          {/* Tour Active Stepper Indicator at Top Center */}
+          {isTourActive && activeHotspot && (
+            <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 border border-brass/45 bg-[#121915]/95 px-3 py-1.5 text-xs text-paper backdrop-blur-md rounded-full shadow-2xl animate-fade-down">
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={handlePrevHotspot}
+                  className="p-1 hover:text-brass text-paper/70 transition-colors cursor-pointer"
+                  aria-label={t('hotspots.prev', 'Trước')}
+                >
+                  <ChevronLeft className="h-3.5 w-3.5" />
+                </button>
+                <span className="font-cinzel text-[10px] font-bold text-brass px-1">
+                  {String(currentHotspotIndex + 1).padStart(2, '0')}/{String(hotspots.length).padStart(2, '0')}
+                </span>
+                <button
+                  type="button"
+                  onClick={handleNextHotspot}
+                  className="p-1 hover:text-brass text-paper/70 transition-colors cursor-pointer"
+                  aria-label={t('hotspots.next', 'Sau')}
+                >
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </button>
               </div>
+              <span className="text-paper/40">|</span>
+              <span className="font-sans text-xs text-paper/90 truncate max-w-[160px] sm:max-w-[220px]">
+                {activeHotspot.title}
+              </span>
+              <div className="w-10 sm:w-14 h-1 bg-paper/20 rounded-full overflow-hidden shrink-0">
+                <div
+                  className="h-full bg-brass transition-all duration-75 ease-linear"
+                  style={{ width: `${tourTimerProgress}%` }}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsTourActive(false)}
+                className="p-1 hover:text-brass text-paper/70 transition-colors ml-1 cursor-pointer"
+                aria-label={t('hotspots.close', 'Dừng')}
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
             </div>
           )}
 
-          <div className="absolute left-3 top-3 z-10 flex items-center gap-2 border border-brass/30 bg-paper-card/95 px-3 py-2 text-xs font-cinzel uppercase tracking-[0.15em] text-brown-dark font-bold shadow-sm backdrop-blur-sm sm:left-4 sm:top-4">
-            <span className={`h-1.5 w-1.5 bg-brown ${!modelLoaded && !modelFailed && viewerAvailable ? 'animate-pulse' : ''}`} />
+          {/* Stage Loading Status */}
+          <div className="absolute left-3 top-3 z-10 flex items-center gap-2 border border-brass/30 bg-[#121814]/85 px-3 py-1.5 text-xs font-cinzel uppercase tracking-[0.15em] text-paper/90 font-semibold shadow-sm backdrop-blur-sm sm:left-4 sm:top-4">
+            <span className={`h-1.5 w-1.5 bg-brass ${!modelLoaded && !modelFailed && viewerAvailable ? 'animate-pulse' : ''}`} />
             <span role="status" aria-live="polite">{stageLabel}</span>
           </div>
 
-          <div className="absolute right-3 top-3 z-10 flex items-center gap-1.5 sm:right-4 sm:top-4">
+          {/* Top-Right Stage Controls (From User Reference: ↺ Đặt lại góc nhìn & ✕ Thoát) */}
+          <div className="absolute right-3 top-3 z-20 flex items-center gap-2 sm:right-4 sm:top-4">
             {turntableUrl && !reducedMotion && !previewFailed && !modelLoaded && (
               <button
                 type="button"
@@ -578,29 +585,31 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                 aria-label={previewPlaying ? 'Dừng video xem trước mô hình' : 'Phát video xem trước mô hình'}
                 aria-pressed={previewPlaying}
                 title={previewPlaying ? 'Dừng video xem trước' : 'Phát video xem trước'}
-                className="flex h-9 items-center gap-1.5 border border-paper-border bg-paper/90 px-2.5 text-xs font-sans uppercase tracking-wider text-brown-dark shadow-sm backdrop-blur-sm transition-colors hover:border-brass hover:text-forest focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass font-medium"
+                className="flex h-8 sm:h-9 items-center gap-1.5 border border-paper-border/30 bg-[#121814]/85 px-2.5 text-xs font-sans text-paper shadow-md backdrop-blur-sm transition-colors hover:border-brass hover:text-brass font-medium"
               >
                 {previewPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
                 {previewPlaying ? t('product.playingSampleVideo', 'Dừng') : t('product.sampleVideo', 'Video mẫu')}
               </button>
             )}
+
             <button
               type="button"
-              onClick={() => setAutoRotate((current) => !current)}
-              disabled={!modelLoaded || reducedMotion}
-              aria-label={reducedMotion ? 'Tự xoay đang tắt theo cài đặt chuyển động' : isAutoRotating ? 'Tắt tự xoay mô hình' : 'Bật tự xoay mô hình'}
-              aria-pressed={isAutoRotating}
-              title={reducedMotion ? 'Tự xoay đang tắt theo cài đặt giảm chuyển động' : isAutoRotating ? 'Tắt tự xoay' : 'Bật tự xoay'}
-              className="flex h-9 w-9 items-center justify-center border border-paper-border bg-paper/90 text-brown-dark shadow-sm backdrop-blur-sm transition-colors hover:border-brass hover:text-forest focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass disabled:cursor-wait disabled:opacity-45"
+              onClick={handleResetCamera}
+              title={t('hotspots.resetCamera', 'Đặt lại góc nhìn')}
+              className="flex h-8 sm:h-9 items-center gap-1.5 border border-paper-border/30 bg-[#121814]/85 px-2.5 sm:px-3 text-xs font-sans text-paper shadow-md backdrop-blur-sm transition-colors hover:border-brass hover:text-brass font-medium cursor-pointer"
             >
-              {isAutoRotating ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+              <RotateCcw className="h-3.5 w-3.5 text-brass" />
+              <span className="text-[11px] sm:text-xs tracking-wide">
+                {t('hotspots.resetCamera', 'Đặt lại góc nhìn')}
+              </span>
             </button>
+
             <button
               type="button"
               onClick={() => void toggleFullscreen()}
               aria-label={isFullscreen ? 'Thoát toàn màn hình' : 'Xem mô hình toàn màn hình'}
               title={isFullscreen ? 'Thoát toàn màn hình' : 'Toàn màn hình'}
-              className="flex h-9 w-9 items-center justify-center border border-paper-border bg-paper/90 text-brown-dark shadow-sm backdrop-blur-sm transition-colors hover:border-brass hover:text-forest focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass"
+              className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center border border-paper-border/30 bg-[#121814]/85 text-paper shadow-md backdrop-blur-sm transition-colors hover:border-brass hover:text-brass cursor-pointer"
             >
               {isFullscreen ? <X className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
             </button>
@@ -608,117 +617,90 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
 
           {!modelLoaded && !modelFailed && viewerAvailable && !previewPlaying && (
             <div className="pointer-events-none absolute inset-x-0 top-[4.2rem] z-[5] flex justify-center px-4">
-              <div className="flex items-center gap-2 border border-brass/30 bg-paper-card/95 px-3 py-2 text-xs text-forest shadow-sm backdrop-blur-sm">
+              <div className="flex items-center gap-2 border border-brass/30 bg-[#121814]/90 px-3 py-2 text-xs text-brass shadow-sm backdrop-blur-sm">
                 <span className="h-1.5 w-1.5 bg-brass" aria-hidden="true" />
                 <span className="font-sans font-medium">{t('product.loading3d', 'Đang nạp mô hình 3D...')}</span>
               </div>
             </div>
           )}
 
-          {/* Dải điều hướng điểm khảo cứu (Hotspot Ribbon) hoặc Thanh tên tác phẩm chuẩn */}
-          {showHotspots && modelLoaded && hotspots.length > 0 ? (
-            <div className="pointer-events-auto absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-forest/95 via-forest/80 to-transparent px-3 pb-3 pt-12 sm:px-5 sm:pb-4">
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between gap-3 text-paper">
-                  <div className="flex items-center gap-2">
-                    <Target className="h-3.5 w-3.5 text-brass" />
-                    <span className="font-cinzel text-[11px] font-bold uppercase tracking-wider text-brass">
-                      {t('hotspots.toggleTitle', 'Khảo cứu cấu kiện')}
-                    </span>
-                    <span className="text-[11px] text-paper/70 font-sans">
-                      ({hotspots.length} {t('hotspots.pointsCount', 'điểm khảo cứu')})
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={toggleTour}
-                      className={`inline-flex items-center gap-1.5 text-[11px] font-sans px-2.5 py-0.5 border transition-all ${
-                        isTourActive
-                          ? 'border-brass bg-brass text-forest font-semibold shadow-xs'
-                          : 'border-brass/40 bg-forest text-brass hover:border-brass hover:text-paper'
-                      }`}
-                    >
-                      {isTourActive ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
-                      <span>{isTourActive ? t('hotspots.pauseTour', 'Tạm dừng') : t('hotspots.startTour', 'Tour tự động')}</span>
-                    </button>
-
-                    <div className="flex items-center gap-0.5">
-                      <button
-                        type="button"
-                        onClick={handlePrevHotspot}
-                        className="p-1 border border-paper/20 hover:border-brass hover:bg-forest-muted text-paper transition-colors"
-                        aria-label={t('hotspots.prev', 'Cấu kiện trước')}
-                        title={t('hotspots.prev', 'Cấu kiện trước')}
-                      >
-                        <ChevronLeft className="h-3 w-3" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleNextHotspot}
-                        className="p-1 border border-paper/20 hover:border-brass hover:bg-forest-muted text-paper transition-colors"
-                        aria-label={t('hotspots.next', 'Cấu kiện tiếp theo')}
-                        title={t('hotspots.next', 'Cấu kiện tiếp theo')}
-                      >
-                        <ChevronRight className="h-3 w-3" />
-                      </button>
-                    </div>
-
-                    {activeHotspotId && (
-                      <button
-                        type="button"
-                        onClick={handleResetCamera}
-                        className="inline-flex items-center gap-1 text-[11px] font-sans text-paper/70 hover:text-brass transition-colors"
-                      >
-                        <RotateCcw className="h-3 w-3" />
-                        <span className="hidden sm:inline">{t('hotspots.resetCamera', 'Góc nhìn toàn cảnh')}</span>
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
-                  {hotspots.map((hs, index) => {
-                    const isSelected = activeHotspotId === hs.id;
-                    return (
-                      <button
-                        key={hs.id}
-                        type="button"
-                        onClick={() => handleSelectHotspot(hs)}
-                        className={`inline-flex shrink-0 items-center gap-1.5 border px-2.5 py-1 text-xs font-sans transition-all ${
-                          isSelected
-                            ? 'border-brass bg-brass text-forest font-bold shadow-xs'
-                            : 'border-brass/35 bg-forest/85 text-paper/85 hover:border-brass hover:text-paper hover:bg-forest'
-                        }`}
-                      >
-                        <span className={`font-cinzel text-[10px] font-bold ${isSelected ? 'text-forest' : 'text-brass'}`}>
-                          {String(index + 1).padStart(2, '0')}
-                        </span>
-                        <span className="truncate max-w-[130px] sm:max-w-[180px]">
-                          {hs.title}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-4 bg-gradient-to-t from-forest/80 via-forest/25 to-transparent px-4 pb-4 pt-16 text-paper sm:px-6 sm:pb-5">
-              <div>
-                <p className="font-display text-lg sm:text-xl">{product.name}</p>
-                <p className="mt-1 text-[10px] text-paper/75 sm:text-xs">{modelLoaded ? t('product.dragToRotatePrompt', 'Kéo mô hình để xoay · cuộn để thu phóng') : stageLabel}</p>
-              </div>
-              {thumbnailPhoto.src && (
+          {/* Bottom Floating Pill Bar (From User Reference: ✦ ĐIỂN TÍCH LỊCH SỬ | ✦ ẨN CHI TIẾT | ◇ XOAY 3D) */}
+          {modelLoaded && (
+            <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20 flex justify-center px-3">
+              <div className="pointer-events-auto heritage-viewer-pillbar">
                 <button
                   type="button"
-                  onClick={() => setActiveTab('photos')}
-                  className="pointer-events-auto inline-flex shrink-0 items-center gap-2 border border-paper/35 bg-forest/65 px-3 py-2 text-xs font-sans uppercase tracking-wider text-paper backdrop-blur-sm transition-colors hover:border-brass hover:text-brass-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass font-medium"
+                  onClick={() => setIsChronicleOpen(true)}
+                  className="heritage-pill-btn"
+                  title={t('hotspots.historicalChronicle', 'Điển tích lịch sử')}
                 >
-                  <ZoomIn className="h-3.5 w-3.5" />
-                  {t('product.viewPhotoBtn', 'Xem ảnh')}
+                  <span className="text-brass">✦</span>
+                  <span>{t('hotspots.historicalChronicle', 'ĐIỂN TÍCH LỊCH SỬ')}</span>
                 </button>
-              )}
+
+                <span className="heritage-pill-divider" aria-hidden="true" />
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowHotspots((prev) => !prev);
+                    if (showHotspots) {
+                      setActiveHotspotId(null);
+                      setIsTourActive(false);
+                    }
+                  }}
+                  className="heritage-pill-btn"
+                  title={showHotspots ? t('hotspots.hideDetails', 'Ẩn chi tiết') : t('hotspots.showDetails', 'Hiện chi tiết')}
+                >
+                  <span className="text-brass">✦</span>
+                  <span>
+                    {showHotspots
+                      ? t('hotspots.hideDetails', 'ẨN CHI TIẾT')
+                      : t('hotspots.showDetails', 'HIỆN CHI TIẾT')}
+                  </span>
+                </button>
+
+                <span className="heritage-pill-divider" aria-hidden="true" />
+
+                <button
+                  type="button"
+                  onClick={() => setAutoRotate((prev) => !prev)}
+                  disabled={reducedMotion}
+                  className="heritage-pill-btn"
+                  title={isAutoRotating ? t('hotspots.stopRotate', 'Dừng xoay') : t('hotspots.rotate3d', 'Xoay 3D')}
+                >
+                  <span className="text-brass">◇</span>
+                  <span>
+                    {isAutoRotating
+                      ? t('hotspots.stopRotate', 'DỪNG XOAY')
+                      : t('hotspots.rotate3d', 'XOAY 3D')}
+                  </span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Bottom-Right Zoom Controls (From User Reference: ⊕ ZoomIn / ⊖ ZoomOut) */}
+          {modelLoaded && (
+            <div className="heritage-zoom-controls">
+              <button
+                type="button"
+                onClick={() => handleZoom('in')}
+                aria-label={t('hotspots.zoomIn', 'Phóng to')}
+                title={t('hotspots.zoomIn', 'Phóng to')}
+                className="heritage-zoom-btn"
+              >
+                <ZoomIn className="h-4 w-4 text-brass" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleZoom('out')}
+                aria-label={t('hotspots.zoomOut', 'Thu nhỏ')}
+                title={t('hotspots.zoomOut', 'Thu nhỏ')}
+                className="heritage-zoom-btn"
+              >
+                <ZoomOut className="h-4 w-4 text-brass" />
+              </button>
             </div>
           )}
         </div>
@@ -770,6 +752,84 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
             className="max-h-[82vh] max-w-full border border-brass/50 object-contain shadow-2xl"
           />
           <p className="mt-3 text-center font-sans text-xs uppercase tracking-wider text-paper/75">{product.name}</p>
+        </div>
+      )}
+
+      {/* Historical Chronicle Modal / Cultural Heritage Dossier */}
+      {isChronicleOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md animate-fade-in"
+          onClick={() => setIsChronicleOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={t('hotspots.chronicleTitle', 'Điển tích & Bối cảnh lịch sử')}
+        >
+          <div
+            className="relative max-h-[85vh] w-full max-w-xl overflow-y-auto border border-brass/50 bg-[#121915] p-6 text-paper shadow-2xl rounded-[3px]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between border-b border-brass/30 pb-3">
+              <div>
+                <span className="font-cinzel text-[10px] font-bold uppercase tracking-widest text-brass block">
+                  {product.epoch || t('hotspots.chronicleSubtitle', 'Hồ sơ di sản văn hóa')}
+                </span>
+                <h3 className="font-display text-xl sm:text-2xl font-bold text-paper mt-1">
+                  {product.name}
+                </h3>
+                {product.subName && (
+                  <p className="font-sans text-xs text-brass-light/85 italic mt-0.5">
+                    {product.subName}
+                  </p>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsChronicleOpen(false)}
+                className="p-1.5 text-paper/70 hover:text-paper hover:bg-white/10 rounded transition-colors cursor-pointer"
+                aria-label={t('hotspots.closeChronicle', 'Đóng điển tích')}
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="mt-4 space-y-4 font-sans text-sm text-paper/90 leading-relaxed">
+              {product.location && (
+                <div className="flex items-center gap-2 text-xs text-paper/80 bg-paper/5 px-3 py-2 border border-paper/10">
+                  <span className="font-semibold text-brass">Địa điểm:</span>
+                  <span>{product.location}</span>
+                </div>
+              )}
+
+              <p>{product.shortDescription}</p>
+
+              {product.audioGuide?.transcript && (
+                <div className="border-l-2 border-brass pl-3.5 py-1 text-paper/85 italic bg-brass/5">
+                  <p>{product.audioGuide.transcript}</p>
+                </div>
+              )}
+
+              {product.collection?.description && (
+                <p className="text-xs text-paper/70">{product.collection.description}</p>
+              )}
+
+              <div className="pt-2 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsChronicleOpen(false);
+                    const essayEl = document.getElementById('in-depth-essay') || document.querySelector('.story-blocks-container');
+                    if (essayEl) {
+                      essayEl.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  className="inline-flex items-center gap-2 border border-brass bg-brass/20 px-4 py-2 text-xs font-sans font-medium text-brass-light hover:bg-brass hover:text-forest transition-colors cursor-pointer"
+                >
+                  <span>{t('hotspots.viewFullStory', 'Xem toàn bộ khảo cứu chuyên sâu')}</span>
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
