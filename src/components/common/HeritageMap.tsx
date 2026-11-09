@@ -5,10 +5,8 @@ import 'leaflet/dist/leaflet.css';
 import { 
   ArrowRight, 
   Compass, 
-  Box, 
   Maximize2, 
   Layers, 
-  Eye, 
   X
 } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -17,7 +15,6 @@ import {
   resolve3DModelUrl,
   resolve3DPreview,
   resolveImageUrl,
-  handleImageFallback,
   VIETTORIA_IMAGES,
 } from '../../utils/mediaResolver';
 
@@ -144,7 +141,6 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
   );
   const [activeRegion, setActiveRegion] = useState<'all' | 'hanoi' | 'hue' | 'saigon'>('all');
   const [mapLayerType, setMapLayerType] = useState<'standard' | 'satellite'>('standard');
-  const [previewTab, setPreviewTab] = useState<'photo' | '3d'>('photo');
   const [isFullscreen3D, setIsFullscreen3D] = useState<boolean>(false);
 
   const getLocalizedSite = (site: HeritageSiteLocation): HeritageSiteLocation => {
@@ -459,120 +455,67 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
           })}
         </div>
 
-        {/* 4. Hồ Sơ Di Sản Spotlight (Tích hợp trong sidebar, không che bản đồ) */}
-        <div className="space-y-3 pt-1">
-          {/* Nút chuyển đổi chế độ xem Ảnh thực địa / Mô hình 3D */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1 border border-paper-border bg-paper p-0.5">
-              <button
-                type="button"
-                onClick={() => setPreviewTab('photo')}
-                className={`px-2.5 py-1 text-[11px] font-sans font-medium transition-colors flex items-center gap-1 cursor-pointer ${
-                  previewTab === 'photo'
-                    ? 'bg-forest text-paper font-semibold'
-                    : 'text-charcoal-muted hover:text-forest'
-                }`}
-              >
-                <Eye className="w-3 h-3" />
-                <span>{t('product.tabPhotos', 'Ảnh thực địa')}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setPreviewTab('3d')}
-                className={`px-2.5 py-1 text-[11px] font-sans font-medium transition-colors flex items-center gap-1 cursor-pointer ${
-                  previewTab === '3d'
-                    ? 'bg-forest text-paper font-semibold'
-                    : 'text-charcoal-muted hover:text-forest'
-                }`}
-              >
-                <Box className="w-3 h-3 text-brass" />
-                <span>{t('product.tab3d', 'Mô hình 3D')}</span>
-              </button>
-            </div>
-
-            {previewTab === '3d' && (
+        {/* 4. Hồ Sơ Di Sản Spotlight (Chỉ 3D Tinh Giản, Tối Giản Chữ) */}
+        <div className="space-y-2.5 pt-1">
+          {/* Khung hiển thị Mô hình 3D tinh xảo */}
+          <div className="relative aspect-[16/11] w-full overflow-hidden border border-brass/40 bg-[#121814] shadow-inner rounded-[2px] group">
+            <div className="heritage-3d-stage-glow pointer-events-none" aria-hidden="true" />
+            
+            {/* Header nhỏ góc trên: Nhãn 3D và Nút phóng to toàn màn hình */}
+            <div className="absolute top-2 left-2.5 right-2.5 z-10 flex items-center justify-between pointer-events-none">
+              <span className="font-mono text-[9.5px] uppercase tracking-wider text-brass bg-black/60 px-2 py-0.5 border border-brass/30 backdrop-blur-xs">
+                ◇ 3D MODEL
+              </span>
               <button
                 type="button"
                 onClick={() => setIsFullscreen3D(true)}
-                className="text-[11px] font-sans text-brass-dark hover:text-forest flex items-center gap-1 p-1 transition-colors cursor-pointer"
-                title={t('mapPage.expand', 'Mở toàn màn hình')}
+                className="pointer-events-auto text-paper/70 hover:text-brass bg-black/60 p-1 border border-white/10 hover:border-brass/40 backdrop-blur-xs transition-colors cursor-pointer"
+                title={t('mapPage.expand', 'Phóng to 3D toàn màn hình')}
               >
-                <Maximize2 className="w-3 h-3" />
-                <span className="hidden sm:inline">{t('mapPage.expand', 'Phóng to')}</span>
+                <Maximize2 className="w-3.5 h-3.5" />
               </button>
-            )}
+            </div>
+
+            <model-viewer
+              key={`${activeSite.slug}-sidebar-3d`}
+              src={resolve3DModelUrl(activeSite.slug)}
+              poster={resolve3DPreview(activeSite.slug)?.poster || resolveImageUrl(activeSite.heroImage, VIETTORIA_IMAGES.productHighlight)}
+              alt={`Mô hình 3D ${currentSite.name}`}
+              camera-controls
+              auto-rotate=""
+              rotation-per-second="6deg"
+              shadow-intensity="1.2"
+              shadow-softness="0.75"
+              exposure="1.05"
+              loading="lazy"
+              reveal="auto"
+              interaction-prompt="none"
+              style={{ width: '100%', height: '100%', backgroundColor: 'transparent', touchAction: 'pan-y' }}
+              className="absolute inset-0 h-full w-full"
+            />
           </div>
 
-          {/* Khung hiển thị Ảnh hoặc Mô hình 3D tinh xảo */}
-          <div className="relative aspect-[16/10] w-full overflow-hidden border border-brass/40 bg-[#121814] shadow-inner rounded-[2px]">
-            {previewTab === 'photo' ? (
-              <div className="relative w-full h-full">
-                <img
-                  src={resolveImageUrl(activeSite.heroImage, VIETTORIA_IMAGES.productHighlight)}
-                  alt={currentSite.name}
-                  onError={(e) => handleImageFallback(e, VIETTORIA_IMAGES.productHighlight)}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute bottom-2 left-2 right-2 text-paper text-[10px] font-mono flex justify-between items-center">
-                  <span className="bg-black/60 px-1.5 py-0.5 backdrop-blur-xs border border-white/20">
-                    {currentSite.cityName}
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <div className="relative w-full h-full heritage-3d-dark-stage">
-                <div className="heritage-3d-stage-glow pointer-events-none" aria-hidden="true" />
-                <model-viewer
-                  key={`${activeSite.slug}-sidebar-3d`}
-                  src={resolve3DModelUrl(activeSite.slug)}
-                  poster={resolve3DPreview(activeSite.slug)?.poster || resolveImageUrl(activeSite.heroImage, VIETTORIA_IMAGES.productHighlight)}
-                  alt={`Mô hình 3D ${currentSite.name}`}
-                  camera-controls
-                  auto-rotate=""
-                  rotation-per-second="6deg"
-                  shadow-intensity="1.2"
-                  shadow-softness="0.75"
-                  exposure="1.05"
-                  loading="lazy"
-                  reveal="auto"
-                  interaction-prompt="none"
-                  style={{ width: '100%', height: '100%', backgroundColor: 'transparent', touchAction: 'pan-y' }}
-                  className="absolute inset-0 h-full w-full"
-                />
-                <div className="absolute bottom-1.5 left-2 right-2 pointer-events-none flex justify-between items-center text-[9.5px] font-sans text-paper/75 bg-black/60 px-2 py-0.5 backdrop-blur-xs border border-white/10">
-                  <span>Kéo để xoay 360°</span>
-                  <span className="font-cinzel text-brass">{currentSite.epoch.split('(')[0].trim()}</span>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Chi tiết di sản */}
-          <div className="space-y-1">
-            <div>
-              <h4 className="font-display text-base font-bold text-forest leading-snug">
+          {/* Chi tiết di sản tối giản chữ: Tên, Địa danh · Niên đại và Tọa độ */}
+          <div className="flex items-end justify-between gap-3 pt-0.5">
+            <div className="min-w-0">
+              <h4 className="font-serif text-lg font-bold text-forest leading-tight truncate">
                 {currentSite.name}
               </h4>
-              <p className="font-display text-xs italic text-brass-dark">
-                {currentSite.subName}
+              <p className="text-[11px] text-charcoal-muted font-sans mt-0.5 truncate">
+                {currentSite.cityName.split('—')[0].trim()} · {currentSite.epoch.split('(')[0].trim()}
               </p>
             </div>
-            <p className="text-[11px] text-charcoal/80 leading-relaxed line-clamp-2">
-              {currentSite.description}
-            </p>
-            <div className="flex items-center gap-2 pt-1 font-mono text-[10px] text-charcoal-muted border-t border-paper-border">
-              <span className="text-brass">📍 Tọa độ GPS:</span>
-              <span>{formatCoordinates(activeSite)}</span>
-            </div>
+            <span className="font-mono text-[10px] text-brass-dark shrink-0">
+              {formatCoordinates(activeSite)}
+            </span>
           </div>
 
           {/* Nút hành động chính: Mở trang khảo cứu 3D chi tiết */}
           <Link
             to={`/products/${activeSite.slug}`}
-            className="w-full inline-flex items-center justify-center gap-2 border border-brass bg-forest text-paper px-4 py-2.5 text-xs font-cinzel font-bold tracking-wider uppercase hover:bg-forest-muted transition-colors shadow-sm group"
+            className="w-full inline-flex items-center justify-center gap-2 border border-brass bg-forest text-paper px-4 py-2 text-xs font-cinzel font-bold tracking-wider uppercase hover:bg-forest-muted transition-colors shadow-xs group"
           >
-            <span>{t('mapPage.exploreMonument3D', 'Khảo Cứu 3D Toàn Cảnh')}</span>
+            <span>{t('mapPage.exploreMonument3D', 'Khảo Cứu 3D Chi Tiết')}</span>
             <ArrowRight className="w-3.5 h-3.5 text-brass transition-transform group-hover:translate-x-1" />
           </Link>
         </div>

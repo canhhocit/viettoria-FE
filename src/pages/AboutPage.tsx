@@ -170,200 +170,164 @@ export const AboutPage: React.FC = () => {
             </div>
           </div>
 
-          {/* 3-Card Curated Atelier Display: Warm Beige - Terracotta Lacquer - Warm Beige */}
+          {/* 3-Card Curated Atelier Display: Clean, Unified, Bright Heritage Aesthetic */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {/* Card 1: Chùa Một Cột - Warm Beige Curation */}
-            <div className="group relative bg-paper-warm border border-paper-border hover:border-brass/70 transition-all duration-300 rounded-[2px] shadow-xs hover:shadow-md flex flex-col justify-between overflow-hidden">
-              <div className="p-4 sm:p-5 space-y-4">
-                <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-brass font-bold tracking-widest uppercase">01 · HIỆN VẬT KHẢO CỨU</span>
-                  <span className="px-2 py-0.5 border border-brass/30 bg-brass/10 text-forest text-[11px] font-medium tracking-wide">
-                    TỶ LỆ 1:120
+            {/* Card 1: Chùa Một Cột */}
+            <div className="group bg-paper-warm border border-paper-border hover:border-brass/70 transition-all duration-300 rounded-[2px] shadow-xs hover:shadow-md flex flex-col justify-between overflow-hidden">
+              <div 
+                onClick={() => setPreviewData({
+                  src: VIETTORIA_IMAGES.curatedChuaMotCot,
+                  title: t('aboutPage.workshopCard1Title'),
+                  desc: t('aboutPage.workshopCard1Desc'),
+                  tag: t('aboutPage.workshopCard1Tag'),
+                  specs: 'Gỗ lim nguyên khối & Đá xanh Thanh Hóa · Sơn then thủ công'
+                })}
+                className="relative aspect-[4/3] overflow-hidden bg-paper-card border-b border-paper-border cursor-pointer group/img"
+                role="button"
+                tabIndex={0}
+                aria-label={`Phóng to ${t('aboutPage.workshopCard1Title')}`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    setPreviewData({
+                      src: VIETTORIA_IMAGES.curatedChuaMotCot,
+                      title: t('aboutPage.workshopCard1Title'),
+                      desc: t('aboutPage.workshopCard1Desc'),
+                      tag: t('aboutPage.workshopCard1Tag'),
+                      specs: 'Gỗ lim nguyên khối & Đá xanh Thanh Hóa · Sơn then thủ công'
+                    });
+                  }
+                }}
+              >
+                <img
+                  src={VIETTORIA_IMAGES.curatedChuaMotCot}
+                  alt={t('aboutPage.workshopCard1Title')}
+                  onError={(e) => handleImageFallback(e)}
+                  className="w-full h-full object-cover object-center group-hover/img:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-forest/40 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center text-paper">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-forest/85 backdrop-blur-xs border border-brass/50 text-xs font-mono uppercase tracking-wider text-paper shadow-sm">
+                    <ZoomIn className="w-3.5 h-3.5 text-brass" />
+                    <span>Xem chi tiết</span>
                   </span>
-                </div>
-
-                <div 
-                  onClick={() => setPreviewData({
-                    src: VIETTORIA_IMAGES.curatedChuaMotCot,
-                    title: t('aboutPage.workshopCard1Title'),
-                    desc: t('aboutPage.workshopCard1Desc'),
-                    tag: 'Chùa Một Cột · Liên Hoa Đài (Năm 1049)',
-                    specs: 'Gỗ lim nguyên khối & Đá xanh Thanh Hóa · Sơn then thủ công'
-                  })}
-                  className="relative aspect-[4/3] overflow-hidden bg-paper-card border border-paper-border cursor-pointer group/img"
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`Phóng to ${t('aboutPage.workshopCard1Title')}`}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      setPreviewData({
-                        src: VIETTORIA_IMAGES.curatedChuaMotCot,
-                        title: t('aboutPage.workshopCard1Title'),
-                        desc: t('aboutPage.workshopCard1Desc'),
-                        tag: 'Chùa Một Cột · Liên Hoa Đài (Năm 1049)',
-                        specs: 'Gỗ lim nguyên khối & Đá xanh Thanh Hóa · Sơn then thủ công'
-                      });
-                    }
-                  }}
-                >
-                  <img
-                    src={VIETTORIA_IMAGES.curatedChuaMotCot}
-                    alt={t('aboutPage.workshopCard1Title')}
-                    onError={(e) => handleImageFallback(e)}
-                    className="w-full h-full object-cover object-center group-hover/img:scale-105 transition-transform duration-700 ease-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-forest/70 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-end justify-between p-3 text-paper">
-                    <span className="text-xs font-mono text-paper/90">Xem chi tiết hiện vật</span>
-                    <ZoomIn className="w-4 h-4 text-brass-light" />
-                  </div>
-                  <div className="absolute top-2 left-2 px-2 py-0.5 bg-forest/85 backdrop-blur-xs text-paper text-[10px] font-mono tracking-wider border border-brass/40">
-                    Chùa Một Cột
-                  </div>
-                </div>
-
-                <div className="space-y-1.5 pt-1">
-                  <h3 className="font-serif font-bold text-lg text-forest group-hover:text-brass-dark transition-colors">
-                    {t('aboutPage.workshopCard1Title')}
-                  </h3>
-                  <p className="text-xs sm:text-sm font-sans text-charcoal/80 font-normal leading-relaxed">
-                    {t('aboutPage.workshopCard1Desc')}
-                  </p>
                 </div>
               </div>
 
-              <div className="px-4 py-2.5 bg-paper/60 border-t border-paper-border text-[11px] font-mono text-charcoal-muted flex items-center justify-between">
-                <span>Vật liệu: Gỗ & Đá</span>
-                <span className="text-brass font-medium">Sơn then thủ công</span>
+              <div className="p-5 sm:p-6 space-y-2">
+                <span className="text-[11px] font-mono uppercase tracking-widest text-brass font-bold block">
+                  {t('aboutPage.workshopCard1Tag')}
+                </span>
+                <h3 className="font-serif font-bold text-xl text-forest group-hover:text-brass-dark transition-colors">
+                  {t('aboutPage.workshopCard1Title')}
+                </h3>
+                <p className="text-xs sm:text-sm font-sans text-charcoal/80 font-normal leading-relaxed">
+                  {t('aboutPage.workshopCard1Desc')}
+                </p>
               </div>
             </div>
 
-            {/* Card 2: Cấu Kiện Mộng Khớp - Deep Imperial Terracotta Lacquer */}
-            <div className="group relative bg-[#1B1614] text-paper border border-terracotta/50 hover:border-brass transition-all duration-300 rounded-[2px] shadow-sm hover:shadow-lg flex flex-col justify-between overflow-hidden">
-              <div className="p-4 sm:p-5 space-y-4">
-                <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-terracotta-light font-bold tracking-widest uppercase">02 · BẢN VẼ BÓC TÁCH</span>
-                  <span className="px-2 py-0.5 border border-terracotta/40 bg-terracotta/20 text-paper text-[11px] font-medium tracking-wide">
-                    MỘNG ÂM DƯƠNG
+            {/* Card 2: Khuê Văn Các */}
+            <div className="group bg-paper-warm border border-paper-border hover:border-brass/70 transition-all duration-300 rounded-[2px] shadow-xs hover:shadow-md flex flex-col justify-between overflow-hidden">
+              <div 
+                onClick={() => setPreviewData({
+                  src: VIETTORIA_IMAGES.curatedKhueVanCac,
+                  title: t('aboutPage.workshopCard2Title'),
+                  desc: t('aboutPage.workshopCard2Desc'),
+                  tag: t('aboutPage.workshopCard2Tag'),
+                  specs: 'Ghép mộng không keo · Khung sườn gỗ lim & Mái đao cong'
+                })}
+                className="relative aspect-[4/3] overflow-hidden bg-paper-card border-b border-paper-border cursor-pointer group/img"
+                role="button"
+                tabIndex={0}
+                aria-label={`Phóng to ${t('aboutPage.workshopCard2Title')}`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    setPreviewData({
+                      src: VIETTORIA_IMAGES.curatedKhueVanCac,
+                      title: t('aboutPage.workshopCard2Title'),
+                      desc: t('aboutPage.workshopCard2Desc'),
+                      tag: t('aboutPage.workshopCard2Tag'),
+                      specs: 'Ghép mộng không keo · Khung sườn gỗ lim & Mái đao cong'
+                    });
+                  }
+                }}
+              >
+                <img
+                  src={VIETTORIA_IMAGES.curatedKhueVanCac}
+                  alt={t('aboutPage.workshopCard2Title')}
+                  onError={(e) => handleImageFallback(e)}
+                  className="w-full h-full object-cover object-center group-hover/img:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-forest/40 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center text-paper">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-forest/85 backdrop-blur-xs border border-brass/50 text-xs font-mono uppercase tracking-wider text-paper shadow-sm">
+                    <ZoomIn className="w-3.5 h-3.5 text-brass" />
+                    <span>Xem chi tiết</span>
                   </span>
-                </div>
-
-                <div 
-                  onClick={() => setPreviewData({
-                    src: VIETTORIA_IMAGES.curatedAssemblyMong,
-                    title: t('aboutPage.workshopCard3Title'),
-                    desc: t('aboutPage.workshopCard3Desc'),
-                    tag: 'Khuê Văn Các · Kỹ thuật mộng mộc truyền thống',
-                    specs: 'Ghép mộng không keo · Khung sườn gỗ lim & Mái đao cong'
-                  })}
-                  className="relative aspect-[4/3] overflow-hidden bg-[#853018] border border-terracotta/40 cursor-pointer group/img"
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`Phóng to ${t('aboutPage.workshopCard3Title')}`}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      setPreviewData({
-                        src: VIETTORIA_IMAGES.curatedAssemblyMong,
-                        title: t('aboutPage.workshopCard3Title'),
-                        desc: t('aboutPage.workshopCard3Desc'),
-                        tag: 'Khuê Văn Các · Kỹ thuật mộng mộc truyền thống',
-                        specs: 'Ghép mộng không keo · Khung sườn gỗ lim & Mái đao cong'
-                      });
-                    }
-                  }}
-                >
-                  <img
-                    src={VIETTORIA_IMAGES.curatedAssemblyMong}
-                    alt={t('aboutPage.workshopCard3Title')}
-                    onError={(e) => handleImageFallback(e)}
-                    className="w-full h-full object-cover object-center group-hover/img:scale-105 transition-transform duration-700 ease-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-end justify-between p-3 text-paper">
-                    <span className="text-xs font-mono text-paper/90">Xem cấu trúc mộng</span>
-                    <ZoomIn className="w-4 h-4 text-brass-light" />
-                  </div>
-                  <div className="absolute top-2 left-2 px-2 py-0.5 bg-black/70 backdrop-blur-xs text-brass-light text-[10px] font-mono tracking-wider border border-brass/40">
-                    Khuê Văn Các
-                  </div>
-                </div>
-
-                <div className="space-y-1.5 pt-1">
-                  <h3 className="font-serif font-bold text-lg text-paper group-hover:text-brass-light transition-colors">
-                    {t('aboutPage.workshopCard3Title')}
-                  </h3>
-                  <p className="text-xs sm:text-sm font-sans text-paper/80 font-normal leading-relaxed">
-                    {t('aboutPage.workshopCard3Desc')}
-                  </p>
                 </div>
               </div>
 
-              <div className="px-4 py-2.5 bg-black/45 border-t border-terracotta/30 text-[11px] font-mono text-paper/70 flex items-center justify-between">
-                <span>Khớp nối: Âm dương</span>
-                <span className="text-terracotta-light font-medium">Không dùng keo dán</span>
+              <div className="p-5 sm:p-6 space-y-2">
+                <span className="text-[11px] font-mono uppercase tracking-widest text-brass font-bold block">
+                  {t('aboutPage.workshopCard2Tag')}
+                </span>
+                <h3 className="font-serif font-bold text-xl text-forest group-hover:text-brass-dark transition-colors">
+                  {t('aboutPage.workshopCard2Title')}
+                </h3>
+                <p className="text-xs sm:text-sm font-sans text-charcoal/80 font-normal leading-relaxed">
+                  {t('aboutPage.workshopCard2Desc')}
+                </p>
               </div>
             </div>
 
-            {/* Card 3: Ngọ Môn & Bao Bì Độc Bản - Warm Beige Curation */}
-            <div className="group relative bg-paper-warm border border-paper-border hover:border-brass/70 transition-all duration-300 rounded-[2px] shadow-xs hover:shadow-md flex flex-col justify-between overflow-hidden">
-              <div className="p-4 sm:p-5 space-y-4">
-                <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-brass font-bold tracking-widest uppercase">03 · BẢO CHỨNG ĐỘC BẢN</span>
-                  <span className="px-2 py-0.5 border border-brass/30 bg-brass/10 text-forest text-[11px] font-medium tracking-wide">
-                    TEM QR ĐỊNH DANH
+            {/* Card 3: Ngọ Môn Huế */}
+            <div className="group bg-paper-warm border border-paper-border hover:border-brass/70 transition-all duration-300 rounded-[2px] shadow-xs hover:shadow-md flex flex-col justify-between overflow-hidden">
+              <div 
+                onClick={() => setPreviewData({
+                  src: VIETTORIA_IMAGES.curatedNgoMon,
+                  title: t('aboutPage.workshopCard3Title'),
+                  desc: t('aboutPage.workshopCard3Desc'),
+                  tag: t('aboutPage.workshopCard3Tag'),
+                  specs: 'Hộp mỹ thuật vân dó ép kim · Kèm thẻ chứng thực độc bản & Audio Guide'
+                })}
+                className="relative aspect-[4/3] overflow-hidden bg-paper-card border-b border-paper-border cursor-pointer group/img"
+                role="button"
+                tabIndex={0}
+                aria-label={`Phóng to ${t('aboutPage.workshopCard3Title')}`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    setPreviewData({
+                      src: VIETTORIA_IMAGES.curatedNgoMon,
+                      title: t('aboutPage.workshopCard3Title'),
+                      desc: t('aboutPage.workshopCard3Desc'),
+                      tag: t('aboutPage.workshopCard3Tag'),
+                      specs: 'Hộp mỹ thuật vân dó ép kim · Kèm thẻ chứng thực độc bản & Audio Guide'
+                    });
+                  }
+                }}
+              >
+                <img
+                  src={VIETTORIA_IMAGES.curatedNgoMon}
+                  alt={t('aboutPage.workshopCard3Title')}
+                  onError={(e) => handleImageFallback(e)}
+                  className="w-full h-full object-cover object-center group-hover/img:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-forest/40 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center text-paper">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-forest/85 backdrop-blur-xs border border-brass/50 text-xs font-mono uppercase tracking-wider text-paper shadow-sm">
+                    <ZoomIn className="w-3.5 h-3.5 text-brass" />
+                    <span>Xem chi tiết</span>
                   </span>
-                </div>
-
-                <div 
-                  onClick={() => setPreviewData({
-                    src: VIETTORIA_IMAGES.curatedNgoMon,
-                    title: t('aboutPage.workshopCard2Title'),
-                    desc: t('aboutPage.workshopCard2Desc'),
-                    tag: 'Ngọ Môn Huế · Phiên bản giới hạn Hoàng Cung',
-                    specs: 'Hộp mỹ thuật vân dó ép kim · Kèm thẻ chứng thực độc bản & Audio Guide'
-                  })}
-                  className="relative aspect-[4/3] overflow-hidden bg-paper-card border border-paper-border cursor-pointer group/img"
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`Phóng to ${t('aboutPage.workshopCard2Title')}`}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      setPreviewData({
-                        src: VIETTORIA_IMAGES.curatedNgoMon,
-                        title: t('aboutPage.workshopCard2Title'),
-                        desc: t('aboutPage.workshopCard2Desc'),
-                        tag: 'Ngọ Môn Huế · Phiên bản giới hạn Hoàng Cung',
-                        specs: 'Hộp mỹ thuật vân dó ép kim · Kèm thẻ chứng thực độc bản & Audio Guide'
-                      });
-                    }
-                  }}
-                >
-                  <img
-                    src={VIETTORIA_IMAGES.curatedNgoMon}
-                    alt={t('aboutPage.workshopCard2Title')}
-                    onError={(e) => handleImageFallback(e)}
-                    className="w-full h-full object-cover object-center group-hover/img:scale-105 transition-transform duration-700 ease-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-forest/70 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-end justify-between p-3 text-paper">
-                    <span className="text-xs font-mono text-paper/90">Xem chi tiết hiện vật</span>
-                    <ZoomIn className="w-4 h-4 text-brass-light" />
-                  </div>
-                  <div className="absolute top-2 left-2 px-2 py-0.5 bg-forest/85 backdrop-blur-xs text-paper text-[10px] font-mono tracking-wider border border-brass/40">
-                    Ngọ Môn Huế
-                  </div>
-                </div>
-
-                <div className="space-y-1.5 pt-1">
-                  <h3 className="font-serif font-bold text-lg text-forest group-hover:text-brass-dark transition-colors">
-                    {t('aboutPage.workshopCard2Title')}
-                  </h3>
-                  <p className="text-xs sm:text-sm font-sans text-charcoal/80 font-normal leading-relaxed">
-                    {t('aboutPage.workshopCard2Desc')}
-                  </p>
                 </div>
               </div>
 
-              <div className="px-4 py-2.5 bg-paper/60 border-t border-paper-border text-[11px] font-mono text-charcoal-muted flex items-center justify-between">
-                <span>Hộp: Vân dó ép kim</span>
-                <span className="text-brass font-medium">Tem số hiệu bảo chứng</span>
+              <div className="p-5 sm:p-6 space-y-2">
+                <span className="text-[11px] font-mono uppercase tracking-widest text-brass font-bold block">
+                  {t('aboutPage.workshopCard3Tag')}
+                </span>
+                <h3 className="font-serif font-bold text-xl text-forest group-hover:text-brass-dark transition-colors">
+                  {t('aboutPage.workshopCard3Title')}
+                </h3>
+                <p className="text-xs sm:text-sm font-sans text-charcoal/80 font-normal leading-relaxed">
+                  {t('aboutPage.workshopCard3Desc')}
+                </p>
               </div>
             </div>
           </div>
