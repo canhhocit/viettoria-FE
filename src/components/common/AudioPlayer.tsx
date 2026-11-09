@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   ArrowUp, 
   ChevronDown, 
@@ -239,168 +240,171 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
         </div>
       </section>
 
-      {/* 2. Floating Tour Guide Companion at Bottom-Right Corner (Lifelike Micro-Motions & Equalizer Waves) */}
-      <aside 
-        className="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end pointer-events-none select-none transition-all duration-300"
-        aria-label={t('audioPlayer.narrator', 'Hướng dẫn viên Viettoria')}
-      >
-        {isGuideMinimized ? (
-          <button
-            type="button"
-            onClick={() => setIsGuideMinimized(false)}
-            className="pointer-events-auto flex items-center gap-2 border border-brass/60 bg-forest-dark/95 text-paper px-3 py-2 text-xs font-serif shadow-2xl backdrop-blur-md hover:border-brass transition-all cursor-pointer group rounded-[2px]"
-            title="Mở hướng dẫn viên Viettoria"
-          >
-            <span className="relative flex h-2 w-2">
-              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isPlaying ? 'bg-brass' : 'bg-brass/50'}`} />
-              <span className={`relative inline-flex rounded-full h-2 w-2 ${isPlaying ? 'bg-brass' : 'bg-brass/70'}`} />
-            </span>
-            <Headphones className="w-3.5 h-3.5 text-brass" />
-            <span className="font-medium text-[11px] text-paper">
-              {isPlaying ? t('audioPlayer.speaking', 'Đang thuyết minh...') : t('audioPlayer.narrator', 'Hướng dẫn viên')}
-            </span>
-            <ChevronUp className="w-3.5 h-3.5 text-brass group-hover:-translate-y-0.5 transition-transform" />
-          </button>
-        ) : (
-          <div className="relative flex flex-col items-end">
-            {/* A. Dynamic Speech Card / Floating Audio Pill */}
-            <div className={`pointer-events-auto mb-2 w-[220px] sm:w-[245px] border border-brass/50 bg-[#121915]/95 p-2.5 sm:p-3 text-paper shadow-2xl backdrop-blur-md rounded-[2px] transition-all duration-300 ${
-              isPlaying ? 'border-brass shadow-[0_8px_30px_rgba(184,138,68,0.3)]' : 'border-paper/20'
-            }`}>
-              {/* Header with real-time soundwave visualizer */}
-              <div className="flex items-center justify-between gap-1.5 pb-1.5 border-b border-paper/10">
-                <div className="flex items-center gap-1.5 min-w-0">
-                  {isPlaying ? (
-                    <div className="flex items-end gap-[2px] h-3 shrink-0" aria-label="Âm thanh đang phát">
-                      <span className="w-[2px] bg-brass animate-soundwave-1" />
-                      <span className="w-[2px] bg-brass animate-soundwave-2" />
-                      <span className="w-[2px] bg-brass animate-soundwave-3" />
-                      <span className="w-[2px] bg-brass animate-soundwave-4" />
-                    </div>
-                  ) : (
-                    <span className="w-1.5 h-1.5 rounded-full bg-brass/70 shrink-0" />
-                  )}
-                  <span className="font-serif text-[10.5px] font-bold text-brass truncate uppercase tracking-wider">
-                    {isPlaying ? t('audioPlayer.speaking', 'Đang Thuyết Minh') : t('audioPlayer.narrator', 'Hướng Dẫn Viên')}
-                  </span>
-                </div>
+      {/* 2. Floating Tour Guide Companion at Bottom-Right Corner (Portaled directly to document.body for true viewport fixed docking) */}
+      {typeof document !== 'undefined' && createPortal(
+        <aside 
+          className="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end pointer-events-none select-none transition-all duration-300"
+          aria-label={t('audioPlayer.narrator', 'Hướng dẫn viên Viettoria')}
+        >
+          {isGuideMinimized ? (
+            <button
+              type="button"
+              onClick={() => setIsGuideMinimized(false)}
+              className="pointer-events-auto flex items-center gap-2 border border-brass/60 bg-forest-dark/95 text-paper px-3 py-2 text-xs font-serif shadow-2xl backdrop-blur-md hover:border-brass transition-all cursor-pointer group rounded-[2px]"
+              title="Mở hướng dẫn viên Viettoria"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isPlaying ? 'bg-brass' : 'bg-brass/50'}`} />
+                <span className={`relative inline-flex rounded-full h-2 w-2 ${isPlaying ? 'bg-brass' : 'bg-brass/70'}`} />
+              </span>
+              <Headphones className="w-3.5 h-3.5 text-brass" />
+              <span className="font-medium text-[11px] text-paper">
+                {isPlaying ? t('audioPlayer.speaking', 'Đang thuyết minh...') : t('audioPlayer.narrator', 'Hướng dẫn viên')}
+              </span>
+              <ChevronUp className="w-3.5 h-3.5 text-brass group-hover:-translate-y-0.5 transition-transform" />
+            </button>
+          ) : (
+            <div className="relative flex flex-col items-end">
+              {/* A. Dynamic Speech Card / Floating Audio Pill */}
+              <div className={`pointer-events-auto mb-2 w-[220px] sm:w-[245px] border border-brass/50 bg-[#121915]/95 p-2.5 sm:p-3 text-paper shadow-2xl backdrop-blur-md rounded-[2px] transition-all duration-300 ${
+                isPlaying ? 'border-brass shadow-[0_8px_30px_rgba(184,138,68,0.3)]' : 'border-paper/20'
+              }`}>
+                {/* Header with real-time soundwave visualizer */}
+                <div className="flex items-center justify-between gap-1.5 pb-1.5 border-b border-paper/10">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    {isPlaying ? (
+                      <div className="flex items-end gap-[2px] h-3 shrink-0" aria-label="Âm thanh đang phát">
+                        <span className="w-[2px] bg-brass animate-soundwave-1" />
+                        <span className="w-[2px] bg-brass animate-soundwave-2" />
+                        <span className="w-[2px] bg-brass animate-soundwave-3" />
+                        <span className="w-[2px] bg-brass animate-soundwave-4" />
+                      </div>
+                    ) : (
+                      <span className="w-1.5 h-1.5 rounded-full bg-brass/70 shrink-0" />
+                    )}
+                    <span className="font-serif text-[10.5px] font-bold text-brass truncate uppercase tracking-wider">
+                      {isPlaying ? t('audioPlayer.speaking', 'Đang Thuyết Minh') : t('audioPlayer.narrator', 'Hướng Dẫn Viên')}
+                    </span>
+                  </div>
 
-                <button
-                  type="button"
-                  onClick={() => setIsGuideMinimized(true)}
-                  className="p-0.5 text-paper/50 hover:text-paper transition-colors cursor-pointer"
-                  title="Thu nhỏ hướng dẫn viên"
-                  aria-label="Thu nhỏ hướng dẫn viên"
-                >
-                  <ChevronDown className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              {/* Title & Live Time */}
-              <p className="mt-1.5 font-serif text-xs font-semibold text-paper leading-snug truncate">
-                {titleLabel}
-              </p>
-              <p className="mt-0.5 font-mono text-[9px] text-brass-light/80">
-                {formatTime(currentTime)} / {durationLabel}
-              </p>
-
-              {/* Interactive Audio Controls */}
-              <div className="mt-2 flex items-center justify-between gap-2 pt-1.5 border-t border-paper/10">
-                <div className="flex items-center gap-1">
                   <button
                     type="button"
-                    onClick={toggleMute}
-                    disabled={!hasAudio || audioError}
-                    className="p-1 text-paper/70 hover:text-brass transition-colors cursor-pointer disabled:opacity-40"
-                    title={isMuted ? t('audioPlayer.unmute') : t('audioPlayer.mute')}
+                    onClick={() => setIsGuideMinimized(true)}
+                    className="p-0.5 text-paper/50 hover:text-paper transition-colors cursor-pointer"
+                    title="Thu nhỏ hướng dẫn viên"
+                    aria-label="Thu nhỏ hướng dẫn viên"
                   >
-                    {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                    <ChevronDown className="w-3.5 h-3.5" />
                   </button>
-                  {isOutOfView && (
-                    <button
-                      type="button"
-                      onClick={scrollToPlayer}
-                      className="p-1 text-paper/70 hover:text-brass transition-colors cursor-pointer"
-                      title={t('audioPlayer.player', 'Đến khu vực thuyết minh')}
-                    >
-                      <ArrowUp className="w-3.5 h-3.5" />
-                    </button>
-                  )}
                 </div>
 
+                {/* Title & Live Time */}
+                <p className="mt-1.5 font-serif text-xs font-semibold text-paper leading-snug truncate">
+                  {titleLabel}
+                </p>
+                <p className="mt-0.5 font-mono text-[9px] text-brass-light/80">
+                  {formatTime(currentTime)} / {durationLabel}
+                </p>
+
+                {/* Interactive Audio Controls */}
+                <div className="mt-2 flex items-center justify-between gap-2 pt-1.5 border-t border-paper/10">
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={toggleMute}
+                      disabled={!hasAudio || audioError}
+                      className="p-1 text-paper/70 hover:text-brass transition-colors cursor-pointer disabled:opacity-40"
+                      title={isMuted ? t('audioPlayer.unmute') : t('audioPlayer.mute')}
+                    >
+                      {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                    </button>
+                    {isOutOfView && (
+                      <button
+                        type="button"
+                        onClick={scrollToPlayer}
+                        className="p-1 text-paper/70 hover:text-brass transition-colors cursor-pointer"
+                        title={t('audioPlayer.player', 'Đến khu vực thuyết minh')}
+                      >
+                        <ArrowUp className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => void togglePlay()}
+                    disabled={!hasAudio || audioError}
+                    className="inline-flex items-center gap-1.5 bg-brass hover:bg-brass-light text-forest px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer disabled:opacity-40 rounded-[2px]"
+                  >
+                    {isPlaying ? (
+                      <>
+                        <Pause className="w-3 h-3 fill-current" />
+                        <span>{t('audioPlayer.pause', 'Dừng')}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Play className="w-3 h-3 fill-current" />
+                        <span>{t('audioPlayer.listen', 'Nghe')}</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Progress bar line */}
+                <div className="mt-2 h-[2px] w-full bg-paper/15 overflow-hidden rounded-full">
+                  <div
+                    className="h-full bg-brass transition-[width] duration-150 ease-linear"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* B. Tour Guide Figure on Atmospheric Pedestal */}
+              <div className="relative h-[155px] w-[95px] sm:h-[195px] sm:w-[120px] pointer-events-auto">
+                {/* Pedestal Shadow (Pulsates in gentle breath rhythm) */}
+                <div 
+                  className="guide-shadow-pulse absolute bottom-0 left-1/2 w-20 h-3 rounded-[100%] bg-black/70 blur-[3px] pointer-events-none" 
+                  aria-hidden="true" 
+                />
+                <div 
+                  className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-16 h-2.5 rounded-[100%] bg-brass/20 blur-[5px] pointer-events-none" 
+                  aria-hidden="true" 
+                />
+
+                {/* Clickable Guide Figure with Smooth Dual-Layer Cross-Fade */}
                 <button
                   type="button"
                   onClick={() => void togglePlay()}
                   disabled={!hasAudio || audioError}
-                  className="inline-flex items-center gap-1.5 bg-brass hover:bg-brass-light text-forest px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer disabled:opacity-40 rounded-[2px]"
+                  className="relative h-full w-full cursor-pointer border-0 bg-transparent p-0 disabled:cursor-not-allowed group transition-transform duration-300 hover:scale-[1.03]"
+                  aria-label={isPlaying ? t('audioPlayer.pause') : t('audioPlayer.listen')}
+                  title={isPlaying ? 'Bấm vào hướng dẫn viên để tạm dừng' : 'Bấm vào hướng dẫn viên để nghe thuyết minh'}
                 >
-                  {isPlaying ? (
-                    <>
-                      <Pause className="w-3 h-3 fill-current" />
-                      <span>{t('audioPlayer.pause', 'Dừng')}</span>
-                    </>
-                  ) : (
-                    <>
-                      <Play className="w-3 h-3 fill-current" />
-                      <span>{t('audioPlayer.listen', 'Nghe')}</span>
-                    </>
-                  )}
+                  {/* Layer 1: Idle Pose (Breathes naturally with organic CSS micro-float) */}
+                  <img
+                    src="/images/guide/guide-idle.png"
+                    alt="Hướng dẫn viên Viettoria trong tà áo dài đỏ"
+                    className={`absolute inset-0 h-full w-full object-contain object-bottom transition-opacity duration-500 ease-in-out ${
+                      isPlaying ? 'opacity-0' : 'opacity-100'
+                    } guide-idle-breath`}
+                    draggable={false}
+                  />
+                  {/* Layer 2: Animated Speaking WebP (Active speech cadence gestures) */}
+                  <img
+                    src="/images/guide/guide-speaking.webp"
+                    alt="Hướng dẫn viên Viettoria đang thuyết minh"
+                    className={`absolute inset-0 h-full w-full object-contain object-bottom transition-opacity duration-500 ease-in-out ${
+                      isPlaying ? 'opacity-100' : 'opacity-0'
+                    } guide-speaking-motion`}
+                    draggable={false}
+                  />
                 </button>
               </div>
-
-              {/* Progress bar line */}
-              <div className="mt-2 h-[2px] w-full bg-paper/15 overflow-hidden rounded-full">
-                <div
-                  className="h-full bg-brass transition-[width] duration-150 ease-linear"
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
             </div>
-
-            {/* B. Tour Guide Figure on Atmospheric Pedestal */}
-            <div className="relative h-[155px] w-[95px] sm:h-[195px] sm:w-[120px] pointer-events-auto">
-              {/* Pedestal Shadow (Pulsates in gentle breath rhythm) */}
-              <div 
-                className="guide-shadow-pulse absolute bottom-0 left-1/2 w-20 h-3 rounded-[100%] bg-black/70 blur-[3px] pointer-events-none" 
-                aria-hidden="true" 
-              />
-              <div 
-                className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-16 h-2.5 rounded-[100%] bg-brass/20 blur-[5px] pointer-events-none" 
-                aria-hidden="true" 
-              />
-
-              {/* Clickable Guide Figure with Smooth Dual-Layer Cross-Fade */}
-              <button
-                type="button"
-                onClick={() => void togglePlay()}
-                disabled={!hasAudio || audioError}
-                className="relative h-full w-full cursor-pointer border-0 bg-transparent p-0 disabled:cursor-not-allowed group transition-transform duration-300 hover:scale-[1.03]"
-                aria-label={isPlaying ? t('audioPlayer.pause') : t('audioPlayer.listen')}
-                title={isPlaying ? 'Bấm vào hướng dẫn viên để tạm dừng' : 'Bấm vào hướng dẫn viên để nghe thuyết minh'}
-              >
-                {/* Layer 1: Idle Pose (Breathes naturally with organic CSS micro-float) */}
-                <img
-                  src="/images/guide/guide-idle.png"
-                  alt="Hướng dẫn viên Viettoria trong tà áo dài đỏ"
-                  className={`absolute inset-0 h-full w-full object-contain object-bottom transition-opacity duration-500 ease-in-out ${
-                    isPlaying ? 'opacity-0' : 'opacity-100'
-                  } guide-idle-breath`}
-                  draggable={false}
-                />
-                {/* Layer 2: Animated Speaking WebP (Active speech cadence gestures) */}
-                <img
-                  src="/images/guide/guide-speaking.webp"
-                  alt="Hướng dẫn viên Viettoria đang thuyết minh"
-                  className={`absolute inset-0 h-full w-full object-contain object-bottom transition-opacity duration-500 ease-in-out ${
-                    isPlaying ? 'opacity-100' : 'opacity-0'
-                  } guide-speaking-motion`}
-                  draggable={false}
-                />
-              </button>
-            </div>
-          </div>
-        )}
-      </aside>
+          )}
+        </aside>,
+        document.body
+      )}
     </>
   );
 };
