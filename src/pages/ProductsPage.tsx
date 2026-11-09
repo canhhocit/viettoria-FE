@@ -5,8 +5,10 @@ import { publicApi } from '../services/api';
 import type { Product, Collection } from '../types';
 import { TiltCard } from '../components/effects/TiltCard';
 import { resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export const ProductsPage: React.FC = () => {
+  const { t } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [collections, setCollections] = useState<Collection[]>([]);
@@ -79,7 +81,7 @@ export const ProductsPage: React.FC = () => {
                   : 'bg-paper text-charcoal border-paper-border hover:border-brass'
               }`}
             >
-              Tất Cả ({products.length})
+              {t('common.all', 'Tất Cả')} ({products.length})
             </button>
             {collections.map((col) => (
               <button
@@ -103,7 +105,7 @@ export const ProductsPage: React.FC = () => {
               type="text"
               value={searchQuery}
               onChange={handleSearchChange}
-              placeholder="Tìm kiếm tác phẩm kiến trúc, địa danh lịch sử..."
+              placeholder={t('common.search', 'Tìm kiếm tác phẩm kiến trúc, địa danh lịch sử...')}
               className="w-full pl-9 pr-4 py-2 bg-paper border border-paper-border focus:border-brass text-xs font-sans focus:outline-none transition-colors"
             />
           </div>
@@ -185,12 +187,12 @@ export const ProductsPage: React.FC = () => {
                       {/* Quick Specs */}
                       <div className="pt-2 grid grid-cols-2 gap-2 text-xs font-mono text-charcoal-muted">
                         <div>
-                          <span>Tỷ lệ:</span>{' '}
+                          <span>{t('product.specScale', 'Tỷ lệ')}:</span>{' '}
                           <span className="text-forest font-semibold">{product.modelSpecs.scale}</span>
                         </div>
                         <div>
-                          <span>Khớp mộng:</span>{' '}
-                          <span className="text-brass font-bold">{product.modelSpecs.partsCount} khớp</span>
+                          <span>{t('product.specParts', 'Cấu kiện')}:</span>{' '}
+                          <span className="text-brass font-bold">{product.modelSpecs.partsCount}</span>
                         </div>
                       </div>
                     </div>
@@ -206,7 +208,7 @@ export const ProductsPage: React.FC = () => {
                         to={`/products/${product.slug}`}
                         className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-forest font-bold group-hover:text-brass transition-colors"
                       >
-                        <span>Khám phá chi tiết</span>
+                        <span>{t('common.learnMore', 'Khám phá chi tiết')}</span>
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                       </Link>
                     </div>

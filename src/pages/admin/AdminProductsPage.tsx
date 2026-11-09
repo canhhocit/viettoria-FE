@@ -169,21 +169,21 @@ export const AdminProductsPage: React.FC = () => {
 
         {!isDemo && <button
           onClick={handleOpenAdd}
-          className="px-4 py-2.5 bg-forest text-paper hover:bg-brass transition-colors font-mono text-xs uppercase tracking-wider font-bold flex items-center gap-2 shadow-sm"
+          className="px-4 py-2.5 bg-forest text-paper hover:bg-brass transition-colors font-sans text-xs uppercase tracking-wider font-bold flex items-center gap-2 shadow-sm"
         >
           <Plus className="w-4 h-4" />
           <span>Thêm Mô Hình Mới</span>
         </button>}
       </div>
 
-      {error && <div role="alert" className="border border-terracotta/40 bg-terracotta/10 p-3 text-sm text-terracotta">{error}</div>}
+      {error && <div role="alert" className="border border-terracotta/40 bg-terracotta/10 p-3 text-sm text-terracotta font-sans">{error}</div>}
 
       {/* Table Card */}
       <div className="overflow-hidden border border-brass/30 bg-paper-card shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="bg-paper-warm border-b border-paper-border text-charcoal-muted font-mono uppercase tracking-wider">
+              <tr className="bg-paper-warm border-b border-paper-border text-charcoal-muted font-sans uppercase tracking-wider text-[11px] font-semibold">
                 <th className="p-4">Tác Phẩm</th>
                 <th className="whitespace-nowrap p-4">Mã SKU</th>
                 <th className="p-4">Địa Điểm & Niên Đại</th>
@@ -192,7 +192,7 @@ export const AdminProductsPage: React.FC = () => {
                 <th className="p-4 text-right">Thao Tác</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-paper-border font-mono">
+            <tbody className="divide-y divide-paper-border font-sans">
               {loading ? (
                 <tr>
                   <td colSpan={6} className="p-8 text-center">
@@ -216,21 +216,21 @@ export const AdminProductsPage: React.FC = () => {
                     </div>
                   </td>
                   <td className="whitespace-nowrap p-4">
-                    <span className="bg-paper-warm px-2 py-1 border border-paper-border text-forest font-bold">
+                    <span className="bg-paper-warm px-2 py-1 border border-paper-border text-forest font-cinzel font-bold text-xs tracking-wider">
                       {product.code}
                     </span>
                     {product.isHeroRelease && (
-                      <span className="block mt-1 text-[10px] text-brass uppercase font-bold">
+                      <span className="block mt-1 text-[10px] text-brass uppercase font-cinzel font-bold tracking-wider">
                         Hero Release
                       </span>
                     )}
                   </td>
                   <td className="p-4">
-                    <div>{product.location}</div>
+                    <div className="font-medium text-forest">{product.location}</div>
                     <div className="text-charcoal-muted text-[11px]">{product.epoch}</div>
                   </td>
                   <td className="p-4">
-                    <div>{product.modelSpecs.scale}</div>
+                    <div className="font-mono text-xs font-semibold text-charcoal">{product.modelSpecs.scale}</div>
                     <div className="text-brass font-bold text-[11px]">{product.modelSpecs.partsCount} mộng</div>
                   </td>
                   <td className="p-4">
@@ -258,7 +258,7 @@ export const AdminProductsPage: React.FC = () => {
                     </button>}
                   </td>
                   <td className="whitespace-nowrap p-4 text-right">
-                    <div className="flex items-center justify-end gap-2">
+                    <div className="flex items-center justify-end gap-2 font-sans">
                       <Link
                         to={`/admin/products/${product.id}/stories`}
                         className="px-2.5 py-1.5 bg-forest text-paper hover:bg-brass transition-colors uppercase tracking-wider text-[11px] flex items-center gap-1 font-bold"
@@ -319,26 +319,26 @@ export const AdminProductsPage: React.FC = () => {
 
             {error && <div role="alert" className="mb-4 border border-terracotta/40 bg-terracotta/10 p-3 text-sm text-terracotta">{error}</div>}
 
-            <form onSubmit={handleSave} className="space-y-4 font-mono text-xs">
+            <form onSubmit={handleSave} className="space-y-4 font-sans text-xs">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-charcoal-muted uppercase mb-1">Mã SKU Di Sản</label>
+                  <label className="block text-charcoal-muted uppercase mb-1 font-semibold tracking-wider">Mã SKU Di Sản</label>
                   <input
                     type="text"
                     value={editingProduct.code || ''}
                     onChange={e => setEditingProduct({ ...editingProduct, code: e.target.value })}
-                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border focus:border-brass focus:outline-none"
+                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border font-cinzel font-bold text-xs tracking-wider text-forest focus:border-brass focus:outline-none"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-charcoal-muted uppercase mb-1">Slug URL</label>
+                  <label className="block text-charcoal-muted uppercase mb-1 font-semibold tracking-wider">Slug URL</label>
                   <input
                     type="text"
                     value={editingProduct.slug || ''}
                     onChange={e => setEditingProduct({ ...editingProduct, slug: e.target.value })}
                     placeholder="chua-mot-cot"
-                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border focus:border-brass focus:outline-none"
+                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border font-mono text-xs focus:border-brass focus:outline-none"
                     required
                   />
                 </div>
@@ -346,54 +346,54 @@ export const AdminProductsPage: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-charcoal-muted uppercase mb-1">Tên Công Trình</label>
+                  <label className="block text-charcoal-muted uppercase mb-1 font-semibold tracking-wider">Tên Công Trình</label>
                   <input
                     type="text"
                     value={editingProduct.name || ''}
                     onChange={e => setEditingProduct({ ...editingProduct, name: e.target.value })}
-                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border focus:border-brass focus:outline-none"
+                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border font-serif text-sm font-bold text-forest focus:border-brass focus:outline-none"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-charcoal-muted uppercase mb-1">Tên Chữ Hán / Tên Phụ</label>
+                  <label className="block text-charcoal-muted uppercase mb-1 font-semibold tracking-wider">Tên Chữ Hán / Tên Phụ</label>
                   <input
                     type="text"
                     value={editingProduct.subName || ''}
                     onChange={e => setEditingProduct({ ...editingProduct, subName: e.target.value })}
                     placeholder="Diên Hựu Tự — Liên Hoa Đài"
-                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border focus:border-brass focus:outline-none"
+                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border text-xs focus:border-brass focus:outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-charcoal-muted uppercase mb-1">Địa Điểm</label>
+                  <label className="block text-charcoal-muted uppercase mb-1 font-semibold tracking-wider">Địa Điểm</label>
                   <input
                     type="text"
                     value={editingProduct.location || ''}
                     onChange={e => setEditingProduct({ ...editingProduct, location: e.target.value })}
-                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border focus:border-brass focus:outline-none"
+                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border text-xs focus:border-brass focus:outline-none"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-charcoal-muted uppercase mb-1">Niên Đại Lịch Sử</label>
+                  <label className="block text-charcoal-muted uppercase mb-1 font-semibold tracking-wider">Niên Đại Lịch Sử</label>
                   <input
                     type="text"
                     value={editingProduct.epoch || ''}
                     onChange={e => setEditingProduct({ ...editingProduct, epoch: e.target.value })}
-                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border focus:border-brass focus:outline-none"
+                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border text-xs focus:border-brass focus:outline-none"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-charcoal-muted uppercase mb-1">Bộ Sưu Tập</label>
+                  <label className="block text-charcoal-muted uppercase mb-1 font-semibold tracking-wider">Bộ Sưu Tập</label>
                   <select
                     value={editingProduct.collectionId || ''}
                     onChange={e => setEditingProduct({ ...editingProduct, collectionId: e.target.value })}
-                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border focus:border-brass focus:outline-none"
+                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border text-xs focus:border-brass focus:outline-none"
                   >
                     {collections.map(col => (
                       <option key={col.id} value={col.id}>{col.name}</option>
@@ -403,19 +403,19 @@ export const AdminProductsPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-charcoal-muted uppercase mb-1">Mô Tả Ngắn</label>
+                <label className="block text-charcoal-muted uppercase mb-1 font-semibold tracking-wider">Mô Tả Ngắn</label>
                 <textarea
                   rows={3}
                   value={editingProduct.shortDescription || ''}
                   onChange={e => setEditingProduct({ ...editingProduct, shortDescription: e.target.value })}
-                  className="w-full px-3 py-2 bg-paper-warm border border-paper-border focus:border-brass focus:outline-none font-sans"
+                  className="w-full px-3 py-2 bg-paper-warm border border-paper-border focus:border-brass focus:outline-none font-sans text-xs leading-relaxed"
                   required
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-charcoal-muted uppercase mb-1">Tỷ Lệ Điêu Khắc</label>
+                  <label className="block text-charcoal-muted uppercase mb-1 font-semibold tracking-wider">Tỷ Lệ Điêu Khắc</label>
                   <input
                     type="text"
                     value={editingProduct.modelSpecs?.scale || '1:120'}
@@ -423,11 +423,11 @@ export const AdminProductsPage: React.FC = () => {
                       ...editingProduct,
                       modelSpecs: { ...editingProduct.modelSpecs!, scale: e.target.value }
                     })}
-                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border focus:border-brass focus:outline-none"
+                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border font-mono text-xs focus:border-brass focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-charcoal-muted uppercase mb-1">Số Khớp Mộng Gỗ</label>
+                  <label className="block text-charcoal-muted uppercase mb-1 font-semibold tracking-wider">Số Khớp Mộng Gỗ</label>
                   <input
                     type="number"
                     value={editingProduct.modelSpecs?.partsCount || 20}
@@ -435,11 +435,11 @@ export const AdminProductsPage: React.FC = () => {
                       ...editingProduct,
                       modelSpecs: { ...editingProduct.modelSpecs!, partsCount: parseInt(e.target.value, 10) || 0 }
                     })}
-                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border focus:border-brass focus:outline-none"
+                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border text-xs focus:border-brass focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-charcoal-muted uppercase mb-1">Vật Liệu Cốt Lõi</label>
+                  <label className="block text-charcoal-muted uppercase mb-1 font-semibold tracking-wider">Vật Liệu Cốt Lõi</label>
                   <input
                     type="text"
                     value={editingProduct.modelSpecs?.material || 'BioPETG Khoáng Đá'}
@@ -447,7 +447,7 @@ export const AdminProductsPage: React.FC = () => {
                       ...editingProduct,
                       modelSpecs: { ...editingProduct.modelSpecs!, material: e.target.value }
                     })}
-                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border focus:border-brass focus:outline-none"
+                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border text-xs focus:border-brass focus:outline-none"
                   />
                 </div>
               </div>

@@ -16,12 +16,14 @@ import {
   resolveImageUrl,
   VIETTORIA_IMAGES,
 } from '../../utils/mediaResolver';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface ArchitecturalViewerProps {
   product: Product;
 }
 
 export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ product }) => {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'3d' | 'photos'>('3d');
   const [selectedPhoto, setSelectedPhoto] = useState(0);
   const [isPhotoZoomOpen, setIsPhotoZoomOpen] = useState(false);
@@ -146,34 +148,34 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
   const showTurntable = Boolean(turntableUrl && previewPlaying && !previewFailed && !modelLoaded);
   const isAutoRotating = autoRotate && !reducedMotion;
   const stageLabel = modelLoaded
-    ? 'Mô hình 3D · kéo để xoay'
+    ? t('home.dragToRotate', 'Mô hình 3D · kéo để xoay')
     : showTurntable
-      ? 'Video xem trước'
+      ? t('home.previewVideo', 'Video xem trước')
       : modelFailed || !viewerAvailable
-        ? 'Ảnh xem trước'
-        : 'Đang tải mô hình 3D';
+        ? t('home.previewPhoto', 'Ảnh xem trước')
+        : t('product.loading3d', 'Đang tải mô hình 3D');
 
   return (
     <div className="architectural-viewer-shell relative overflow-hidden border border-paper-border bg-paper-card shadow-sm">
       <header className="flex flex-wrap items-center justify-between gap-3 border-b border-paper-border bg-header p-3.5 sm:p-4">
-        <div className="flex items-center gap-1.5" role="group" aria-label="Chế độ xem sản phẩm">
+        <div className="flex items-center gap-1.5" role="group" aria-label={t('product.tab3d', 'Chế độ xem sản phẩm')}>
           <button
             type="button"
             aria-pressed={activeTab === '3d'}
             onClick={() => setActiveTab('3d')}
-            className={`inline-flex min-h-9 items-center gap-2 border px-3 text-[10px] font-mono uppercase tracking-[0.12em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass sm:text-xs ${activeTab === '3d' ? 'border-forest bg-forest text-paper' : 'border-transparent bg-paper-warm text-brown-dark hover:border-paper-border'}`}
+            className={`inline-flex min-h-9 items-center gap-2 border px-3 text-xs font-sans uppercase tracking-wider font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass ${activeTab === '3d' ? 'border-forest bg-forest text-paper' : 'border-transparent bg-paper-warm text-brown-dark hover:border-paper-border'}`}
           >
             <Box className="h-3.5 w-3.5" />
-            Mô hình 3D
+            {t('product.tab3d', 'Mô hình 3D')}
           </button>
           <button
             type="button"
             aria-pressed={activeTab === 'photos'}
             onClick={() => setActiveTab('photos')}
-            className={`inline-flex min-h-9 items-center gap-2 border px-3 text-[10px] font-mono uppercase tracking-[0.12em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass sm:text-xs ${activeTab === 'photos' ? 'border-forest bg-forest text-paper' : 'border-transparent bg-paper-warm text-brown-dark hover:border-paper-border'}`}
+            className={`inline-flex min-h-9 items-center gap-2 border px-3 text-xs font-sans uppercase tracking-wider font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass ${activeTab === 'photos' ? 'border-forest bg-forest text-paper' : 'border-transparent bg-paper-warm text-brown-dark hover:border-paper-border'}`}
           >
             <Eye className="h-3.5 w-3.5" />
-            Ảnh sản phẩm
+            {t('product.tabPhotos', 'Ảnh thực địa')}
           </button>
         </div>
 
@@ -229,7 +231,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
             />
           )}
 
-          <div className="absolute left-3 top-3 z-10 flex items-center gap-2 border border-brass/30 bg-paper-card/95 px-3 py-2 text-xs font-mono uppercase tracking-[0.1em] text-brown-dark shadow-sm backdrop-blur-sm sm:left-4 sm:top-4">
+          <div className="absolute left-3 top-3 z-10 flex items-center gap-2 border border-brass/30 bg-paper-card/95 px-3 py-2 text-xs font-cinzel uppercase tracking-[0.15em] text-brown-dark font-bold shadow-sm backdrop-blur-sm sm:left-4 sm:top-4">
             <span className={`h-1.5 w-1.5 bg-brown ${!modelLoaded && !modelFailed && viewerAvailable ? 'animate-pulse' : ''}`} />
             <span role="status" aria-live="polite">{stageLabel}</span>
           </div>
@@ -242,7 +244,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                 aria-label={previewPlaying ? 'Dừng video xem trước mô hình' : 'Phát video xem trước mô hình'}
                 aria-pressed={previewPlaying}
                 title={previewPlaying ? 'Dừng video xem trước' : 'Phát video xem trước'}
-                className="flex h-9 items-center gap-1.5 border border-paper-border bg-paper/90 px-2.5 text-[9px] font-mono uppercase tracking-[0.08em] text-brown-dark shadow-sm backdrop-blur-sm transition-colors hover:border-brass hover:text-forest focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass"
+                className="flex h-9 items-center gap-1.5 border border-paper-border bg-paper/90 px-2.5 text-xs font-sans uppercase tracking-wider text-brown-dark shadow-sm backdrop-blur-sm transition-colors hover:border-brass hover:text-forest focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass font-medium"
               >
                 {previewPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
                 {previewPlaying ? 'Dừng' : 'Video mẫu'}
@@ -274,7 +276,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
             <div className="pointer-events-none absolute inset-x-0 top-[4.2rem] z-[5] flex justify-center px-4">
               <div className="flex items-center gap-2 border border-brass/30 bg-paper-card/95 px-3 py-2 text-xs text-forest shadow-sm backdrop-blur-sm">
                 <span className="h-1.5 w-1.5 bg-brass" aria-hidden="true" />
-                <span className="font-mono">Đang mở mô hình 3D…</span>
+                <span className="font-sans font-medium">Đang mở mô hình 3D…</span>
               </div>
             </div>
           )}
@@ -288,7 +290,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
               <button
                 type="button"
                 onClick={() => setActiveTab('photos')}
-                className="pointer-events-auto inline-flex shrink-0 items-center gap-2 border border-paper/35 bg-forest/65 px-3 py-2 text-[9px] font-mono uppercase tracking-[0.12em] text-paper backdrop-blur-sm transition-colors hover:border-brass hover:text-brass-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass"
+                className="pointer-events-auto inline-flex shrink-0 items-center gap-2 border border-paper/35 bg-forest/65 px-3 py-2 text-xs font-sans uppercase tracking-wider text-paper backdrop-blur-sm transition-colors hover:border-brass hover:text-brass-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass font-medium"
               >
                 <ZoomIn className="h-3.5 w-3.5" />
                 Xem ảnh
@@ -311,7 +313,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                 onError={(event) => handleImageFallback(event, VIETTORIA_IMAGES.productHighlight)}
                 className="h-full w-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.025]"
               />
-              <span className="pointer-events-none absolute bottom-4 left-4 inline-flex items-center gap-2 border border-paper/20 bg-forest/80 px-3 py-2 text-[10px] font-mono uppercase tracking-[0.12em] text-paper opacity-0 shadow-sm backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
+              <span className="pointer-events-none absolute bottom-4 left-4 inline-flex items-center gap-2 border border-paper/20 bg-forest/80 px-3 py-2 text-xs font-sans uppercase tracking-wider text-paper opacity-0 shadow-sm backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100 font-medium">
                 <ZoomIn className="h-3.5 w-3.5 text-brass-light" />
                 Phóng to ảnh
               </span>
@@ -338,7 +340,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                 onError={(event) => handleImageFallback(event, VIETTORIA_IMAGES.productHighlight)}
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              <span className="absolute inset-x-0 bottom-0 bg-forest/75 px-1 py-0.5 text-center font-mono text-[8px] uppercase tracking-wider text-paper">{photo.label}</span>
+              <span className="absolute inset-x-0 bottom-0 bg-forest/75 px-1 py-0.5 text-center font-sans text-[10px] uppercase tracking-wider text-paper font-medium">{photo.label}</span>
             </button>
           ))}
         </nav>
@@ -367,7 +369,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
             onClick={(event) => event.stopPropagation()}
             className="max-h-[82vh] max-w-full border border-brass/50 object-contain shadow-2xl"
           />
-          <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-[0.14em] text-paper/65">{product.name} · {currentPhoto.label}</p>
+          <p className="mt-3 text-center font-sans text-xs uppercase tracking-wider text-paper/75">{product.name} · {currentPhoto.label}</p>
         </div>
       )}
     </div>

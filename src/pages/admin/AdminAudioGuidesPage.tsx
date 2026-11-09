@@ -149,14 +149,14 @@ export const AdminAudioGuidesPage: React.FC = () => {
     <div className="space-y-6">
       <header className="flex flex-col justify-between gap-4 border-b border-paper-border pb-4 sm:flex-row sm:items-end">
         <div>
-          <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-brass">
+          <div className="flex items-center gap-2 font-cinzel text-xs uppercase tracking-widest text-brass font-bold">
             <Headphones className="h-4 w-4" />
             <span>Giọng kể & tư liệu âm thanh</span>
           </div>
           <h1 className="mt-1 font-serif text-2xl font-bold text-forest sm:text-3xl">Hướng dẫn viên audio</h1>
-          <p className="mt-1 text-xs text-charcoal-muted">Quản lý bản thu, người dẫn và lời thoại theo từng công trình.</p>
+          <p className="mt-1 text-xs text-charcoal-muted font-sans">Quản lý bản thu, người dẫn và lời thoại theo từng công trình.</p>
         </div>
-        <div className="border border-paper-border bg-paper px-4 py-2 font-mono text-xs text-charcoal-muted">
+        <div className="border border-paper-border bg-paper px-4 py-2 font-sans text-xs text-charcoal-muted">
           <span className="font-bold text-forest">{guideCount}</span> / {products.length} công trình có bản thu
         </div>
       </header>
@@ -293,10 +293,10 @@ export const AdminAudioGuidesPage: React.FC = () => {
             </label>
 
             <div className="flex flex-col-reverse justify-between gap-3 border-t border-paper-border pt-4 sm:flex-row sm:items-center">
-              <button type="button" onClick={() => void removeGuide()} disabled={isDemo || saving || (!selectedProduct.audioGuide && !guide.audioUrl?.trim() && !guide.transcript.trim())} className="inline-flex items-center justify-center gap-2 px-3 py-2 font-mono text-[10px] uppercase tracking-wider text-terracotta transition-colors hover:bg-terracotta/5 disabled:cursor-not-allowed disabled:opacity-40">
+              <button type="button" onClick={() => void removeGuide()} disabled={isDemo || saving || (!selectedProduct.audioGuide && !guide.audioUrl?.trim() && !guide.transcript.trim())} className="inline-flex items-center justify-center gap-2 px-3 py-2 font-sans text-xs uppercase tracking-wider text-terracotta transition-colors hover:bg-terracotta/5 disabled:cursor-not-allowed disabled:opacity-40">
                 <Trash2 className="h-3.5 w-3.5" />Gỡ audio guide
               </button>
-              <button type="submit" disabled={isDemo || saving || uploading} className="inline-flex items-center justify-center gap-2 border border-forest bg-forest px-5 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-paper transition-colors hover:bg-brass hover:text-forest disabled:cursor-not-allowed disabled:opacity-50">
+              <button type="submit" disabled={isDemo || saving || uploading} className="inline-flex items-center justify-center gap-2 border border-forest bg-forest px-5 py-2.5 font-sans text-xs font-bold uppercase tracking-wider text-paper transition-colors hover:bg-brass hover:text-forest disabled:cursor-not-allowed disabled:opacity-50 shadow-sm">
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                 {saving ? 'Đang lưu...' : 'Lưu hướng dẫn viên'}
               </button>

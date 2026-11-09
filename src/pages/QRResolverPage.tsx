@@ -3,8 +3,10 @@ import { useSearchParams, useNavigate, useParams, Link } from 'react-router-dom'
 import { QrCode, ArrowRight, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { publicApi } from '../services/api';
 import { HeritageLoader } from '../components/common/HeritageLoader';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export const QRResolverPage: React.FC = () => {
+  const { t } = useLanguage();
   const [searchParams] = useSearchParams();
   const { code: pathCode } = useParams<{ code?: string }>();
   const navigate = useNavigate();
@@ -47,8 +49,8 @@ export const QRResolverPage: React.FC = () => {
           variant="overlay"
           blur={true}
           size="lg"
-          message={`Đang Xác Thực Mã Di Sản [${rawCode.toUpperCase()}]...`}
-          submessage="Kết nối hệ sinh thái Phygital Viettoria"
+          message={`${t('qr.resolvingTitle', 'Đang Xác Thực Mã Di Sản')} [${rawCode.toUpperCase()}]...`}
+          submessage={t('qr.resolvingSub', 'Kết nối hệ sinh thái Phygital Viettoria')}
           showWordmark={true}
         />
       </div>

@@ -56,14 +56,14 @@ export const AdminDashboardPage: React.FC = () => {
         <div className="flex flex-wrap gap-3">
           <Link
             to="/admin/products"
-            className="px-4 py-2.5 bg-brass text-forest hover:bg-brass-light transition-colors font-mono text-xs uppercase tracking-wider font-bold flex items-center gap-2 shadow-sm"
+            className="px-4 py-2.5 bg-brass text-forest hover:bg-brass-light transition-colors font-sans text-xs uppercase tracking-wider font-bold flex items-center gap-2 shadow-sm"
           >
             <Plus className="w-4 h-4" />
             <span>Quản Lý Sản Phẩm</span>
           </Link>
           <Link
             to="/admin/blogs"
-            className="px-4 py-2.5 border border-paper/30 text-paper hover:border-brass hover:text-brass transition-colors font-mono text-xs uppercase tracking-wider flex items-center gap-2"
+            className="px-4 py-2.5 border border-paper/30 text-paper hover:border-brass hover:text-brass transition-colors font-sans text-xs uppercase tracking-wider flex items-center gap-2 font-medium"
           >
             <Plus className="w-4 h-4" />
             <span>Viết Bài Mới</span>
@@ -75,52 +75,52 @@ export const AdminDashboardPage: React.FC = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <div className="bg-paper p-6 border border-paper-border corner-frame space-y-2">
           <div className="flex items-center justify-between text-charcoal-muted">
-            <span className="text-xs font-mono uppercase tracking-wider">Mô Hình 3D</span>
+            <span className="text-xs font-cinzel uppercase tracking-wider font-bold">Mô Hình 3D</span>
             <Box className="w-4 h-4 text-brass" />
           </div>
           <p className="font-serif text-3xl font-bold text-forest">
             {stats?.totalProducts || 0}
           </p>
-          <p className="text-[11px] font-mono text-charcoal-muted">
+          <p className="text-xs font-sans text-charcoal-muted">
             <span className="text-forest font-semibold">{stats?.publishedProducts || 0}</span> tác phẩm đã phát hành
           </p>
         </div>
 
         <div className="bg-paper p-6 border border-paper-border corner-frame space-y-2">
           <div className="flex items-center justify-between text-charcoal-muted">
-            <span className="text-xs font-mono uppercase tracking-wider">Bộ Sưu Tập</span>
+            <span className="text-xs font-cinzel uppercase tracking-wider font-bold">Bộ Sưu Tập</span>
             <Layers className="w-4 h-4 text-brass" />
           </div>
           <p className="font-serif text-3xl font-bold text-forest">
             {stats?.totalCollections || 0}
           </p>
-          <p className="text-[11px] font-mono text-charcoal-muted">
+          <p className="text-xs font-sans text-charcoal-muted">
             Theo các thời kỳ lịch sử
           </p>
         </div>
 
         <div className="bg-paper p-6 border border-paper-border corner-frame space-y-2">
           <div className="flex items-center justify-between text-charcoal-muted">
-            <span className="text-xs font-mono uppercase tracking-wider">Story Blocks</span>
+            <span className="text-xs font-cinzel uppercase tracking-wider font-bold">Story Blocks</span>
             <BookOpen className="w-4 h-4 text-brass" />
           </div>
           <p className="font-serif text-3xl font-bold text-forest">
             {stats?.totalStoryBlocks || 0}
           </p>
-          <p className="text-[11px] font-mono text-charcoal-muted">
+          <p className="text-xs font-sans text-charcoal-muted">
             Khối câu chuyện số hóa
           </p>
         </div>
 
         <div className="bg-paper p-6 border border-paper-border corner-frame space-y-2">
           <div className="flex items-center justify-between text-charcoal-muted">
-            <span className="text-xs font-mono uppercase tracking-wider">Bài Viết Khảo Cứu</span>
+            <span className="text-xs font-cinzel uppercase tracking-wider font-bold">Bài Viết Khảo Cứu</span>
             <FileText className="w-4 h-4 text-brass" />
           </div>
           <p className="font-serif text-3xl font-bold text-forest">
             {stats?.totalBlogs || 0}
           </p>
-          <p className="text-[11px] font-mono text-charcoal-muted">
+          <p className="text-xs font-sans text-charcoal-muted">
             Góc nhìn di sản
           </p>
         </div>
@@ -133,12 +133,12 @@ export const AdminDashboardPage: React.FC = () => {
             <h2 className="font-serif text-lg font-bold text-forest">
               Mô Hình & Khối Câu Chuyện 
             </h2>
-            <Link to="/admin/products" className="text-xs font-mono text-brass hover:underline">
+            <Link to="/admin/products" className="text-xs font-sans text-brass hover:underline font-semibold">
               Xem tất cả →
             </Link>
           </div>
 
-          <div className="divide-y divide-paper-border">
+          <div className="divide-y divide-paper-border font-sans">
             {recentProducts.map((p) => (
               <div key={p.id} className="py-3.5 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
@@ -151,18 +151,18 @@ export const AdminDashboardPage: React.FC = () => {
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-serif font-bold text-forest text-sm">{p.name}</span>
-                      <span className="text-[10px] font-mono bg-paper-warm px-1.5 py-0.5 border border-paper-border">
+                      <span className="text-[10px] font-cinzel font-bold bg-paper-warm px-1.5 py-0.5 border border-paper-border text-forest">
                         {p.code}
                       </span>
                     </div>
-                    <span className="text-[11px] text-charcoal-muted font-normal">{p.location} • Tỷ lệ {p.modelSpecs.scale}</span>
+                    <span className="text-xs text-charcoal-muted font-normal">{p.location} • Tỷ lệ {p.modelSpecs.scale}</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <Link
                     to={`/admin/products/${p.id}/stories`}
-                    className="px-2.5 py-1.5 bg-forest text-paper hover:bg-brass transition-colors font-mono text-[11px] uppercase tracking-wider"
+                    className="px-2.5 py-1.5 bg-forest text-paper hover:bg-brass transition-colors font-sans text-xs uppercase tracking-wider font-semibold"
                   >
                     Biên Tập Stories
                   </Link>
@@ -178,15 +178,15 @@ export const AdminDashboardPage: React.FC = () => {
             <h2 className="font-serif text-lg font-bold text-forest">
               Bài Viết Mới Nhất
             </h2>
-            <Link to="/admin/blogs" className="text-xs font-mono text-brass hover:underline">
+            <Link to="/admin/blogs" className="text-xs font-sans text-brass hover:underline font-semibold">
               Quản lý →
             </Link>
           </div>
 
-          <div className="divide-y divide-paper-border">
+          <div className="divide-y divide-paper-border font-sans">
             {recentBlogs.map((b) => (
               <div key={b.id} className="py-3 space-y-1">
-                <div className="flex items-center justify-between text-[11px] font-mono text-charcoal-muted">
+                <div className="flex items-center justify-between text-xs text-charcoal-muted">
                   <span className="text-brass font-semibold">{b.category}</span>
                   <span>{b.publishedAt}</span>
                 </div>

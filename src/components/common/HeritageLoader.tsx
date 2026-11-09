@@ -97,7 +97,7 @@ export const HeritageLoader: React.FC<HeritageLoaderProps> = ({
   // 1. Chế độ Inline
   if (variant === 'inline') {
     return (
-      <div className={`inline-flex items-center gap-2 font-mono text-xs text-charcoal ${className}`}>
+      <div className={`inline-flex items-center gap-2 font-sans text-xs text-charcoal ${className}`}>
         <HeritageSpinner size={size} />
         {message && <span>{message}</span>}
       </div>
@@ -151,7 +151,7 @@ export const HeritageLoader: React.FC<HeritageLoaderProps> = ({
 
           {/* Thông điệp phụ */}
           {submessage && (
-            <p className="mt-1 font-mono text-[11px] uppercase tracking-widest text-charcoal-muted">
+            <p className="mt-1 font-cinzel text-[11px] uppercase tracking-widest text-charcoal-muted font-semibold">
               {submessage}
             </p>
           )}
@@ -170,13 +170,13 @@ export const HeritageLoader: React.FC<HeritageLoaderProps> = ({
       <HeritageSpinner size={size} />
 
       {message && (
-        <p className="mt-3.5 font-mono text-xs uppercase tracking-wider text-forest font-semibold">
+        <p className="mt-3.5 font-serif text-sm text-forest font-semibold tracking-wide">
           {message}
         </p>
       )}
 
       {submessage && (
-        <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-charcoal-muted">
+        <p className="mt-1 font-cinzel text-[10px] uppercase tracking-widest text-charcoal-muted font-bold">
           {submessage}
         </p>
       )}

@@ -6,8 +6,10 @@ import type { Collection } from '../types';
 import { PageLoadingHeritage } from '../components/common/HeritageSkeleton';
 import { HeritageTimeline } from '../components/common/HeritageTimeline';
 import { resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export const CollectionsPage: React.FC = () => {
+  const { t } = useLanguage();
   const [collections, setCollections] = useState<Collection[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -27,12 +29,12 @@ export const CollectionsPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         {/* Page Header */}
         <div className="max-w-3xl space-y-4">
-          <div className="flex items-center gap-2 text-brass text-xs font-mono uppercase tracking-widest">
+          <div className="flex items-center gap-2 text-brass text-xs font-cinzel uppercase tracking-widest font-bold">
             <Layers className="w-4 h-4" />
             <span>Phân Loại Niên Đại & Kiến Trúc</span>
           </div>
           <h1 className="font-serif text-3xl sm:text-5xl font-bold text-forest leading-tight">
-            Các Tuyển Tập Di Sản
+            {t('collectionsPage.title', 'Các Tuyển Tập Di Sản')}
           </h1>
           <p className="text-base text-charcoal/80 font-normal leading-relaxed">
             Mỗi bộ sưu tập đại diện cho một thời kỳ hoàng kim của kiến trúc Việt Nam. Chúng tôi tái hiện từng cấu kiện với lòng thành kính và tiêu chuẩn kỹ thuật số bảo tàng học.
@@ -50,7 +52,7 @@ export const CollectionsPage: React.FC = () => {
             <h2 className="font-serif text-2xl font-bold text-forest">
               Danh Mục Bộ Sưu Tập Theo Thời Kỳ
             </h2>
-            <span className="text-xs font-mono text-charcoal-muted uppercase">
+            <span className="text-xs font-cinzel text-charcoal-muted uppercase font-bold tracking-wider">
               {collections.length} Tuyển Tập
             </span>
           </div>
@@ -69,7 +71,7 @@ export const CollectionsPage: React.FC = () => {
                       onError={(e) => handleImageFallback(e)}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute top-3 left-3 bg-forest/90 border border-brass/50 px-2.5 py-1 text-[11px] font-serif uppercase tracking-wider text-brass">
+                    <div className="absolute top-3 left-3 bg-forest/90 border border-brass/50 px-2.5 py-1 text-[11px] font-cinzel uppercase tracking-wider text-brass font-bold">
                       Tuyển Tập
                     </div>
                   </div>
@@ -86,15 +88,15 @@ export const CollectionsPage: React.FC = () => {
 
                 <div className="p-6 sm:p-8 pt-0 border-t border-paper-border mt-4">
                   <div className="pt-4 flex items-center justify-between">
-                    <span className="text-xs font-mono text-charcoal-muted">
+                    <span className="text-xs font-sans text-charcoal-muted">
                       {col.productsCount || 1} Công trình nghiên cứu
                     </span>
 
                     <Link
                       to={`/collections/${col.slug}`}
-                      className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-forest font-bold group-hover:text-brass transition-colors"
+                      className="inline-flex items-center gap-1.5 text-xs font-sans uppercase tracking-wider text-forest font-bold group-hover:text-brass transition-colors"
                     >
-                      <span>Khám phá bộ sưu tập</span>
+                      <span>{t('home.exploreCollection', 'Khám phá bộ sưu tập')}</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </div>

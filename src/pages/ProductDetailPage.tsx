@@ -20,6 +20,7 @@ import { StoryBlockRenderer } from '../components/story/StoryBlockRenderer';
 import { ScaleRuler } from '../components/common/ScaleRuler';
 import { PageLoadingHeritage } from '../components/common/HeritageSkeleton';
 import { resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -32,6 +33,7 @@ export const ProductDetailPage: React.FC = () => {
   const [qrLoading, setQrLoading] = useState(false);
   const [qrError, setQrError] = useState('');
   const [shareMessage, setShareMessage] = useState('');
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (slug) {
@@ -120,7 +122,7 @@ export const ProductDetailPage: React.FC = () => {
   };
 
   if (loading) {
-    return <PageLoadingHeritage message="Đang tải dữ liệu..." />;
+    return <PageLoadingHeritage message={t('common.loading', 'Đang tải dữ liệu di sản...')} />;
   }
 
   if (!product) {
@@ -129,7 +131,7 @@ export const ProductDetailPage: React.FC = () => {
         <h2 className="font-serif text-2xl font-bold text-forest mb-2">Không tìm thấy tác phẩm di sản</h2>
         <p className="text-sm text-charcoal-muted mb-6">Mã tác phẩm hoặc đường dẫn không hợp lệ.</p>
         <Link to="/products" className="px-5 py-2.5 bg-forest text-paper font-mono text-xs uppercase tracking-wider">
-          Xem danh mục tác phẩm
+          {t('common.viewAll', 'Xem danh mục tác phẩm')}
         </Link>
       </div>
     );
@@ -140,9 +142,9 @@ export const ProductDetailPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Breadcrumb Navigation */}
         <nav aria-label="Đường dẫn điều hướng" className="flex items-center gap-2 text-xs font-mono text-charcoal-muted uppercase tracking-wider">
-          <Link to="/" className="hover:text-forest transition-colors">Trang Chủ</Link>
+          <Link to="/" className="hover:text-forest transition-colors">{t('nav.home', 'Trang Chủ')}</Link>
           <span>/</span>
-          <Link to="/products" className="hover:text-forest transition-colors">Tác Phẩm</Link>
+          <Link to="/products" className="hover:text-forest transition-colors">{t('nav.products', 'Tác Phẩm')}</Link>
           <span>/</span>
           <span className="text-brass font-bold">{product.name}</span>
         </nav>
@@ -166,7 +168,7 @@ export const ProductDetailPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="text-[11px] font-mono text-brass-subtle uppercase tracking-widest shrink-0">
+            <div className="text-xs font-cinzel text-brass-subtle uppercase tracking-widest shrink-0 font-bold">
               Định Danh Vật Lý 1:120
             </div>
           </div>
@@ -175,7 +177,7 @@ export const ProductDetailPage: React.FC = () => {
         {/* Product Identity Header */}
         <div className="space-y-4 max-w-4xl">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="px-3 py-1 bg-paper-warm border border-paper-border text-forest text-xs uppercase tracking-wider font-medium">
+            <span className="px-3 py-1 bg-paper-warm border border-paper-border text-forest text-xs uppercase tracking-wider font-cinzel font-semibold">
               {product.epoch}
             </span>
             <span className="flex items-center gap-1.5 text-xs text-charcoal-muted">
@@ -199,10 +201,10 @@ export const ProductDetailPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsShareOpen(true)}
-            className="inline-flex items-center gap-2 border border-paper-border bg-paper-warm px-4 py-2.5 text-xs font-mono uppercase tracking-wider text-forest transition-colors hover:border-brass hover:bg-paper"
+            className="inline-flex items-center gap-2 border border-paper-border bg-paper-warm px-4 py-2.5 text-xs font-sans uppercase tracking-wider text-forest font-semibold transition-colors hover:border-brass hover:bg-paper"
           >
             <Share2 className="h-4 w-4 text-brass" />
-            Chia sẻ tác phẩm
+            {t('common.share', 'Chia sẻ tác phẩm')}
           </button>
         </div>
 
@@ -328,35 +330,35 @@ export const ProductDetailPage: React.FC = () => {
         {/* Technical Specifications Sheet */}
         <section className="bg-paper-warm border border-paper-border corner-frame p-5 sm:p-6 space-y-6">
           <div className="space-y-1">
-            <div className="flex items-center gap-2 text-brass text-xs font-mono uppercase tracking-widest">
+            <div className="flex items-center gap-2 text-brass text-xs font-cinzel uppercase tracking-widest font-bold">
               <Ruler className="w-4 h-4" />
-              <span>Tiêu Chuẩn Kỹ Thuật Chế Tác</span>
+              <span>{t('product.craftingSpecs', 'Tiêu Chuẩn Kỹ Thuật Chế Tác')}</span>
             </div>
             <h2 className="font-serif text-2xl sm:text-3xl font-bold text-forest">
-              Bảng Thông Số Mô Hình Thu Nhỏ
+              {t('product.craftingSpecs', 'Bảng Thông Số Mô Hình Thu Nhỏ')}
             </h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-4 border-t border-paper-border">
             <div className="space-y-1">
-              <span className="text-xs font-mono text-charcoal-muted uppercase">Tỷ Lệ Điêu Khắc</span>
-              <p className="font-serif text-xl font-bold text-forest">{product.modelSpecs.scale}</p>
+              <span className="text-xs font-sans text-charcoal-muted uppercase tracking-wider font-medium">{t('product.specScale', 'Tỷ Lệ Điêu Khắc')}</span>
+              <p className="font-mono text-xl font-bold text-forest">{product.modelSpecs.scale}</p>
             </div>
 
             <div className="space-y-1">
-              <span className="text-xs font-mono text-charcoal-muted uppercase">Kích Thước / Khối Lượng</span>
-              <p className="font-serif text-xl font-bold text-forest">
+              <span className="text-xs font-sans text-charcoal-muted uppercase tracking-wider font-medium">{t('common.dimensions', 'Kích Thước / Khối Lượng')}</span>
+              <p className="font-mono text-xl font-bold text-forest">
                 {product.modelSpecs.heightCm} × {product.modelSpecs.widthCm} cm · {product.modelSpecs.weightGrams} g
               </p>
             </div>
 
             <div className="space-y-1">
-              <span className="text-xs font-mono text-charcoal-muted uppercase">Vật Liệu Cốt Lõi</span>
-              <p className="font-serif text-xl font-bold text-forest">{product.modelSpecs.material}</p>
+              <span className="text-xs font-sans text-charcoal-muted uppercase tracking-wider font-medium">{t('product.specMaterial', 'Vật Liệu Cốt Lõi')}</span>
+              <p className="font-serif text-lg font-bold text-forest">{product.modelSpecs.material}</p>
             </div>
 
             <div className="space-y-1">
-              <span className="text-xs font-mono text-charcoal-muted uppercase">Số Cấu Kiện</span>
+              <span className="text-xs font-sans text-charcoal-muted uppercase tracking-wider font-medium">{t('product.specParts', 'Số Cấu Kiện')}</span>
               <p className="font-serif text-xl font-bold text-brass">
                 {product.modelSpecs.partsCount}
               </p>

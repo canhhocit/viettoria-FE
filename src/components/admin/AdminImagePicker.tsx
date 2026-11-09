@@ -173,7 +173,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
     <div className="space-y-2">
       {/* Header bar: Label & Action Buttons */}
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <label htmlFor={fileInputId} className="block font-mono text-xs font-semibold text-charcoal-muted uppercase tracking-wider">
+        <label htmlFor={fileInputId} className="block font-sans text-xs font-semibold text-charcoal-muted uppercase tracking-wider">
           {label} {required && <span className="text-terracotta">*</span>}
         </label>
         <div className="flex items-center gap-2">
@@ -182,7 +182,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
               type="button"
               disabled={disabled || isUploading}
               onClick={() => fileInputRef.current?.click()}
-              className="inline-flex items-center gap-1.5 border border-paper-border bg-paper-warm px-2.5 py-1 font-mono text-[11px] font-medium text-forest transition-colors hover:border-brass hover:bg-paper focus:outline-none disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 border border-paper-border bg-paper-warm px-2.5 py-1 font-sans text-xs font-medium text-forest transition-colors hover:border-brass hover:bg-paper focus:outline-none disabled:opacity-50"
               title="Tải ảnh trực tiếp từ máy tính"
             >
               {isUploading ? <Loader2 className="h-3.5 w-3.5 animate-spin text-brass" /> : <Upload className="h-3.5 w-3.5 text-brass" />}
@@ -193,7 +193,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
             type="button"
             disabled={disabled}
             onClick={handleOpenLibrary}
-            className="inline-flex items-center gap-1.5 border border-paper-border bg-paper-warm px-2.5 py-1 font-mono text-[11px] font-medium text-forest transition-colors hover:border-brass hover:bg-paper focus:outline-none disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 border border-paper-border bg-paper-warm px-2.5 py-1 font-sans text-xs font-medium text-forest transition-colors hover:border-brass hover:bg-paper focus:outline-none disabled:opacity-50"
             title="Mở kho ảnh di sản có sẵn"
           >
             <FolderOpen className="h-3.5 w-3.5 text-brass" />
@@ -249,13 +249,13 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
 
       {/* Status Messages */}
       {uploadError && (
-        <div role="alert" className="flex items-center gap-1.5 text-[11px] font-mono text-terracotta">
+        <div role="alert" className="flex items-center gap-1.5 text-xs font-sans text-terracotta">
           <AlertCircle className="h-3.5 w-3.5 shrink-0" />
           <span>{uploadError}</span>
         </div>
       )}
       {uploadSuccess && (
-        <div role="status" className="flex items-center gap-1.5 text-[11px] font-mono text-forest">
+        <div role="status" className="flex items-center gap-1.5 text-xs font-sans text-forest">
           <Check className="h-3.5 w-3.5 shrink-0 text-brass" />
           <span>{uploadSuccess}</span>
         </div>
@@ -273,7 +273,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
                 onError={(e) => handleImageFallback(e)}
                 className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
               />
-              <span className="absolute left-1 top-1 bg-forest/85 px-1 py-0.5 font-mono text-[9px] uppercase tracking-wider text-brass">
+              <span className="absolute left-1 top-1 bg-forest/85 px-1 py-0.5 font-cinzel text-[8px] uppercase tracking-wider text-brass font-bold">
                 Ảnh hiện tại
               </span>
             </div>
@@ -290,7 +290,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
                   href={resolveImageUrl(value)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-[11px] font-mono text-charcoal-muted transition-colors hover:text-forest"
+                  className="inline-flex items-center gap-1 text-xs font-sans text-charcoal-muted transition-colors hover:text-forest"
                   title="Xem ảnh"
                 >
                   <ExternalLink className="h-3 w-3" />
@@ -302,7 +302,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="text-[11px] font-mono text-charcoal-muted transition-colors hover:text-brass"
+                  className="text-xs font-sans text-charcoal-muted transition-colors hover:text-brass"
                 >
                   Thay ảnh
                 </button>
@@ -312,7 +312,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
                 <button
                   type="button"
                   onClick={() => onChange('')}
-                  className="inline-flex items-center gap-1 text-[11px] font-mono text-terracotta/80 transition-colors hover:text-terracotta"
+                  className="inline-flex items-center gap-1 text-xs font-sans text-terracotta/80 transition-colors hover:text-terracotta"
                 >
                   <Trash2 className="h-3 w-3" />
                   <span>Gỡ ảnh</span>
@@ -338,7 +338,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
         >
           <div className="flex items-center gap-2 text-charcoal-muted">
             <ImageIcon className="h-4 w-4 text-brass" />
-            <span className="font-mono text-[11px]">
+            <span className="font-sans text-xs">
               Chưa chọn ảnh. Dán link phía trên, kéo thả ảnh vào đây hoặc
             </span>
           </div>
@@ -348,7 +348,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
                 type="button"
                 disabled={isUploading || disabled}
                 onClick={() => fileInputRef.current?.click()}
-                className="border border-paper-border bg-paper px-2.5 py-1 font-mono text-[11px] font-medium text-forest hover:border-brass"
+                className="border border-paper-border bg-paper px-2.5 py-1 font-sans text-xs font-medium text-forest hover:border-brass transition-colors"
               >
                 Tải ảnh từ máy
               </button>
@@ -357,7 +357,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
               type="button"
               disabled={disabled}
               onClick={handleOpenLibrary}
-              className="border border-paper-border bg-paper px-2.5 py-1 font-mono text-[11px] font-medium text-forest hover:border-brass"
+              className="border border-paper-border bg-paper px-2.5 py-1 font-sans text-xs font-medium text-forest hover:border-brass transition-colors"
             >
               Chọn từ thư viện
             </button>
@@ -365,7 +365,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
         </div>
       )}
 
-      {helpText && <p className="font-mono text-[10px] text-charcoal-muted">{helpText}</p>}
+      {helpText && <p className="font-sans text-xs text-charcoal-muted">{helpText}</p>}
 
       {/* MEDIA LIBRARY MODAL */}
       {isLibraryOpen && (
@@ -381,7 +381,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
                   <h3 className="font-serif text-lg font-bold text-forest sm:text-xl">
                     Thư Viện Media Di Sản
                   </h3>
-                  <p className="font-mono text-[11px] text-charcoal-muted">
+                  <p className="font-sans text-xs text-charcoal-muted">
                     Chọn ảnh sẵn có trong hệ thống hoặc tải tệp mới vào thư viện
                   </p>
                 </div>
@@ -405,7 +405,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Tìm theo tên ảnh..."
-                  className="w-full border border-paper-border bg-paper-warm py-2 pl-9 pr-3 font-mono text-xs text-charcoal focus:border-brass focus:outline-none"
+                  className="w-full border border-paper-border bg-paper-warm py-2 pl-9 pr-3 font-sans text-xs text-charcoal focus:border-brass focus:outline-none"
                 />
               </div>
 
@@ -422,7 +422,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
                     type="button"
                     disabled={isUploading}
                     onClick={() => modalUploadInputRef.current?.click()}
-                    className="inline-flex w-full items-center justify-center gap-2 border border-forest bg-forest px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-paper transition-colors hover:bg-brass disabled:opacity-50 sm:w-auto"
+                    className="inline-flex w-full items-center justify-center gap-2 border border-forest bg-forest px-4 py-2 font-sans text-xs font-bold uppercase tracking-wider text-paper transition-colors hover:bg-brass disabled:opacity-50 sm:w-auto"
                   >
                     {isUploading ? (
                       <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -437,7 +437,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
 
             {/* Error alerts inside modal */}
             {libraryError && (
-              <div role="alert" className="mb-3 border border-terracotta/40 bg-terracotta/10 p-2.5 font-mono text-xs text-terracotta">
+              <div role="alert" className="mb-3 border border-terracotta/40 bg-terracotta/10 p-2.5 font-sans text-xs text-terracotta">
                 {libraryError}
               </div>
             )}
@@ -445,14 +445,14 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
             {/* Media Grid */}
             <div className="flex-1 overflow-y-auto border border-paper-border bg-paper-warm/30 p-3">
               {isLoadingMedia ? (
-                <div className="flex flex-col items-center justify-center py-20 text-center font-mono text-xs text-forest">
+                <div className="flex flex-col items-center justify-center py-20 text-center font-sans text-xs text-forest">
                   <HeritageSpinner size="md" className="mb-3" />
                   <span>Đang tải danh mục tư liệu hình ảnh…</span>
                 </div>
               ) : imageMediaItems.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-16 text-center">
                   <ImageIcon className="mb-2 h-8 w-8 text-charcoal-muted/40" />
-                  <p className="font-mono text-xs text-charcoal-muted">
+                  <p className="font-sans text-xs text-charcoal-muted">
                     {searchQuery
                       ? 'Không tìm thấy hình ảnh phù hợp với từ khóa.'
                       : 'Chưa có hình ảnh nào trong thư viện media.'}
@@ -510,13 +510,13 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
 
             {/* Modal Footer */}
             <div className="flex items-center justify-between border-t border-paper-border pt-4">
-              <span className="font-mono text-[11px] text-charcoal-muted">
+              <span className="font-sans text-xs text-charcoal-muted">
                 {imageMediaItems.length} hình ảnh khả dụng
               </span>
               <button
                 type="button"
                 onClick={() => setIsLibraryOpen(false)}
-                className="border border-paper-border px-4 py-1.5 font-mono text-xs uppercase text-charcoal hover:bg-paper-warm"
+                className="border border-paper-border px-4 py-1.5 font-sans text-xs uppercase text-charcoal hover:bg-paper-warm transition-colors font-medium"
               >
                 Đóng
               </button>

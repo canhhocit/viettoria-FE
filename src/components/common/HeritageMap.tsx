@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { ArrowRight, Compass } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 export interface HeritageSiteLocation {
   id: string;
@@ -116,6 +117,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
   initialSiteId, 
   compactHeight = false 
 }) => {
+  const { t } = useLanguage();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<{ [key: string]: L.Marker }>({});
@@ -312,7 +314,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
                   : 'text-charcoal-muted hover:text-forest'
               }`}
             >
-              Toàn Cảnh
+              {t('common.all', 'Toàn Cảnh')}
             </button>
             <button
               onClick={() => flyToRegion('hanoi')}
@@ -398,7 +400,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
               to={`/products/${activeSite.slug}`}
               className="shrink-0 inline-flex items-center gap-1 pt-1 text-xs font-semibold text-brass-dark hover:text-forest group"
             >
-              <span>Mở di sản</span>
+              <span>{t('mapPage.viewDetails', 'Mở di sản')}</span>
               <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { QrCode, X, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface QRScanModalProps {
   isOpen: boolean;
@@ -10,6 +11,7 @@ interface QRScanModalProps {
 export const QRScanModal: React.FC<QRScanModalProps> = ({ isOpen, onClose }) => {
   const [code, setCode] = useState<string>('VT-HN-001');
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (!isOpen) return;
@@ -38,18 +40,18 @@ export const QRScanModal: React.FC<QRScanModalProps> = ({ isOpen, onClose }) => 
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-1 text-charcoal-muted hover:text-charcoal transition-colors"
-          aria-label="Đóng cửa sổ"
+          aria-label={t('nav.close', 'Đóng cửa sổ')}
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="flex items-center gap-2.5 text-brass text-xs font-mono tracking-widest uppercase mb-2">
           <QrCode className="w-4 h-4" />
-          <span>Trải Nghiệm Quét Mã Di Sản</span>
+          <span>{t('nav.scanQr', 'Trải Nghiệm Quét Mã Di Sản')}</span>
         </div>
 
         <h3 id="qr-modal-title" className="font-serif text-2xl font-bold text-forest mb-2">
-          Mở Khóa Không Gian Số
+          {t('qr.resolvingTitle', 'Mở Khóa Không Gian Số')}
         </h3>
         <p className="text-xs text-charcoal/80 font-normal leading-relaxed mb-6">
           Nhập mã sản phẩm in trên tem QR dưới đế mô hình của bạn để mở trực tiếp trang chi tiết và thuyết minh âm thanh.

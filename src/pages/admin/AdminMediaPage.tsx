@@ -117,7 +117,7 @@ export const AdminMediaPage: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-paper-border">
         <div>
-          <div className="flex items-center gap-2 text-brass text-xs font-mono uppercase tracking-widest">
+          <div className="flex items-center gap-2 text-brass text-xs font-cinzel uppercase tracking-widest font-bold">
             <Image className="w-4 h-4" />
             <span>Kho Lưu Trữ Hình Ảnh Thực Địa & Khảo Cứu</span>
           </div>
@@ -129,15 +129,15 @@ export const AdminMediaPage: React.FC = () => {
             value={search}
             onChange={event => setSearch(event.target.value)}
             placeholder="Tìm tên tệp hoặc URL..."
-            className="w-full px-3 py-2 bg-paper border border-paper-border focus:border-brass text-xs font-mono focus:outline-none"
+            className="w-full px-3 py-2 bg-paper border border-paper-border focus:border-brass text-xs font-sans focus:outline-none"
           />
         </div>
       </div>
 
-      {error && <div role="alert" className="border border-terracotta/40 bg-terracotta/10 p-3 text-sm text-terracotta">{error}</div>}
-      {notice && <div role="status" className="border border-brass/40 bg-paper-warm p-3 text-sm text-forest">{notice}</div>}
+      {error && <div role="alert" className="border border-terracotta/40 bg-terracotta/10 p-3 text-sm text-terracotta font-sans">{error}</div>}
+      {notice && <div role="status" className="border border-brass/40 bg-paper-warm p-3 text-sm text-forest font-sans">{notice}</div>}
 
-      {!isDemo && <form onSubmit={event => void handleUpload(event)} className="border border-paper-border bg-paper p-4 sm:p-5">
+      {!isDemo && <form onSubmit={event => void handleUpload(event)} className="border border-paper-border bg-paper p-4 sm:p-5 font-sans">
         <div className="flex items-start gap-3 mb-4">
           <div className="border border-brass/40 p-2 text-brass"><Upload className="w-4 h-4" /></div>
           <div>
@@ -146,30 +146,30 @@ export const AdminMediaPage: React.FC = () => {
         </div>
 
         <div className="grid gap-3 md:grid-cols-[1fr_1fr_1fr_auto] md:items-end">
-          <label className="block text-[11px] font-mono uppercase tracking-wider text-charcoal-muted">
+          <label className="block text-xs font-sans font-semibold uppercase tracking-wider text-charcoal-muted">
             Tệp ảnh, GLB hoặc audio
             <input
               ref={fileInputRef}
               type="file"
               accept="image/jpeg,image/png,image/webp,image/avif,image/gif,.glb,audio/mpeg,audio/wav,audio/mp4,audio/ogg,audio/flac,.mp3,.wav,.m4a,.ogg,.flac"
               onChange={event => selectFile(event.target.files?.[0])}
-              className="mt-1 block w-full text-xs normal-case file:mr-2 file:border file:border-paper-border file:bg-paper-warm file:px-2 file:py-1.5 file:text-[11px] file:font-mono file:text-charcoal"
+              className="mt-1 block w-full text-xs normal-case file:mr-2 file:border file:border-paper-border file:bg-paper-warm file:px-2 file:py-1.5 file:text-xs file:font-sans file:text-charcoal"
             />
           </label>
-          <label className="block text-[11px] font-mono uppercase tracking-wider text-charcoal-muted">
+          <label className="block text-xs font-sans font-semibold uppercase tracking-wider text-charcoal-muted">
             Tên hiển thị
             <input value={assetName} onChange={event => setAssetName(event.target.value)} placeholder="Ví dụ: Chùa Một Cột" className="mt-1 w-full border border-paper-border bg-paper px-3 py-2 text-sm normal-case text-charcoal focus:border-brass focus:outline-none" />
           </label>
-          <label className="block text-[11px] font-mono uppercase tracking-wider text-charcoal-muted">
+          <label className="block text-xs font-sans font-semibold uppercase tracking-wider text-charcoal-muted">
             Mô tả ảnh (alt text)
             <input value={altText} onChange={event => setAltText(event.target.value)} placeholder="Mô tả ngắn cho người xem" className="mt-1 w-full border border-paper-border bg-paper px-3 py-2 text-sm normal-case text-charcoal focus:border-brass focus:outline-none" />
           </label>
-          <button type="submit" disabled={!selectedFile || uploading} className="inline-flex h-9 items-center justify-center gap-2 border border-forest bg-forest px-4 text-xs font-mono uppercase tracking-wider text-paper transition-colors hover:bg-forest/90 disabled:cursor-not-allowed disabled:opacity-50">
+          <button type="submit" disabled={!selectedFile || uploading} className="inline-flex h-9 items-center justify-center gap-2 border border-forest bg-forest px-4 text-xs font-sans font-bold uppercase tracking-wider text-paper transition-colors hover:bg-forest/90 disabled:cursor-not-allowed disabled:opacity-50">
             {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
             {uploading ? 'Đang tải lên' : 'Tải lên'}
           </button>
         </div>
-        {selectedFile && <p className="mt-3 flex items-center gap-2 text-[11px] font-mono text-charcoal-muted"><FileImage className="h-3.5 w-3.5 text-brass" />{selectedFile.name} · {(selectedFile.size / 1024).toFixed(0)} KB</p>}
+        {selectedFile && <p className="mt-3 flex items-center gap-2 text-xs font-sans text-charcoal-muted"><FileImage className="h-3.5 w-3.5 text-brass" />{selectedFile.name} · {(selectedFile.size / 1024).toFixed(0)} KB</p>}
       </form>}
 
       {loading ? (

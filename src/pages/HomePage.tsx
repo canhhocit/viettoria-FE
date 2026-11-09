@@ -5,6 +5,7 @@ import { publicApi } from '../services/api';
 import type { Product, Collection, BlogPost } from '../types';
 import { FALLBACK_BLOGS, FALLBACK_COLLECTIONS, FALLBACK_PRODUCTS } from '../data/fallbackData';
 import { resolve3DModelUrl, resolve3DPreview, resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const imageFor = (path?: string | null, slug?: string) =>
   resolveImageUrl(path || (slug ? resolve3DPreview(slug)?.poster : undefined));
@@ -58,6 +59,7 @@ const useHomeScrollReveal = (containerRef: React.RefObject<HTMLElement | null>, 
 };
 
 const InteractiveModelStage: React.FC<{ product: Product; reducedMotion: boolean; }> = ({ product, reducedMotion }) => {
+  const { t } = useLanguage();
   const [viewerAvailable, setViewerAvailable] = useState(() =>
     typeof window !== 'undefined' && Boolean(window.customElements?.get('model-viewer')),
   );
@@ -168,23 +170,23 @@ const InteractiveModelStage: React.FC<{ product: Product; reducedMotion: boolean
       )}
       <div className="pointer-events-none absolute left-4 top-4 z-10 bg-header/90 px-3 py-1.5 text-[11px] text-brown-dark">
         {modelLoaded
-          ? 'Mô hình 3D · Kéo để xoay'
+          ? t('home.dragToRotate', 'Mô hình 3D · Kéo để xoay')
           : previewPlaying
-            ? 'Video xem trước'
+            ? t('home.previewVideo', 'Video xem trước')
             : modelFailed || !viewerAvailable
-              ? 'Ảnh xem trước'
-              : 'Đang tải mô hình 3D…'}
+              ? t('home.previewPhoto', 'Ảnh xem trước')
+              : t('home.loadingModel', 'Đang tải mô hình 3D…')}
       </div>
       {turntable && !reducedMotion && !modelLoaded && (
         <button
           type="button"
           onClick={() => setPreviewPlaying((playing) => !playing)}
-          aria-label={previewPlaying ? 'Dừng video xem trước mô hình' : 'Phát video xem trước mô hình'}
+          aria-label={previewPlaying ? t('home.stopVideo', 'Dừng video xem trước mô hình') : t('home.playVideo', 'Phát video xem trước mô hình')}
           aria-pressed={previewPlaying}
-          className="absolute right-4 top-4 z-10 inline-flex min-h-8 items-center gap-2 border border-paper-border bg-header/95 px-3 text-[10px] font-mono uppercase tracking-[0.08em] text-brown-dark transition-colors hover:border-brass hover:text-forest focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass"
+          className="absolute right-4 top-4 z-10 inline-flex min-h-8 items-center gap-2 border border-paper-border bg-header/95 px-3 text-xs font-sans uppercase tracking-[0.08em] text-brown-dark font-medium transition-colors hover:border-brass hover:text-forest focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass"
         >
           {previewPlaying ? <Pause size={13} /> : <Play size={13} />}
-          {previewPlaying ? 'Dừng video' : 'Xem chuyển động'}
+          {previewPlaying ? t('home.stopVideo', 'Dừng video') : t('home.playVideo', 'Xem chuyển động')}
         </button>
       )}
     </>
@@ -192,6 +194,7 @@ const InteractiveModelStage: React.FC<{ product: Product; reducedMotion: boolean
 };
 
 const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
+  const { t } = useLanguage();
   const reducedMotion = useReducedMotionPreference();
   const [activeIndex, setActiveIndex] = useState(0);
   const chapterRefs = useRef<Array<HTMLElement | null>>([]);
@@ -232,10 +235,10 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
     <section id="hanh-trinh-di-san" className="home-story-section border-y border-paper-border bg-header">
       <div className="mx-auto max-w-[1440px] px-5 py-16 sm:px-8 sm:py-20 lg:px-16 lg:py-24">
         <header data-home-reveal className="mb-9 max-w-2xl sm:mb-12">
-          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-brass-dark">Một vòng qua di sản Việt</p>
-          <h2 className="font-display text-3xl leading-tight text-ink sm:text-4xl lg:text-5xl">Mỗi công trình, một câu chuyện</h2>
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-brass-dark">{t('home.scrollyEyebrow', 'Một vòng qua di sản Việt')}</p>
+          <h2 className="font-display text-3xl leading-tight text-ink sm:text-4xl lg:text-5xl">{t('home.scrollyHeading', 'Mỗi công trình, một câu chuyện')}</h2>
           <p className="mt-4 max-w-xl text-sm leading-7 text-charcoal-muted sm:text-base">
-            Cuộn trang để lần lượt ngắm các mô hình 3D và khám phá câu chuyện phía sau từng dấu ấn kiến trúc.
+            {t('home.scrollyDesc', 'Cuộn trang để lần lượt ngắm các mô hình 3D và khám phá câu chuyện phía sau từng dấu ấn kiến trúc.')}
           </p>
         </header>
 
@@ -246,7 +249,7 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
               <div>
                 <p className="mt-1 font-display text-xl sm:text-2xl">{activeProduct.name}</p>
               </div>
-              <span className="font-mono text-xs tracking-[0.14em] text-white/80">0{activeIndex + 1} / 0{products.length}</span>
+              <span className="font-cinzel text-xs tracking-[0.14em] text-white/90 font-bold">0{activeIndex + 1} / 0{products.length}</span>
             </div>
             <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[2px] bg-white/25" aria-hidden="true">
               <div className="h-full bg-brass-light transition-[width] duration-700" style={{ width: `${((activeIndex + 1) / products.length) * 100}%` }} />
@@ -263,7 +266,7 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
                 className={`home-story-chapter flex min-h-[58vh] flex-col justify-center border-b border-paper-border py-10 transition-all duration-700 last:border-0 lg:min-h-[68vh] ${activeIndex === index ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-60'}`}
               >
                 <div className="mb-5 flex items-center gap-3 text-[11px] uppercase tracking-[0.16em] text-brown">
-                  <span className="font-mono">0{index + 1}</span>
+                  <span className="font-cinzel font-bold text-xs">0{index + 1}</span>
                   <span className="h-px w-8 bg-paper-deep" />
                   <span>{product.location}</span>
                 </div>
@@ -273,7 +276,7 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
                 <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-paper-border pt-4 text-xs text-charcoal-muted">
                   <span>{product.epoch}</span>
                   <Link to={`/products/${product.slug}`} className="inline-flex items-center gap-2 font-semibold text-brown transition-colors hover:text-terracotta">
-                    Tìm hiểu công trình <ArrowRight size={14} strokeWidth={1.6} />
+                    {t('common.exploreMonument', 'Tìm hiểu công trình')} <ArrowRight size={14} strokeWidth={1.6} />
                   </Link>
                 </div>
               </article>
@@ -281,7 +284,7 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
           </div>
         </div>
 
-        <nav className="mt-7 flex flex-wrap gap-2 lg:ml-[calc(52.5%-1rem)]" aria-label="Chọn công trình đang xem">
+        <nav className="mt-7 flex flex-wrap gap-2 lg:ml-[calc(52.5%-1rem)]" aria-label={t('home.selectMonument', 'Chọn công trình đang xem')}>
           {products.map((product, index) => (
             <button
               key={product.id}
@@ -300,6 +303,7 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
 };
 
 export const HomePage: React.FC = () => {
+  const { t } = useLanguage();
   const mainRef = useRef<HTMLElement>(null);
   const initialHero = FALLBACK_PRODUCTS.find((product) => product.isHeroRelease) || FALLBACK_PRODUCTS[0];
   const [heroProduct, setHeroProduct] = useState<Product | null>(initialHero || null);
@@ -389,29 +393,32 @@ export const HomePage: React.FC = () => {
 
         <div className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center px-5 pb-24 pt-16 sm:px-8 lg:px-16">
           <div className="max-w-[760px] animate-fade-up py-10">
-            
             <h1 className="font-display text-[clamp(3.25rem,8vw,7rem)] font-normal leading-[0.94] tracking-[-0.045em] text-paper">
-              Văn Minh<br />
-              <em className="font-normal text-brass-subtle">Di Sản Việt</em>
+              {t('home.heroTitleLine1', 'Văn Minh')}<br />
+              <em className="font-normal text-brass-subtle">{t('home.heroTitleLine2', 'Di Sản Việt')}</em>
             </h1>
             <p className="mt-6 max-w-[700px] text-lg leading-8 text-white/90 sm:text-xl sm:leading-9">
-              Hành trình số hóa bảo tàng, di tích và ký ức văn hóa Việt Nam qua các câu chuyện lịch sử
+              {t('home.heroSubtitle', 'Hành trình số hóa bảo tàng, di tích và ký ức văn hóa Việt Nam qua các câu chuyện lịch sử')}
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link to="/collections" className="inline-flex min-h-12 items-center gap-3 bg-brass px-6 py-3 text-sm font-semibold text-forest transition-colors hover:bg-brass-light">
-                Khám phá bộ sưu tập <ArrowRight size={16} strokeWidth={1.7} />
+                {t('home.heroCtaCollection', 'Khám phá bộ sưu tập')} <ArrowRight size={16} strokeWidth={1.7} />
               </Link>
               <Link to="/about" className="inline-flex min-h-12 items-center gap-2 border border-white/45 px-5 py-3 text-sm text-paper transition-colors hover:border-brass-subtle hover:text-brass-subtle">
-                Câu chuyện Viettoria
+                {t('home.heroCtaStory', 'Câu chuyện Viettoria')}
               </Link>
             </div>
             <div className="mt-11 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/25 pt-4 text-xs tracking-wide text-white/75">
-              <span>Mô hình kiến trúc</span><span className="h-1 w-1 bg-brass" /><span>Câu chuyện di sản</span><span className="h-1 w-1 bg-brass" /><span>Trải nghiệm 3D</span>
+              <span>{t('home.heroBadge1', 'Mô hình kiến trúc')}</span>
+              <span className="h-1 w-1 bg-brass" />
+              <span>{t('home.heroBadge2', 'Câu chuyện di sản')}</span>
+              <span className="h-1 w-1 bg-brass" />
+              <span>{t('home.heroBadge3', 'Trải nghiệm 3D')}</span>
             </div>
           </div>
         </div>
         <a href="#hanh-trinh-di-san" className="absolute bottom-6 left-5 z-10 inline-flex items-center gap-2 text-xs tracking-wide text-white/80 transition-colors hover:text-white sm:left-8 lg:left-16">
-          Cuộn để khám phá <ArrowDown size={14} strokeWidth={1.5} />
+          {t('home.scrollDown', 'Cuộn để khám phá')} <ArrowDown size={14} strokeWidth={1.5} />
         </a>
       </section>
 
@@ -420,11 +427,11 @@ export const HomePage: React.FC = () => {
       <section id="bo-suu-tap" className="mx-auto max-w-[1440px] px-5 py-16 sm:px-8 sm:py-20 lg:px-16 lg:py-24">
         <div data-home-reveal className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-paper-border pb-5 sm:mb-10">
           <div>
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-brass-dark">Chọn theo câu chuyện bạn yêu thích</p>
-            <h2 className="font-display text-3xl text-ink sm:text-4xl">Bộ sưu tập di sản</h2>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-brass-dark">{t('home.collectionEyebrow', 'Chọn theo câu chuyện bạn yêu thích')}</p>
+            <h2 className="font-display text-3xl text-ink sm:text-4xl">{t('home.collectionHeading', 'Bộ sưu tập di sản')}</h2>
           </div>
           <Link to="/collections" className="inline-flex items-center gap-2 pb-1 text-sm font-semibold text-brown hover:text-terracotta">
-            Xem tất cả <ArrowRight size={15} strokeWidth={1.6} />
+            {t('common.viewAll', 'Xem tất cả')} <ArrowRight size={15} strokeWidth={1.6} />
           </Link>
         </div>
 
@@ -442,7 +449,7 @@ export const HomePage: React.FC = () => {
                     onError={(event) => handleImageFallback(event, '/3D/chua-mot-cot-poster.webp')}
                     className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.035]"
                   />
-                  <span className="absolute left-3 top-3 bg-header/90 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.13em] text-brown">{collection.productsCount || 1} tác phẩm</span>
+                  <span className="absolute left-3 top-3 bg-header/90 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.13em] text-brown">{collection.productsCount || 1} {t('common.monumentCount', 'tác phẩm')}</span>
                 </div>
                 <div className="flex items-start justify-between gap-4">
                   <div>

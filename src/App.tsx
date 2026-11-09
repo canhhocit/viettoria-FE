@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, useLocation } from 'react-router-dom';
 import { AppRoutes } from './routes';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
@@ -14,10 +15,12 @@ const ScrollToTop: React.FC = () => {
 
 export const App: React.FC = () => {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <AppRoutes />
-    </BrowserRouter>
+    <LanguageProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <AppRoutes />
+      </BrowserRouter>
+    </LanguageProvider>
   );
 };
 

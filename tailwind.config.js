@@ -72,11 +72,16 @@ export default {
         cinnabar: '#98281A',
       },
       fontFamily: {
-        display: ['"Playfair Display"', 'Georgia', 'serif'],
+        // Cổ xưa, bia đá, vương triều, con dấu hoàng gia (dành cho tiêu đề lớn, thương hiệu, mã di sản)
+        cinzel: ['"Cinzel"', '"Playfair Display"', 'Georgia', 'serif'],
+        display: ['"Cinzel"', '"Playfair Display"', 'Georgia', 'serif'],
+        // Cổ điển, văn bia, tự sự lịch sử (đầy đủ dấu tiếng Việt)
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
-        body: ['"Be Vietnam Pro"', 'sans-serif'],
-        sans: ['"Be Vietnam Pro"', 'sans-serif'],
-        mono: ['"Roboto Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+        // Nội dung chuẩn xác, thanh thoát, đọc êm mắt (toàn bộ body, form, buttons, navigation)
+        body: ['"Be Vietnam Pro"', 'system-ui', 'sans-serif'],
+        sans: ['"Be Vietnam Pro"', 'system-ui', 'sans-serif'],
+        // Chỉ dùng cho thông số kỹ thuật (tỷ lệ 1:120, kích thước cm, tọa độ)
+        mono: ['"Roboto Mono"', 'ui-monospace', 'monospace'],
       },
       borderRadius: {
         none: '0px',

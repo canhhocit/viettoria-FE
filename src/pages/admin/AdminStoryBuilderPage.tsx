@@ -246,7 +246,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
       <div className="flex items-center justify-between border-b border-paper-border pb-3">
         <Link
           to="/admin/products"
-          className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-charcoal-muted transition-colors hover:text-forest"
+          className="inline-flex items-center gap-1.5 font-sans text-xs uppercase tracking-wider text-charcoal-muted transition-colors hover:text-forest"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           <span>Danh Mục Tác Phẩm</span>
@@ -259,7 +259,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
             to={`/products/${product.slug}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-[11px] font-mono text-charcoal-muted transition-colors hover:text-forest"
+            className="inline-flex items-center gap-1 text-[11px] font-sans text-charcoal-muted transition-colors hover:text-forest"
           >
             <span>Xem trang công khai</span>
             <ExternalLink className="h-3 w-3" />
@@ -279,17 +279,17 @@ export const AdminStoryBuilderPage: React.FC = () => {
                 onError={handleImageFallback}
                 className="h-full w-full object-cover"
               />
-              <span className="absolute bottom-0 inset-x-0 bg-forest/90 py-0.5 text-center font-mono text-[9px] uppercase tracking-wider text-brass">
+              <span className="absolute bottom-0 inset-x-0 bg-forest/90 py-0.5 text-center font-cinzel text-[9px] uppercase tracking-wider text-brass font-bold">
                 {product?.code || 'DI SẢN'}
               </span>
             </div>
 
             <div className="space-y-1">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="border border-brass/40 bg-paper-warm px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-brass-dark font-medium">
+                <span className="border border-brass/40 bg-paper-warm px-2 py-0.5 font-cinzel text-[10px] uppercase tracking-wider text-brass-dark font-semibold">
                   {product?.epoch || 'Triều đại lịch sử'}
                 </span>
-                <span className="font-mono text-[11px] text-charcoal-muted">
+                <span className="font-sans text-xs text-charcoal-muted">
                   {product?.collection?.name || 'Bộ sưu tập độc bản'}
                 </span>
               </div>
@@ -298,8 +298,8 @@ export const AdminStoryBuilderPage: React.FC = () => {
                 {product?.name || 'Đang tải tác phẩm...'}
               </h1>
 
-              <div className="flex items-center gap-3 font-mono text-xs text-charcoal-muted pt-0.5">
-                <span>Mã: <strong className="text-charcoal font-semibold">{product?.code}</strong></span>
+              <div className="flex items-center gap-3 font-sans text-xs text-charcoal-muted pt-0.5">
+                <span>Mã: <strong className="font-cinzel text-charcoal font-bold tracking-wider">{product?.code}</strong></span>
                 <span>•</span>
                 <span>Khối câu chuyện: <strong className="text-forest font-semibold">{stories.length} khối</strong></span>
               </div>
@@ -312,7 +312,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsAddMenuOpen(!isAddMenuOpen)}
-                className="inline-flex w-full sm:w-auto items-center justify-center gap-2 border border-forest bg-forest px-5 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-paper transition-all hover:bg-brass shadow-sm"
+                className="inline-flex w-full sm:w-auto items-center justify-center gap-2 border border-forest bg-forest px-5 py-2.5 font-sans text-xs font-bold uppercase tracking-wider text-paper transition-all hover:bg-brass shadow-sm"
               >
                 <Plus className="h-4 w-4 text-brass" />
                 <span>Thêm Khối Câu Chuyện</span>
@@ -326,7 +326,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                     onClick={() => setIsAddMenuOpen(false)}
                   />
                   <div className="absolute right-0 top-full z-30 mt-2 w-80 border border-brass bg-paper p-2 shadow-xl">
-                    <p className="px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-charcoal-muted border-b border-paper-border">
+                    <p className="px-3 py-1.5 font-cinzel text-[10px] uppercase tracking-widest text-charcoal-muted border-b border-paper-border font-bold">
                       Chọn cấu trúc khối
                     </p>
                     <div className="space-y-1 pt-1">
@@ -346,7 +346,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                               <p className="font-serif text-xs font-bold text-forest group-hover:text-brass">
                                 {item.label}
                               </p>
-                              <p className="font-mono text-[10px] text-charcoal-muted line-clamp-1">
+                              <p className="font-sans text-[11px] text-charcoal-muted line-clamp-1">
                                 {item.description}
                               </p>
                             </div>
@@ -364,7 +364,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
         {/* Quick Block Type Segmented Ribbon */}
         {!isDemo && (
           <div className="mt-5 pt-4 border-t border-paper-border">
-            <p className="font-mono text-[10px] uppercase tracking-widest text-charcoal-muted mb-2.5 flex items-center gap-1.5">
+            <p className="font-cinzel text-[10px] uppercase tracking-widest text-charcoal-muted mb-2.5 flex items-center gap-1.5 font-bold">
               <Layers className="h-3 w-3 text-brass" />
               <span>Thêm nhanh theo loại cấu kiện:</span>
             </p>
@@ -376,7 +376,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                     key={item.type}
                     type="button"
                     onClick={() => handleOpenAdd(item.type)}
-                    className="flex items-center gap-2 border border-paper-border bg-paper-warm/60 px-3 py-2 text-left font-mono text-[11px] text-charcoal transition-all hover:border-brass hover:bg-paper hover:text-forest shadow-2xs"
+                    className="flex items-center gap-2 border border-paper-border bg-paper-warm/60 px-3 py-2 text-left font-sans text-xs font-medium text-charcoal transition-all hover:border-brass hover:bg-paper hover:text-forest shadow-2xs"
                   >
                     <Icon className="h-3.5 w-3.5 shrink-0 text-brass" />
                     <span className="truncate">{item.shortLabel}</span>
@@ -419,14 +419,14 @@ export const AdminStoryBuilderPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => handleOpenAdd('text_image')}
-                className="border border-forest bg-forest px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-paper hover:bg-brass"
+                className="border border-forest bg-forest px-4 py-2 font-sans text-xs font-bold uppercase tracking-wider text-paper hover:bg-brass transition-colors"
               >
                 + Khối Kể Chuyện & Ảnh
               </button>
               <button
                 type="button"
                 onClick={() => handleOpenAdd('timeline')}
-                className="border border-paper-border bg-paper-warm px-4 py-2 font-mono text-xs uppercase tracking-wider text-forest hover:border-brass"
+                className="border border-paper-border bg-paper-warm px-4 py-2 font-sans text-xs uppercase tracking-wider text-forest hover:border-brass transition-colors"
               >
                 + Khối Tiến Trình Lịch Sử
               </button>
@@ -460,7 +460,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                     <span className="font-serif text-lg sm:text-xl font-bold text-forest">
                       {String(idx + 1).padStart(2, '0')}
                     </span>
-                    <span className="font-mono text-[9px] uppercase tracking-widest text-charcoal-muted">
+                    <span className="font-cinzel text-[9px] uppercase tracking-widest text-charcoal-muted font-bold">
                       THỨ TỰ
                     </span>
                   </div>
@@ -476,21 +476,21 @@ export const AdminStoryBuilderPage: React.FC = () => {
                     {/* Header Row: Type Badge, Era, Status */}
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-paper-border/60 pb-2.5">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className={`inline-flex items-center gap-1.5 border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider font-semibold ${meta.badgeClass}`}>
+                        <span className={`inline-flex items-center gap-1.5 border px-2 py-0.5 font-sans text-[11px] uppercase tracking-wider font-semibold ${meta.badgeClass}`}>
                           <Icon className="h-3 w-3" />
                           <span>{meta.label}</span>
                         </span>
 
                         {block.subtitle && (
-                          <span className="font-mono text-[11px] uppercase tracking-wider text-charcoal-muted">
+                          <span className="font-serif italic text-xs text-brass-dark">
                             • {block.subtitle}
                           </span>
                         )}
                       </div>
 
                       {/* Status indicator */}
-                      <span className={`inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider ${
-                        !isHidden ? 'text-forest font-semibold' : 'text-charcoal-muted'
+                      <span className={`inline-flex items-center gap-1.5 font-sans text-xs ${
+                        !isHidden ? 'text-forest font-medium' : 'text-charcoal-muted'
                       }`}>
                         <span className={`h-1.5 w-1.5 rounded-none ${!isHidden ? 'bg-forest' : 'bg-charcoal-muted'}`} />
                         <span>{!isHidden ? 'Đang hiển thị' : 'Đang ẩn'}</span>
@@ -508,7 +508,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                             onError={handleImageFallback}
                             className="h-full w-full object-cover transition-transform duration-300 group-hover/thumb:scale-105"
                           />
-                          <span className="absolute bottom-1 right-1 bg-forest/80 px-1 py-0.5 font-mono text-[8px] uppercase tracking-wider text-brass">
+                          <span className="absolute bottom-1 right-1 bg-forest/80 px-1 py-0.5 font-cinzel text-[8px] uppercase tracking-wider text-brass font-bold">
                             Tư Liệu
                           </span>
                         </div>
@@ -525,7 +525,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                         </h3>
 
                         {block.content && (
-                          <p className="font-sans text-xs text-charcoal/80 font-normal leading-relaxed line-clamp-2">
+                          <p className="font-sans text-xs sm:text-[13px] text-charcoal/85 font-normal leading-relaxed line-clamp-2">
                             {block.content}
                           </p>
                         )}
@@ -533,14 +533,14 @@ export const AdminStoryBuilderPage: React.FC = () => {
                         {/* Special Block Previews */}
                         {block.type === 'timeline' && block.timelineItems && block.timelineItems.length > 0 && (
                           <div className="mt-2 flex flex-wrap items-center gap-1.5 pt-1">
-                            <span className="font-mono text-[10px] text-charcoal-muted">Các mốc son:</span>
+                            <span className="font-sans text-xs text-charcoal-muted">Các mốc son:</span>
                             {block.timelineItems.slice(0, 4).map((item, tIdx) => (
-                              <span key={tIdx} className="border border-paper-border bg-paper-warm px-1.5 py-0.5 font-mono text-[10px] text-brass-dark">
+                              <span key={tIdx} className="border border-paper-border bg-paper-warm px-1.5 py-0.5 font-cinzel text-[11px] font-bold text-brass-dark tracking-wider">
                                 {item.year}
                               </span>
                             ))}
                             {block.timelineItems.length > 4 && (
-                              <span className="font-mono text-[10px] text-charcoal-muted">
+                              <span className="font-sans text-xs text-charcoal-muted">
                                 +{block.timelineItems.length - 4} mốc khác
                               </span>
                             )}
@@ -549,14 +549,14 @@ export const AdminStoryBuilderPage: React.FC = () => {
 
                         {block.type === 'highlight' && block.highlightBadge && (
                           <div className="mt-1">
-                            <span className="border border-brass/50 bg-brass/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-brass-dark font-medium">
+                            <span className="border border-brass/50 bg-brass/10 px-2 py-0.5 font-cinzel text-[10px] uppercase tracking-wider text-brass-dark font-bold">
                               ★ {block.highlightBadge}
                             </span>
                           </div>
                         )}
 
                         {block.mediaCaption && (
-                          <p className="font-mono text-[10px] italic text-charcoal-muted pt-0.5">
+                          <p className="font-sans text-xs italic text-charcoal-muted pt-0.5">
                             Chú thích: {block.mediaCaption}
                           </p>
                         )}
@@ -568,13 +568,13 @@ export const AdminStoryBuilderPage: React.FC = () => {
                   {!isDemo && (
                     <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-paper-border/60 pt-3">
                       {/* Left: Move order buttons */}
-                      <div className="flex items-center gap-1 font-mono text-xs">
-                        <span className="text-[10px] text-charcoal-muted mr-1">Thứ tự:</span>
+                      <div className="flex items-center gap-1 font-sans text-xs">
+                        <span className="text-xs text-charcoal-muted mr-1">Thứ tự:</span>
                         <button
                           type="button"
                           onClick={() => handleMove(idx, 'up')}
                           disabled={idx === 0}
-                          className="inline-flex items-center gap-1 border border-paper-border bg-paper px-2 py-1 text-[11px] text-charcoal hover:border-brass disabled:opacity-30 disabled:hover:border-paper-border"
+                          className="inline-flex items-center gap-1 border border-paper-border bg-paper px-2 py-1 text-xs text-charcoal hover:border-brass disabled:opacity-30 disabled:hover:border-paper-border transition-colors"
                           title="Đẩy lên trước"
                         >
                           <ArrowUp className="h-3 w-3" />
@@ -584,7 +584,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                           type="button"
                           onClick={() => handleMove(idx, 'down')}
                           disabled={idx === stories.length - 1}
-                          className="inline-flex items-center gap-1 border border-paper-border bg-paper px-2 py-1 text-[11px] text-charcoal hover:border-brass disabled:opacity-30 disabled:hover:border-paper-border"
+                          className="inline-flex items-center gap-1 border border-paper-border bg-paper px-2 py-1 text-xs text-charcoal hover:border-brass disabled:opacity-30 disabled:hover:border-paper-border transition-colors"
                           title="Đẩy xuống sau"
                         >
                           <ArrowDown className="h-3 w-3" />
@@ -593,11 +593,11 @@ export const AdminStoryBuilderPage: React.FC = () => {
                       </div>
 
                       {/* Right: Visibility, Edit, Delete */}
-                      <div className="flex items-center gap-2 font-mono text-xs">
+                      <div className="flex items-center gap-2 font-sans text-xs">
                         <button
                           type="button"
                           onClick={() => handleToggleStatus(block)}
-                          className={`inline-flex items-center gap-1.5 border px-2.5 py-1 text-[11px] transition-colors ${
+                          className={`inline-flex items-center gap-1.5 border px-2.5 py-1 text-xs transition-colors ${
                             !isHidden
                               ? 'border-forest/30 bg-forest/5 text-forest hover:bg-forest/15'
                               : 'border-paper-border bg-paper text-charcoal-muted hover:text-charcoal'
@@ -611,7 +611,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => handleOpenEdit(block)}
-                          className="inline-flex items-center gap-1.5 border border-forest bg-forest/5 px-2.5 py-1 text-[11px] font-semibold text-forest transition-colors hover:border-brass hover:bg-forest hover:text-paper"
+                          className="inline-flex items-center gap-1.5 border border-forest bg-forest/5 px-2.5 py-1 text-xs font-semibold text-forest transition-colors hover:border-brass hover:bg-forest hover:text-paper"
                           title="Chỉnh sửa nội dung khối"
                         >
                           <Edit3 className="h-3 w-3 text-brass" />
@@ -621,7 +621,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => handleDeleteBlock(block)}
-                          className="inline-flex items-center gap-1 border border-paper-border px-2 py-1 text-[11px] text-terracotta hover:border-terracotta hover:bg-terracotta/5"
+                          className="inline-flex items-center gap-1 border border-paper-border px-2 py-1 text-xs text-terracotta hover:border-terracotta hover:bg-terracotta/5 transition-colors"
                           title="Xóa vĩnh viễn khối này"
                         >
                           <Trash2 className="h-3 w-3" />
@@ -656,7 +656,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
               const ModalIcon = ModalMeta.icon;
               return (
                 <div className="border-b border-paper-border pb-4 pr-8">
-                  <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-brass">
+                  <div className="flex items-center gap-2 font-cinzel text-[11px] uppercase tracking-widest text-brass font-bold">
                     <ModalIcon className="h-4 w-4 text-brass" />
                     <span>{ModalMeta.label}</span>
                   </div>
@@ -668,10 +668,10 @@ export const AdminStoryBuilderPage: React.FC = () => {
             })()}
 
             {/* Modal Form */}
-            <form onSubmit={handleSaveBlock} className="flex-1 overflow-y-auto space-y-5 py-4 font-mono text-xs">
+            <form onSubmit={handleSaveBlock} className="flex-1 overflow-y-auto space-y-5 py-4 font-sans text-xs">
               {/* Type Switcher Selector */}
               <div>
-                <label className="block text-charcoal-muted uppercase mb-1.5">
+                <label className="block text-charcoal-muted uppercase mb-1.5 font-semibold tracking-wider">
                   Định Dạng Khối
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -690,7 +690,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                         }`}
                       >
                         <Icon className={`h-3.5 w-3.5 shrink-0 ${isSelected ? 'text-brass' : 'text-charcoal-muted'}`} />
-                        <span className="truncate text-[11px]">{item.shortLabel}</span>
+                        <span className="truncate text-xs font-medium">{item.shortLabel}</span>
                       </button>
                     );
                   })}
@@ -700,7 +700,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
               {/* Title & Subtitle */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-2">
-                  <label className="block text-charcoal-muted uppercase mb-1">
+                  <label className="block text-charcoal-muted uppercase mb-1 font-semibold tracking-wider">
                     Tiêu Đề Khối <span className="text-terracotta">*</span>
                   </label>
                   <input
@@ -714,7 +714,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-charcoal-muted uppercase mb-1">
+                  <label className="block text-charcoal-muted uppercase mb-1 font-semibold tracking-wider">
                     Niên Hiệu / Nhãn Phụ
                   </label>
                   <input
@@ -730,7 +730,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
               {/* Highlight Badge (if type is highlight) */}
               {editingBlock.type === 'highlight' && (
                 <div>
-                  <label className="block text-charcoal-muted uppercase mb-1">
+                  <label className="block text-charcoal-muted uppercase mb-1 font-semibold tracking-wider">
                     Huy Hiệu Điểm Nhấn
                   </label>
                   <input
@@ -745,7 +745,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
 
               {/* Content Textarea */}
               <div>
-                <label className="block text-charcoal-muted uppercase mb-1">
+                <label className="block text-charcoal-muted uppercase mb-1 font-semibold tracking-wider">
                   Nội Dung Tự Sự / Khảo Cứu <span className="text-terracotta">*</span>
                 </label>
                 <textarea
@@ -769,7 +769,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                   />
 
                   <div>
-                    <label className="block text-[11px] font-mono text-charcoal-muted uppercase mb-1">
+                    <label className="block text-xs font-sans text-charcoal-muted uppercase mb-1 font-semibold tracking-wider">
                       Chú Thích Ảnh (Caption)
                     </label>
                     <input
@@ -787,21 +787,21 @@ export const AdminStoryBuilderPage: React.FC = () => {
               {editingBlock.type === 'timeline' && (
                 <div className="border border-paper-border bg-paper p-4 space-y-3">
                   <div className="flex items-center justify-between border-b border-paper-border pb-2">
-                    <span className="font-mono text-xs uppercase text-brass font-bold flex items-center gap-1.5">
+                    <span className="font-cinzel text-xs uppercase text-brass font-bold flex items-center gap-1.5">
                       <Calendar className="h-3.5 w-3.5" />
                       <span>Các Mốc Niên Đại Lịch Sử</span>
                     </span>
                     <button
                       type="button"
                       onClick={handleAddTimelineItem}
-                      className="border border-paper-border bg-paper-warm px-2.5 py-1 font-mono text-[11px] text-forest hover:border-brass"
+                      className="border border-paper-border bg-paper-warm px-2.5 py-1 font-sans text-xs font-medium text-forest hover:border-brass transition-colors"
                     >
                       + Thêm mốc năm
                     </button>
                   </div>
 
                   {(!editingBlock.timelineItems || editingBlock.timelineItems.length === 0) ? (
-                    <p className="text-center py-4 font-mono text-[11px] text-charcoal-muted">
+                    <p className="text-center py-4 font-sans text-xs text-charcoal-muted">
                       Chưa có mốc thời gian nào. Hãy nhấn nút "+ Thêm mốc năm" phía trên.
                     </p>
                   ) : (
@@ -813,7 +813,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                             value={item.year}
                             onChange={(e) => handleUpdateTimelineItem(tIdx, 'year', e.target.value)}
                             placeholder="Năm (1049)"
-                            className="w-20 border border-paper-border bg-paper px-2 py-1 font-mono text-xs text-brass-dark font-bold focus:border-brass focus:outline-none"
+                            className="w-20 border border-paper-border bg-paper px-2 py-1 font-cinzel text-xs text-brass-dark font-bold focus:border-brass focus:outline-none tracking-wider"
                           />
                           <div className="flex-1 space-y-1.5">
                             <input
@@ -880,14 +880,14 @@ export const AdminStoryBuilderPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="border border-paper-border px-4 py-2 uppercase text-charcoal hover:bg-paper-warm transition-colors"
+                  className="border border-paper-border px-4 py-2 font-sans text-xs uppercase font-medium text-charcoal hover:bg-paper-warm transition-colors"
                 >
                   Hủy Bỏ
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="bg-forest px-6 py-2 font-bold uppercase text-paper hover:bg-brass transition-colors disabled:opacity-50"
+                  className="bg-forest px-6 py-2 font-sans text-xs font-bold uppercase tracking-wider text-paper hover:bg-brass transition-colors disabled:opacity-50 shadow-sm"
                 >
                   {saving ? 'Đang lưu…' : 'Lưu Khối Nội Dung'}
                 </button>
