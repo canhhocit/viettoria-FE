@@ -95,26 +95,28 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   border-radius: 9999px;
   background-color: #142820;
   border: 1.5px solid #C49A45;
   color: #FAF7F0;
   cursor: pointer;
   box-shadow: 0 4px 14px rgba(13, 28, 22, 0.5), 0 0 0 1px rgba(196, 154, 69, 0.35);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, background-color 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease;
   user-select: none;
   touch-action: manipulation;
   pointer-events: auto;
+  animation: floatSlow 4s ease-in-out infinite;
 }
 
 .heritage-hotspot-node:hover,
 .heritage-hotspot-node.is-active {
-  transform: scale(1.18);
+  transform: scale(1.22);
   border-color: #FAF7F0;
   background-color: #B88A38;
   color: #142820;
+  box-shadow: 0 0 0 4px rgba(196, 154, 69, 0.35), 0 0 25px rgba(212, 175, 55, 0.7);
   z-index: 30;
 }
 
@@ -361,21 +363,64 @@
   position: absolute;
   top: -1px;
   left: -1px;
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-top: 2px solid var(--heritage-brass);
   border-left: 2px solid var(--heritage-brass);
   pointer-events: none;
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), height 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+  z-index: 5;
 }
 .corner-frame::after {
   content: '';
   position: absolute;
   bottom: -1px;
   right: -1px;
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-bottom: 2px solid var(--heritage-brass);
   border-right: 2px solid var(--heritage-brass);
+  pointer-events: none;
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), height 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+  z-index: 5;
+}
+.corner-frame:hover::before,
+.corner-frame:hover::after {
+  width: 22px;
+  height: 22px;
+  border-color: #E2CFA8;
+  box-shadow: 0 0 12px rgba(196, 154, 69, 0.45);
+}
+
+/* Royal Imperial Gold Foil Text Gradient & Shimmer */
+.heritage-gold-foil {
+  background: linear-gradient(135deg, #FAF7F0 0%, #D4AF37 30%, #FFF3B0 50%, #B88A38 80%, #9C6F2A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  animation: goldFoilShift 8s ease infinite alternate;
+  filter: drop-shadow(0 2px 14px rgba(212, 175, 55, 0.3));
+}
+
+@keyframes goldFoilShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Celestial Bronze Drum Sacred Golden Glow */
+.home-dong-son-celestial {
+  filter: drop-shadow(0 0 60px rgba(212, 175, 55, 0.3)) drop-shadow(0 0 120px rgba(184, 138, 68, 0.18));
+  animation: dongSonSpin 200s linear infinite;
+  transform-origin: center center;
+}
+
+/* 3D Exhibition Pedestal Spotlight */
+.heritage-pedestal-light {
+  background: radial-gradient(ellipse at 50% 90%, rgba(196, 154, 69, 0.22) 0%, rgba(184, 138, 68, 0.08) 45%, transparent 75%);
   pointer-events: none;
 }
 

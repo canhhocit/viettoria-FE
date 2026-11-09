@@ -6,6 +6,8 @@ import type { Product, Collection, BlogPost } from '../types';
 import { FALLBACK_BLOGS, FALLBACK_COLLECTIONS, FALLBACK_PRODUCTS } from '../data/fallbackData';
 import { resolve3DModelUrl, resolve3DPreview, resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
 import { useLanguage } from '../contexts/LanguageContext';
+import { HeritageParticles } from '../components/effects/HeritageParticles';
+import { TiltCard } from '../components/effects/TiltCard';
 
 const imageFor = (path?: string | null, slug?: string) =>
   resolveImageUrl(path || (slug ? resolve3DPreview(slug)?.poster : undefined));
@@ -259,72 +261,81 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
           className="flex overflow-x-auto snap-x snap-mandatory gap-5 pb-4 no-scrollbar sm:gap-6 lg:grid lg:grid-cols-3 lg:gap-8 lg:overflow-visible lg:pb-0"
         >
           {products.map((product, index) => (
-            <article
+            <TiltCard
               key={product.id}
-              id={`di-san-${product.slug}`}
-              data-home-reveal
-              className="home-story-card group flex min-w-[85vw] sm:min-w-[360px] lg:min-w-0 snap-center flex-col border border-paper-border bg-paper-card shadow-xs transition-all duration-300 hover:border-brass/70 hover:shadow-md"
+              className="min-w-[85vw] sm:min-w-[360px] lg:min-w-0 snap-center h-full"
+              glareEffect={true}
+              tiltAmount={1.8}
             >
-              {/* Card Plaque Top Bar */}
-              <div className="flex items-center justify-between border-b border-paper-border bg-paper-warm/60 px-4 py-2.5 text-xs">
-                <div className="flex items-center gap-2 text-brown">
-                  <span className="font-cinzel text-xs font-bold text-brass">0{index + 1}</span>
-                  <span className="h-2.5 w-px bg-paper-deep" />
-                  <span className="truncate max-w-[150px] font-sans text-[11px] uppercase tracking-wider text-charcoal/80 font-medium">
-                    {product.location}
-                  </span>
-                </div>
-                <span className="font-cinzel text-[10px] uppercase tracking-widest text-brass-dark font-bold">
-                  {product.epoch}
-                </span>
-              </div>
-
-              {/* 3D Model Viewport */}
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-paper sm:aspect-[1.18/1]">
-                <InteractiveModelStage product={product} reducedMotion={reducedMotion} />
-
-                {/* Bottom Overlay with Monument Name and Index */}
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between bg-gradient-to-t from-forest-dark/85 via-forest-dark/35 to-transparent px-4 pb-3 pt-12 text-paper-light">
-                  <p className="font-display text-base sm:text-lg font-bold text-paper drop-shadow-xs">
-                    {product.name}
-                  </p>
-                  <span className="font-cinzel text-[11px] font-bold text-white/90">
-                    0{index + 1} / 0{products.length}
-                  </span>
-                </div>
-              </div>
-
-              {/* Card Information Body */}
-              <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
-                <div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold leading-snug text-ink transition-colors group-hover:text-brown">
-                    <Link to={`/products/${product.slug}`}>
-                      {product.name}
-                    </Link>
-                  </h3>
-                  <p className="mt-1 font-display text-xs sm:text-sm italic text-brown">
-                    {product.subName}
-                  </p>
-                  <p className="mt-3.5 text-xs sm:text-sm leading-relaxed text-charcoal-muted line-clamp-3">
-                    {product.shortDescription}
-                  </p>
-                </div>
-
-                {/* Card Action Link */}
-                <div className="mt-6 flex items-center justify-between border-t border-paper-border pt-4">
-                  <span className="font-cinzel text-[10px] font-bold uppercase tracking-wider text-brown-dark/70">
+              <article
+                id={`di-san-${product.slug}`}
+                data-home-reveal
+                className="home-story-card corner-frame group flex h-full flex-col border border-paper-border bg-paper-card shadow-xs transition-all duration-300 hover:border-brass/70 hover:shadow-xl"
+              >
+                {/* Card Plaque Top Bar */}
+                <div className="flex items-center justify-between border-b border-paper-border bg-paper-warm/60 px-4 py-2.5 text-xs">
+                  <div className="flex items-center gap-2 text-brown">
+                    <span className="font-cinzel text-xs font-bold text-brass">0{index + 1}</span>
+                    <span className="h-2.5 w-px bg-paper-deep" />
+                    <span className="truncate max-w-[150px] font-sans text-[11px] uppercase tracking-wider text-charcoal/80 font-medium">
+                      {product.location}
+                    </span>
+                  </div>
+                  <span className="font-cinzel text-[10px] uppercase tracking-widest text-brass-dark font-bold">
                     {product.epoch}
                   </span>
-                  <Link
-                    to={`/products/${product.slug}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-wider text-brown transition-colors hover:text-terracotta"
-                  >
-                    <span>{t('common.exploreMonument', 'Tìm hiểu công trình')}</span>
-                    <ArrowRight size={13} strokeWidth={1.8} className="transition-transform group-hover:translate-x-1" />
-                  </Link>
                 </div>
-              </div>
-            </article>
+
+                {/* 3D Model Viewport */}
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-paper sm:aspect-[1.18/1]">
+                  {/* Exhibition Pedestal Spotlight */}
+                  <div className="heritage-pedestal-light pointer-events-none absolute inset-0 z-[1]" aria-hidden="true" />
+                  
+                  <InteractiveModelStage product={product} reducedMotion={reducedMotion} />
+
+                  {/* Bottom Overlay with Monument Name and Index */}
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between bg-gradient-to-t from-forest-dark/85 via-forest-dark/35 to-transparent px-4 pb-3 pt-12 text-paper-light">
+                    <p className="font-display text-base sm:text-lg font-bold text-paper drop-shadow-xs">
+                      {product.name}
+                    </p>
+                    <span className="font-cinzel text-[11px] font-bold text-white/90">
+                      0{index + 1} / 0{products.length}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Card Information Body */}
+                <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
+                  <div>
+                    <h3 className="font-display text-xl sm:text-2xl font-bold leading-snug text-ink transition-colors group-hover:text-brown">
+                      <Link to={`/products/${product.slug}`}>
+                        {product.name}
+                      </Link>
+                    </h3>
+                    <p className="mt-1 font-display text-xs sm:text-sm italic text-brown">
+                      {product.subName}
+                    </p>
+                    <p className="mt-3.5 text-xs sm:text-sm leading-relaxed text-charcoal-muted line-clamp-3">
+                      {product.shortDescription}
+                    </p>
+                  </div>
+
+                  {/* Card Action Link */}
+                  <div className="mt-6 flex items-center justify-between border-t border-paper-border pt-4">
+                    <span className="font-cinzel text-[10px] font-bold uppercase tracking-wider text-brown-dark/70">
+                      {product.epoch}
+                    </span>
+                    <Link
+                      to={`/products/${product.slug}`}
+                      className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-wider text-brown transition-colors hover:text-terracotta"
+                    >
+                      <span>{t('common.exploreMonument', 'Tìm hiểu công trình')}</span>
+                      <ArrowRight size={13} strokeWidth={1.8} className="transition-transform group-hover:translate-x-1" />
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            </TiltCard>
           ))}
         </div>
       </div>
@@ -417,21 +428,22 @@ export const HomePage: React.FC = () => {
           </video>
         )}
         <div className="home-hero-scrim absolute inset-0" aria-hidden="true" />
+        <HeritageParticles className="absolute inset-0 pointer-events-none z-[3]" />
         <div className="home-hero-drum pointer-events-none absolute -right-[17vw] top-1/2 z-[1] h-[82vw] w-[82vw] max-h-[920px] max-w-[920px] -translate-y-1/2 sm:-right-[10vw] lg:right-[-5vw] lg:h-[64vw] lg:w-[64vw]" aria-hidden="true">
-          <img src="/images/trong-dong.webp" alt="" className="home-dong-son h-full w-full object-contain opacity-25 mix-blend-screen" />
+          <img src="/images/trong-dong.webp" alt="" className="home-dong-son home-dong-son-celestial h-full w-full object-contain opacity-35 mix-blend-screen" />
         </div>
 
         <div className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center px-5 pb-24 pt-16 sm:px-8 lg:px-16">
           <div className="max-w-[760px] animate-fade-up py-10">
             <h1 className="font-display text-[clamp(3.25rem,8vw,7rem)] font-normal leading-[0.94] tracking-[-0.045em] text-paper">
               {t('home.heroTitleLine1', 'Văn Minh')}<br />
-              <em className="font-normal text-brass-subtle">{t('home.heroTitleLine2', 'Di Sản Việt')}</em>
+              <span className="heritage-gold-foil font-normal italic">{t('home.heroTitleLine2', 'Di Sản Việt')}</span>
             </h1>
             <p className="mt-6 max-w-[700px] text-lg leading-8 text-white/90 sm:text-xl sm:leading-9">
               {t('home.heroSubtitle', 'Hành trình số hóa bảo tàng, di tích và ký ức văn hóa Việt Nam qua các câu chuyện lịch sử')}
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link to="/collections" className="inline-flex min-h-12 items-center gap-3 bg-brass px-6 py-3 text-sm font-semibold text-forest transition-colors hover:bg-brass-light">
+              <Link to="/collections" className="animate-gold-glint inline-flex min-h-12 items-center gap-3 bg-brass px-6 py-3 text-sm font-semibold text-forest transition-all hover:bg-brass-light shadow-[0_0_20px_rgba(184,138,68,0.25)] hover:shadow-[0_0_35px_rgba(184,138,68,0.5)]">
                 {t('home.heroCtaCollection', 'Khám phá bộ sưu tập')} <ArrowRight size={16} strokeWidth={1.7} />
               </Link>
               <Link to="/about" className="inline-flex min-h-12 items-center gap-2 border border-white/45 px-5 py-3 text-sm text-paper transition-colors hover:border-brass-subtle hover:text-brass-subtle">
@@ -471,7 +483,7 @@ export const HomePage: React.FC = () => {
             const poster = imageFor(representative?.heroImage || collection.heroImage, representative?.slug);
             return (
               <Link key={collection.id} to={`/collections/${collection.slug}`} data-home-reveal className="group block border-b border-paper-border pb-5">
-                <div className="relative mb-4 flex aspect-[1.32/0.9] items-center justify-center overflow-hidden border border-brass/25 bg-paper-card shadow-sm transition-all duration-300 group-hover:shadow-md">
+                <div className="corner-frame relative mb-4 flex aspect-[1.32/0.9] items-center justify-center overflow-hidden border border-brass/25 bg-paper-card shadow-sm transition-all duration-300 group-hover:border-brass/70 group-hover:shadow-lg">
                   <img
                     src={poster}
                     alt={collection.name}

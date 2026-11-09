@@ -272,6 +272,9 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
           ref={viewportRef}
           className={`architectural-3d-stage group relative isolate aspect-[4/3] overflow-hidden sm:aspect-[16/10] ${isFullscreen ? 'architectural-3d-stage-fullscreen' : ''}`}
         >
+          {/* Ambient Museum Pedestal Spotlight */}
+          <div className="heritage-pedestal-light pointer-events-none absolute inset-0 z-[2]" aria-hidden="true" />
+
           <img
             src={posterUrl}
             alt=""
