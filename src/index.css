@@ -1197,6 +1197,91 @@
   box-shadow: 0 0 0 1px var(--heritage-forest);
 }
 
+/* ========================================================
+   VIETTORIA VIRTUAL TOUR GUIDE COMPANION
+   Lifelike micro-motions, organic breathing & soundwave bars
+   ======================================================== */
+
+.guide-idle-breath {
+  animation: guide-idle-breath 3.6s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.guide-speaking-motion {
+  animation: guide-speaking-motion 2.4s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.guide-shadow-pulse {
+  animation: guide-shadow-pulse 3.6s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+@keyframes guide-idle-breath {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-3.5px) scale(1.006);
+  }
+}
+
+@keyframes guide-speaking-motion {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translateY(-2px) rotate(0.5deg) scale(1.004);
+  }
+  50% {
+    transform: translateY(-3.5px) rotate(0deg) scale(1.008);
+  }
+  75% {
+    transform: translateY(-1.5px) rotate(-0.5deg) scale(1.004);
+  }
+}
+
+@keyframes guide-shadow-pulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translateX(-50%) scale(0.9);
+    opacity: 0.45;
+  }
+}
+
+.animate-soundwave-1 {
+  animation: soundwave-bar-1 0.9s ease-in-out infinite;
+}
+.animate-soundwave-2 {
+  animation: soundwave-bar-2 1.2s ease-in-out infinite 0.15s;
+}
+.animate-soundwave-3 {
+  animation: soundwave-bar-3 0.8s ease-in-out infinite 0.3s;
+}
+.animate-soundwave-4 {
+  animation: soundwave-bar-4 1.1s ease-in-out infinite 0.1s;
+}
+
+@keyframes soundwave-bar-1 {
+  0%, 100% { height: 3px; }
+  50% { height: 13px; }
+}
+@keyframes soundwave-bar-2 {
+  0%, 100% { height: 12px; }
+  50% { height: 4px; }
+}
+@keyframes soundwave-bar-3 {
+  0%, 100% { height: 4px; }
+  50% { height: 14px; }
+}
+@keyframes soundwave-bar-4 {
+  0%, 100% { height: 13px; }
+  50% { height: 5px; }
+}
+
 .admin-layout button:disabled,
 .admin-layout input:disabled,
 .admin-layout select:disabled,
