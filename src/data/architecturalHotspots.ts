@@ -235,3 +235,4 @@ export function getHotspotsForProduct(identifier?: string): ArchitecturalHotspot
   // Mặc định trả về cấu kiện tiêu chuẩn
   return ARCHITECTURAL_HOTSPOTS['chua-mot-cot'];
 }
+
