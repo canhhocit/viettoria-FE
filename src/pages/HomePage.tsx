@@ -505,7 +505,7 @@ export const HomePage: React.FC = () => {
                 </div>
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <h3 className="font-display text-2xl font-bold text-forest transition-colors group-hover:text-brass-dark">{collection.name}</h3>
+                    <h3 className="font-serif text-2xl font-bold text-forest transition-colors group-hover:text-brass-dark leading-snug">{collection.name}</h3>
                     <p className="mt-1.5 line-clamp-2 text-sm leading-6 text-charcoal/85">{collection.description}</p>
                   </div>
                   <ArrowRight size={17} strokeWidth={2} className="mt-1 shrink-0 text-forest transition-transform group-hover:translate-x-1 group-hover:text-brass" />

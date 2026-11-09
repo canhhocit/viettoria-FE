@@ -55,7 +55,7 @@ export const AssemblyGuide: React.FC<AssemblyGuideProps> = ({ steps = DEFAULT_ST
             <Hammer className="w-4 h-4" />
             <span>Kỹ Nghệ Khớp Mộng Gỗ Truyền Thống</span>
           </div>
-          <h3 className="font-serif text-xl sm:text-2xl font-bold tracking-wide">
+          <h3 className="font-serif text-xl sm:text-2xl font-bold tracking-wide text-paper leading-snug">
             Cơ Chế Lắp Ráp Thủ Công — {heritageName}
           </h3>
         </div>

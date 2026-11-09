@@ -55,21 +55,26 @@ export const CollectionDetailPage: React.FC = () => {
 
         {/* Collection Banner */}
         <div className="bg-forest text-paper border border-brass corner-frame p-8 sm:p-12 relative overflow-hidden shadow-xl">
+          {/* Subtle Dong Son motif watermark in background */}
+          <div className="pointer-events-none absolute -right-16 -top-16 h-72 w-72 sm:h-96 sm:w-96 opacity-10 select-none" aria-hidden="true">
+            <img src="/images/trong-dong.webp" alt="" className="h-full w-full object-contain" />
+          </div>
+
           <div className="relative z-10 max-w-3xl space-y-4">
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <span className="px-3 py-1 bg-brass text-forest text-xs font-serif uppercase tracking-widest font-bold">
                 {t('collectionsPage.collectionTag', 'Tuyển Tập Di Sản')}
               </span>
-              <span className="text-xs text-brass-subtle uppercase tracking-widest">
+              <span className="text-xs text-brass-light font-medium uppercase tracking-widest">
                 {t('collectionsPage.historicEra', 'Thời kỳ lịch sử')}
               </span>
             </div>
 
-            <h1 className="font-serif text-3xl sm:text-5xl font-bold tracking-wide">
+            <h1 className="font-serif text-3xl sm:text-5xl font-bold text-paper leading-[1.25] sm:leading-[1.2] tracking-normal py-1">
               {currentCollection.name}
             </h1>
 
-            <p className="text-sm sm:text-base text-paper/85 font-normal leading-relaxed">
+            <p className="text-sm sm:text-base text-paper/90 font-normal leading-relaxed max-w-2xl">
               {currentCollection.description}
             </p>
           </div>

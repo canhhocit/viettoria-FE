@@ -37,7 +37,7 @@ export const CollectionsPage: React.FC = () => {
               <span>{t('collectionsPage.eyebrow', 'Phân Loại Niên Đại & Kiến Trúc')}</span>
             </div>
 
-            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-forest leading-[1.1] tracking-tight">
+            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-forest leading-[1.2] tracking-tight">
               {t('collectionsPage.title', 'Các Tuyển Tập Di Sản')}
             </h1>
 
@@ -94,7 +94,7 @@ export const CollectionsPage: React.FC = () => {
         <section className="space-y-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-brass/30 pb-4">
             <div>
-              <span className="text-[11px] font-cinzel text-brass uppercase tracking-[0.2em] font-bold block mb-1">
+              <span className="text-[11px] font-sans text-brass uppercase tracking-[0.18em] font-bold block mb-1">
                 {t('collectionsPage.subtitle', 'Tuyển tập theo triều đại và văn hóa')}
               </span>
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-forest">
@@ -126,7 +126,7 @@ export const CollectionsPage: React.FC = () => {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-transparent to-transparent pointer-events-none" />
                       
-                      <div className="absolute top-3 left-3 bg-forest/90 border border-brass/50 px-3 py-1 text-[10px] font-cinzel uppercase tracking-widest text-brass font-bold backdrop-blur-sm">
+                      <div className="absolute top-3 left-3 bg-forest/90 border border-brass/50 px-3 py-1 text-[10px] font-sans uppercase tracking-widest text-brass font-bold backdrop-blur-sm">
                         {t('collectionsPage.collectionTag', 'Tuyển Tập Di Sản')}
                       </div>
 
@@ -139,7 +139,7 @@ export const CollectionsPage: React.FC = () => {
 
                     {/* Card Content */}
                     <div className="p-6 sm:p-8 space-y-3">
-                      <h3 className="font-serif text-2xl font-bold text-forest group-hover:text-brass-dark transition-colors duration-200">
+                      <h3 className="font-serif text-2xl font-bold text-forest group-hover:text-brass-dark transition-colors duration-200 leading-snug">
                         {col.name}
                       </h3>
                       <p className="line-clamp-2 text-sm text-charcoal/85 font-sans font-normal leading-relaxed">
@@ -158,7 +158,7 @@ export const CollectionsPage: React.FC = () => {
 
                       <Link
                         to={`/collections/${col.slug}`}
-                        className="inline-flex items-center gap-2 text-xs font-cinzel uppercase tracking-wider text-forest font-bold group-hover:text-brass transition-colors"
+                        className="inline-flex items-center gap-2 text-xs font-sans uppercase tracking-wider text-forest font-bold group-hover:text-brass transition-colors"
                       >
                         <span>{t('home.exploreCollection', 'Khám phá')}</span>
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-200" />

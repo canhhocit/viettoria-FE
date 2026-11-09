@@ -52,9 +52,11 @@ export const AboutPage: React.FC = () => {
             <span>{t('aboutPage.heroEyebrow')}</span>
           </div>
 
-          <h1 className="font-serif text-4xl sm:text-6xl font-bold tracking-tight text-forest leading-[1.15]">
-            {t('aboutPage.heroTitleLine1')}<br />
-            <span className="italic font-normal text-brass-dark">{t('aboutPage.heroTitleLine2')}</span>
+          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-forest leading-[1.3] sm:leading-[1.32]">
+            <span className="block">{t('aboutPage.heroTitleLine1')}</span>
+            <span className="block italic font-normal text-brass-dark mt-1.5 sm:mt-2.5">
+              {t('aboutPage.heroTitleLine2')}
+            </span>
           </h1>
 
           <p className="font-serif text-xl sm:text-2xl italic text-charcoal/85 leading-relaxed font-normal border-l-2 border-brass pl-6">

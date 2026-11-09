@@ -47,7 +47,7 @@ export const AdminDashboardPage: React.FC = () => {
       <div className="bg-forest text-paper px-6 py-4 border border-brass corner-frame flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-md">
         <div className="space-y-2">
           
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-wide">
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-wide text-paper leading-snug">
             Bảng Điều Hành Trung Tâm
           </h1>
           
