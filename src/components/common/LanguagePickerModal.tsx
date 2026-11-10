@@ -79,16 +79,16 @@ export const LanguagePickerModal: React.FC<LanguagePickerModalProps> = ({
 
           {/* Heading */}
           <div className="text-center mb-2">
-            <p className="font-cinzel text-xs tracking-[0.3em] text-brass/70 uppercase mb-3">
+            <p className="font-sans text-xs tracking-[0.2em] text-brass uppercase mb-2 font-semibold">
               Viettoria
             </p>
             <h2
               id="lang-picker-title"
-              className="font-cinzel text-2xl sm:text-3xl font-semibold tracking-wide text-forest-dark"
+              className="font-serif text-2xl sm:text-3xl font-bold tracking-normal text-forest-dark"
             >
               Chọn Ngôn Ngữ
             </h2>
-            <p className="font-cinzel text-sm tracking-widest text-ink/40 mt-1">
+            <p className="font-sans text-xs tracking-wide text-ink/60 mt-1">
               Select Your Language
             </p>
             
@@ -129,15 +129,15 @@ export const LanguagePickerModal: React.FC<LanguagePickerModalProps> = ({
                   </span>
                   {/* Label */}
                   <span
-                    className={`font-cinzel text-xs tracking-[0.12em] uppercase leading-tight text-center transition-colors duration-200 ${
-                      isSelected ? 'text-brass font-semibold' : 'group-hover:text-brass'
+                    className={`font-sans text-xs tracking-wider uppercase leading-tight text-center transition-colors duration-200 ${
+                      isSelected ? 'text-brass font-bold' : 'group-hover:text-brass'
                     }`}
                   >
                     {lang.label}
                   </span>
                   {/* Short code badge */}
                   <span
-                    className={`absolute top-1.5 right-1.5 font-cinzel text-[9px] tracking-widest transition-colors duration-200 ${
+                    className={`absolute top-1.5 right-1.5 font-mono text-[9px] tracking-wider transition-colors duration-200 ${
                       isSelected ? 'text-brass/90 font-bold' : 'text-brass/40 group-hover:text-brass/70'
                     }`}
                   >

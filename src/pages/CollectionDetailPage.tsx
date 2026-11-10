@@ -9,18 +9,18 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 export const CollectionDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { t, localizeCollection, localizeProduct } = useLanguage();
+  const { language, t, localizeCollection, localizeProduct } = useLanguage();
   const [collection, setCollection] = useState<(Collection & { products: Product[] }) | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (slug) {
-      publicApi.getCollectionBySlug(slug).then((data) => {
+      publicApi.getCollectionBySlug(slug, language).then((data) => {
         setCollection(data);
         setLoading(false);
       });
     }
-  }, [slug]);
+  }, [slug, language]);
 
   if (loading) {
     return <PageLoadingHeritage message={t('common.loading', 'Đang tải chi tiết bộ sưu tập kiến trúc...')} />;

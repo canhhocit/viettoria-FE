@@ -34,17 +34,17 @@ export const ProductDetailPage: React.FC = () => {
   const [qrLoading, setQrLoading] = useState(false);
   const [qrError, setQrError] = useState('');
   const [shareMessage, setShareMessage] = useState('');
-  const { t, localizeProduct } = useLanguage();
+  const { language, t, localizeProduct, localizeStoryBlock } = useLanguage();
 
   useEffect(() => {
     if (slug) {
       setLoading(true);
-      publicApi.getProductBySlugOrCode(slug).then((data) => {
+      publicApi.getProductBySlugOrCode(slug, language).then((data) => {
         setRawProduct(data);
         setLoading(false);
       });
     }
-  }, [slug]);
+  }, [slug, language]);
 
   const product = useMemo(() => (rawProduct ? localizeProduct(rawProduct) : null), [rawProduct, localizeProduct]);
 
@@ -171,7 +171,7 @@ export const ProductDetailPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="text-xs font-cinzel text-brass-subtle uppercase tracking-widest shrink-0 font-bold">
+            <div className="text-xs font-sans text-brass-subtle uppercase tracking-wider shrink-0 font-semibold">
               {t('product.qrDeepLinkIdBadge')}
             </div>
           </div>
@@ -180,7 +180,7 @@ export const ProductDetailPage: React.FC = () => {
         {/* Product Identity Header */}
         <div className="space-y-4 max-w-4xl">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="px-3 py-1 bg-paper-warm border border-paper-border text-forest text-xs uppercase tracking-wider font-cinzel font-semibold">
+            <span className="px-3 py-1 bg-paper-warm border border-paper-border text-forest text-xs uppercase tracking-wider font-sans font-semibold">
               {product.epoch}
             </span>
             <span className="flex items-center gap-1.5 text-xs text-charcoal-muted">
@@ -314,7 +314,7 @@ export const ProductDetailPage: React.FC = () => {
               {product.storyBlocks.map((block: StoryBlock) => (
                 <StoryBlockRenderer 
                   key={block.id} 
-                  block={block} 
+                  block={localizeStoryBlock(block)} 
                   heritageName={product.name} 
                 />
               ))}
@@ -338,7 +338,7 @@ export const ProductDetailPage: React.FC = () => {
         {/* Technical Specifications Sheet */}
         <section className="bg-paper-warm border border-paper-border corner-frame p-5 sm:p-6 space-y-6">
           <div className="space-y-1">
-            <div className="flex items-center gap-2 text-brass text-xs font-cinzel uppercase tracking-widest font-bold">
+            <div className="flex items-center gap-2 text-brass text-xs font-sans uppercase tracking-wider font-semibold">
               <Ruler className="w-4 h-4" />
               <span>{t('product.craftingSpecs', 'Tiêu Chuẩn Kỹ Thuật Chế Tác')}</span>
             </div>

@@ -9,16 +9,16 @@ import { resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
 import { useLanguage } from '../contexts/LanguageContext';
 
 export const CollectionsPage: React.FC = () => {
-  const { t, localizeCollection } = useLanguage();
+  const { language, t, localizeCollection } = useLanguage();
   const [collections, setCollections] = useState<Collection[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    publicApi.getCollections().then((data) => {
+    publicApi.getCollections(language).then((data) => {
       setCollections(data);
       setLoading(false);
     });
-  }, []);
+  }, [language]);
 
   if (loading) {
     return <PageLoadingHeritage message={t('collectionsPage.loading', 'Đang tải các bộ sưu tập di sản kiến trúc...')} />;
@@ -32,7 +32,7 @@ export const CollectionsPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end border-b border-paper-border pb-10 sm:pb-14">
           {/* Main Title & Manifesto */}
           <div className="lg:col-span-8 space-y-4">
-            <div className="inline-flex items-center gap-2.5 text-brass text-xs font-cinzel uppercase tracking-[0.2em] font-bold">
+            <div className="inline-flex items-center gap-2.5 text-brass text-xs font-sans uppercase tracking-wider font-semibold">
               <Layers className="w-4 h-4 text-brass" />
               <span>{t('collectionsPage.eyebrow', 'Phân Loại Niên Đại & Kiến Trúc')}</span>
             </div>
@@ -62,15 +62,15 @@ export const CollectionsPage: React.FC = () => {
             <div className="grid grid-cols-2 gap-3 pt-1 text-xs">
               <div className="space-y-0.5">
                 <span className="text-[10px] font-mono uppercase text-charcoal-muted tracking-wider block">
-                  Quy Mô Khảo Cứu
+                  {t('collectionsPage.researchScope', 'Quy Mô Khảo Cứu')}
                 </span>
                 <span className="font-serif text-base font-bold text-forest">
-                  5 Mốc Hoàng Kim
+                  {t('collectionsPage.goldenEras', '5 Mốc Hoàng Kim')}
                 </span>
               </div>
               <div className="space-y-0.5">
                 <span className="text-[10px] font-mono uppercase text-charcoal-muted tracking-wider block">
-                  Trục Niên Biểu
+                  {t('collectionsPage.timelineAxis', 'Trục Niên Biểu')}
                 </span>
                 <span className="font-serif text-base font-bold text-forest">
                   1049 — 1863
@@ -80,13 +80,13 @@ export const CollectionsPage: React.FC = () => {
 
             <p className="text-[11px] font-sans text-charcoal/70 leading-normal pt-1 border-t border-paper-border flex items-center gap-1.5">
               <Award className="w-3.5 h-3.5 text-brass shrink-0" />
-              <span>Tiêu chuẩn số hóa phục chế 3D độ chính xác cao</span>
+              <span>{t('collectionsPage.precisionStandard', 'Tiêu chuẩn số hóa phục chế 3D độ chính xác cao')}</span>
             </p>
           </div>
         </div>
 
         {/* Chronological Heritage Timeline (1049 - 1863) */}
-        <section aria-label="Biên niên sử di sản kiến trúc">
+        <section aria-label={t('collectionsPage.chronicleSectionLabel', 'Biên niên sử di sản kiến trúc')}>
           <HeritageTimeline />
         </section>
 

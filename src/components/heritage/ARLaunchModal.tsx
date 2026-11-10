@@ -86,7 +86,7 @@ export const ARLaunchModal: React.FC<ARLaunchModalProps> = ({
 
         <div className="flex items-center gap-2 text-brass">
           <Box size={16} />
-          <span className="font-cinzel text-xs font-bold uppercase tracking-widest">
+          <span className="font-sans text-xs font-bold uppercase tracking-widest">
             {t('ar.title', 'Thực Tế Ảo Tăng Cường (Web AR)')}
           </span>
         </div>

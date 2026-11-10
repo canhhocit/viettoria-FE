@@ -279,14 +279,14 @@ export const AdminStoryBuilderPage: React.FC = () => {
                 onError={handleImageFallback}
                 className="h-full w-full object-cover"
               />
-              <span className="absolute bottom-0 inset-x-0 bg-forest/90 py-0.5 text-center font-cinzel text-[9px] uppercase tracking-wider text-brass font-bold">
+              <span className="absolute bottom-0 inset-x-0 bg-forest/90 py-0.5 text-center font-sans text-[9px] uppercase tracking-wider text-brass font-bold">
                 {product?.code || 'DI SẢN'}
               </span>
             </div>
 
             <div className="space-y-1">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="border border-brass/40 bg-paper-warm px-2 py-0.5 font-cinzel text-[10px] uppercase tracking-wider text-brass-dark font-semibold">
+                <span className="border border-brass/40 bg-paper-warm px-2 py-0.5 font-sans text-[10px] uppercase tracking-wider text-brass-dark font-semibold">
                   {product?.epoch || 'Triều đại lịch sử'}
                 </span>
                 <span className="font-sans text-xs text-charcoal-muted">
@@ -299,7 +299,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
               </h1>
 
               <div className="flex items-center gap-3 font-sans text-xs text-charcoal-muted pt-0.5">
-                <span>Mã: <strong className="font-cinzel text-charcoal font-bold tracking-wider">{product?.code}</strong></span>
+                <span>Mã: <strong className="font-sans text-charcoal font-bold tracking-wider">{product?.code}</strong></span>
                 <span>•</span>
                 <span>Khối câu chuyện: <strong className="text-forest font-semibold">{stories.length} khối</strong></span>
               </div>
@@ -326,7 +326,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                     onClick={() => setIsAddMenuOpen(false)}
                   />
                   <div className="absolute right-0 top-full z-30 mt-2 w-80 border border-brass bg-paper p-2 shadow-xl">
-                    <p className="px-3 py-1.5 font-cinzel text-[10px] uppercase tracking-widest text-charcoal-muted border-b border-paper-border font-bold">
+                    <p className="px-3 py-1.5 font-sans text-[10px] uppercase tracking-widest text-charcoal-muted border-b border-paper-border font-bold">
                       Chọn cấu trúc khối
                     </p>
                     <div className="space-y-1 pt-1">
@@ -364,7 +364,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
         {/* Quick Block Type Segmented Ribbon */}
         {!isDemo && (
           <div className="mt-5 pt-4 border-t border-paper-border">
-            <p className="font-cinzel text-[10px] uppercase tracking-widest text-charcoal-muted mb-2.5 flex items-center gap-1.5 font-bold">
+            <p className="font-sans text-[10px] uppercase tracking-widest text-charcoal-muted mb-2.5 flex items-center gap-1.5 font-bold">
               <Layers className="h-3 w-3 text-brass" />
               <span>Thêm nhanh theo loại cấu kiện:</span>
             </p>
@@ -460,7 +460,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                     <span className="font-serif text-lg sm:text-xl font-bold text-forest">
                       {String(idx + 1).padStart(2, '0')}
                     </span>
-                    <span className="font-cinzel text-[9px] uppercase tracking-widest text-charcoal-muted font-bold">
+                    <span className="font-sans text-[9px] uppercase tracking-widest text-charcoal-muted font-bold">
                       THỨ TỰ
                     </span>
                   </div>
@@ -508,7 +508,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                             onError={handleImageFallback}
                             className="h-full w-full object-cover transition-transform duration-300 group-hover/thumb:scale-105"
                           />
-                          <span className="absolute bottom-1 right-1 bg-forest/80 px-1 py-0.5 font-cinzel text-[8px] uppercase tracking-wider text-brass font-bold">
+                          <span className="absolute bottom-1 right-1 bg-forest/80 px-1 py-0.5 font-sans text-[8px] uppercase tracking-wider text-brass font-bold">
                             Tư Liệu
                           </span>
                         </div>
@@ -535,7 +535,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                           <div className="mt-2 flex flex-wrap items-center gap-1.5 pt-1">
                             <span className="font-sans text-xs text-charcoal-muted">Các mốc son:</span>
                             {block.timelineItems.slice(0, 4).map((item, tIdx) => (
-                              <span key={tIdx} className="border border-paper-border bg-paper-warm px-1.5 py-0.5 font-cinzel text-[11px] font-bold text-brass-dark tracking-wider">
+                              <span key={tIdx} className="border border-paper-border bg-paper-warm px-1.5 py-0.5 font-sans text-[11px] font-bold text-brass-dark tracking-wider">
                                 {item.year}
                               </span>
                             ))}
@@ -549,7 +549,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
 
                         {block.type === 'highlight' && block.highlightBadge && (
                           <div className="mt-1">
-                            <span className="border border-brass/50 bg-brass/10 px-2 py-0.5 font-cinzel text-[10px] uppercase tracking-wider text-brass-dark font-bold">
+                            <span className="border border-brass/50 bg-brass/10 px-2 py-0.5 font-sans text-[10px] uppercase tracking-wider text-brass-dark font-bold">
                               ★ {block.highlightBadge}
                             </span>
                           </div>
@@ -656,7 +656,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
               const ModalIcon = ModalMeta.icon;
               return (
                 <div className="border-b border-paper-border pb-4 pr-8">
-                  <div className="flex items-center gap-2 font-cinzel text-[11px] uppercase tracking-widest text-brass font-bold">
+                  <div className="flex items-center gap-2 font-sans text-[11px] uppercase tracking-widest text-brass font-bold">
                     <ModalIcon className="h-4 w-4 text-brass" />
                     <span>{ModalMeta.label}</span>
                   </div>
@@ -787,7 +787,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
               {editingBlock.type === 'timeline' && (
                 <div className="border border-paper-border bg-paper p-4 space-y-3">
                   <div className="flex items-center justify-between border-b border-paper-border pb-2">
-                    <span className="font-cinzel text-xs uppercase text-brass font-bold flex items-center gap-1.5">
+                    <span className="font-sans text-xs uppercase text-brass font-bold flex items-center gap-1.5">
                       <Calendar className="h-3.5 w-3.5" />
                       <span>Các Mốc Niên Đại Lịch Sử</span>
                     </span>
@@ -813,7 +813,7 @@ export const AdminStoryBuilderPage: React.FC = () => {
                             value={item.year}
                             onChange={(e) => handleUpdateTimelineItem(tIdx, 'year', e.target.value)}
                             placeholder="Năm (1049)"
-                            className="w-20 border border-paper-border bg-paper px-2 py-1 font-cinzel text-xs text-brass-dark font-bold focus:border-brass focus:outline-none tracking-wider"
+                            className="w-20 border border-paper-border bg-paper px-2 py-1 font-sans text-xs text-brass-dark font-bold focus:border-brass focus:outline-none tracking-wider"
                           />
                           <div className="flex-1 space-y-1.5">
                             <input

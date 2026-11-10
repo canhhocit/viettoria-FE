@@ -41,10 +41,10 @@ export const Footer: React.FC = () => {
 
           {/* Column 2: 5 Monuments Collection */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="font-cinzel text-xs uppercase tracking-widest text-brass font-bold">
+            <h4 className="font-sans text-xs uppercase tracking-wider text-brass font-semibold">
               {t('footer.monumentsCol')}
             </h4>
-            <ul className="space-y-2 text-xs sm:text-sm font-serif">
+            <ul className="space-y-2 text-xs sm:text-sm font-sans">
               {footerMonuments.map((m) => {
                 const loc = getLocalizedProduct({ slug: m.slug, name: m.name } as any, language);
                 return (
@@ -75,10 +75,10 @@ export const Footer: React.FC = () => {
 
           {/* Column 3: Atelier & Story */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="font-cinzel text-xs uppercase tracking-widest text-brass font-bold">
+            <h4 className="font-sans text-xs uppercase tracking-wider text-brass font-semibold">
               {t('footer.atelierCol')}
             </h4>
-            <ul className="space-y-2 text-xs sm:text-sm font-serif text-paper/80">
+            <ul className="space-y-2 text-xs sm:text-sm font-sans text-paper/80">
               <li>
                 <Link to="/about" className="hover:text-brass-light transition-colors block">
                   {t('nav.about')}
@@ -109,10 +109,10 @@ export const Footer: React.FC = () => {
 
           {/* Column 4: Contact & Social */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="font-cinzel text-xs uppercase tracking-widest text-brass font-bold">
+            <h4 className="font-sans text-xs uppercase tracking-wider text-brass font-semibold">
               {t('footer.connectCol')}
             </h4>
-            <div className="space-y-2.5 text-xs sm:text-[13px] text-paper/80 font-serif">
+            <div className="space-y-2.5 text-xs sm:text-[13px] text-paper/80 font-sans">
               <div className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-brass shrink-0" />
                 <a href={`mailto:${t('footer.contactEmail')}`} className="hover:text-brass-light transition-colors">

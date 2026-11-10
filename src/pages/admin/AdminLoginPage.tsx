@@ -94,11 +94,11 @@ export const AdminLoginPage: React.FC = () => {
               className="group inline-flex items-center gap-3"
               aria-label="Viettoria, về trang chủ"
             >
-              <span className="flex h-11 w-11 items-center justify-center border border-brass/70 bg-paper/5 font-display text-xl text-brass-light transition-colors group-hover:bg-brass/15">
+              <span className="flex h-11 w-11 items-center justify-center border border-brass/70 bg-paper/5 font-serif text-xl text-brass-light transition-colors group-hover:bg-brass/15">
                 V
               </span>
               <span>
-                <span className="block font-display text-lg font-semibold tracking-[0.12em] text-paper">
+                <span className="block font-serif text-lg font-semibold tracking-[0.12em] text-paper">
                   VIETTORIA
                 </span>
               </span>
@@ -111,7 +111,7 @@ export const AdminLoginPage: React.FC = () => {
               Không gian dành cho quản trị
               <span className="h-px w-8 bg-brass" />
             </p>
-            <h1 className="max-w-[470px] font-display text-[clamp(2.15rem,4vw,3.75rem)] font-medium leading-[1.08] tracking-[-0.025em] text-paper">
+            <h1 className="max-w-[470px] font-serif text-[clamp(2.15rem,4vw,3.75rem)] font-medium leading-[1.08] tracking-[-0.025em] text-paper">
               Gìn giữ ký ức,
               <br />
               <em className="font-normal text-brass-light">
@@ -140,7 +140,7 @@ export const AdminLoginPage: React.FC = () => {
             </Link>
 
             <div className="mb-8">
-              <h2 className="mt-2 font-display text-[2rem] font-medium leading-tight text-forest sm:text-[2.25rem]">
+              <h2 className="mt-2 font-serif text-[2rem] font-medium leading-tight text-forest sm:text-[2.25rem]">
                 Chào mừng trở lại
               </h2>
             </div>

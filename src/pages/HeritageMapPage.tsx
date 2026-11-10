@@ -11,7 +11,7 @@ export const HeritageMapPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         {/* Page Header */}
         <div className="max-w-3xl space-y-3">
-          <div className="flex items-center gap-2 text-brass text-xs font-cinzel uppercase tracking-widest font-bold">
+          <div className="flex items-center gap-2 text-brass text-xs font-sans uppercase tracking-wider font-semibold">
             <Compass className="w-4 h-4" />
             <span>{t('mapPage.subtitle', 'Hệ Thống Tọa Độ & Bản Đồ Số')}</span>
           </div>

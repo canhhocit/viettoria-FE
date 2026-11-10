@@ -150,11 +150,11 @@ export const ExplodedJoineryViewer: React.FC = () => {
           <div className="max-w-2xl">
             <div className="flex items-center gap-2 text-brass">
               <Layers size={16} />
-              <p className="font-cinzel text-xs font-bold uppercase tracking-[0.2em]">
+              <p className="font-sans text-xs font-semibold uppercase tracking-wider text-brass">
                 {t('joinery.eyebrow', 'Bí Thuật Kiến Trúc Gỗ Việt · Không Dùng Đinh')}
               </p>
             </div>
-            <h2 className="mt-2 font-display text-3xl font-bold leading-tight text-forest sm:text-4xl">
+            <h2 className="mt-2 font-serif text-3xl font-bold leading-tight text-forest sm:text-4xl">
               {t('joinery.heading', 'Bóc Tách Cấu Kiện Mộng Khớp Âm Dương')}
             </h2>
             <p className="mt-3 text-sm sm:text-base leading-relaxed text-charcoal/85 font-normal">
@@ -255,7 +255,7 @@ export const ExplodedJoineryViewer: React.FC = () => {
                   style={{ width: '100%', height: '100%', backgroundColor: 'transparent' }}
                   className="h-full w-full"
                 />
-                <div className="pointer-events-none absolute left-3 top-3 border border-brass/40 bg-forest/90 px-2.5 py-1 text-[11px] font-cinzel text-brass font-bold rounded-[1px]">
+                <div className="pointer-events-none absolute left-3 top-3 border border-brass/40 bg-forest/90 px-2.5 py-1 text-[11px] font-sans text-brass font-semibold uppercase tracking-wider rounded-[1px]">
                   MÔ HÌNH 3D THỜI GIAN THỰC · KÉO ĐỂ XOAY
                 </div>
               </div>
@@ -263,7 +263,7 @@ export const ExplodedJoineryViewer: React.FC = () => {
 
             {/* Tiers Navigation Selector Pills */}
             <div className="mt-4 border-t border-paper-border pt-4">
-              <span className="font-cinzel text-[10px] uppercase font-bold text-charcoal-muted block mb-2">
+              <span className="font-sans text-[11px] uppercase font-bold text-charcoal-muted block mb-2 tracking-wider">
                 Chọn Cấu Kiện Khảo Cứu:
               </span>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -278,7 +278,7 @@ export const ExplodedJoineryViewer: React.FC = () => {
                         : 'border-paper-border bg-paper hover:border-brass text-forest'
                     }`}
                   >
-                    <span className="font-cinzel text-[10px] text-brass font-bold block">
+                    <span className="font-mono text-[10px] text-brass font-bold block">
                       Tầng [{tier.letter}]
                     </span>
                     <span className="truncate block font-medium mt-0.5">{tier.name.split(' (')[0]}</span>
@@ -293,12 +293,12 @@ export const ExplodedJoineryViewer: React.FC = () => {
             <div>
               <div className="flex items-center gap-2 border-b border-paper-border pb-3">
                 <Info size={16} className="text-brass" />
-                <span className="font-cinzel text-xs font-bold uppercase tracking-widest text-brass">
+                <span className="font-sans text-xs font-semibold uppercase tracking-wider text-brass">
                   Khảo Cứu Cấu Kiện · Tầng [{activeTier.letter}]
                 </span>
               </div>
 
-              <h3 className="mt-3 font-display text-2xl font-bold text-forest">
+              <h3 className="mt-3 font-serif text-2xl font-bold text-forest">
                 {activeTier.name}
               </h3>
               <p className="mt-1 font-serif text-sm italic text-brass-dark">
@@ -307,10 +307,10 @@ export const ExplodedJoineryViewer: React.FC = () => {
 
               <div className="mt-5 space-y-4">
                 <div className="border border-paper-border bg-paper-warm p-3.5 rounded-[2px]">
-                  <span className="font-cinzel text-[10px] uppercase font-bold text-brass block">
+                  <span className="font-sans text-[10px] uppercase font-bold tracking-wider text-brass block">
                     Phương Thức Khớp Mộng Cổ Truyền
                   </span>
-                  <p className="font-serif text-base font-bold text-forest mt-0.5">
+                  <p className="font-sans text-sm font-semibold text-forest mt-0.5">
                     {activeTier.joineryType}
                   </p>
                 </div>

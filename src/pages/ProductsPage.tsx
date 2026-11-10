@@ -8,7 +8,7 @@ import { resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
 import { useLanguage } from '../contexts/LanguageContext';
 
 export const ProductsPage: React.FC = () => {
-  const { t, localizeProduct, localizeCollection } = useLanguage();
+  const { language, t, localizeProduct, localizeCollection } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [collections, setCollections] = useState<Collection[]>([]);
@@ -17,19 +17,19 @@ export const ProductsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    publicApi.getCollections().then(setCollections);
-  }, []);
+    publicApi.getCollections(language).then(setCollections);
+  }, [language]);
 
   useEffect(() => {
     setLoading(true);
     publicApi.getProducts({
       collectionId: selectedCollectionId === 'all' ? undefined : selectedCollectionId,
       search: searchQuery.trim() || undefined
-    }).then((data) => {
+    }, language).then((data) => {
       setProducts(data);
       setLoading(false);
     });
-  }, [selectedCollectionId, searchQuery]);
+  }, [selectedCollectionId, searchQuery, language]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;

@@ -174,9 +174,9 @@ const InteractiveModelStage: React.FC<{ product: Product; reducedMotion: boolean
           className={`home-model-viewer absolute inset-0 h-full w-full transition-opacity duration-700 ${modelLoaded ? 'opacity-100' : 'opacity-0'}`}
         />
       )}
-      <div className="pointer-events-none absolute left-3 top-3 z-10 border border-brass/50 bg-[#121814]/90 px-2.5 py-1 text-[10px] font-cinzel font-bold text-brass uppercase tracking-wider backdrop-blur-sm rounded-[1px] shadow-sm">
+      <div className="pointer-events-none absolute left-3 top-3 z-10 border border-brass/50 bg-[#121814]/90 px-2.5 py-1 text-[10px] font-sans font-semibold text-brass uppercase tracking-wider backdrop-blur-sm rounded-[1px] shadow-sm">
         {modelLoaded
-          ? '✦ 3D THỜI GIAN THỰC · KÉO XOAY'
+          ? t('home.dragToRotate', 'Mô hình 3D · Kéo để xoay')
           : previewPlaying
             ? t('home.previewVideo', 'Video xem trước')
             : modelFailed || !viewerAvailable
@@ -226,10 +226,10 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
         {/* Header Section */}
         <div data-home-reveal className="mb-8 flex flex-col justify-between gap-5 sm:mb-10 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
-            <p className="mb-2.5 font-cinzel text-xs font-bold uppercase tracking-[0.2em] text-brass">
+            <p className="mb-2.5 font-sans text-xs font-semibold uppercase tracking-wider text-brass">
               {t('home.scrollyEyebrow', 'Một vòng qua di sản Việt')}
             </p>
-            <h2 className="font-display text-3xl font-bold leading-tight text-forest sm:text-4xl lg:text-5xl">
+            <h2 className="font-serif text-3xl font-bold leading-tight text-forest sm:text-4xl lg:text-5xl">
               {t('home.scrollyHeading', 'Mỗi công trình, một câu chuyện')}
             </h2>
             <p className="mt-3.5 max-w-xl text-sm leading-relaxed text-charcoal-muted sm:text-base">
@@ -253,7 +253,7 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
                       : 'border-paper-border bg-paper text-forest hover:border-brass hover:text-forest hover:bg-paper-warm font-medium'
                   }`}
                 >
-                  <span className={`font-cinzel text-[10px] font-bold ${activeMobileIndex === index ? 'text-brass-light' : 'text-brass'}`}>
+                  <span className={`font-mono text-[10px] font-bold ${activeMobileIndex === index ? 'text-brass-light' : 'text-brass'}`}>
                     0{index + 1}
                   </span>
                   <span>{product.name}</span>
@@ -285,13 +285,13 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
                 {/* Card Plaque Top Bar - Imperial Forest Green & Brass */}
                 <div className="flex items-center justify-between border-b border-brass/40 bg-forest px-4 py-2.5 text-xs text-paper">
                   <div className="flex items-center gap-2">
-                    <span className="font-cinzel text-xs font-bold text-brass">0{index + 1}</span>
+                    <span className="font-mono text-xs font-bold text-brass">0{index + 1}</span>
                     <span className="h-2.5 w-px bg-brass/40" />
                     <span className="truncate max-w-[150px] font-sans text-[11px] uppercase tracking-wider text-paper/90 font-medium">
                       {product.location}
                     </span>
                   </div>
-                  <span className="font-cinzel text-[10px] uppercase tracking-widest text-brass-light font-bold">
+                  <span className="font-sans text-[10px] uppercase tracking-wider text-brass-light font-semibold">
                     {product.epoch}
                   </span>
                 </div>
@@ -305,10 +305,10 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
 
                   {/* Bottom Overlay with Monument Name and Index */}
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between bg-gradient-to-t from-forest-dark/85 via-forest-dark/35 to-transparent px-4 pb-3 pt-12 text-paper-light">
-                    <p className="font-display text-base sm:text-lg font-bold text-paper drop-shadow-xs">
+                    <p className="font-serif text-base sm:text-lg font-bold text-paper drop-shadow-xs">
                       {product.name}
                     </p>
-                    <span className="font-cinzel text-[11px] font-bold text-white/90">
+                    <span className="font-mono text-[11px] font-semibold text-white/90">
                       0{index + 1} / 0{products.length}
                     </span>
                   </div>
@@ -317,12 +317,12 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
                 {/* Card Information Body */}
                 <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
                   <div>
-                    <h3 className="font-display text-xl sm:text-2xl font-bold leading-snug text-forest transition-colors group-hover:text-brass-dark">
+                    <h3 className="font-serif text-xl sm:text-2xl font-bold leading-snug text-forest transition-colors group-hover:text-brass-dark">
                       <Link to={`/products/${product.slug}`}>
                         {product.name}
                       </Link>
                     </h3>
-                    <p className="mt-1 font-display text-xs sm:text-sm italic text-brass-dark font-medium">
+                    <p className="mt-1 font-serif text-xs sm:text-sm italic text-brass-dark font-medium">
                       {product.subName}
                     </p>
                     <p className="mt-3.5 text-xs sm:text-sm leading-relaxed text-charcoal/85 line-clamp-3">
@@ -332,7 +332,7 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
 
                   {/* Card Action Link */}
                   <div className="mt-6 flex items-center justify-between border-t border-paper-border pt-4">
-                    <span className="font-cinzel text-[10px] font-bold uppercase tracking-wider text-charcoal-muted">
+                    <span className="font-sans text-[10px] font-semibold uppercase tracking-wider text-charcoal-muted">
                       {product.epoch}
                     </span>
                     <Link
@@ -355,7 +355,7 @@ const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
 };
 
 export const HomePage: React.FC = () => {
-  const { t, localizeCollection, localizeBlog } = useLanguage();
+  const { language, t, localizeCollection, localizeBlog } = useLanguage();
   const mainRef = useRef<HTMLElement>(null);
   const initialHero = FALLBACK_PRODUCTS.find((product) => product.isHeroRelease) || FALLBACK_PRODUCTS[0];
   const [heroProduct, setHeroProduct] = useState<Product | null>(initialHero || null);
@@ -382,7 +382,7 @@ export const HomePage: React.FC = () => {
       setBlogs(data.latestBlogs);
     });
     return () => { mounted = false; };
-  }, []);
+  }, [language]);
 
   useEffect(() => {
     const video = heroVideoRef.current;
@@ -445,7 +445,7 @@ export const HomePage: React.FC = () => {
 
         <div className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center px-5 pb-24 pt-16 sm:px-8 lg:px-16">
           <div className="max-w-[880px] animate-fade-up py-10">
-            <h1 className="font-display text-[clamp(2.75rem,5.8vw,5.5rem)] font-normal leading-[1.18] tracking-normal text-paper">
+            <h1 className="font-serif text-[clamp(2.75rem,5.8vw,5.5rem)] font-normal leading-[1.18] tracking-normal text-paper">
               <span className="block">{t('home.heroTitleLine1', 'Văn Minh')}</span>
               <span className="heritage-gold-foil font-normal italic pb-1">{t('home.heroTitleLine2', 'Di Sản Việt')}</span>
             </h1>
@@ -487,7 +487,7 @@ export const HomePage: React.FC = () => {
         <div data-home-reveal className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-paper-border pb-5 sm:mb-10">
           <div>
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-brass-dark">{t('home.collectionEyebrow', 'Chọn theo câu chuyện bạn yêu thích')}</p>
-            <h2 className="font-display text-3xl font-bold text-forest sm:text-4xl">{t('home.collectionHeading', 'Bộ sưu tập di sản')}</h2>
+            <h2 className="font-serif text-3xl font-bold text-forest sm:text-4xl">{t('home.collectionHeading', 'Bộ sưu tập di sản')}</h2>
           </div>
           <Link to="/collections" className="inline-flex items-center gap-2 pb-1 text-sm font-bold text-forest hover:text-brass transition-colors">
             {t('common.viewAll', 'Xem tất cả')} <ArrowRight size={15} strokeWidth={2} />
@@ -530,10 +530,10 @@ export const HomePage: React.FC = () => {
       <section className="border-y-2 border-brass/40 bg-forest text-paper">
         <div className="mx-auto grid max-w-[1440px] gap-8 px-5 py-16 sm:px-8 md:grid-cols-[0.8fr_1.2fr] lg:px-16">
           <div data-home-reveal>
-            <p className="text-xs font-cinzel font-bold uppercase tracking-[0.2em] text-brass">
+            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-brass">
               {t('home.blogEyebrow', 'Ghi chép về di sản')}
             </p>
-            <h2 className="mt-3 font-display text-3xl font-bold text-paper sm:text-4xl">
+            <h2 className="mt-3 font-serif text-3xl font-bold text-paper sm:text-4xl">
               {t('home.blogHeading', 'Câu chuyện phía sau công trình')}
             </h2>
             <p className="mt-3 max-w-sm text-sm leading-6 text-paper/80 font-normal">
@@ -548,8 +548,8 @@ export const HomePage: React.FC = () => {
               const blog = localizeBlog(rawBlog);
               return (
                 <article key={blog.id} data-home-reveal className="group border-t border-brass/30 pt-4">
-                  <p className="font-cinzel text-xs font-bold uppercase tracking-[0.14em] text-brass">{blog.category} · 0{index + 1}</p>
-                  <h3 className="mt-3 font-display text-2xl leading-snug text-paper">
+                  <p className="font-sans text-xs font-semibold uppercase tracking-wider text-brass">{blog.category} · 0{index + 1}</p>
+                  <h3 className="mt-3 font-serif text-2xl leading-snug text-paper">
                     <Link to={`/blogs/${blog.slug}`} className="transition-colors group-hover:text-brass-light">{blog.title}</Link>
                   </h3>
                   <p className="mt-2 line-clamp-2 text-sm leading-6 text-paper/75">{blog.excerpt}</p>

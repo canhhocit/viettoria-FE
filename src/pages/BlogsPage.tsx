@@ -7,17 +7,17 @@ import { resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
 import { useLanguage } from '../contexts/LanguageContext';
 
 export const BlogsPage: React.FC = () => {
-  const { t, localizeBlog } = useLanguage();
+  const { language, t, localizeBlog } = useLanguage();
   const [rawBlogs, setRawBlogs] = useState<BlogPost[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    publicApi.getBlogs().then((data) => {
+    publicApi.getBlogs(language).then((data) => {
       setRawBlogs(data);
       setLoading(false);
     });
-  }, []);
+  }, [language]);
 
   const blogs = (rawBlogs || []).map((b) => localizeBlog(b));
 

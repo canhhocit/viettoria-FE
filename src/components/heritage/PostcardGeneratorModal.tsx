@@ -243,7 +243,7 @@ export const PostcardGeneratorModal: React.FC<PostcardGeneratorModalProps> = ({
 
         <div className="flex items-center gap-2 text-brass">
           <Stamp size={16} />
-          <span className="font-cinzel text-xs font-bold uppercase tracking-widest">
+          <span className="font-sans text-xs font-bold uppercase tracking-widest">
             {t('postcard.atelier', 'Xưởng In Bưu Thiếp Ký Ức')}
           </span>
         </div>
@@ -277,7 +277,7 @@ export const PostcardGeneratorModal: React.FC<PostcardGeneratorModalProps> = ({
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
           {/* Poetic quote picker */}
           <div>
-            <label className="block text-xs font-cinzel font-bold uppercase tracking-wider text-brass mb-1.5">
+            <label className="block text-xs font-sans font-bold uppercase tracking-wider text-brass mb-1.5">
               Chọn Lời Thơ Di Sản
             </label>
             <div className="space-y-1.5">
@@ -301,7 +301,7 @@ export const PostcardGeneratorModal: React.FC<PostcardGeneratorModalProps> = ({
           {/* Personal note input */}
           <div className="flex flex-col justify-between">
             <div>
-              <label htmlFor="postcard-note" className="block text-xs font-cinzel font-bold uppercase tracking-wider text-brass mb-1.5">
+              <label htmlFor="postcard-note" className="block text-xs font-sans font-bold uppercase tracking-wider text-brass mb-1.5">
                 Lời Nhắn Của Bạn
               </label>
               <textarea

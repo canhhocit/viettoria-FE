@@ -273,7 +273,7 @@ export const AdminImagePicker: React.FC<AdminImagePickerProps> = ({
                 onError={(e) => handleImageFallback(e)}
                 className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
               />
-              <span className="absolute left-1 top-1 bg-forest/85 px-1 py-0.5 font-cinzel text-[8px] uppercase tracking-wider text-brass font-bold">
+              <span className="absolute left-1 top-1 bg-forest/85 px-1 py-0.5 font-sans text-[8px] uppercase tracking-wider text-brass font-bold">
                 Ảnh hiện tại
               </span>
             </div>

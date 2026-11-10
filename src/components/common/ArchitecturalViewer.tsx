@@ -454,7 +454,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
               <Target className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">{t('hotspots.toggleTitle', 'Khảo cứu cấu kiện')}</span>
               <span className="sm:hidden">{t('hotspots.toggleTitle', 'Cấu kiện')}</span>
-              <span className={`px-1.5 py-0.2 font-cinzel text-[10px] font-bold ${showHotspots ? 'bg-forest text-brass' : 'bg-paper text-charcoal'}`}>
+              <span className={`px-1.5 py-0.2 font-sans text-[10px] font-bold ${showHotspots ? 'bg-forest text-brass' : 'bg-paper text-charcoal'}`}>
                 {hotspots.length}
               </span>
             </button>
@@ -612,7 +612,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                 >
                   <ChevronLeft className="h-3.5 w-3.5" />
                 </button>
-                <span className="font-cinzel text-[10px] font-bold text-brass px-1">
+                <span className="font-sans text-[10px] font-bold text-brass px-1">
                   {String(currentHotspotIndex + 1).padStart(2, '0')}/{String(hotspots.length).padStart(2, '0')}
                 </span>
                 <button
@@ -646,7 +646,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
           )}
 
           {/* Stage Loading Status */}
-          <div className="absolute left-3 top-3 z-10 flex items-center gap-2 border border-brass/40 bg-[#121814]/90 px-3 py-1.5 text-xs font-cinzel uppercase tracking-[0.15em] text-paper font-bold shadow-sm backdrop-blur-sm sm:left-4 sm:top-4">
+          <div className="absolute left-3 top-3 z-10 flex items-center gap-2 border border-brass/40 bg-[#121814]/90 px-3 py-1.5 text-xs font-sans uppercase tracking-[0.15em] text-paper font-bold shadow-sm backdrop-blur-sm sm:left-4 sm:top-4">
             <span className={`h-1.5 w-1.5 bg-brass ${!modelLoaded && !modelFailed && viewerAvailable ? 'animate-pulse' : ''}`} />
             <span role="status" aria-live="polite">{stageLabel}</span>
           </div>
@@ -658,7 +658,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                 type="button"
                 onClick={() => setLightingMode('dawn')}
                 title="Sớm Mai: Nắng dịu vàng sương"
-                className={`px-2 py-1 flex items-center gap-1 font-cinzel text-[10px] uppercase font-bold transition-colors ${
+                className={`px-2 py-1 flex items-center gap-1 font-sans text-[10px] uppercase font-bold transition-colors ${
                   lightingMode === 'dawn' ? 'bg-brass text-forest' : 'text-paper/80 hover:text-brass'
                 }`}
               >
@@ -669,7 +669,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                 type="button"
                 onClick={() => setLightingMode('noon')}
                 title="Chính Ngọ: Ánh sáng rõ nét"
-                className={`px-2 py-1 flex items-center gap-1 font-cinzel text-[10px] uppercase font-bold transition-colors ${
+                className={`px-2 py-1 flex items-center gap-1 font-sans text-[10px] uppercase font-bold transition-colors ${
                   lightingMode === 'noon' ? 'bg-brass text-forest' : 'text-paper/80 hover:text-brass'
                 }`}
               >
@@ -680,7 +680,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                 type="button"
                 onClick={() => setLightingMode('dusk')}
                 title="Hoàng Hôn: Ráng chiều hổ phách"
-                className={`px-2 py-1 flex items-center gap-1 font-cinzel text-[10px] uppercase font-bold transition-colors ${
+                className={`px-2 py-1 flex items-center gap-1 font-sans text-[10px] uppercase font-bold transition-colors ${
                   lightingMode === 'dusk' ? 'bg-brass text-forest' : 'text-paper/80 hover:text-brass'
                 }`}
               >
@@ -691,7 +691,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                 type="button"
                 onClick={() => setLightingMode('night')}
                 title="Dạ Nguyệt: Ánh trăng huyền ảo"
-                className={`px-2 py-1 flex items-center gap-1 font-cinzel text-[10px] uppercase font-bold transition-colors ${
+                className={`px-2 py-1 flex items-center gap-1 font-sans text-[10px] uppercase font-bold transition-colors ${
                   lightingMode === 'night' ? 'bg-brass text-forest' : 'text-paper/80 hover:text-brass'
                 }`}
               >
@@ -908,10 +908,10 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
           >
             <div className="flex items-start justify-between border-b border-brass/30 pb-3">
               <div>
-                <span className="font-cinzel text-[10px] font-bold uppercase tracking-widest text-brass block">
+                <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-brass block">
                   {product.epoch || t('hotspots.chronicleSubtitle', 'Hồ sơ di sản văn hóa')}
                 </span>
-                <h3 className="font-display text-xl sm:text-2xl font-bold text-paper mt-1">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-paper mt-1">
                   {product.name}
                 </h3>
                 {product.subName && (

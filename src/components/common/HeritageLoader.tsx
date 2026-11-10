@@ -151,7 +151,7 @@ export const HeritageLoader: React.FC<HeritageLoaderProps> = ({
 
           {/* Thông điệp phụ */}
           {submessage && (
-            <p className="mt-1 font-cinzel text-[11px] uppercase tracking-widest text-charcoal-muted font-semibold">
+            <p className="mt-1 font-sans text-[11px] uppercase tracking-widest text-charcoal-muted font-semibold">
               {submessage}
             </p>
           )}
@@ -176,7 +176,7 @@ export const HeritageLoader: React.FC<HeritageLoaderProps> = ({
       )}
 
       {submessage && (
-        <p className="mt-1 font-cinzel text-[10px] uppercase tracking-widest text-charcoal-muted font-bold">
+        <p className="mt-1 font-sans text-[10px] uppercase tracking-widest text-charcoal-muted font-bold">
           {submessage}
         </p>
       )}

@@ -182,7 +182,7 @@ export const AboutPage: React.FC = () => {
                   title: t('aboutPage.workshopCard1Title'),
                   desc: t('aboutPage.workshopCard1Desc'),
                   tag: t('aboutPage.workshopCard1Tag'),
-                  specs: 'Gỗ lim nguyên khối & Đá xanh Thanh Hóa · Sơn then thủ công'
+                  specs: t('aboutPage.workshopCard1Specs', 'Gỗ lim nguyên khối & Đá xanh Thanh Hóa · Sơn then thủ công')
                 })}
                 className="relative aspect-[4/3] overflow-hidden bg-paper-card border-b border-paper-border cursor-pointer group/img"
                 role="button"
@@ -195,7 +195,7 @@ export const AboutPage: React.FC = () => {
                       title: t('aboutPage.workshopCard1Title'),
                       desc: t('aboutPage.workshopCard1Desc'),
                       tag: t('aboutPage.workshopCard1Tag'),
-                      specs: 'Gỗ lim nguyên khối & Đá xanh Thanh Hóa · Sơn then thủ công'
+                      specs: t('aboutPage.workshopCard1Specs', 'Gỗ lim nguyên khối & Đá xanh Thanh Hóa · Sơn then thủ công')
                     });
                   }
                 }}
@@ -209,7 +209,7 @@ export const AboutPage: React.FC = () => {
                 <div className="absolute inset-0 bg-forest/40 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center text-paper">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-forest/85 backdrop-blur-xs border border-brass/50 text-xs font-mono uppercase tracking-wider text-paper shadow-sm">
                     <ZoomIn className="w-3.5 h-3.5 text-brass" />
-                    <span>Xem chi tiết</span>
+                    <span>{t('common.viewDetails', 'Xem chi tiết')}</span>
                   </span>
                 </div>
               </div>
@@ -235,7 +235,7 @@ export const AboutPage: React.FC = () => {
                   title: t('aboutPage.workshopCard2Title'),
                   desc: t('aboutPage.workshopCard2Desc'),
                   tag: t('aboutPage.workshopCard2Tag'),
-                  specs: 'Ghép mộng không keo · Khung sườn gỗ lim & Mái đao cong'
+                  specs: t('aboutPage.workshopCard2Specs', 'Ghép mộng không keo · Khung sườn gỗ lim & Mái đao cong')
                 })}
                 className="relative aspect-[4/3] overflow-hidden bg-paper-card border-b border-paper-border cursor-pointer group/img"
                 role="button"
@@ -248,7 +248,7 @@ export const AboutPage: React.FC = () => {
                       title: t('aboutPage.workshopCard2Title'),
                       desc: t('aboutPage.workshopCard2Desc'),
                       tag: t('aboutPage.workshopCard2Tag'),
-                      specs: 'Ghép mộng không keo · Khung sườn gỗ lim & Mái đao cong'
+                      specs: t('aboutPage.workshopCard2Specs', 'Ghép mộng không keo · Khung sườn gỗ lim & Mái đao cong')
                     });
                   }
                 }}
@@ -262,7 +262,7 @@ export const AboutPage: React.FC = () => {
                 <div className="absolute inset-0 bg-forest/40 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center text-paper">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-forest/85 backdrop-blur-xs border border-brass/50 text-xs font-mono uppercase tracking-wider text-paper shadow-sm">
                     <ZoomIn className="w-3.5 h-3.5 text-brass" />
-                    <span>Xem chi tiết</span>
+                    <span>{t('common.viewDetails', 'Xem chi tiết')}</span>
                   </span>
                 </div>
               </div>
@@ -288,7 +288,7 @@ export const AboutPage: React.FC = () => {
                   title: t('aboutPage.workshopCard3Title'),
                   desc: t('aboutPage.workshopCard3Desc'),
                   tag: t('aboutPage.workshopCard3Tag'),
-                  specs: 'Hộp mỹ thuật vân dó ép kim · Kèm thẻ chứng thực độc bản & Audio Guide'
+                  specs: t('aboutPage.workshopCard3Specs', 'Hộp mỹ thuật vân dó ép kim · Kèm thẻ chứng thực độc bản & Audio Guide')
                 })}
                 className="relative aspect-[4/3] overflow-hidden bg-paper-card border-b border-paper-border cursor-pointer group/img"
                 role="button"
@@ -301,7 +301,7 @@ export const AboutPage: React.FC = () => {
                       title: t('aboutPage.workshopCard3Title'),
                       desc: t('aboutPage.workshopCard3Desc'),
                       tag: t('aboutPage.workshopCard3Tag'),
-                      specs: 'Hộp mỹ thuật vân dó ép kim · Kèm thẻ chứng thực độc bản & Audio Guide'
+                      specs: t('aboutPage.workshopCard3Specs', 'Hộp mỹ thuật vân dó ép kim · Kèm thẻ chứng thực độc bản & Audio Guide')
                     });
                   }
                 }}
@@ -315,7 +315,7 @@ export const AboutPage: React.FC = () => {
                 <div className="absolute inset-0 bg-forest/40 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center text-paper">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-forest/85 backdrop-blur-xs border border-brass/50 text-xs font-mono uppercase tracking-wider text-paper shadow-sm">
                     <ZoomIn className="w-3.5 h-3.5 text-brass" />
-                    <span>Xem chi tiết</span>
+                    <span>{t('common.viewDetails', 'Xem chi tiết')}</span>
                   </span>
                 </div>
               </div>
@@ -361,7 +361,7 @@ export const AboutPage: React.FC = () => {
                   type="button"
                   onClick={() => setPreviewData(null)}
                   className="p-1.5 text-paper/70 hover:text-paper hover:bg-white/10 rounded transition-colors cursor-pointer"
-                  aria-label="Đóng xem ảnh"
+                  aria-label={t('common.close', 'Đóng xem ảnh')}
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -380,7 +380,7 @@ export const AboutPage: React.FC = () => {
                   {previewData.desc}
                 </p>
                 <div className="text-[11px] font-mono text-brass-light/80 border-t border-white/10 pt-2 flex items-center justify-between">
-                  <span>Khảo cứu: {previewData.specs}</span>
+                  <span>{t('aboutPage.researchSpec', 'Khảo cứu')}: {previewData.specs}</span>
                   <span className="text-brass">VIETTORIA ATELIER</span>
                 </div>
               </div>

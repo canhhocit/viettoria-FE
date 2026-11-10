@@ -137,7 +137,7 @@ export const HeritageTimeline: React.FC = () => {
       {/* Header Section */}
       <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-paper/15 pb-8">
         <div className="space-y-2">
-          <div className="flex items-center gap-2.5 text-brass text-xs font-cinzel uppercase tracking-[0.2em] font-bold">
+          <div className="flex items-center gap-2.5 text-brass text-xs font-sans uppercase tracking-[0.2em] font-bold">
             <Compass className="w-4 h-4 text-brass" />
             <span>{t('timeline.eyebrow')}</span>
           </div>
@@ -188,7 +188,7 @@ export const HeritageTimeline: React.FC = () => {
                         : 'bg-forest text-paper/85 border-brass/40 group-hover:border-brass group-hover:text-brass group-hover:scale-105'
                     }`}
                   >
-                    <span className="font-cinzel text-xs font-bold leading-none tracking-wider">
+                    <span className="font-sans text-xs font-bold leading-none tracking-wider">
                       {item.yearLabel}
                     </span>
                     <span className={`text-[8px] font-mono uppercase mt-0.5 ${isSelected ? 'text-forest/80' : 'text-brass/70'}`}>
@@ -197,7 +197,7 @@ export const HeritageTimeline: React.FC = () => {
                   </div>
 
                   {/* Dynastic Tag */}
-                  <span className={`text-xs font-cinzel mt-3 tracking-wider font-semibold transition-colors text-center ${
+                  <span className={`text-xs font-sans mt-3 tracking-wider font-semibold transition-colors text-center ${
                     isSelected ? 'text-brass' : 'text-paper/60 group-hover:text-paper'
                   }`}>
                     {locItem.dynastyShort || locItem.dynasty}
@@ -259,7 +259,7 @@ export const HeritageTimeline: React.FC = () => {
               <h4 className="font-serif text-3xl sm:text-4xl font-bold text-paper tracking-tight">
                 {currentEvent.title}
               </h4>
-              <p className="text-brass font-cinzel text-xs uppercase tracking-widest mt-1">
+              <p className="text-brass font-sans text-xs uppercase tracking-widest mt-1">
                 {currentEvent.subTitle}
               </p>
             </div>
@@ -271,7 +271,7 @@ export const HeritageTimeline: React.FC = () => {
             <div className="pt-3 flex flex-wrap items-center gap-4 border-t border-paper/15">
               <Link
                 to={`/products/${selectedEvent.slug}`}
-                className="px-6 py-3 bg-brass text-forest hover:bg-brass-light transition-all font-cinzel text-xs uppercase tracking-widest font-bold flex items-center gap-2 shadow-lg hover:shadow-brass/20 hover:-translate-y-0.5 active:translate-y-0"
+                className="px-6 py-3 bg-brass text-forest hover:bg-brass-light transition-all font-sans text-xs uppercase tracking-widest font-bold flex items-center gap-2 shadow-lg hover:shadow-brass/20 hover:-translate-y-0.5 active:translate-y-0"
               >
                 <span>{t('timeline.exploreBtn')}</span>
                 <ArrowRight className="w-4 h-4" />

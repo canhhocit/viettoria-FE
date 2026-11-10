@@ -117,7 +117,7 @@ export const AdminMediaPage: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-paper-border">
         <div>
-          <div className="flex items-center gap-2 text-brass text-xs font-cinzel uppercase tracking-widest font-bold">
+          <div className="flex items-center gap-2 text-brass text-xs font-sans uppercase tracking-widest font-bold">
             <Image className="w-4 h-4" />
             <span>Kho Lưu Trữ Hình Ảnh Thực Địa & Khảo Cứu</span>
           </div>

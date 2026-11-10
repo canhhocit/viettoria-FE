@@ -9,19 +9,19 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 export const BlogDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { t, localizeBlog } = useLanguage();
+  const { language, t, localizeBlog } = useLanguage();
   const [rawBlog, setRawBlog] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (slug) {
       setLoading(true);
-      publicApi.getBlogBySlug(slug).then((data) => {
+      publicApi.getBlogBySlug(slug, language).then((data) => {
         setRawBlog(data);
         setLoading(false);
       });
     }
-  }, [slug]);
+  }, [slug, language]);
 
   const blog = rawBlog ? localizeBlog(rawBlog) : null;
 

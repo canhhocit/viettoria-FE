@@ -85,7 +85,7 @@ export const HeritagePassportModal: React.FC = () => {
           <div className="mx-auto flex h-12 w-12 items-center justify-center border border-brass bg-forest text-brass">
             <Compass size={24} />
           </div>
-          <p className="mt-3 font-cinzel text-xs font-bold uppercase tracking-[0.25em] text-brass">
+          <p className="mt-3 font-sans text-xs font-bold uppercase tracking-[0.25em] text-brass">
             Viettoria Atelier · Chứng Thư Khảo Cứu
           </p>
           <h2 id="passport-modal-title" className="mt-1 font-serif text-2xl sm:text-3xl font-bold text-forest">
@@ -100,7 +100,7 @@ export const HeritagePassportModal: React.FC = () => {
             <div className="flex items-center gap-2.5">
               <Award className="text-brass shrink-0" size={18} />
               <div className="text-left">
-                <span className="font-cinzel text-[10px] uppercase tracking-wider text-brass font-bold block">
+                <span className="font-sans text-[10px] uppercase tracking-wider text-brass font-bold block">
                   Phẩm Trật Giám Định
                 </span>
                 <span className="font-serif text-sm font-bold text-forest">
@@ -110,7 +110,7 @@ export const HeritagePassportModal: React.FC = () => {
             </div>
 
             <div className="text-right">
-              <span className="font-cinzel text-xs font-bold text-forest">
+              <span className="font-sans text-xs font-bold text-forest">
                 {totalStamped} / {totalAvailable} Châu Phê
               </span>
               <div className="mt-1 h-2 w-32 bg-paper-border overflow-hidden rounded-[1px]">
@@ -140,7 +140,7 @@ export const HeritagePassportModal: React.FC = () => {
               >
                 <div>
                   <div className="flex items-start justify-between gap-2">
-                    <span className="font-cinzel text-[10px] font-bold text-brass uppercase tracking-wider">
+                    <span className="font-sans text-[10px] font-bold text-brass uppercase tracking-wider">
                       {monument.epoch}
                     </span>
                     {isStamped ? (
@@ -164,7 +164,7 @@ export const HeritagePassportModal: React.FC = () => {
                   {isStamped ? (
                     <div className="relative flex h-20 w-20 items-center justify-center border-2 border-cinnabar bg-cinnabar/5 p-1 text-cinnabar rotate-[-4deg] shadow-inner">
                       <div className="border border-cinnabar/60 w-full h-full flex flex-col items-center justify-center text-center p-1">
-                        <span className="font-cinzel text-[7px] font-bold tracking-widest text-cinnabar-dark">
+                        <span className="font-sans text-[7px] font-bold tracking-widest text-cinnabar-dark">
                           VIETTORIA
                         </span>
                         <span className="font-serif text-[11px] font-extrabold leading-tight text-cinnabar-dark">
@@ -177,7 +177,7 @@ export const HeritagePassportModal: React.FC = () => {
                     </div>
                   ) : (
                     <div className="flex h-16 w-16 items-center justify-center border border-dashed border-paper-border text-charcoal-muted/50 rounded-[2px]">
-                      <span className="font-cinzel text-[9px] text-center px-1">TRIỆN TRỐNG</span>
+                      <span className="font-sans text-[9px] text-center px-1">TRIỆN TRỐNG</span>
                     </div>
                   )}
                 </div>

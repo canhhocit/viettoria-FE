@@ -72,16 +72,19 @@ export default {
         cinnabar: '#98281A',
       },
       fontFamily: {
-        // Cổ xưa, bia đá, vương triều, con dấu hoàng gia (dành cho tiêu đề lớn, thương hiệu, mã di sản)
-        cinzel: ['"Cinzel"', '"Playfair Display"', 'Georgia', 'serif'],
-        display: ['"Cinzel"', '"Playfair Display"', 'Georgia', 'serif'],
-        // Cổ điển, văn bia, tự sự lịch sử (đầy đủ dấu tiếng Việt)
+        // 1. Font đồng nhất cho Header (Tiêu đề lớn, nhỏ, tên di sản): Playfair Display
+        heading: ['"Playfair Display"', 'Georgia', 'serif'],
+        display: ['"Playfair Display"', 'Georgia', 'serif'],
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
-        // Nội dung chuẩn xác, thanh thoát, đọc êm mắt (toàn bộ body, form, buttons, navigation)
-        body: ['"Be Vietnam Pro"', 'system-ui', 'sans-serif'],
-        sans: ['"Be Vietnam Pro"', 'system-ui', 'sans-serif'],
-        // Chỉ dùng cho thông số kỹ thuật (tỷ lệ 1:120, kích thước cm, tọa độ)
+        // 2. Font đồng nhất cho Chữ bình thường & Chữ nhỏ (Nội dung, nhãn, thẻ, nút bấm): Be Vietnam Pro
+        body: ['"Be Vietnam Pro"', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['"Be Vietnam Pro"', 'system-ui', '-apple-system', 'sans-serif'],
+        caption: ['"Be Vietnam Pro"', 'system-ui', '-apple-system', 'sans-serif'],
+        // Bí danh cinzel trỏ trực tiếp về Be Vietnam Pro để loại bỏ vĩnh viễn lỗi vỡ font ở mọi component cũ
+        cinzel: ['"Be Vietnam Pro"', 'system-ui', '-apple-system', 'sans-serif'],
+        // 3. Font cho Highlight / Kỹ thuật (Tỷ lệ 1:120, kích thước cm, tọa độ): Roboto Mono
         mono: ['"Roboto Mono"', 'ui-monospace', 'monospace'],
+        highlight: ['"Playfair Display"', 'Georgia', 'serif'],
       },
       borderRadius: {
         none: '0px',

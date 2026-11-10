@@ -306,7 +306,7 @@ export const AdminAudioGuidesPage: React.FC = () => {
       {/* Editorial Header */}
       <header className="flex flex-col justify-between gap-4 border-b border-paper-border pb-4 sm:flex-row sm:items-end">
         <div>
-          <div className="flex items-center gap-2 font-cinzel text-xs uppercase tracking-widest text-brass font-bold">
+          <div className="flex items-center gap-2 font-sans text-xs uppercase tracking-widest text-brass font-bold">
             <Globe className="h-4 w-4" />
             <span>Âm thanh & Thuyết minh đa ngôn ngữ</span>
           </div>
@@ -522,7 +522,7 @@ export const AdminAudioGuidesPage: React.FC = () => {
                       <div className="flex items-center gap-1.5">
                         <span className="text-base select-none leading-none">{lang.flagSymbol}</span>
                         <span
-                          className={`font-cinzel text-xs font-bold uppercase tracking-wider ${
+                          className={`font-sans text-xs font-bold uppercase tracking-wider ${
                             isCurrent ? 'text-brass' : 'text-charcoal'
                           }`}
                         >

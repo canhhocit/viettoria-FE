@@ -65,7 +65,7 @@ export const CuratorLoupe: React.FC<CuratorLoupeProps> = ({
           title={isActive ? 'Tắt kính lúp giám định' : 'Bật kính lúp giám định'}
         >
           <Search size={13} className="text-brass" />
-          <span className="font-cinzel text-[11px] uppercase tracking-wider">
+          <span className="font-sans text-[11px] uppercase tracking-wider">
             {isActive ? 'Kính Lúp: Bật' : 'Kính Lúp: Tắt'}
           </span>
         </button>
@@ -111,7 +111,7 @@ export const CuratorLoupe: React.FC<CuratorLoupeProps> = ({
             <div className="absolute inset-0 rounded-full border border-brass-light/40" />
 
             {/* Magnification Badge */}
-            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap border border-brass/80 bg-forest px-2 py-0.5 text-[9px] font-cinzel font-bold text-brass uppercase tracking-widest shadow-sm rounded-[1px]">
+            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap border border-brass/80 bg-forest px-2 py-0.5 text-[9px] font-sans font-bold text-brass uppercase tracking-widest shadow-sm rounded-[1px]">
               {zoomLevel}× Giám Định
             </div>
           </div>

@@ -357,7 +357,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
             <Compass className="w-3.5 h-3.5" />
             <span>{t('mapPage.subtitle', 'Định Vị Tọa Độ Địa Lý')}</span>
           </div>
-          <h3 className="font-display text-xl sm:text-2xl font-bold text-forest">
+          <h3 className="font-serif text-xl sm:text-2xl font-bold text-forest">
             {t('mapPage.selectedMonument', 'Bản Đồ Di Sản')}
           </h3>
           <p className="text-xs text-charcoal/80 font-normal leading-relaxed">
@@ -431,14 +431,14 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
               >
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5 text-[10px]">
-                    <span className={`font-cinzel uppercase tracking-wider font-bold ${isSelected ? 'text-brass' : 'text-brass-dark'}`}>
+                    <span className={`font-sans uppercase tracking-wider font-bold ${isSelected ? 'text-brass' : 'text-brass-dark'}`}>
                       {cityLabels[site.city]?.[language] || site.cityName.split('—')[0].trim()}
                     </span>
                     <span className={isSelected ? 'text-paper/60' : 'text-charcoal-muted'}>
                       • {locSite.epoch.split('(')[0].trim()}
                     </span>
                   </div>
-                  <div className="font-display text-xs sm:text-sm font-bold truncate">
+                  <div className="font-serif text-xs sm:text-sm font-bold truncate">
                     {locSite.name}
                   </div>
                 </div>
@@ -513,7 +513,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
           {/* Nút hành động chính: Mở trang khảo cứu 3D chi tiết */}
           <Link
             to={`/products/${activeSite.slug}`}
-            className="w-full inline-flex items-center justify-center gap-2 border border-brass bg-forest text-paper px-4 py-2 text-xs font-cinzel font-bold tracking-wider uppercase hover:bg-forest-muted transition-colors shadow-xs group"
+            className="w-full inline-flex items-center justify-center gap-2 border border-brass bg-forest text-paper px-4 py-2 text-xs font-sans font-bold tracking-wider uppercase hover:bg-forest-muted transition-colors shadow-xs group"
           >
             <span>{t('mapPage.exploreMonument3D', 'Khảo Cứu 3D Chi Tiết')}</span>
             <ArrowRight className="w-3.5 h-3.5 text-brass transition-transform group-hover:translate-x-1" />
@@ -581,7 +581,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
         <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-20 pointer-events-none bg-paper/95 border border-paper-border px-3.5 py-2 shadow-md backdrop-blur-sm flex items-center gap-2.5 text-xs text-forest max-w-[calc(100%-2rem)] sm:max-w-md">
           <span className="h-2 w-2 rounded-full bg-brass shrink-0 animate-ping" />
           <div className="min-w-0 truncate">
-            <span className="font-display font-bold">{currentSite.name}</span>
+            <span className="font-serif font-bold">{currentSite.name}</span>
             <span className="text-charcoal-muted ml-1.5 text-[11px] truncate hidden sm:inline">({currentSite.location})</span>
           </div>
         </div>
@@ -599,10 +599,10 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
             {/* Header Modal */}
             <div className="flex items-center justify-between border-b border-brass/30 px-5 py-3.5 bg-forest-dark/80">
               <div>
-                <span className="font-cinzel text-[10px] font-bold uppercase tracking-widest text-brass block">
+                <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-brass block">
                   {currentSite.epoch} · {currentSite.cityName}
                 </span>
-                <h3 className="font-display text-xl font-bold text-paper mt-0.5">
+                <h3 className="font-serif text-xl font-bold text-paper mt-0.5">
                   {currentSite.name}
                 </h3>
               </div>

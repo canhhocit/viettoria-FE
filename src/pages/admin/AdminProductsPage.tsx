@@ -216,11 +216,11 @@ export const AdminProductsPage: React.FC = () => {
                     </div>
                   </td>
                   <td className="whitespace-nowrap p-4">
-                    <span className="bg-paper-warm px-2 py-1 border border-paper-border text-forest font-cinzel font-bold text-xs tracking-wider">
+                    <span className="bg-paper-warm px-2 py-1 border border-paper-border text-forest font-sans font-bold text-xs tracking-wider">
                       {product.code}
                     </span>
                     {product.isHeroRelease && (
-                      <span className="block mt-1 text-[10px] text-brass uppercase font-cinzel font-bold tracking-wider">
+                      <span className="block mt-1 text-[10px] text-brass uppercase font-sans font-bold tracking-wider">
                         Hero Release
                       </span>
                     )}
@@ -327,7 +327,7 @@ export const AdminProductsPage: React.FC = () => {
                     type="text"
                     value={editingProduct.code || ''}
                     onChange={e => setEditingProduct({ ...editingProduct, code: e.target.value })}
-                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border font-cinzel font-bold text-xs tracking-wider text-forest focus:border-brass focus:outline-none"
+                    className="w-full px-3 py-2 bg-paper-warm border border-paper-border font-sans font-bold text-xs tracking-wider text-forest focus:border-brass focus:outline-none"
                     required
                   />
                 </div>

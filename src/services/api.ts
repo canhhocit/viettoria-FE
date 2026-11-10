@@ -128,8 +128,8 @@ async function adminMultipartRequest<T>(path: string, formData: FormData): Promi
 
 // --- PUBLIC API ---
 export const publicApi = {
-  async getCollections(): Promise<Collection[]> {
-    const lang = getActiveLanguage();
+  async getCollections(langOverride?: LanguageCode): Promise<Collection[]> {
+    const lang = langOverride || getActiveLanguage();
     try {
       const res = await fetch(`${API_BASE}/public/collections`, {
         headers: { 'Accept-Language': lang }
@@ -145,8 +145,8 @@ export const publicApi = {
     return getLocalizedCollections(list, lang);
   },
 
-  async getCollectionBySlug(slug: string): Promise<(Collection & { products: Product[] }) | null> {
-    const lang = getActiveLanguage();
+  async getCollectionBySlug(slug: string, langOverride?: LanguageCode): Promise<(Collection & { products: Product[] }) | null> {
+    const lang = langOverride || getActiveLanguage();
     try {
       const res = await fetch(`${API_BASE}/public/collections/${slug}`, {
         headers: { 'Accept-Language': lang }
@@ -169,8 +169,8 @@ export const publicApi = {
     return { ...localized, products: getLocalizedProducts(prods, lang) };
   },
 
-  async getProducts(params?: { collectionId?: string; search?: string }): Promise<Product[]> {
-    const lang = getActiveLanguage();
+  async getProducts(params?: { collectionId?: string; search?: string }, langOverride?: LanguageCode): Promise<Product[]> {
+    const lang = langOverride || getActiveLanguage();
     try {
       const query = new URLSearchParams();
       if (params?.collectionId) query.set('collectionId', params.collectionId);
@@ -200,8 +200,8 @@ export const publicApi = {
     return getLocalizedProducts(list, lang);
   },
 
-  async getProductBySlugOrCode(slugOrCode: string): Promise<Product | null> {
-    const lang = getActiveLanguage();
+  async getProductBySlugOrCode(slugOrCode: string, langOverride?: LanguageCode): Promise<Product | null> {
+    const lang = langOverride || getActiveLanguage();
     try {
       const res = await fetch(`${API_BASE}/public/products/${slugOrCode}`, {
         headers: { 'Accept-Language': lang }
@@ -256,8 +256,8 @@ export const publicApi = {
     };
   },
 
-  async getBlogs(): Promise<BlogPost[]> {
-    const lang = getActiveLanguage();
+  async getBlogs(langOverride?: LanguageCode): Promise<BlogPost[]> {
+    const lang = langOverride || getActiveLanguage();
     try {
       const res = await fetch(`${API_BASE}/public/blogs`, {
         headers: { 'Accept-Language': lang }
@@ -273,8 +273,8 @@ export const publicApi = {
     return getLocalizedBlogs(list, lang);
   },
 
-  async getBlogBySlug(slug: string): Promise<BlogPost | null> {
-    const lang = getActiveLanguage();
+  async getBlogBySlug(slug: string, langOverride?: LanguageCode): Promise<BlogPost | null> {
+    const lang = langOverride || getActiveLanguage();
     try {
       const res = await fetch(`${API_BASE}/public/blogs/${slug}`, {
         headers: { 'Accept-Language': lang }
@@ -290,13 +290,13 @@ export const publicApi = {
     return blog ? getLocalizedBlog(blog, lang) : null;
   },
 
-  async getFeatured(): Promise<{
+  async getFeatured(langOverride?: LanguageCode): Promise<{
     heroProduct: Product;
     featuredProducts: Product[];
     collections: Collection[];
     latestBlogs: BlogPost[];
   }> {
-    const lang = getActiveLanguage();
+    const lang = langOverride || getActiveLanguage();
     try {
       const res = await fetch(`${API_BASE}/public/featured`, {
         headers: { 'Accept-Language': lang }

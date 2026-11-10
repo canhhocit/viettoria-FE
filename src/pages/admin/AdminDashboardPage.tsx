@@ -75,7 +75,7 @@ export const AdminDashboardPage: React.FC = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <div className="bg-paper p-6 border border-paper-border corner-frame space-y-2">
           <div className="flex items-center justify-between text-charcoal-muted">
-            <span className="text-xs font-cinzel uppercase tracking-wider font-bold">Mô Hình 3D</span>
+            <span className="text-xs font-sans uppercase tracking-wider font-bold">Mô Hình 3D</span>
             <Box className="w-4 h-4 text-brass" />
           </div>
           <p className="font-serif text-3xl font-bold text-forest">
@@ -88,7 +88,7 @@ export const AdminDashboardPage: React.FC = () => {
 
         <div className="bg-paper p-6 border border-paper-border corner-frame space-y-2">
           <div className="flex items-center justify-between text-charcoal-muted">
-            <span className="text-xs font-cinzel uppercase tracking-wider font-bold">Bộ Sưu Tập</span>
+            <span className="text-xs font-sans uppercase tracking-wider font-bold">Bộ Sưu Tập</span>
             <Layers className="w-4 h-4 text-brass" />
           </div>
           <p className="font-serif text-3xl font-bold text-forest">
@@ -101,7 +101,7 @@ export const AdminDashboardPage: React.FC = () => {
 
         <div className="bg-paper p-6 border border-paper-border corner-frame space-y-2">
           <div className="flex items-center justify-between text-charcoal-muted">
-            <span className="text-xs font-cinzel uppercase tracking-wider font-bold">Story Blocks</span>
+            <span className="text-xs font-sans uppercase tracking-wider font-bold">Story Blocks</span>
             <BookOpen className="w-4 h-4 text-brass" />
           </div>
           <p className="font-serif text-3xl font-bold text-forest">
@@ -114,7 +114,7 @@ export const AdminDashboardPage: React.FC = () => {
 
         <div className="bg-paper p-6 border border-paper-border corner-frame space-y-2">
           <div className="flex items-center justify-between text-charcoal-muted">
-            <span className="text-xs font-cinzel uppercase tracking-wider font-bold">Bài Viết Khảo Cứu</span>
+            <span className="text-xs font-sans uppercase tracking-wider font-bold">Bài Viết Khảo Cứu</span>
             <FileText className="w-4 h-4 text-brass" />
           </div>
           <p className="font-serif text-3xl font-bold text-forest">
@@ -151,7 +151,7 @@ export const AdminDashboardPage: React.FC = () => {
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-serif font-bold text-forest text-sm">{p.name}</span>
-                      <span className="text-[10px] font-cinzel font-bold bg-paper-warm px-1.5 py-0.5 border border-paper-border text-forest">
+                      <span className="text-[10px] font-sans font-bold bg-paper-warm px-1.5 py-0.5 border border-paper-border text-forest">
                         {p.code}
                       </span>
                     </div>
