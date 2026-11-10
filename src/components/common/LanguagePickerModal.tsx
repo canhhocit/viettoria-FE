@@ -80,7 +80,7 @@ export const LanguagePickerModal: React.FC<LanguagePickerModalProps> = ({
           {/* Heading */}
           <div className="text-center mb-2">
             <p className="font-cinzel text-xs tracking-[0.3em] text-brass/70 uppercase mb-3">
-              Viettoria · Heritage Collectibles
+              Viettoria
             </p>
             <h2
               id="lang-picker-title"
@@ -91,9 +91,7 @@ export const LanguagePickerModal: React.FC<LanguagePickerModalProps> = ({
             <p className="font-cinzel text-sm tracking-widest text-ink/40 mt-1">
               Select Your Language
             </p>
-            <p className="font-sans text-xs tracking-wide text-ink/60 mt-2.5 max-w-sm mx-auto">
-              Lựa chọn ngôn ngữ để đánh thức không gian âm thanh chuông cổ tự.
-            </p>
+            
           </div>
 
           {/* Divider */}
@@ -156,9 +154,7 @@ export const LanguagePickerModal: React.FC<LanguagePickerModalProps> = ({
           </div>
 
           {/* Footer note */}
-          <p className="font-sans text-xs text-ink/30 text-center mt-6 tracking-wide">
-            Lựa chọn có thể thay đổi bất kỳ lúc nào · You may change this anytime
-          </p>
+         
         </div>
 
         {/* Bottom accent bar */}
