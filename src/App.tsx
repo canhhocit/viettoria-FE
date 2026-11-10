@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, useLocation } from 'react-router-dom';
 import { AppRoutes } from './routes';
 import { LanguageProvider } from './contexts/LanguageContext';
+import { PassportProvider } from './contexts/PassportContext';
 
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
@@ -16,10 +17,12 @@ const ScrollToTop: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <LanguageProvider>
-      <BrowserRouter>
-        <ScrollToTop />
-        <AppRoutes />
-      </BrowserRouter>
+      <PassportProvider>
+        <BrowserRouter>
+          <ScrollToTop />
+          <AppRoutes />
+        </BrowserRouter>
+      </PassportProvider>
     </LanguageProvider>
   );
 };

@@ -344,6 +344,57 @@ export const zh: TranslationSchema = {
     viewFullStory: '查阅完整深度考据专文',
   },
 
+  soundscape: {
+    ambient: '意境原声',
+    title: '古刹宁静声景',
+    intro: '清幽素雅的古刹原声意境，助您静心品鉴东方遗风。',
+    bellTitle: '古寺晨钟',
+    bellDesc: '晨曦薄雾中悠远回荡的青铜钟声',
+    windTitle: '竹林清风',
+    windDesc: '穿拂古刹青竹丛梢的飒飒微风',
+    rainTitle: '青瓦檐雨',
+    rainDesc: '淅淅沥沥滴落于斑驳青瓦上的空灵雨声',
+    volume: '音量',
+    playing: '播放中',
+    paused: '暂停中',
+    stopPlayback: '暂停声景',
+    startPlayback: '聆听古刹声韵',
+    mute: '静音声景',
+    play: '开启声景',
+    options: '声景设置',
+  },
+
+  passport: {
+    title: '通关文牒',
+    open: '开启文牒典藏',
+    bookletTitle: '越南古典遗珍通关文牒',
+    atelierDossier: 'VIETTORIA 工坊 · 鉴赏认证',
+  },
+
+  ar: {
+    title: '空间实境投影 (Web AR)',
+    intro: '将名筑 3D 比例模型置于您的书案或眼前实境，细品斗拱檐牙之美。',
+    openNowMobile: '移动端即刻开启 AR',
+    launch: '在眼前空间呈现 (AR)',
+  },
+
+  postcard: {
+    atelier: '纸墨明信片工坊',
+    btn: '印制手工楮纸明信片',
+  },
+
+  timetravel: {
+    eyebrow: '跨世纪时空对照 · 1900 ↔ 2026',
+    heading: '旧影斑驳与今朝重现',
+    desc: '左右滑动对照：亲历自十九世纪末黑白档案照至当代 3D 实体复原的岁月变迁。',
+  },
+
+  joinery: {
+    eyebrow: '越南古建榫卯绝艺 · 滴铁不假',
+    heading: '榫卯斗拱纵向解构剖视',
+    desc: '轻拉滑块，见证数百个木构件沿纵轴精准分离，尽显千百载不朽营造匠心。',
+  },
+
   footer: {
     brandDesc: '将越南古代建筑奇迹复刻为精雕细琢的 3D 实物模型，融合多感官数字孪生，让千百年的历史记忆跨越国界、历久弥新。',
     monumentsCol: '古典遗珍作品',

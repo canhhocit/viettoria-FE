@@ -4,6 +4,7 @@ import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
 import { QRScanModal } from '../components/common/QRScanModal';
 import { PageScrollProgress } from '../components/common/PageScrollProgress';
+import { HeritagePassportModal } from '../components/heritage/HeritagePassportModal';
 
 export const MainLayout: React.FC = () => {
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
@@ -28,6 +29,9 @@ export const MainLayout: React.FC = () => {
         isOpen={isQRModalOpen} 
         onClose={() => setIsQRModalOpen(false)} 
       />
+
+      {/* Heritage Passport Modal */}
+      <HeritagePassportModal />
     </div>
   );
 };

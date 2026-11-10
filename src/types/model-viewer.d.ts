@@ -11,10 +11,15 @@ declare module 'react' {
         'auto-rotate'?: string;
         'rotation-per-second'?: string;
         'shadow-intensity'?: string;
+        'shadow-softness'?: string;
         exposure?: string;
         loading?: string;
         reveal?: string;
         'interaction-prompt'?: string;
+        ar?: boolean;
+        'ar-modes'?: string;
+        'ar-scale'?: string;
+        'quick-look-browsers'?: string;
         style?: React.CSSProperties;
         className?: string;
         ref?: React.Ref<HTMLElement | null>;
@@ -23,4 +28,3 @@ declare module 'react' {
     }
   }
 }
-

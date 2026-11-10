@@ -344,6 +344,57 @@ export const ko: TranslationSchema = {
     viewFullStory: '심층 고증 전문 읽기',
   },
 
+  soundscape: {
+    ambient: '음향 풍경',
+    title: '고찰의 고요한 소리 풍경',
+    intro: '소박하고 고즈넉한 고찰의 소리가 깊이 있는 유산 감상을 돕습니다.',
+    bellTitle: '사찰의 아침 범종',
+    bellDesc: '새벽 안개 속을 은은하게 울리는 청동 범종 소리',
+    windTitle: '대숲을 스치는 바람',
+    windDesc: '사찰 마당의 푸른 대나무 숲을 부드럽게 흔드는 바람 소리',
+    rainTitle: '처마 기와에 내리는 빗소리',
+    rainDesc: '이끼 낀 전통 기와에 맑게 떨어지는 빗방울 소리',
+    volume: '음량',
+    playing: '재생 중',
+    paused: '일시 정지',
+    stopPlayback: '소리 정지',
+    startPlayback: '소리 듣기',
+    mute: '음소거',
+    play: '소리 재생',
+    options: '소리 설정',
+  },
+
+  passport: {
+    title: '유산 여권',
+    open: '유산 여권 열기',
+    bookletTitle: '베트남 문화유산 탐방 여권',
+    atelierDossier: '비에토리아 아틀리에 · 고증 인증서',
+  },
+
+  ar: {
+    title: '공간 증강현실 (Web AR)',
+    intro: '3D 정밀 모형을 실제 책상이나 공간에 배치하여 고유한 비례를 직접 경험해 보세요.',
+    openNowMobile: '모바일에서 AR 바로 실행',
+    launch: '실제 공간에 배치하기 (AR)',
+  },
+
+  postcard: {
+    atelier: '전통 한지 엽서 공방',
+    btn: '전통 엽서 제작하기',
+  },
+
+  timetravel: {
+    eyebrow: '세기를 넘나드는 시공간 대조 · 1900 ↔ 2026',
+    heading: '옛 기억과 오늘의 복원',
+    desc: '슬라이더를 밀어 19세기 말 흑백 기록 사진과 오늘날의 3D 정밀 복원을 비교해 보세요.',
+  },
+
+  joinery: {
+    eyebrow: '못을 쓰지 않는 베트남 전통 맞춤 기법',
+    heading: '짜맞춤 결구 수직 분해 뷰',
+    desc: '슬라이더를 조작하여 수백 개의 목조 결구가 수직으로 분해되는 경이로운 모습을 관찰하세요.',
+  },
+
   footer: {
     brandDesc: '베트남의 건축 걸작을 정교한 3D 실물 모형과 다감각 인터랙티브 디지털 트윈으로 복원하여, 선조들의 찬란한 역사를 전 세계 여행자들과 나눕니다.',
     monumentsCol: '유산 걸작 컬렉션',

@@ -344,6 +344,57 @@ export const fr: TranslationSchema = {
     viewFullStory: 'Lire l’Étude Architecturale Détaillée',
   },
 
+  soundscape: {
+    ambient: 'Ambiance',
+    title: 'Paysage Sonore Patrimonial',
+    intro: 'Ambiances sonores méditatives pour contempler le patrimoine en toute sérénité.',
+    bellTitle: 'Cloche de Pagode Antique',
+    bellDesc: 'Résonance d’airain s’élevant dans la brume matinale du sanctuaire',
+    windTitle: 'Brise de Bambouseraie',
+    windDesc: 'Bruissement du vent à travers les bambous verts entourant la pagode',
+    rainTitle: 'Pluie sur Tuiles d’Argile',
+    rainDesc: 'Clapotis paisible des gouttes sur les vieilles tuiles moussues',
+    volume: 'Volume',
+    playing: 'En cours',
+    paused: 'En pause',
+    stopPlayback: 'Pause Ambiance',
+    startPlayback: 'Écouter le Sanctuaire',
+    mute: 'Couper le son',
+    play: 'Activer le son',
+    options: 'Options sonores',
+  },
+
+  passport: {
+    title: 'Passeport',
+    open: 'Ouvrir le Passeport du Patrimoine',
+    bookletTitle: 'Passeport du Patrimoine Vietnamien',
+    atelierDossier: 'Atelier Viettoria · Certificat d’Étude',
+  },
+
+  ar: {
+    title: 'Réalité Augmentée (Web AR)',
+    intro: 'Déposez nos maquettes 3D directement sur votre bureau ou dans votre espace avec des proportions fidèles.',
+    openNowMobile: 'Lancer l’AR sur mobile',
+    launch: 'Placer dans votre espace (AR)',
+  },
+
+  postcard: {
+    atelier: 'Atelier de Cartes Postales Mémoire',
+    btn: 'Créer Carte Postale Papier Dó',
+  },
+
+  timetravel: {
+    eyebrow: 'Voyage à Travers les Siècles · 1900 ↔ 2026',
+    heading: 'Échos d’Hier & Restitution Contemporaine',
+    desc: 'Faites glisser le curseur pour observer l’évolution : des clichés noir et blanc du XIXe siècle à la modélisation 3D actuelle.',
+  },
+
+  joinery: {
+    eyebrow: 'Art de l’Assemblage en Bois Vietnamien · Sans Clous',
+    heading: 'Écorché des Assemblages Tenon-Mortaise',
+    desc: 'Faites coulisser pour admirer la séparation verticale des éléments en bois, révélant le génie architectural millénaire.',
+  },
+
   footer: {
     brandDesc: 'Restitution fidèle des chefs-d’œuvre architecturaux du Vietnam sous forme de modèles physiques 3D sublimés par des jumeaux numériques interactifs, transmettant la grande histoire vietnamienne aux voyageurs du monde.',
     monumentsCol: 'ŒUVRES DU PATRIMOINE',

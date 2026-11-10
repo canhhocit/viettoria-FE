@@ -344,6 +344,63 @@ export const en: TranslationSchema = {
     viewFullStory: 'Read In-Depth Architectural Essay',
   },
 
+  // Soundscape
+  soundscape: {
+    ambient: 'Soundscape',
+    title: 'Serene Heritage Soundscape',
+    intro: 'Tranquil acoustic landscapes to enrich your mindful heritage exploration.',
+    bellTitle: 'Ancient Temple Bell',
+    bellDesc: 'Resonant bronze chimes echoing through the misty morning sanctuary',
+    windTitle: 'Bamboo Grove Breeze',
+    windDesc: 'Gentle rustling wind through green bamboo surrounding the pagoda',
+    rainTitle: 'Rain on Clay Tiles',
+    rainDesc: 'Peaceful raindrops pattering softly on mossy curved terracotta roof tiles',
+    volume: 'Volume',
+    playing: 'Playing',
+    paused: 'Paused',
+    stopPlayback: 'Pause Soundscape',
+    startPlayback: 'Listen to Sanctuary',
+    mute: 'Mute Soundscape',
+    play: 'Play Soundscape',
+    options: 'Soundscape settings',
+  },
+
+  // Passport & Vermilion Seal
+  passport: {
+    title: 'Passport',
+    open: 'Open Heritage Passport',
+    bookletTitle: 'Vietnam Heritage Passport',
+    atelierDossier: 'Viettoria Atelier · Explorer Certification',
+  },
+
+  // Web AR
+  ar: {
+    title: 'Web Augmented Reality (AR)',
+    intro: 'Place authentic 3D monuments right on your physical desk or room in true proportion.',
+    openNowMobile: 'Launch AR On Device',
+    launch: 'Place in Your Space (AR)',
+  },
+
+  // Postcard
+  postcard: {
+    atelier: 'Heritage Postcard Atelier',
+    btn: 'Create Do Paper Postcard',
+  },
+
+  // Time Travel
+  timetravel: {
+    eyebrow: 'Century Time-Travel · 1900 ↔ 2026',
+    heading: 'Archival Echoes & Modern Restoration',
+    desc: 'Drag the slider to witness historical evolution: from 19th-century black-and-white archives to precision 3D physical reconstructions today.',
+  },
+
+  // Exploded Joinery
+  joinery: {
+    eyebrow: 'Vietnamese Timber Joinery · No Nails Used',
+    heading: 'Scrub-to-Explode Mortise & Tenon Assembly',
+    desc: 'Slide to watch hundreds of interlocking timber components separate along the vertical axis, revealing millennia of ancestral architectural genius.',
+  },
+
   footer: {
     brandDesc: 'Recreating Vietnamese architectural masterpieces as exquisite 3D physical models combined with multi-sensory interactive digital twins, connecting ancestral chronicles to visitors worldwide.',
     monumentsCol: 'HERITAGE WORKS',

@@ -19,6 +19,7 @@ import { AudioPlayer } from '../components/common/AudioPlayer';
 import { StoryBlockRenderer } from '../components/story/StoryBlockRenderer';
 import { ScaleRuler } from '../components/common/ScaleRuler';
 import { PageLoadingHeritage } from '../components/common/HeritageSkeleton';
+import { TimeTravelComparison } from '../components/heritage/TimeTravelComparison';
 import { resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -327,6 +328,11 @@ export const ProductDetailPage: React.FC = () => {
             modelSpecs={product.modelSpecs} 
             heritageName={product.name} 
           />
+        </section>
+
+        {/* Feature 1: Century Comparison for this Monument */}
+        <section className="space-y-4">
+          <TimeTravelComparison defaultId={product.slug} />
         </section>
 
         {/* Technical Specifications Sheet */}

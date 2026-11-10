@@ -344,6 +344,57 @@ export const ja: TranslationSchema = {
     viewFullStory: '詳細な建築考証論文を読む',
   },
 
+  soundscape: {
+    ambient: '音景',
+    title: '古刹の静寂サウンドスケープ',
+    intro: 'いにしえの寺院の静かな響きが、心静かな遺産鑑賞へ導きます。',
+    bellTitle: '古寺の朝鐘',
+    bellDesc: '朝霧の中に厳かに響き渡る青銅の鐘の余韻',
+    windTitle: '竹林を渡る風',
+    windDesc: '寺の境内を囲む青竹を優しく撫でる風の囁き',
+    rainTitle: '軒瓦の雨音',
+    rainDesc: '苔むした伝統瓦を静かに打つ清らかな雨音',
+    volume: '音量',
+    playing: '再生中',
+    paused: '一時停止',
+    stopPlayback: '音景を停止',
+    startPlayback: '音景を聴く',
+    mute: '消音',
+    play: '音景を再生',
+    options: '音景設定',
+  },
+
+  passport: {
+    title: '遺産手帳',
+    open: '手帳を開く',
+    bookletTitle: 'ベトナム古典遺産手帳',
+    atelierDossier: 'VIETTORIA アトリエ · 考証証明',
+  },
+
+  ar: {
+    title: '空間拡張現実 (Web AR)',
+    intro: '卓上やお部屋の実寸空間に3D建築模型を配置し、細部の木組みをご堪能いただけます。',
+    openNowMobile: 'モバイルでAR起動',
+    launch: '実空間に配置する (AR)',
+  },
+
+  postcard: {
+    atelier: '伝統紙絵葉書工房',
+    btn: '伝統紙ポストカード作成',
+  },
+
+  timetravel: {
+    eyebrow: '世紀を超える時空対比 · 1900 ↔ 2026',
+    heading: '古の記憶と現代の復元',
+    desc: 'スライダーを動かして19世紀末の古写真と現在の精密3D復元の対比をご覧ください。',
+  },
+
+  joinery: {
+    eyebrow: '釘を使わぬベトナム伝統木組み',
+    heading: '斗拱・ほぞ組みの分解構造',
+    desc: 'スライダーで数百に及ぶ木部構造が垂直に分離し、千年の伝統技法を解き明かします。',
+  },
+
   footer: {
     brandDesc: 'ベトナムの建築的傑作を精巧な3D実物模型と多感覚のデジタルツインとして再現し、先人たちの誇り高き歴史を世界中の旅人に伝えます。',
     monumentsCol: '古典遺産作品',

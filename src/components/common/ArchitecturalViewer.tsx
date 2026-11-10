@@ -5,9 +5,14 @@ import {
   ChevronRight,
   Eye,
   Maximize2,
+  Moon,
   Pause,
   Play,
   RotateCcw,
+  Stamp,
+  Sun,
+  Sunrise,
+  Sunset,
   Target,
   X,
   ZoomIn,
@@ -22,22 +27,33 @@ import {
   VIETTORIA_IMAGES,
 } from '../../utils/mediaResolver';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { usePassport } from '../../contexts/PassportContext';
 import {
   getHotspotsForProduct,
   type ArchitecturalHotspot,
 } from '../../data/architecturalHotspots';
+import { ARLaunchModal } from '../heritage/ARLaunchModal';
+import { PostcardGeneratorModal } from '../heritage/PostcardGeneratorModal';
+import { CuratorLoupe } from '../heritage/CuratorLoupe';
 
 interface ArchitecturalViewerProps {
   product: Product;
 }
 
+type LightingPreset = 'dawn' | 'noon' | 'dusk' | 'night';
+
 export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ product }) => {
   const { t, localizeHotspot } = useLanguage();
+  const { stampMonument } = usePassport();
   const [activeTab, setActiveTab] = useState<'3d' | 'photos'>('3d');
   const [isPhotoZoomOpen, setIsPhotoZoomOpen] = useState(false);
   const [viewerAvailable, setViewerAvailable] = useState(() =>
     typeof window !== 'undefined' && Boolean(window.customElements?.get('model-viewer')),
   );
+  const [lightingMode, setLightingMode] = useState<LightingPreset>('noon');
+  const [isARModalOpen, setIsARModalOpen] = useState(false);
+  const [isPostcardOpen, setIsPostcardOpen] = useState(false);
+  const [postcardSnapshot, setPostcardSnapshot] = useState<string | null>(null);
   const [modelLoaded, setModelLoaded] = useState(false);
   const [modelFailed, setModelFailed] = useState(false);
   const [previewFailed, setPreviewFailed] = useState(false);
@@ -56,6 +72,72 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
 
   const viewportRef = useRef<HTMLDivElement>(null);
   const modelViewerRef = useRef<HTMLElement | null>(null);
+
+  // Auto-stamp monument in Heritage Passport after user engages with 3D model
+  useEffect(() => {
+    if (!modelLoaded) return;
+    const timer = window.setTimeout(() => {
+      stampMonument(product.slug, product.name, product.epoch);
+    }, 12000);
+    return () => window.clearTimeout(timer);
+  }, [modelLoaded, product.slug, product.name, product.epoch, stampMonument]);
+
+  const lightingSettings = useMemo(() => {
+    switch (lightingMode) {
+      case 'dawn':
+        return {
+          exposure: '1.18',
+          shadowIntensity: '0.85',
+          bgClass: 'bg-gradient-to-b from-[#F7EFE2] via-[#EFE5D2] to-[#FAF7F0]',
+        };
+      case 'dusk':
+        return {
+          exposure: '0.90',
+          shadowIntensity: '0.95',
+          bgClass: 'bg-gradient-to-b from-[#EAD0B3] via-[#D8B998] to-[#142820]',
+        };
+      case 'night':
+        return {
+          exposure: '0.65',
+          shadowIntensity: '0.60',
+          bgClass: 'bg-gradient-to-b from-[#0D1C16] via-[#142820] to-[#07110D]',
+        };
+      case 'noon':
+      default:
+        return {
+          exposure: '1.05',
+          shadowIntensity: '1.25',
+          bgClass: 'bg-paper-card',
+        };
+    }
+  }, [lightingMode]);
+
+  const handleOpenPostcard = async () => {
+    const mv = modelViewerRef.current as unknown as { toBlob?: (options: { idealAspect: boolean }) => Promise<Blob> };
+    if (mv && typeof mv.toBlob === 'function') {
+      try {
+        const blob = await mv.toBlob({ idealAspect: true });
+        const url = URL.createObjectURL(blob);
+        setPostcardSnapshot(url);
+      } catch {
+        setPostcardSnapshot(null);
+      }
+    }
+    setIsPostcardOpen(true);
+  };
+
+  const handleOpenAR = () => {
+    const mv = modelViewerRef.current as unknown as { canActivateAR?: boolean; activateAR?: () => void };
+    if (mv && mv.canActivateAR && typeof mv.activateAR === 'function') {
+      try {
+        mv.activateAR();
+        return;
+      } catch {
+        // fallback
+      }
+    }
+    setIsARModalOpen(true);
+  };
 
   const handleZoom = (direction: 'in' | 'out') => {
     const modelViewer = modelViewerRef.current;
@@ -394,7 +476,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
       {activeTab === '3d' ? (
         <div
           ref={viewportRef}
-          className={`architectural-3d-stage heritage-3d-dark-stage group relative isolate aspect-[4/3] overflow-hidden sm:aspect-[16/10] ${isFullscreen ? 'architectural-3d-stage-fullscreen' : ''}`}
+          className={`architectural-3d-stage heritage-3d-dark-stage group relative isolate aspect-[4/3] overflow-hidden sm:aspect-[16/10] ${lightingSettings.bgClass} ${isFullscreen ? 'architectural-3d-stage-fullscreen' : ''} transition-colors duration-500`}
         >
           {/* Ambient Museum Pedestal Spotlight & Glow */}
           <div className="heritage-3d-stage-glow pointer-events-none" aria-hidden="true" />
@@ -433,9 +515,13 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
               camera-controls
               auto-rotate={isAutoRotating ? '' : undefined}
               rotation-per-second="8deg"
-              shadow-intensity="1.2"
+              shadow-intensity={lightingSettings.shadowIntensity}
               shadow-softness="0.75"
-              exposure="1.05"
+              exposure={lightingSettings.exposure}
+              ar
+              ar-modes="webxr scene-viewer quick-look"
+              ar-scale="auto"
+              quick-look-browsers="safari chrome"
               loading="eager"
               reveal="auto"
               interaction-prompt="none"
@@ -576,6 +662,56 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
             <span role="status" aria-live="polite">{stageLabel}</span>
           </div>
 
+          {/* 4 Time-of-Day Lighting Mode Presets */}
+          {modelLoaded && (
+            <div className="absolute left-3 top-11 sm:top-3 sm:left-44 z-10 flex items-center border border-brass/40 bg-[#121814]/90 p-0.5 text-xs text-paper shadow-sm backdrop-blur-sm rounded-[2px]">
+              <button
+                type="button"
+                onClick={() => setLightingMode('dawn')}
+                title="Sớm Mai: Nắng dịu vàng sương"
+                className={`px-2 py-1 flex items-center gap-1 font-cinzel text-[10px] uppercase font-bold transition-colors ${
+                  lightingMode === 'dawn' ? 'bg-brass text-forest' : 'text-paper/80 hover:text-brass'
+                }`}
+              >
+                <Sunrise size={11} />
+                <span className="hidden md:inline">Sớm Mai</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setLightingMode('noon')}
+                title="Chính Ngọ: Ánh sáng rõ nét"
+                className={`px-2 py-1 flex items-center gap-1 font-cinzel text-[10px] uppercase font-bold transition-colors ${
+                  lightingMode === 'noon' ? 'bg-brass text-forest' : 'text-paper/80 hover:text-brass'
+                }`}
+              >
+                <Sun size={11} />
+                <span className="hidden md:inline">Chính Ngọ</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setLightingMode('dusk')}
+                title="Hoàng Hôn: Ráng chiều hổ phách"
+                className={`px-2 py-1 flex items-center gap-1 font-cinzel text-[10px] uppercase font-bold transition-colors ${
+                  lightingMode === 'dusk' ? 'bg-brass text-forest' : 'text-paper/80 hover:text-brass'
+                }`}
+              >
+                <Sunset size={11} />
+                <span className="hidden md:inline">Hoàng Hôn</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setLightingMode('night')}
+                title="Dạ Nguyệt: Ánh trăng huyền ảo"
+                className={`px-2 py-1 flex items-center gap-1 font-cinzel text-[10px] uppercase font-bold transition-colors ${
+                  lightingMode === 'night' ? 'bg-brass text-forest' : 'text-paper/80 hover:text-brass'
+                }`}
+              >
+                <Moon size={11} />
+                <span className="hidden md:inline">Dạ Nguyệt</span>
+              </button>
+            </div>
+          )}
+
           {/* Top-Right Stage Controls (From User Reference: ↺ Đặt lại góc nhìn & ✕ Thoát) */}
           <div className="absolute right-3 top-3 z-20 flex items-center gap-2 sm:right-4 sm:top-4">
             {turntableUrl && !reducedMotion && !previewFailed && !modelLoaded && (
@@ -676,6 +812,30 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                       : t('hotspots.rotate3d', 'XOAY 3D')}
                   </span>
                 </button>
+
+                <span className="heritage-pill-divider" aria-hidden="true" />
+
+                <button
+                  type="button"
+                  onClick={handleOpenAR}
+                  className="heritage-pill-btn"
+                  title={t('ar.launch', 'Đặt mô hình vào không gian thực (AR)')}
+                >
+                  <Box className="h-3.5 w-3.5 text-brass" />
+                  <span>XEM AR</span>
+                </button>
+
+                <span className="heritage-pill-divider" aria-hidden="true" />
+
+                <button
+                  type="button"
+                  onClick={handleOpenPostcard}
+                  className="heritage-pill-btn"
+                  title={t('postcard.btn', 'In bưu thiếp ký ức giấy dó')}
+                >
+                  <Stamp className="h-3.5 w-3.5 text-brass" />
+                  <span>BƯU THIẾP</span>
+                </button>
               </div>
             </div>
           )}
@@ -707,23 +867,12 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
       ) : (
         <div className="relative aspect-[16/10] overflow-hidden bg-paper">
           {thumbnailPhoto && (
-            <button
-              type="button"
-              onClick={() => setIsPhotoZoomOpen(true)}
-              className="group relative flex h-full w-full cursor-zoom-in items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-brass"
-              aria-label={`Phóng to ảnh ${product.name}`}
-            >
-              <img
-                src={thumbnailPhoto.src}
-                alt={`${product.name} · ${t('product.tabPhotos', 'Ảnh thực địa')}`}
-                onError={(event) => handleImageFallback(event, VIETTORIA_IMAGES.productHighlight)}
-                className="h-full w-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.025]"
-              />
-              <span className="pointer-events-none absolute bottom-4 left-4 inline-flex items-center gap-2 border border-paper/20 bg-forest/80 px-3 py-2 text-xs font-sans uppercase tracking-wider text-paper opacity-0 shadow-sm backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100 font-medium">
-                <ZoomIn className="h-3.5 w-3.5 text-brass-light" />
-                {t('product.zoomPhotoBtn', 'Phóng to ảnh')}
-              </span>
-            </button>
+            <CuratorLoupe
+              imageSrc={thumbnailPhoto.src}
+              altText={`${product.name} · ${t('product.tabPhotos', 'Ảnh thực địa')}`}
+              zoomLevel={2.5}
+              className="h-full w-full"
+            />
           )}
         </div>
       )}
@@ -832,6 +981,32 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
           </div>
         </div>
       )}
+
+      {/* Web AR Experience Modal */}
+      <ARLaunchModal
+        product={product}
+        isOpen={isARModalOpen}
+        onClose={() => setIsARModalOpen(false)}
+        canDirectAR={Boolean((modelViewerRef.current as unknown as { canActivateAR?: boolean })?.canActivateAR)}
+        onActivateDirectAR={() => {
+          try {
+            (modelViewerRef.current as unknown as { activateAR?: () => void })?.activateAR?.();
+          } catch {
+            // ignore
+          }
+        }}
+      />
+
+      {/* Bespoke Heritage Postcard Generator Modal */}
+      <PostcardGeneratorModal
+        product={product}
+        isOpen={isPostcardOpen}
+        onClose={() => {
+          setIsPostcardOpen(false);
+          setPostcardSnapshot(null);
+        }}
+        snapshotDataUrl={postcardSnapshot}
+      />
     </div>
   );
 };

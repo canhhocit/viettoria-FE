@@ -367,6 +367,63 @@ export const vi = {
     viewFullStory: 'Xem toàn bộ khảo cứu chuyên sâu',
   },
 
+  // Soundscape
+  soundscape: {
+    ambient: 'Âm Cảnh',
+    title: 'Âm Cảnh Tĩnh Lặng',
+    intro: 'Không gian âm thanh cổ tự mộc mạc, giúp du khách tĩnh tâm chiêm ngưỡng di sản.',
+    bellTitle: 'Chuông Cổ Tự',
+    bellDesc: 'Tiếng chuông đồng ngân vang thanh tịnh trong sương sớm',
+    windTitle: 'Gió Rừng Trúc',
+    windDesc: 'Gió lùa xào xạc qua rặng tre xanh sân chùa',
+    rainTitle: 'Mưa Mái Ngói',
+    rainDesc: 'Mưa rào êm ả rơi trên lớp ngói vảy rêu phong',
+    volume: 'Âm lượng',
+    playing: 'Đang phát',
+    paused: 'Tạm ngưng',
+    stopPlayback: 'Tạm Dừng Âm Cảnh',
+    startPlayback: 'Bật Lắng Nghe Di Sản',
+    mute: 'Tắt âm cảnh di sản',
+    play: 'Bật âm cảnh di sản',
+    options: 'Tùy chỉnh âm cảnh',
+  },
+
+  // Passport & Vermilion Seal
+  passport: {
+    title: 'Hộ Chiếu',
+    open: 'Mở Hộ Chiếu Di Sản',
+    bookletTitle: 'Hộ Chiếu Di Sản Việt Nam',
+    atelierDossier: 'Viettoria Atelier · Chứng Thư Khảo Cứu',
+  },
+
+  // Web AR
+  ar: {
+    title: 'Thực Tế Ảo Tăng Cường (Web AR)',
+    intro: 'Chiêm ngưỡng mô hình 3D nguyên vẹn đặt trên mặt bàn làm việc hoặc không gian thực của bạn với tỷ lệ chân thực.',
+    openNowMobile: 'Mở AR Ngay Trên Máy',
+    launch: 'Đặt mô hình vào không gian thực (AR)',
+  },
+
+  // Postcard
+  postcard: {
+    atelier: 'Xưởng In Bưu Thiếp Ký Ức',
+    btn: 'In bưu thiếp ký ức giấy dó',
+  },
+
+  // Time Travel
+  timetravel: {
+    eyebrow: 'Khảo Cứu Xuyên Thế Kỷ · 1900 ↔ 2026',
+    heading: 'Dấu Xưa & Diện Mạo Phục Dựng',
+    desc: 'Kéo thanh trượt để chứng kiến sự chuyển biến của thời gian: từ những thước ảnh tư liệu đen trắng thế kỷ XIX sang mô hình phục dựng chi tiết ngày nay.',
+  },
+
+  // Exploded Joinery
+  joinery: {
+    eyebrow: 'Bí Thuật Kiến Trúc Gỗ Việt · Không Dùng Đinh',
+    heading: 'Bóc Tách Cấu Kiện Mộng Khớp Âm Dương',
+    desc: 'Kéo thanh trượt để chứng kiến hàng trăm cấu kiện mộng gỗ tự động tách rời theo phương thẳng đứng, hé lộ nghệ thuật ghép nối ngàn năm của các bậc tiền nhân.',
+  },
+
   // Footer
   footer: {
     brandDesc: 'Tái hiện kiệt tác kiến trúc Việt Nam dưới dạng mô hình in 3D tinh xảo kết hợp nền tảng số hóa tương tác đa giác quan, đưa câu chuyện sử Việt đến gần hơn với mọi thế hệ du khách trong nước và quốc tế.',

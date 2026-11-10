@@ -8,6 +8,8 @@ import { resolve3DModelUrl, resolve3DPreview, resolveImageUrl, handleImageFallba
 import { useLanguage } from '../contexts/LanguageContext';
 import { HeritageParticles } from '../components/effects/HeritageParticles';
 import { TiltCard } from '../components/effects/TiltCard';
+import { TimeTravelComparison } from '../components/heritage/TimeTravelComparison';
+import { ExplodedJoineryViewer } from '../components/heritage/ExplodedJoineryViewer';
 
 const imageFor = (path?: string | null, slug?: string) =>
   resolveImageUrl(path || (slug ? resolve3DPreview(slug)?.poster : undefined));
@@ -475,6 +477,9 @@ export const HomePage: React.FC = () => {
 
       <ScrollyHeritage products={storyProducts} />
 
+      {/* Feature 1: Time-Travel 1900 <-> 2026 Comparison Showcase */}
+      <TimeTravelComparison />
+
       <section id="bo-suu-tap" className="mx-auto max-w-[1440px] px-5 py-16 sm:px-8 sm:py-20 lg:px-16 lg:py-24">
         <div data-home-reveal className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-paper-border pb-5 sm:mb-10">
           <div>
@@ -515,6 +520,9 @@ export const HomePage: React.FC = () => {
           })}
         </div>
       </section>
+
+      {/* Feature 8: Scrub-to-Explode Joinery Experience */}
+      <ExplodedJoineryViewer />
 
       <section className="border-y-2 border-brass/40 bg-forest text-paper">
         <div className="mx-auto grid max-w-[1440px] gap-8 px-5 py-16 sm:px-8 md:grid-cols-[0.8fr_1.2fr] lg:px-16">
