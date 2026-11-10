@@ -412,7 +412,7 @@ export const HomePage: React.FC = () => {
 
   return (
     <main ref={mainRef} className="bg-paper text-ink">
-      <section id="hero" className="home-hero relative isolate flex min-h-[620px] overflow-hidden bg-forest-dark text-paper md:min-h-[calc(100svh-80px)]">
+      <section id="hero" className="home-hero relative isolate flex h-[calc(100svh-64px)] sm:h-[calc(100dvh-72px)] md:h-[calc(100dvh-80px)] min-h-[540px] max-h-[820px] overflow-hidden bg-forest-dark text-paper items-center">
         <img
           src="/videos/hero-background-poster.webp"
           alt=""
@@ -443,16 +443,16 @@ export const HomePage: React.FC = () => {
           <img src="/images/trong-dong.webp" alt="" className="home-dong-son home-dong-son-celestial h-full w-full object-contain opacity-35 mix-blend-screen" />
         </div>
 
-        <div className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center px-5 pb-24 pt-16 sm:px-8 lg:px-16">
-          <div className="max-w-[880px] animate-fade-up py-10">
+        <div className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center px-5 py-4 sm:px-8 sm:py-6 lg:px-16">
+          <div className="max-w-[880px] animate-fade-up">
             <h1 className="font-serif text-[clamp(2.75rem,5.8vw,5.5rem)] font-normal leading-[1.18] tracking-normal text-paper">
               <span className="block">{t('home.heroTitleLine1', 'Văn Minh')}</span>
               <span className="heritage-gold-foil font-normal italic pb-1">{t('home.heroTitleLine2', 'Di Sản Việt')}</span>
             </h1>
-            <p className="mt-6 max-w-[700px] text-lg leading-8 text-white/90 sm:text-xl sm:leading-9">
+            <p className="mt-4 sm:mt-5 max-w-[700px] text-lg leading-8 text-white/90 sm:text-xl sm:leading-9">
               {t('home.heroSubtitle', 'Hành trình số hóa bảo tàng, di tích và ký ức văn hóa Việt Nam qua các câu chuyện lịch sử')}
             </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div className="mt-6 sm:mt-7 flex flex-wrap items-center gap-3">
               <Link to="/collections" className="animate-gold-glint inline-flex min-h-12 items-center gap-3 bg-brass px-6 py-3 text-sm font-semibold text-forest transition-all hover:bg-brass-light shadow-[0_0_20px_rgba(184,138,68,0.25)] hover:shadow-[0_0_35px_rgba(184,138,68,0.5)]">
                 {t('home.heroCtaCollection', 'Khám phá bộ sưu tập')} <ArrowRight size={16} strokeWidth={1.7} />
               </Link>
@@ -464,7 +464,7 @@ export const HomePage: React.FC = () => {
                 <span>{t('home.heroCtaStory', 'Câu chuyện Viettoria')}</span>
               </Link>
             </div>
-            <div className="mt-11 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/25 pt-4 text-xs tracking-wide text-white/75">
+            <div className="mt-7 sm:mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/25 pt-3.5 sm:pt-4 text-xs tracking-wide text-white/75">
               <span>{t('home.heroBadge1', 'Mô hình kiến trúc')}</span>
               <span className="h-1 w-1 bg-brass" />
               <span>{t('home.heroBadge2', 'Câu chuyện di sản')}</span>
@@ -473,7 +473,7 @@ export const HomePage: React.FC = () => {
             </div>
           </div>
         </div>
-        <a href="#hanh-trinh-di-san" className="absolute bottom-6 left-5 z-10 inline-flex items-center gap-2 text-xs tracking-wide text-white/80 transition-colors hover:text-white sm:left-8 lg:left-16">
+        <a href="#hanh-trinh-di-san" className="absolute bottom-3 sm:bottom-4 left-5 z-10 inline-flex items-center gap-2 text-xs tracking-wide text-white/80 transition-colors hover:text-white sm:left-8 lg:left-16">
           {t('home.scrollDown', 'Cuộn để khám phá')} <ArrowDown size={14} strokeWidth={1.5} />
         </a>
       </section>
