@@ -217,6 +217,9 @@ const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, Localize
       epoch: '阮朝（公元 1805 年）',
       material: 'BioPETG 环保树脂结合黄铜金箔细部',
       finishing: '手工朱漆贴金奎星圆窗边框与仿古瓦当',
+      audioGuideTitle: '奎星璀璨耀长安',
+      audioGuideNarrator: 'Viettoria 工坊解说员',
+      audioGuideTranscript: '奎文阁倒映于天光井的静谧水面，如明镜映照文人雅士之心。1805年由总镇阮文诚主持营建，象征着大越崇文重道与尊师重教的优良传统。',
     },
     ko: {
       name: '규문각',
@@ -226,15 +229,21 @@ const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, Localize
       epoch: '응우옌 왕조 (1805년)',
       material: 'BioPETG 친환경 수지 및 금박 황동 디테일',
       finishing: '전통 주칠 및 원형 창호 금박 마감, 전통 기와',
+      audioGuideTitle: '장안의 땅을 비추는 규성의 빛',
+      audioGuideNarrator: 'Viettoria 아틀리에 해설사',
+      audioGuideTranscript: '규문각은 선비의 마음을 비추는 거울처럼 고요한 티엔꽝 우물에 모습을 비춥니다. 1805년 총진 응우옌 반 타인이 건립하였으며, 민족의 드높은 학문과 스승을 존경하는 숭고한 전통을 상징합니다.',
     },
     ja: {
       name: '奎文閣',
       subName: '奎星の楼閣 — 文廟・国子監',
-      shortDescription: 'ハノイの学問尊重と文治の象徴。「天円地方」の宇宙観を宿した比類なき木造楼閣。',
+      shortDescription: 'ハノイの学問尊重と文治の象徴。「天円地方」の宇宙観を宿した比类なき木造楼閣。',
       location: 'ハノイ市ドンダー区',
       epoch: '阮朝 (1805年)',
       material: 'BioPETG 樹脂および真鍮箔アクセント',
       finishing: '朱塗り漆工芸、奎星を象る円窓の金箔加飾、古代瓦',
+      audioGuideTitle: '長安の地を照らす奎星の輝き',
+      audioGuideNarrator: 'Viettoria アトリエナレーター',
+      audioGuideTranscript: '奎文閣は、文人の心を映す鏡のように静まり返る天光井の水面にその優美な影を落とします。1805年に総鎮阮文誠により建立され、高潔な学問の精神と尊師重道の伝統を象徴しています。',
     },
   },
   'cot-co-ha-noi': {
@@ -258,6 +267,9 @@ const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, Localize
       epoch: 'Dynastie Nguyen (Année 1812)',
       material: 'Résine BioPETG imitant la brique ancestrale de Thang Long',
       finishing: 'Patine rouge brique ancienne, 39 meurtrières en rosace sculptées',
+      audioGuideTitle: 'Héroïsme du Bastion de Thang Long',
+      audioGuideNarrator: 'Narrateur Viettoria Atelier',
+      audioGuideTranscript: 'Construite en 1812, la Tour du Drapeau de Hanoï est l\'un des rares monuments préservés au sein de la Cité Impériale, marquant le jour sacré de la Libération de la Capitale le 10 octobre 1954.',
     },
     zh: {
       name: '河内旗台',
@@ -267,6 +279,9 @@ const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, Localize
       epoch: '阮朝（公元 1812 年）',
       material: 'BioPETG 树脂还原升龙古砖纹理',
       finishing: '古朴砖红风化釉色，39个精雕梅花透气采光孔',
+      audioGuideTitle: '升龙要塞旗台之浩气',
+      audioGuideNarrator: 'Viettoria 工坊解说员',
+      audioGuideTranscript: '河内旗台建于1812年，是升龙皇城内少有的完好保留至今的古建筑之一，铭刻着1954年10月10日首都解放的神圣历史时刻。',
     },
     ko: {
       name: '하노이 깃대',
@@ -276,6 +291,9 @@ const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, Localize
       epoch: '응우옌 왕조 (1812년)',
       material: '탕롱 전통 고벽돌 질감을 재현한 BioPETG 수지',
       finishing: '고벽돌 붉은 녹색 파티나, 39개의 국화 채광창 정밀 조각',
+      audioGuideTitle: '탕롱 기단의 기개와 역사',
+      audioGuideNarrator: 'Viettoria 아틀리에 해설사',
+      audioGuideTranscript: '1812년에 축조된 하노이 깃대는 탕롱 황성 안에서 온전히 보존된 몇 안 되는 유적 중 하나로, 1954년 10월 10일 수도 해방의 성스러운 순간을 상징합니다.',
     },
     ja: {
       name: 'ハノイの旗塔',
@@ -285,6 +303,9 @@ const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, Localize
       epoch: '阮朝 (1812年)',
       material: '昇龍古煉瓦の風合いを再現した BioPETG 樹脂',
       finishing: '古煉瓦の赤褐色パティナ、39箇所の梅花換気採光窓',
+      audioGuideTitle: '昇龍旗台の気概',
+      audioGuideNarrator: 'Viettoria アトリエナレーター',
+      audioGuideTranscript: '1812年に建設されたハノイの旗塔は、昇龍皇城の中で現存する数少ない貴重な建築遺産の一つであり、1954年10月10日の首都解放という歴史的瞬間を永遠に留めています。',
     },
   },
   'ngo-mon-hue': {
@@ -308,6 +329,9 @@ const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, Localize
       epoch: 'Dynastie Nguyen (Année 1833)',
       material: 'Résine BioPETG aux teintes fidèles à la cour impériale',
       finishing: 'Tuiles émaillées impériales jaune vif et céramiques vertes éclatantes',
+      audioGuideTitle: 'Mélodies Impériales au Bord de la Rivière des Parfums',
+      audioGuideNarrator: 'Narrateur Cité Impériale Viettoria',
+      audioGuideTranscript: 'Faisant face au sud selon les principes de la géomancie, la Porte du Midi est le lieu où l\'autorité impériale s\'unit à la lumière céleste. Au sommet trône le Belvédère des Cinq Phénix, témoin des grandes proclamations et de l\'abdication historique de 1945.',
     },
     zh: {
       name: '顺化午门',
@@ -317,6 +341,9 @@ const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, Localize
       epoch: '阮朝（公元 1833 年）',
       material: 'BioPETG 树脂配搭宫廷传统纯矿物漆色',
       finishing: '灿烂金黄琉璃瓦与青绿琉璃瓦双色交叠',
+      audioGuideTitle: '香江之畔宫廷雅韵',
+      audioGuideNarrator: 'Viettoria 古都解说员',
+      audioGuideTranscript: '午门依照易理面南而立，乃皇权与光明汇聚之所。门楼之上建有五凤楼，见证了大朝传胪、颁朔之典，以及1945年保大帝宣布退位的重要历史转折。',
     },
     ko: {
       name: '후에 오문',
@@ -326,6 +353,9 @@ const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, Localize
       epoch: '응우옌 왕조 (1833년)',
       material: '궁중 전통 광물 도료를 재현한 BioPETG 수지',
       finishing: '황실 황유리와와 청유리와의 정교한 배치 마감',
+      audioGuideTitle: '흐엉강 변에 울려 퍼지는 궁중의 선율',
+      audioGuideNarrator: 'Viettoria 고도 문화유산 해설사',
+      audioGuideTranscript: '오문은 역학의 원리에 따라 정남향을 바라보며, 황제의 권위와 빛이 모여드는 성스러운 공간입니다. 상부의 오봉루는 과거 급제자 발표와 책력 반포 등 국가 의례가 열렸으며, 1945년 역사적인 퇴위식이 거행된 장소입니다.',
     },
     ja: {
       name: 'フエ午門',
@@ -335,6 +365,9 @@ const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, Localize
       epoch: '阮朝 (1833年)',
       material: '宮廷伝統の鉱物漆色を再現した BioPETG 樹脂',
       finishing: '鮮やかな黄色の皇帝瑠璃瓦と青緑瑠璃瓦の二色葺き',
+      audioGuideTitle: '香江のほとりに響く宮廷の調べ',
+      audioGuideNarrator: 'Viettoria 古都専任ナレーター',
+      audioGuideTranscript: '午門は易学の理に従い真南を向いて建ち、皇帝の威光と光が交わる神聖な場所です。上部には五鳳楼がそびえ、官吏登用発表や暦の頒布などの大礼が執り行われ、1945年の歴史的退位の舞台となりました。',
     },
   },
   'ben-nha-rong': {
@@ -358,6 +391,9 @@ const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, Localize
       epoch: 'Époque Contemporaine (Année 1863)',
       material: 'Résine BioPETG imitant la brique coloniale terracotta',
       finishing: 'Toiture ornée du couple de dragons en céramique émaillée turquoise vénérant la lune',
+      audioGuideTitle: 'Chant Épique sur le Port de Saigon',
+      audioGuideNarrator: 'Narrateur Viettoria Atelier',
+      audioGuideTranscript: 'Le 5 juin 1911, le paquebot Amiral Latouche-Tréville quitta le port de Saigon, portant les ardentes aspirations du jeune patriote de 21 ans, Nguyen Tat Thanh, en quête de libération nationale.',
     },
     zh: {
       name: '龙屋码头',
@@ -367,6 +403,9 @@ const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, Localize
       epoch: '近现代（公元 1863 年）',
       material: 'BioPETG 树脂再现殖民地时代古红陶砖质地',
       finishing: '屋脊双龙戏珠青釉陶塑神兽浮雕',
+      audioGuideTitle: '西贡商港之壮丽长歌',
+      audioGuideNarrator: 'Viettoria 工坊解说员',
+      audioGuideTranscript: '1911年6月5日，拉图什-特雷维尔海军上将号轮船缓缓驶离西贡港口，载着21岁青年阮必成寻找民族独立自由之路的赤诚炽热之志。',
     },
     ko: {
       name: '냐롱 부두',
@@ -376,6 +415,9 @@ const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, Localize
       epoch: '근현대 (1863년)',
       material: '프랑스 식민지 시절 테라코타 벽돌을 모사한 BioPETG',
       finishing: '지붕 위 청록색 에나멜 도자기 쌍룡조월 상징 조각',
+      audioGuideTitle: '사이공 항구 위에 울려 퍼지는 서사시',
+      audioGuideNarrator: 'Viettoria 아틀리에 해설사',
+      audioGuideTranscript: '1911년 6월 5일, 아미랄 라투슈-트레빌 호가 사이공 항구를 떠나며 21세 청년 응우옌 떳 타인의 조국 독립과 자유를 향한 뜨거운 열망을 싣고 항해를 시작했습니다.',
     },
     ja: {
       name: 'ニャロン埠頭',
@@ -385,6 +427,9 @@ const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, Localize
       epoch: '近代 (1863年)',
       material: 'フランス植民地時代のテラコッタ煉瓦を再現した BioPETG',
       finishing: '屋根上の青釉陶器製「双龍朝月」彫刻ディテール',
+      audioGuideTitle: 'サイゴン港の壮大なる叙事詩',
+      audioGuideNarrator: 'Viettoria アトリエナレーター',
+      audioGuideTranscript: '1911年6月5日、ラトゥーシュ・トレヴィル提督号はサイゴン港を静かに出航しました。21歳の青年グエン・タット・タインの、祖国の独立と自由を求める燃えるような情熱を乗せて。',
     },
   },
 };
@@ -862,12 +907,14 @@ export function getLocalizedProduct<T extends Product | Partial<Product>>(
     };
   }
 
-  if (product.audioGuide && (tr.audioGuideTitle || tr.audioGuideTranscript || tr.audioGuideNarrator)) {
+  if (product.audioGuide) {
+    const langAudioUrl = product.audioGuide.audioUrls?.[language];
     updated.audioGuide = {
       ...product.audioGuide,
       title: tr.audioGuideTitle || product.audioGuide.title,
       transcript: tr.audioGuideTranscript || product.audioGuide.transcript,
       narrator: tr.audioGuideNarrator || product.audioGuide.narrator,
+      audioUrl: langAudioUrl || product.audioGuide.audioUrl,
     };
   }
 
