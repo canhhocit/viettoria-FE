@@ -109,9 +109,16 @@ export const HeritageSoundscape: React.FC = () => {
     }
   }, [getAudioContext, playBellChime, stopLoop]);
 
+  // First-visit detection: if no stored language, skip autoplay until user picks language in modal
+  const isFirstVisit =
+    typeof window !== 'undefined' && !localStorage.getItem('viettoria_language');
+
   // Autoplay on mount + handle modern browser autoplay policies via first interaction fallback
   useEffect(() => {
     if (!isPlaying) return;
+
+    // On first visit, don't autoplay — wait for the language picker click event instead
+    if (isFirstVisit) return;
 
     getAudioContext();
     startBellAudio();
@@ -135,7 +142,26 @@ export const HeritageSoundscape: React.FC = () => {
       window.removeEventListener('keydown', handleFirstUserGesture);
       window.removeEventListener('touchstart', handleFirstUserGesture);
     };
-  }, [getAudioContext, isPlaying, startBellAudio]);
+  }, [getAudioContext, isPlaying, isFirstVisit, startBellAudio]);
+
+  // Listen for the language-picker trigger so the bell starts exactly on that user gesture
+  useEffect(() => {
+    const handleBellTrigger = () => {
+      if (!isPlayingRef.current) return;
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      const dest = masterGainRef.current;
+      if (!dest) return;
+      if (ctx.state === 'suspended') {
+        ctx.resume().then(() => startBellAudio()).catch(() => {});
+      } else {
+        startBellAudio();
+      }
+    };
+
+    window.addEventListener('viettoria:start-bell', handleBellTrigger);
+    return () => window.removeEventListener('viettoria:start-bell', handleBellTrigger);
+  }, [getAudioContext, startBellAudio]);
 
   // Toggle audio ON / OFF
   const togglePlay = () => {
