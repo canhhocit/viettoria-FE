@@ -221,7 +221,8 @@ export const vi = {
     pageSubtitle: 'Mỗi bộ sưu tập đại diện cho một thời kỳ hoàng kim của kiến trúc Việt Nam. Chúng tôi tái hiện từng cấu kiện với lòng thành kính và tiêu chuẩn kỹ thuật số bảo tàng học.',
     gridTitle: 'Danh Mục Bộ Sưu Tập Theo Thời Kỳ',
     collectionTag: 'Tuyển Tập',
-    monumentResearch: 'công trình nghiên cứu',
+    monumentResearch: 'công trình',
+    exploreAction: 'Khám phá',
     allCollections: 'Tất cả bộ sưu tập',
     historicEra: 'Thời kỳ lịch sử',
     worksInCollection: 'Các Tác Phẩm Trong Bộ Sưu Tập',
@@ -283,6 +284,7 @@ export const vi = {
     badge: '5 Tuyệt Tác Khảo Cứu',
     yearPrefix: 'Năm',
     exploreBtn: 'Khảo Cứu Tác Phẩm',
+    historyBadge: 'Tiến Trình Niên Đại Lịch Sử',
   },
 
   // Scale Ruler
@@ -419,12 +421,36 @@ export const vi = {
     intro: 'Chiêm ngưỡng mô hình 3D nguyên vẹn đặt trên mặt bàn làm việc hoặc không gian thực của bạn với tỷ lệ chân thực.',
     openNowMobile: 'Mở AR Ngay Trên Máy',
     launch: 'Đặt mô hình vào không gian thực (AR)',
+    step1: 'Dùng Camera iPhone (iOS 12+) hoặc Android quét mã',
+    step2: 'Bấm vào liên kết vừa mở để kích hoạt chế độ AR',
+    step3: 'Hướng camera xuống mặt bàn để đặt mô hình',
+    copyLink: 'Chép link',
+    copied: 'Đã sao chép',
   },
 
   // Postcard
   postcard: {
     atelier: 'Xưởng In Bưu Thiếp Ký Ức',
     btn: 'In bưu thiếp ký ức giấy dó',
+    title: 'Bưu Thiếp Giấy Dó',
+    subtitle: 'Bưu thiếp được đóng dấu triện son hoàng gia cùng góc chụp 3D độc bản của bạn.',
+    rendering: 'Đang in bưu thiếp chất liệu giấy dó...',
+    failed: 'Không thể tạo bưu thiếp. Vui lòng thử lại.',
+    selectQuote: 'Chọn Lời Thơ Di Sản',
+    yourNote: 'Lời Nhắn Của Bạn',
+    notePlaceholder: 'Nhập lời đề tặng gửi người thân hoặc lưu giữ kỷ niệm...',
+    charCount: 'ký tự',
+    downloadBtn: 'Tải Bưu Thiếp Về Máy (HD PNG)',
+    sealText: 'LỜI NHẮN TỪ KÝ ỨC:',
+    defaultNote: 'Lưu giữ vẻ đẹp truyền thống Việt Nam',
+  },
+
+  // Loupe
+  loupe: {
+    turnOn: 'Bật kính lúp giám định',
+    turnOff: 'Tắt kính lúp giám định',
+    on: 'Kính Lúp: Bật',
+    off: 'Kính Lúp: Tắt',
   },
 
   // Time Travel

@@ -206,7 +206,8 @@ export const en: TranslationSchema = {
     pageSubtitle: 'Each collection embodies a golden epoch of Vietnamese architecture. We reconstruct each modular component with reverence and museum-grade digital precision.',
     gridTitle: 'Collections By Historical Epoch',
     collectionTag: 'Anthology',
-    monumentResearch: 'research works',
+    monumentResearch: 'monuments',
+    exploreAction: 'Explore',
     allCollections: 'All Collections',
     historicEra: 'Historical Era',
     worksInCollection: 'Works in this Collection',
@@ -265,6 +266,7 @@ export const en: TranslationSchema = {
     badge: '5 Archival Masterpieces',
     yearPrefix: 'Year',
     exploreBtn: 'Explore Heritage Work',
+    historyBadge: 'Historical Chronology',
   },
 
   scaleRuler: {
@@ -396,12 +398,36 @@ export const en: TranslationSchema = {
     intro: 'Place authentic 3D monuments right on your physical desk or room in true proportion.',
     openNowMobile: 'Launch AR On Device',
     launch: 'Place in Your Space (AR)',
+    step1: 'Scan QR with iPhone (iOS 12+) or Android Camera',
+    step2: 'Tap the opened link to activate Web AR mode',
+    step3: 'Point camera toward table surface to place model',
+    copyLink: 'Copy Link',
+    copied: 'Copied',
   },
 
   // Postcard
   postcard: {
     atelier: 'Heritage Postcard Atelier',
     btn: 'Create Do Paper Postcard',
+    title: 'Do Paper Postcard',
+    subtitle: 'Postcard stamped with imperial vermilion seal and your unique 3D vantage angle.',
+    rendering: 'Printing authentic Do paper postcard...',
+    failed: 'Failed to generate postcard. Please try again.',
+    selectQuote: 'Select Heritage Poetic Verse',
+    yourNote: 'Your Personal Note',
+    notePlaceholder: 'Write a dedicated greeting or commemorative message...',
+    charCount: 'chars',
+    downloadBtn: 'Download Postcard (HD PNG)',
+    sealText: 'MESSAGE FROM MEMORY:',
+    defaultNote: 'Preserving the timeless grace of Vietnamese heritage',
+  },
+
+  // Loupe
+  loupe: {
+    turnOn: 'Turn on curator loupe',
+    turnOff: 'Turn off curator loupe',
+    on: 'Curator Loupe: On',
+    off: 'Curator Loupe: Off',
   },
 
   // Time Travel

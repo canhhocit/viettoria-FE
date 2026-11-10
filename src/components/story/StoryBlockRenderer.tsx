@@ -2,6 +2,7 @@ import React from 'react';
 import type { StoryBlock } from '../../types';
 import { Clock } from 'lucide-react';
 import { resolveImageUrl, handleImageFallback } from '../../utils/mediaResolver';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface StoryBlockRendererProps {
   block: StoryBlock;
@@ -9,6 +10,7 @@ interface StoryBlockRendererProps {
 }
 
 export const StoryBlockRenderer: React.FC<StoryBlockRendererProps> = ({ block }) => {
+  const { t } = useLanguage();
   if (block.status === 'hidden') return null;
 
   switch (block.type) {
@@ -98,7 +100,7 @@ export const StoryBlockRenderer: React.FC<StoryBlockRendererProps> = ({ block })
             <div className="text-center mb-10 space-y-2">
               <div className="inline-flex items-center gap-2 text-brass text-xs font-mono uppercase tracking-widest">
                 <Clock className="w-4 h-4" />
-                <span>Tiến Trình Niên Đại Lịch Sử</span>
+                <span>{t('timeline.historyBadge', 'Tiến Trình Niên Đại Lịch Sử')}</span>
               </div>
               <h3 className="font-serif text-2xl sm:text-3xl font-bold text-forest">
                 {block.title}
@@ -121,7 +123,7 @@ export const StoryBlockRenderer: React.FC<StoryBlockRendererProps> = ({ block })
 
                   <div className="bg-paper p-5 border border-paper-border hover:border-brass transition-all corner-frame">
                     <span className="font-serif font-bold text-lg text-brass block mb-1">
-                      Năm {item.year}
+                      {`${t('timeline.yearPrefix', 'Năm')} ${item.year}`}
                     </span>
                     <h4 className="font-serif text-base font-semibold text-forest mb-1.5">
                       {item.event}

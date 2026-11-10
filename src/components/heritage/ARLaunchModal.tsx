@@ -132,15 +132,15 @@ export const ARLaunchModal: React.FC<ARLaunchModalProps> = ({
           <div className="mt-4 space-y-1.5 text-left text-xs text-charcoal/90">
             <p className="flex items-center gap-2 font-medium">
               <span className="flex h-5 w-5 shrink-0 items-center justify-center bg-forest text-[10px] font-bold text-paper rounded-[1px]">1</span>
-              <span>Dùng Camera iPhone (iOS 12+) hoặc Android quét mã</span>
+              <span>{t('ar.step1', 'Dùng Camera iPhone (iOS 12+) hoặc Android quét mã')}</span>
             </p>
             <p className="flex items-center gap-2 font-medium">
               <span className="flex h-5 w-5 shrink-0 items-center justify-center bg-forest text-[10px] font-bold text-paper rounded-[1px]">2</span>
-              <span>Bấm vào liên kết vừa mở để kích hoạt chế độ AR</span>
+              <span>{t('ar.step2', 'Bấm vào liên kết vừa mở để kích hoạt chế độ AR')}</span>
             </p>
             <p className="flex items-center gap-2 font-medium">
               <span className="flex h-5 w-5 shrink-0 items-center justify-center bg-forest text-[10px] font-bold text-paper rounded-[1px]">3</span>
-              <span>Hướng camera xuống mặt bàn để đặt mô hình</span>
+              <span>{t('ar.step3', 'Hướng camera xuống mặt bàn để đặt mô hình')}</span>
             </p>
           </div>
         </div>
@@ -156,7 +156,7 @@ export const ARLaunchModal: React.FC<ARLaunchModalProps> = ({
             className="inline-flex items-center gap-1 font-sans text-xs font-bold text-forest hover:text-brass transition-colors"
           >
             {copied ? <Check size={13} className="text-forest" /> : <Copy size={13} className="text-brass" />}
-            <span>{copied ? 'Đã sao chép' : 'Chép link'}</span>
+            <span>{copied ? t('ar.copied', 'Đã sao chép') : t('ar.copyLink', 'Chép link')}</span>
           </button>
         </div>
       </div>

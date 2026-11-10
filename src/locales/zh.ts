@@ -206,7 +206,8 @@ export const zh: TranslationSchema = {
     pageSubtitle: '每一部系列皆代表越南营造史上的璀璨黄金时代。我们以敬畏之心和博物馆级数字准绳再现每一件核心构件。',
     gridTitle: '按历史时期分类的典藏目录',
     collectionTag: '精选辑',
-    monumentResearch: '处考证名作',
+    monumentResearch: '处名作',
+    exploreAction: '探索',
     allCollections: '全部典藏系列',
     historicEra: '历史时期',
     worksInCollection: '此系列所含作品',
@@ -265,6 +266,7 @@ export const zh: TranslationSchema = {
     badge: '5 部考据名作',
     yearPrefix: '公元',
     exploreBtn: '研读古建作品',
+    historyBadge: '历史时空长卷',
   },
 
   scaleRuler: {
@@ -393,11 +395,34 @@ export const zh: TranslationSchema = {
     intro: '将名筑 3D 比例模型置于您的书案或眼前实境，细品斗拱檐牙之美。',
     openNowMobile: '移动端即刻开启 AR',
     launch: '在眼前空间呈现 (AR)',
+    step1: '使用 iPhone (iOS 12+) 或 Android 相机扫描二维码',
+    step2: '点击打开链接以激活 Web AR 模式',
+    step3: '将摄像头对准桌面即可放置模型',
+    copyLink: '复制链接',
+    copied: '已复制',
   },
 
   postcard: {
     atelier: '纸墨明信片工坊',
     btn: '印制手工楮纸明信片',
+    title: '手工楮纸明信片',
+    subtitle: '加盖宫廷朱砂印玺与专属 3D 视角的典藏明信片。',
+    rendering: '正在印制手工楮纸明信片...',
+    failed: '生成明信片失败，请重试。',
+    selectQuote: '挑选典籍诗句',
+    yourNote: '您的题词留言',
+    notePlaceholder: '书写寄语或留存珍贵旅行记忆...',
+    charCount: '字',
+    downloadBtn: '保存高清明信片 (HD PNG)',
+    sealText: '时空寄语：',
+    defaultNote: '铭记越南建筑文宪典雅之韵',
+  },
+
+  loupe: {
+    turnOn: '开启文物鉴赏放大镜',
+    turnOff: '关闭文物鉴赏放大镜',
+    on: '放大镜：开启',
+    off: '放大镜：关闭',
   },
 
   // Time Travel

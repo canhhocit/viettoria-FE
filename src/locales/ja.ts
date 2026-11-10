@@ -206,7 +206,8 @@ export const ja: TranslationSchema = {
     pageSubtitle: '各コレクションはベトナム建築史の黄金期を象徴しています。敬意と博物館級のデジタル精度をもって各部材を再現しています。',
     gridTitle: '歴史時代別コレクション目録',
     collectionTag: '精選集',
-    monumentResearch: '件の考証建築',
+    monumentResearch: '件の建築',
+    exploreAction: '探訪',
     allCollections: 'すべてのコレクション',
     historicEra: '歴史時代',
     worksInCollection: 'このコレクションに含まれる作品',
@@ -265,6 +266,7 @@ export const ja: TranslationSchema = {
     badge: '5大考証名建築',
     yearPrefix: '西暦',
     exploreBtn: '建築作品を探訪',
+    historyBadge: '歴史の軌跡',
   },
 
   scaleRuler: {
@@ -393,11 +395,34 @@ export const ja: TranslationSchema = {
     intro: '卓上やお部屋の実寸空間に3D建築模型を配置し、細部の木組みをご堪能いただけます。',
     openNowMobile: 'モバイルでAR起動',
     launch: '実空間に配置する (AR)',
+    step1: 'iPhone (iOS 12+) または Android カメラでQRコードを読み取ります',
+    step2: '開いたリンクをタップして Web AR モードを起動します',
+    step3: 'カメラを机や床に向けて模型を配置します',
+    copyLink: 'リンクをコピー',
+    copied: 'コピー完了',
   },
 
   postcard: {
     atelier: '伝統紙絵葉書工房',
     btn: '伝統紙ポストカード作成',
+    title: '伝統紙ポストカード',
+    subtitle: '皇帝の朱印と独自の3Dアングルを添えた記念絵葉書です。',
+    rendering: '伝統紙ポストカードを印刷しています...',
+    failed: '絵葉書の生成に失敗しました。もう一度お試しください。',
+    selectQuote: '遺産の詩句を選択',
+    yourNote: 'メッセージ',
+    notePlaceholder: '大切な方への言葉や旅の思い出をお書きください...',
+    charCount: '文字',
+    downloadBtn: '高画質絵葉書を保存 (HD PNG)',
+    sealText: '記憶からの言葉：',
+    defaultNote: 'ベトナム建築遺産の不朽の美を心に刻んで',
+  },
+
+  loupe: {
+    turnOn: '鑑賞用ルーペを起動',
+    turnOff: '鑑賞用ルーペを停止',
+    on: 'ルーペ：オン',
+    off: 'ルーペ：オフ',
   },
 
   // Time Travel

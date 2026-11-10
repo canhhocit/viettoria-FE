@@ -150,18 +150,18 @@ export const CollectionsPage: React.FC = () => {
 
                   {/* Card Footer */}
                   <div className="p-6 sm:p-8 pt-0 border-t border-paper-border mt-4">
-                    <div className="pt-4 flex items-center justify-between">
-                      <span className="text-xs font-mono text-charcoal-muted flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-brass" />
-                        <span>{col.productsCount || 1} {t('collectionsPage.monumentResearch', 'Công trình nghiên cứu')}</span>
+                    <div className="pt-4 flex items-center justify-between gap-4">
+                      <span className="text-xs font-mono text-charcoal-muted flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+                        <Clock className="w-3.5 h-3.5 text-brass shrink-0" />
+                        <span>{col.productsCount || 1} {t('collectionsPage.monumentResearch', 'công trình')}</span>
                       </span>
 
                       <Link
                         to={`/collections/${col.slug}`}
-                        className="inline-flex items-center gap-2 text-xs font-sans uppercase tracking-wider text-forest font-bold group-hover:text-brass transition-colors"
+                        className="inline-flex items-center gap-1.5 text-xs font-sans uppercase tracking-wider text-forest font-bold group-hover:text-brass transition-colors shrink-0 whitespace-nowrap ml-auto"
                       >
-                        <span>{t('home.exploreCollection', 'Khám phá')}</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-200" />
+                        <span>{t('collectionsPage.exploreAction', 'Khám phá')}</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200 shrink-0" />
                       </Link>
                     </div>
                   </div>

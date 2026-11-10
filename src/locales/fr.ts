@@ -206,7 +206,8 @@ export const fr: TranslationSchema = {
     pageSubtitle: 'Chaque collection reflète l’âge d’or de l’architecture vietnamienne. Nous restituons chaque élément avec respect et précision muséale.',
     gridTitle: 'Collections par Période Historique',
     collectionTag: 'Anthologie',
-    monumentResearch: 'édifices documentés',
+    monumentResearch: 'édifices',
+    exploreAction: 'Explorer',
     allCollections: 'Toutes les Collections',
     historicEra: 'Période Historique',
     worksInCollection: 'Œuvres de cette Collection',
@@ -265,6 +266,7 @@ export const fr: TranslationSchema = {
     badge: '5 Chefs-d’œuvre d’Archive',
     yearPrefix: 'An',
     exploreBtn: 'Étudier l’Édifice',
+    historyBadge: 'Chronologie Historique',
   },
 
   scaleRuler: {
@@ -393,11 +395,34 @@ export const fr: TranslationSchema = {
     intro: 'Déposez nos maquettes 3D directement sur votre bureau ou dans votre espace avec des proportions fidèles.',
     openNowMobile: 'Lancer l’AR sur mobile',
     launch: 'Placer dans votre espace (AR)',
+    step1: 'Scannez le QR avec l\'appareil photo iPhone (iOS 12+) ou Android',
+    step2: 'Ouvrez le lien pour activer le mode Web AR',
+    step3: 'Pointez la caméra vers la surface d\'une table pour déposer la maquette',
+    copyLink: 'Copier le lien',
+    copied: 'Copié',
   },
 
   postcard: {
     atelier: 'Atelier de Cartes Postales Mémoire',
     btn: 'Créer Carte Postale Papier Dó',
+    title: 'Carte Postale Papier Dó',
+    subtitle: 'Carte ornée du sceau vermillon impérial et de votre perspective 3D unique.',
+    rendering: 'Impression de la carte postale sur papier Dó...',
+    failed: 'Impossible de générer la carte postale. Veuillez réessayer.',
+    selectQuote: 'Choisir un Poème du Patrimoine',
+    yourNote: 'Votre Message',
+    notePlaceholder: 'Écrivez une dédicace ou un message souvenir...',
+    charCount: 'caractères',
+    downloadBtn: 'Télécharger la Carte Postale (HD PNG)',
+    sealText: 'MESSAGE DE MÉMOIRE :',
+    defaultNote: 'Préserver l\'éclat intemporel du patrimoine vietnamien',
+  },
+
+  loupe: {
+    turnOn: 'Activer la loupe de conservation',
+    turnOff: 'Désactiver la loupe de conservation',
+    on: 'Loupe : Activée',
+    off: 'Loupe : Désactivée',
   },
 
   // Time Travel

@@ -263,28 +263,32 @@ export const TimeTravelComparison: React.FC<{ defaultId?: string }> = ({ default
               {t('timetravel.heading', 'Dấu Xưa & Diện Mạo Phục Dựng')}
             </h2>
             <p className="mt-2.5 text-sm sm:text-base leading-relaxed text-charcoal/85 font-normal">
-              Đối sánh trực diện giữa <strong>ảnh tư liệu lịch sử hơn 100 năm trước (EFEO / tư liệu Pháp)</strong> với <strong>di tích thực tế & mô hình 3D hôm nay</strong>. Kéo thanh trượt để cảm nhận sự chuyển mình qua thăng trầm lịch sử.
+              {t('timetravel.descDetailed', 'Đối sánh trực diện giữa ảnh tư liệu lịch sử hơn 100 năm trước (EFEO / tư liệu Pháp) với di tích thực tế & mô hình 3D hôm nay. Kéo thanh trượt để cảm nhận sự chuyển mình qua thăng trầm lịch sử.')}
             </p>
           </div>
 
           {/* Controls: Monument Selector & Present Mode Toggle */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
             {/* Monument Selector Tabs */}
-            <nav className="flex flex-wrap items-center gap-2" aria-label="Chọn công trình so sánh">
-              {COMPARISON_DATA.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setSelectedId(item.id)}
-                  className={`border px-3 py-2 text-xs font-sans transition-all rounded-[2px] ${
-                    selectedId === item.id
-                      ? 'border-forest bg-forest text-brass font-bold shadow-xs'
-                      : 'border-paper-border bg-paper text-forest hover:border-brass hover:bg-paper-warm font-medium'
-                  }`}
-                >
-                  <span>{item.name.split(' (')[0]}</span>
-                </button>
-              ))}
+            <nav className="flex flex-wrap items-center gap-2" aria-label={t('timetravel.selectMonument', 'Chọn công trình so sánh')}>
+              {COMPARISON_DATA.map((item) => {
+                const loc = TIME_TRAVEL_LOCALES[item.id]?.[language];
+                const displayName = loc?.name || item.name;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setSelectedId(item.id)}
+                    className={`border px-3 py-2 text-xs font-sans transition-all rounded-[2px] ${
+                      selectedId === item.id
+                        ? 'border-forest bg-forest text-brass font-bold shadow-xs'
+                        : 'border-paper-border bg-paper text-forest hover:border-brass hover:bg-paper-warm font-medium'
+                    }`}
+                  >
+                    <span>{displayName.split(' (')[0]}</span>
+                  </button>
+                );
+              })}
             </nav>
 
             {/* View Mode Toggle: Real Photo vs 3D Model */}
@@ -297,7 +301,7 @@ export const TimeTravelComparison: React.FC<{ defaultId?: string }> = ({ default
                 }`}
               >
                 <Eye size={12} />
-                <span>Ảnh Thực Địa</span>
+                <span>{t('timetravel.fieldPhoto', 'Ảnh Thực Địa')}</span>
               </button>
               <button
                 type="button"
@@ -307,7 +311,7 @@ export const TimeTravelComparison: React.FC<{ defaultId?: string }> = ({ default
                 }`}
               >
                 <Box size={12} />
-                <span>Mô Hình 3D</span>
+                <span>{t('timetravel.model3d', 'Mô Hình 3D')}</span>
               </button>
             </div>
           </div>
@@ -328,16 +332,16 @@ export const TimeTravelComparison: React.FC<{ defaultId?: string }> = ({ default
             <div className="absolute inset-0 h-full w-full bg-[#F4EFE6] flex items-center justify-center">
               <img
                 src={currentPresentImage}
-                alt={`${activeItem.name} ${presentMode === '3d' ? 'Mô hình 3D' : 'Ảnh thực địa'} 2026`}
+                alt={`${activeItem.name} ${presentMode === '3d' ? '3D' : ''} 2026`}
                 className="h-full w-full object-cover"
               />
               {/* Right Tag */}
               <div className="pointer-events-none absolute bottom-4 right-4 z-10 border border-brass/60 bg-forest/90 px-3 py-1.5 text-xs text-paper backdrop-blur-sm rounded-[1px] shadow-md">
                 <span className="font-sans text-[10px] font-semibold text-brass uppercase tracking-wider block">
-                  Hiện Tại · {activeItem.presentYear}
+                  {t('timetravel.present', 'Hiện Tại')} · {activeItem.presentYear}
                 </span>
                 <span className="font-sans text-[11px] font-medium text-paper">
-                  {presentMode === '3d' ? 'Mô hình 3D phục dựng số hóa' : activeItem.presentLabel}
+                  {presentMode === '3d' ? t('timetravel.model3dLabel', 'Mô hình 3D phục dựng số hóa') : activeItem.presentLabel}
                 </span>
               </div>
             </div>
@@ -351,20 +355,20 @@ export const TimeTravelComparison: React.FC<{ defaultId?: string }> = ({ default
                 {/* Authentic Historical Archival Photo */}
                 <img
                   src={activeItem.pastImageSrc}
-                  alt={`${activeItem.name} ảnh tư liệu lịch sử ${activeItem.pastYear}`}
+                  alt={`${activeItem.name} ${activeItem.pastYear}`}
                   className="h-full w-full object-cover"
                 />
 
                 {/* EFEO Archival Watermark Seal */}
                 <div className="pointer-events-none absolute top-4 left-4 z-10 flex items-center gap-1.5 border border-charcoal/50 bg-[#1B1E1B]/85 px-2.5 py-1 text-[10px] font-sans font-semibold text-brass backdrop-blur-xs rounded-[1px]">
                   <Clock size={11} className="text-brass" />
-                  <span>ẢNH GỐC LỊCH SỬ · NĂM {activeItem.pastYear}</span>
+                  <span>{t('timetravel.originalArchivalPhoto', 'ẢNH GỐC LỊCH SỬ · NĂM')} {activeItem.pastYear}</span>
                 </div>
 
                 {/* Left Tag */}
                 <div className="pointer-events-none absolute bottom-4 left-4 z-10 border border-charcoal/60 bg-[#142820]/90 px-3 py-1.5 text-xs text-paper backdrop-blur-sm rounded-[1px] shadow-md">
                   <span className="font-sans text-[10px] font-semibold text-brass uppercase tracking-wider block">
-                    Ký Ức · {activeItem.pastYear}
+                    {t('timetravel.past', 'Ký Ức')} · {activeItem.pastYear}
                   </span>
                   <span className="font-sans text-[11px] font-medium text-paper/95">
                     {activeItem.pastLabel}
@@ -399,7 +403,7 @@ export const TimeTravelComparison: React.FC<{ defaultId?: string }> = ({ default
             </div>
             <div className="mt-3 sm:mt-0 text-left sm:text-right shrink-0">
               <span className="font-mono text-[10px] text-charcoal-muted uppercase block">
-                Nguồn Tư Liệu Lưu Trữ:
+                {t('timetravel.archivalSource', 'Nguồn Tư Liệu Lưu Trữ:')}
               </span>
               <span className="font-sans text-[11px] font-medium text-forest">
                 {activeItem.archivalSource}

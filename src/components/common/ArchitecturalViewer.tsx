@@ -657,46 +657,46 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
               <button
                 type="button"
                 onClick={() => setLightingMode('dawn')}
-                title="Sớm Mai: Nắng dịu vàng sương"
+                title={`${t('product.lightingDawn', 'Sớm Mai')}: ${t('product.lightingDawnDesc', 'Nắng dịu vàng sương')}`}
                 className={`px-2 py-1 flex items-center gap-1 font-sans text-[10px] uppercase font-bold transition-colors ${
                   lightingMode === 'dawn' ? 'bg-brass text-forest' : 'text-paper/80 hover:text-brass'
                 }`}
               >
                 <Sunrise size={11} />
-                <span className="hidden md:inline">Sớm Mai</span>
+                <span className="hidden md:inline">{t('product.lightingDawn', 'Sớm Mai')}</span>
               </button>
               <button
                 type="button"
                 onClick={() => setLightingMode('noon')}
-                title="Chính Ngọ: Ánh sáng rõ nét"
+                title={`${t('product.lightingNoon', 'Chính Ngọ')}: ${t('product.lightingNoonDesc', 'Ánh sáng rõ nét')}`}
                 className={`px-2 py-1 flex items-center gap-1 font-sans text-[10px] uppercase font-bold transition-colors ${
                   lightingMode === 'noon' ? 'bg-brass text-forest' : 'text-paper/80 hover:text-brass'
                 }`}
               >
                 <Sun size={11} />
-                <span className="hidden md:inline">Chính Ngọ</span>
+                <span className="hidden md:inline">{t('product.lightingNoon', 'Chính Ngọ')}</span>
               </button>
               <button
                 type="button"
                 onClick={() => setLightingMode('dusk')}
-                title="Hoàng Hôn: Ráng chiều hổ phách"
+                title={`${t('product.lightingDusk', 'Hoàng Hôn')}: ${t('product.lightingDuskDesc', 'Ráng chiều hổ phách')}`}
                 className={`px-2 py-1 flex items-center gap-1 font-sans text-[10px] uppercase font-bold transition-colors ${
                   lightingMode === 'dusk' ? 'bg-brass text-forest' : 'text-paper/80 hover:text-brass'
                 }`}
               >
                 <Sunset size={11} />
-                <span className="hidden md:inline">Hoàng Hôn</span>
+                <span className="hidden md:inline">{t('product.lightingDusk', 'Hoàng Hôn')}</span>
               </button>
               <button
                 type="button"
                 onClick={() => setLightingMode('night')}
-                title="Dạ Nguyệt: Ánh trăng huyền ảo"
+                title={`${t('product.lightingNight', 'Dạ Nguyệt')}: ${t('product.lightingNightDesc', 'Ánh trăng huyền ảo')}`}
                 className={`px-2 py-1 flex items-center gap-1 font-sans text-[10px] uppercase font-bold transition-colors ${
                   lightingMode === 'night' ? 'bg-brass text-forest' : 'text-paper/80 hover:text-brass'
                 }`}
               >
                 <Moon size={11} />
-                <span className="hidden md:inline">Dạ Nguyệt</span>
+                <span className="hidden md:inline">{t('product.lightingNight', 'Dạ Nguyệt')}</span>
               </button>
             </div>
           )}
@@ -811,7 +811,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                   title={t('ar.launch', 'Đặt mô hình vào không gian thực (AR)')}
                 >
                   <Box className="h-3.5 w-3.5 text-brass" />
-                  <span>XEM AR</span>
+                  <span>{t('product.viewAr', 'XEM AR')}</span>
                 </button>
 
                 <span className="heritage-pill-divider" aria-hidden="true" />
@@ -823,7 +823,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                   title={t('postcard.btn', 'In bưu thiếp ký ức giấy dó')}
                 >
                   <Stamp className="h-3.5 w-3.5 text-brass" />
-                  <span>BƯU THIẾP</span>
+                  <span>{t('product.postcard', 'BƯU THIẾP')}</span>
                 </button>
               </div>
             </div>
@@ -933,7 +933,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
             <div className="mt-4 space-y-4 font-sans text-sm text-paper/90 leading-relaxed">
               {product.location && (
                 <div className="flex items-center gap-2 text-xs text-paper/80 bg-paper/5 px-3 py-2 border border-paper/10">
-                  <span className="font-semibold text-brass">Địa điểm:</span>
+                  <span className="font-semibold text-brass">{t('common.location', 'Địa điểm')}:</span>
                   <span>{product.location}</span>
                 </div>
               )}

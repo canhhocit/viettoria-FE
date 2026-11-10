@@ -145,7 +145,7 @@ export const LanguagePickerModal: React.FC<LanguagePickerModalProps> = ({
                   </span>
                   {isSelected && (
                     <span className="text-[9px] font-sans text-brass/80 tracking-wider">
-                      ● Đang chọn
+                      {lang.code === 'vi' ? '● Đang chọn' : lang.code === 'fr' ? '● Sélectionné' : lang.code === 'zh' ? '● 已选择' : lang.code === 'ko' ? '● 선택됨' : lang.code === 'ja' ? '● 選択中' : '● Selected'}
                     </span>
                   )}
                 </button>

@@ -298,8 +298,10 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
         zIndexOffset: isInitialActive ? 1000 : 100 - parseInt(site.id),
       }).addTo(map);
 
+      const locSite = getLocalizedSite(site);
+
       // Tooltip khi di chuột
-      marker.bindTooltip(`<b>${site.mapLabel} · ${site.name}</b> (${site.epoch.split('(')[0].trim()})`, {
+      marker.bindTooltip(`<b>${locSite.mapLabel} · ${locSite.name}</b> (${locSite.epoch.split('(')[0].trim()})`, {
         direction: 'top',
         offset: [0, -44],
         className: 'heritage-map-tooltip',
@@ -314,17 +316,17 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
           background: #FAF7F0;
           color: #1B1E1B;
         ">
-          <div style="font-family: 'Cinzel', serif; font-size: 10px; color: #B88A44; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;">
-            ${site.mapLabel} · ${site.epoch.split('(')[0].trim()}
+          <div style="font-family: 'Playfair Display', serif; font-size: 10px; color: #B88A44; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;">
+            ${locSite.mapLabel} · ${locSite.epoch.split('(')[0].trim()}
           </div>
           <h4 style="font-family: 'Playfair Display', serif; font-size: 15px; font-weight: bold; color: #142820; margin: 3px 0;">
-            ${site.name}
+            ${locSite.name}
           </h4>
           <p style="font-size: 11px; color: #4A4A4A; margin: 0 0 6px 0; line-height: 1.35;">
-            ${site.location}
+            ${locSite.location}
           </p>
           <div style="font-size: 9.5px; color: #8A7246; font-family: monospace; border-top: 1px solid rgba(184, 138, 68, 0.2); padding-top: 4px;">
-            Tọa độ: ${formatCoordinates(site)}
+            ${t('mapPage.coordinates', 'Tọa độ')}: ${formatCoordinates(locSite)}
           </div>
         </div>
       `;
@@ -346,6 +348,40 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
       mapRef.current = null;
     };
   }, []);
+
+  // Cập nhật nội dung Popup & Tooltip khi thay đổi ngôn ngữ
+  useEffect(() => {
+    if (!mapRef.current) return;
+    HERITAGE_SITES.forEach((site) => {
+      const marker = markersRef.current[site.id];
+      if (!marker) return;
+      const locSite = getLocalizedSite(site);
+      const popupHtml = `
+        <div style="
+          font-family: 'Be Vietnam Pro', sans-serif;
+          min-width: 210px;
+          padding: 6px 2px;
+          background: #FAF7F0;
+          color: #1B1E1B;
+        ">
+          <div style="font-family: 'Playfair Display', serif; font-size: 10px; color: #B88A44; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;">
+            ${locSite.mapLabel} · ${locSite.epoch.split('(')[0].trim()}
+          </div>
+          <h4 style="font-family: 'Playfair Display', serif; font-size: 15px; font-weight: bold; color: #142820; margin: 3px 0;">
+            ${locSite.name}
+          </h4>
+          <p style="font-size: 11px; color: #4A4A4A; margin: 0 0 6px 0; line-height: 1.35;">
+            ${locSite.location}
+          </p>
+          <div style="font-size: 9.5px; color: #8A7246; font-family: monospace; border-top: 1px solid rgba(184, 138, 68, 0.2); padding-top: 4px;">
+            ${t('mapPage.coordinates', 'Tọa độ')}: ${formatCoordinates(locSite)}
+          </div>
+        </div>
+      `;
+      marker.setPopupContent(popupHtml);
+      marker.setTooltipContent(`<b>${locSite.mapLabel} · ${locSite.name}</b> (${locSite.epoch.split('(')[0].trim()})`);
+    });
+  }, [language, t]);
 
   return (
     <div className="heritage-map bg-paper border border-brass/40 corner-frame shadow-xl overflow-hidden flex flex-col lg:flex-row">

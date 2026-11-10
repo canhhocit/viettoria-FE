@@ -206,7 +206,8 @@ export const ko: TranslationSchema = {
     pageSubtitle: '각 컬렉션은 베트남 건축의 황금기를 대표합니다. 우리는 박물관급 디지털 정밀도와 깊은 경외심으로 각 부재를 재현합니다.',
     gridTitle: '시대별 컬렉션 목록',
     collectionTag: '선집',
-    monumentResearch: '개 고증 건축물',
+    monumentResearch: '개 건축물',
+    exploreAction: '탐색',
     allCollections: '전체 컬렉션',
     historicEra: '역사 시대',
     worksInCollection: '이 컬렉션에 포함된 작품',
@@ -265,6 +266,7 @@ export const ko: TranslationSchema = {
     badge: '5대 고증 걸작',
     yearPrefix: '서기',
     exploreBtn: '건축 작품 탐구',
+    historyBadge: '역사 연표',
   },
 
   scaleRuler: {
@@ -393,11 +395,34 @@ export const ko: TranslationSchema = {
     intro: '3D 정밀 모형을 실제 책상이나 공간에 배치하여 고유한 비례를 직접 경험해 보세요.',
     openNowMobile: '모바일에서 AR 바로 실행',
     launch: '실제 공간에 배치하기 (AR)',
+    step1: 'iPhone(iOS 12+) 또는 Android 카메라로 QR 코드를 스캔하세요',
+    step2: '열린 링크를 눌러 Web AR 모드를 활성화하세요',
+    step3: '카메라를 책상이나 바닥을 향해 비추어 모형을 배치하세요',
+    copyLink: '링크 복사',
+    copied: '복사 완료',
   },
 
   postcard: {
     atelier: '전통 한지 엽서 공방',
     btn: '전통 엽서 제작하기',
+    title: '전통 엽서',
+    subtitle: '황실 붉은 인장과 나만의 3D 뷰가 담긴 기념 엽서입니다.',
+    rendering: '전통 종이 엽서를 인쇄하는 중입니다...',
+    failed: '엽서 생성에 실패했습니다. 다시 시도해 주세요.',
+    selectQuote: '유산 시구 선택',
+    yourNote: '남기실 말씀',
+    notePlaceholder: '선물할 분을 위한 글이나 여행의 추억을 적어보세요...',
+    charCount: '자',
+    downloadBtn: '엽서 이미지 저장 (HD PNG)',
+    sealText: '기억의 메시지:',
+    defaultNote: '베트남 전통 건축 유산의 고요한 아름다움을 간직하며',
+  },
+
+  loupe: {
+    turnOn: '돋보기 켜기',
+    turnOff: '돋보기 끄기',
+    on: '돋보기: 켜짐',
+    off: '돋보기: 꺼짐',
   },
 
   // Time Travel

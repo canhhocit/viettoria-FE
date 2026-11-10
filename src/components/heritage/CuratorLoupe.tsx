@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { Search } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface CuratorLoupeProps {
   imageSrc: string;
@@ -14,6 +15,7 @@ export const CuratorLoupe: React.FC<CuratorLoupeProps> = ({
   zoomLevel = 2.5,
   className = '',
 }) => {
+  const { t } = useLanguage();
   const [isActive, setIsActive] = useState<boolean>(true);
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const [lensPos, setLensPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -62,11 +64,11 @@ export const CuratorLoupe: React.FC<CuratorLoupeProps> = ({
               ? 'border-brass bg-forest text-brass'
               : 'border-paper-border bg-paper/90 text-forest hover:border-brass'
           }`}
-          title={isActive ? 'Tắt kính lúp giám định' : 'Bật kính lúp giám định'}
+          title={isActive ? t('loupe.turnOff', 'Tắt kính lúp giám định') : t('loupe.turnOn', 'Bật kính lúp giám định')}
         >
           <Search size={13} className="text-brass" />
           <span className="font-sans text-[11px] uppercase tracking-wider">
-            {isActive ? 'Kính Lúp: Bật' : 'Kính Lúp: Tắt'}
+            {isActive ? t('loupe.on', 'Kính Lúp: Bật') : t('loupe.off', 'Kính Lúp: Tắt')}
           </span>
         </button>
       </div>

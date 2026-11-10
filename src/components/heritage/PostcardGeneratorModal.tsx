@@ -3,6 +3,7 @@ import { Download, Sparkles, X, Stamp } from 'lucide-react';
 import type { Product } from '../../types';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { resolveImageUrl } from '../../utils/mediaResolver';
+import type { LanguageCode } from '../../locales';
 
 interface PostcardGeneratorModalProps {
   product: Product;
@@ -11,12 +12,44 @@ interface PostcardGeneratorModalProps {
   snapshotDataUrl?: string | null;
 }
 
-const HERITAGE_QUOTES = [
-  'Ngàn năm bia đá còn ghi · Hồn cốt tiền nhân đọng mái đình.',
-  'Khắc dấu thời gian, nối dài hồn cốt di sản nghìn năm.',
-  'Dấu xưa xe ngựa hồn thu thảo · Nền cũ lâu đài bóng tịch dương.',
-  'Nơi tinh hoa kiến trúc Việt giao hòa cùng đất trời.',
-];
+const HERITAGE_QUOTES: Record<LanguageCode, string[]> = {
+  vi: [
+    'Ngàn năm bia đá còn ghi · Hồn cốt tiền nhân đọng mái đình.',
+    'Khắc dấu thời gian, nối dài hồn cốt di sản nghìn năm.',
+    'Dấu xưa xe ngựa hồn thu thảo · Nền cũ lâu đài bóng tịch dương.',
+    'Nơi tinh hoa kiến trúc Việt giao hòa cùng đất trời.',
+  ],
+  en: [
+    'Carved in stone through a thousand years · Ancestral spirit in ancient eaves.',
+    'Etching the marks of time, preserving millenary heritage.',
+    'Traces of past glory lingering like autumn whispers.',
+    'Where the quintessence of Vietnamese architecture embraces heaven and earth.',
+  ],
+  fr: [
+    'Mille ans gravés dans la pierre · L\'âme ancestrale sous les toits anciens.',
+    'Graver l\'empreinte du temps, perpétuer un héritage millénaire.',
+    'Les traces d\'antan résonnent comme un murmure d\'automne.',
+    'Où la quintessence architecturale vietnamienne s\'unit au ciel et à la terre.',
+  ],
+  zh: [
+    '千年碑石仍载史 · 先祖神韵驻飞檐。',
+    '铭刻岁月痕迹，传承千载华章。',
+    '古道西风忆昔年 · 故城落日映残阳。',
+    '越南建筑精粹与天地和谐共生之地。',
+  ],
+  ko: [
+    '천년의 비석에 새겨진 선조들의 숨결 · 고즈넉한 지붕 처마.',
+    '세월의 흔적을 새겨 천년의 유산을 이어가다.',
+    '옛 궁궐 터에 서린 역사의 깊은 울림.',
+    '베트남 건축의 정수가 하늘과 땅과 어우러지는 곳.',
+  ],
+  ja: [
+    '千年の碑石に刻まれた先人の魂 · 古き軒先に宿る美。',
+    '時の刻印を刻み、千年の遺産を未来へ紡ぐ。',
+    '古の栄華を偲ばせる夕暮れの佇まい。',
+    'ベトナム建築の粋が天と地と調和する聖地。',
+  ],
+};
 
 export const PostcardGeneratorModal: React.FC<PostcardGeneratorModalProps> = ({
   product,
@@ -24,8 +57,9 @@ export const PostcardGeneratorModal: React.FC<PostcardGeneratorModalProps> = ({
   onClose,
   snapshotDataUrl,
 }) => {
-  const { t } = useLanguage();
-  const [senderNote, setSenderNote] = useState<string>('Kỷ niệm chuyến hành trình qua di sản Việt');
+  const { t, language } = useLanguage();
+  const quotes = HERITAGE_QUOTES[language] || HERITAGE_QUOTES.vi;
+  const [senderNote, setSenderNote] = useState<string>('');
   const [selectedQuoteIndex, setSelectedQuoteIndex] = useState<number>(0);
   const [postcardImageUrl, setPostcardImageUrl] = useState<string>('');
   const [isRendering, setIsRendering] = useState<boolean>(true);
@@ -145,7 +179,7 @@ export const PostcardGeneratorModal: React.FC<PostcardGeneratorModalProps> = ({
       // Poetic Quote
       ctx.fillStyle = '#1B1E1B';
       ctx.font = 'italic 18px "Playfair Display", Georgia, serif';
-      const quoteText = `"${HERITAGE_QUOTES[selectedQuoteIndex]}"`;
+      const quoteText = `"${quotes[selectedQuoteIndex] || quotes[0]}"`;
       ctx.fillText(quoteText, rightX, 390);
 
       // Sender Note Box
@@ -155,12 +189,12 @@ export const PostcardGeneratorModal: React.FC<PostcardGeneratorModalProps> = ({
       ctx.strokeRect(rightX, 440, canvas.width - rightX - 80, 95);
 
       ctx.fillStyle = '#8F6E4A';
-      ctx.font = 'bold 12px "Cinzel", serif';
-      ctx.fillText('LỜI NHẮN TỪ KÝ ỨC:', rightX + 16, 465);
+      ctx.font = 'bold 12px "Playfair Display", Georgia, serif';
+      ctx.fillText(t('postcard.sealText', 'LỜI NHẮN TỪ KÝ ỨC:'), rightX + 16, 465);
 
       ctx.fillStyle = '#1B1E1B';
       ctx.font = '15px "Be Vietnam Pro", sans-serif';
-      ctx.fillText(senderNote || 'Lưu giữ vẻ đẹp truyền thống Việt Nam', rightX + 16, 498);
+      ctx.fillText(senderNote || t('postcard.defaultNote', 'Lưu giữ vẻ đẹp truyền thống Việt Nam'), rightX + 16, 498);
 
       // 4. Imperial Vermilion Seal Stamp
       const stampX = canvas.width - 200;
@@ -183,7 +217,7 @@ export const PostcardGeneratorModal: React.FC<PostcardGeneratorModalProps> = ({
       // Stamp text
       ctx.fillStyle = '#98281A';
       ctx.textAlign = 'center';
-      ctx.font = 'bold 11px "Cinzel", serif';
+      ctx.font = 'bold 11px "Playfair Display", Georgia, serif';
       ctx.fillText('VIETTORIA', 0, -18);
       ctx.font = 'bold 17px "Playfair Display", Georgia, serif';
       ctx.fillText('CHÂU PHÊ', 0, 4);
@@ -249,10 +283,10 @@ export const PostcardGeneratorModal: React.FC<PostcardGeneratorModalProps> = ({
         </div>
 
         <h3 id="postcard-modal-title" className="mt-1 font-serif text-2xl font-bold text-forest">
-          Bưu Thiếp Giấy Dó: {product.name}
+          {t('postcard.title', 'Bưu Thiếp Giấy Dó')}: {product.name}
         </h3>
         <p className="text-xs text-charcoal-muted font-normal">
-          Bưu thiếp được đóng dấu triện son hoàng gia cùng góc chụp 3D độc bản của bạn.
+          {t('postcard.subtitle', 'Bưu thiếp được đóng dấu triện son hoàng gia cùng góc chụp 3D độc bản của bạn.')}
         </p>
 
         {/* Postcard Live Visual Preview */}
@@ -260,16 +294,16 @@ export const PostcardGeneratorModal: React.FC<PostcardGeneratorModalProps> = ({
           {isRendering ? (
             <div className="flex h-64 sm:h-96 w-full items-center justify-center flex-col gap-3">
               <Sparkles size={24} className="animate-spin text-brass" />
-              <span className="font-sans text-xs text-forest font-medium">Đang in bưu thiếp chất liệu giấy dó...</span>
+              <span className="font-sans text-xs text-forest font-medium">{t('postcard.rendering', 'Đang in bưu thiếp chất liệu giấy dó...')}</span>
             </div>
           ) : postcardImageUrl ? (
             <img
               src={postcardImageUrl}
-              alt={`Bưu thiếp ${product.name}`}
+              alt={`Postcard: ${product.name}`}
               className="mx-auto max-h-[50vh] w-full object-contain shadow-lg border border-brass/50"
             />
           ) : (
-            <p className="text-xs text-charcoal-muted">Không thể tạo bưu thiếp. Vui lòng thử lại.</p>
+            <p className="text-xs text-charcoal-muted">{t('postcard.failed', 'Không thể tạo bưu thiếp. Vui lòng thử lại.')}</p>
           )}
         </div>
 
@@ -278,10 +312,10 @@ export const PostcardGeneratorModal: React.FC<PostcardGeneratorModalProps> = ({
           {/* Poetic quote picker */}
           <div>
             <label className="block text-xs font-sans font-bold uppercase tracking-wider text-brass mb-1.5">
-              Chọn Lời Thơ Di Sản
+              {t('postcard.selectQuote', 'Chọn Lời Thơ Di Sản')}
             </label>
             <div className="space-y-1.5">
-              {HERITAGE_QUOTES.map((quote, idx) => (
+              {quotes.map((quote, idx) => (
                 <button
                   key={quote}
                   type="button"
@@ -302,7 +336,7 @@ export const PostcardGeneratorModal: React.FC<PostcardGeneratorModalProps> = ({
           <div className="flex flex-col justify-between">
             <div>
               <label htmlFor="postcard-note" className="block text-xs font-sans font-bold uppercase tracking-wider text-brass mb-1.5">
-                Lời Nhắn Của Bạn
+                {t('postcard.yourNote', 'Lời Nhắn Của Bạn')}
               </label>
               <textarea
                 id="postcard-note"
@@ -311,10 +345,10 @@ export const PostcardGeneratorModal: React.FC<PostcardGeneratorModalProps> = ({
                 maxLength={80}
                 onChange={(e) => setSenderNote(e.target.value)}
                 className="w-full border border-paper-border bg-paper p-2.5 text-xs text-forest font-sans rounded-[2px] focus:border-brass focus:outline-none"
-                placeholder="Nhập lời đề tặng gửi người thân hoặc lưu giữ kỷ niệm..."
+                placeholder={t('postcard.notePlaceholder', 'Nhập lời đề tặng gửi người thân hoặc lưu giữ kỷ niệm...')}
               />
               <span className="text-[10px] text-charcoal-muted text-right block mt-1">
-                {senderNote.length}/80 ký tự
+                {senderNote.length}/80 {t('postcard.charCount', 'ký tự')}
               </span>
             </div>
 
@@ -326,7 +360,7 @@ export const PostcardGeneratorModal: React.FC<PostcardGeneratorModalProps> = ({
               className="mt-4 w-full py-3 px-4 bg-brass text-forest font-sans text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-brass-light transition-all rounded-[2px] shadow-sm disabled:opacity-50"
             >
               <Download size={15} />
-              <span>Tải Bưu Thiếp Về Máy (HD PNG)</span>
+              <span>{t('postcard.downloadBtn', 'Tải Bưu Thiếp Về Máy (HD PNG)')}</span>
             </button>
           </div>
         </div>
