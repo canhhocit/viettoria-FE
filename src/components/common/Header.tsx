@@ -4,6 +4,7 @@ import { Menu, X, QrCode } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { HeritageSoundscape } from '../heritage/HeritageSoundscape';
+import { WebsiteQRModal } from './WebsiteQRModal';
 
 interface HeaderProps {
   onOpenQRModal: () => void;
@@ -11,6 +12,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onOpenQRModal }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [websiteQrOpen, setWebsiteQrOpen] = useState<boolean>(false);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const { t } = useLanguage();
 
@@ -82,13 +84,16 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQRModal }) => {
               <LanguageSwitcher variant="header" />
             </div>
 
-            {/* Standout Explorer CTA Button on Desktop */}
-            <Link
-              to="/collections"
-              className="hidden xl:inline-flex items-center gap-1.5 border border-brass bg-brass text-forest px-3.5 py-1.5 text-xs font-sans font-bold uppercase tracking-wider hover:bg-brass-light hover:shadow-xs transition-all rounded-[2px]"
+            {/* Website Direct QR Modal Trigger (Icon only, cute & compact) */}
+            <button
+              type="button"
+              onClick={() => setWebsiteQrOpen(true)}
+              className="flex items-center justify-center p-2 border border-brass/40 bg-paper-warm/90 hover:bg-forest hover:text-brass text-forest transition-all rounded-[2px] shadow-2xs group focus:outline-none focus:ring-1 focus:ring-brass"
+              aria-label={t('header.webQrAria', 'Mã QR liên kết website')}
+              title={t('header.webQrTitle', 'Mã QR liên kết website')}
             >
-              <span>{t('nav.collections', 'Bộ Sưu Tập')}</span>
-            </Link>
+              <QrCode className="w-4 h-4 transition-transform group-hover:scale-110 text-brass-dark group-hover:text-brass" />
+            </button>
 
             {/* Mobile Menu Toggle Button */}
             <button
@@ -149,6 +154,11 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQRModal }) => {
           </div>
         </div>
       )}
+      {/* Website Direct Link QR Modal */}
+      <WebsiteQRModal
+        isOpen={websiteQrOpen}
+        onClose={() => setWebsiteQrOpen(false)}
+      />
     </header>
   );
 };
