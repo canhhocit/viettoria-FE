@@ -60,7 +60,7 @@ const COMPARISON_DATA: TimeTravelItem[] = [
       'Cột cờ Hà Nội cao hơn 33m xây dựng năm 1812. Trong đợt người Pháp san phẳng thành Hà Nội cuối thế kỷ XIX để xây khu nhượng địa, Kỳ Đài là công trình kỳ tích còn nguyên vẹn nhờ được giữ lại làm đài quan sát quân sự. Kết cấu 3 tầng gạch vồ chân voi trường tồn qua hai cuộc chiến.',
     archivalSource: 'Lưu trữ Lịch sử Quân sự Việt Nam & Hoàng thành Thăng Long',
     pastImageSrc: '/images/historical/cot-co-ha-noi-xua.jpg',
-    presentRealImageSrc: '/images/hoang-thanh-thang-long.webp',
+    presentRealImageSrc: '/images/historical/cot-co-ha-noi-hien-tai.webp',
     present3DImageSrc: '/3D/cot-co-ha-noi-poster.webp',
   },
 ];

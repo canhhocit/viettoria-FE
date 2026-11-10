@@ -121,7 +121,7 @@ const COLLECTION_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, Local
 // -------------------------------------------------------------
 // 2. PRODUCTS TRANSLATION DICTIONARY (EN, FR, ZH, KO, JA)
 // -------------------------------------------------------------
-const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, LocalizedProductFields>>> = {
+export const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, LocalizedProductFields>>> = {
   'chua-mot-cot': {
     en: {
       name: 'One Pillar Pagoda',
