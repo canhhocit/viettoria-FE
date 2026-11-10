@@ -159,21 +159,24 @@ const InteractiveModelStage: React.FC<{ product: Product; reducedMotion: boolean
         <model-viewer
           key={`${product.slug}-model`}
           src={modelUrl}
-          alt={`Mô hình 3D có thể xoay của ${product.name}`}
+          alt={`Mô hình 3D tương tác của ${product.name}`}
           camera-controls
-          shadow-intensity="0.75"
-          exposure="1"
+          auto-rotate={!reducedMotion ? '' : undefined}
+          rotation-per-second="10deg"
+          shadow-intensity="1.2"
+          shadow-softness="0.75"
+          exposure="1.05"
           interaction-prompt="none"
-          loading="lazy"
+          loading="eager"
           reveal="auto"
           ref={modelViewerRef}
-          style={{ width: '100%', height: '100%', backgroundColor: 'var(--heritage-paper-card)', touchAction: 'pan-y' }}
+          style={{ width: '100%', height: '100%', backgroundColor: 'transparent', touchAction: 'pan-y' }}
           className={`home-model-viewer absolute inset-0 h-full w-full transition-opacity duration-700 ${modelLoaded ? 'opacity-100' : 'opacity-0'}`}
         />
       )}
-      <div className="pointer-events-none absolute left-4 top-4 z-10 bg-header/90 px-3 py-1.5 text-[11px] text-brown-dark">
+      <div className="pointer-events-none absolute left-3 top-3 z-10 border border-brass/50 bg-[#121814]/90 px-2.5 py-1 text-[10px] font-cinzel font-bold text-brass uppercase tracking-wider backdrop-blur-sm rounded-[1px] shadow-sm">
         {modelLoaded
-          ? t('home.dragToRotate', 'Mô hình 3D · Kéo để xoay')
+          ? '✦ 3D THỜI GIAN THỰC · KÉO XOAY'
           : previewPlaying
             ? t('home.previewVideo', 'Video xem trước')
             : modelFailed || !viewerAvailable

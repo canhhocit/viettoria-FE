@@ -8,7 +8,7 @@ declare module 'react' {
         poster?: string;
         alt?: string;
         'camera-controls'?: boolean;
-        'auto-rotate'?: string;
+        'auto-rotate'?: boolean | string;
         'rotation-per-second'?: string;
         'shadow-intensity'?: string;
         'shadow-softness'?: string;
