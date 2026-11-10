@@ -109,22 +109,20 @@ export const HeritageSoundscape: React.FC = () => {
     }
   }, [getAudioContext, playBellChime, stopLoop]);
 
-  // First-visit detection: if no stored language, skip autoplay until user picks language in modal
-  const isFirstVisit =
-    typeof window !== 'undefined' && !localStorage.getItem('viettoria_language');
-
-  // Autoplay on mount + handle modern browser autoplay policies via first interaction fallback
+  // Autoplay on mount + handle modern browser autoplay policies via first interaction fallback.
+  // The viettoria:start-bell event (from language picker) handles first-visit reliable start.
   useEffect(() => {
     if (!isPlaying) return;
 
-    // On first visit, don't autoplay — wait for the language picker click event instead
-    if (isFirstVisit) return;
-
+    // Always create AudioContext early and attempt autoplay.
+    // For browsers with high media engagement (returning users), this may succeed immediately.
+    // For first-visit, the viettoria:start-bell event fires inside the modal click gesture
+    // and reliably resumes the context — so a failed attempt here is harmless.
     getAudioContext();
     startBellAudio();
 
-    // Fallback: If browser initially suspends AudioContext without user interaction,
-    // resume it on the user's very first interaction on the page.
+    // Fallback: on the very first user gesture (any click/tap/key), resume if still suspended.
+    // This covers returning visitors where autoplay was blocked by the browser.
     const handleFirstUserGesture = () => {
       if (isPlayingRef.current && audioContextRef.current?.state === 'suspended') {
         audioContextRef.current.resume().then(() => {
@@ -142,7 +140,7 @@ export const HeritageSoundscape: React.FC = () => {
       window.removeEventListener('keydown', handleFirstUserGesture);
       window.removeEventListener('touchstart', handleFirstUserGesture);
     };
-  }, [getAudioContext, isPlaying, isFirstVisit, startBellAudio]);
+  }, [getAudioContext, isPlaying, startBellAudio]);
 
   // Listen for the language-picker trigger so the bell starts exactly on that user gesture
   useEffect(() => {
