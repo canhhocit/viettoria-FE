@@ -33,8 +33,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQRModal }) => {
 
   return (
     <header 
-      className={`customer-header sticky top-0 z-50 border-b border-brass/30 bg-header/95 text-ink backdrop-blur-md transition-all duration-300 ${
-        isScrolled ? 'py-1 shadow-sm' : 'py-0'
+      className={`customer-header sticky top-0 z-50 border-b-2 border-brass/50 bg-[#FAF7F0]/95 text-ink backdrop-blur-md transition-all duration-300 shadow-[0_2px_12px_rgba(20,40,32,0.06)] ${
+        isScrolled ? 'py-0.5 shadow-md border-brass/70' : 'py-0'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -55,16 +55,16 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQRModal }) => {
           </Link>
 
           {/* Desktop Navigation Links - Heritage Pill Style */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-1.5 text-[13px] font-medium shrink-0" aria-label={t('nav.menu', 'Menu chính')}>
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 text-[13px] font-sans font-medium shrink-0" aria-label={t('nav.menu', 'Menu chính')}>
             {navLinks.map((link) => (
               <NavLink
                 key={link.to}
                 to={link.to}
                 className={({ isActive }) =>
-                  `whitespace-nowrap border-b-2 px-2.5 py-2 transition-colors duration-200 ${
+                  `whitespace-nowrap px-3 py-1.5 transition-all duration-200 rounded-[2px] ${
                     isActive
-                      ? 'border-forest text-forest font-bold'
-                      : 'border-transparent text-ink/80 hover:border-forest/50 hover:text-forest'
+                      ? 'border-b-2 border-forest bg-forest/8 text-forest font-bold shadow-2xs'
+                      : 'border-b-2 border-transparent text-charcoal/80 hover:text-forest hover:bg-paper-warm/80 hover:border-brass/40 font-semibold'
                   }`
                 }
               >
@@ -74,17 +74,26 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQRModal }) => {
           </nav>
 
           {/* Right Actions: Multi-language Switcher, Soundscape & Mobile Menu Toggle */}
-          <div className="flex items-center gap-1.5 sm:gap-2.5">
-            {/* Heritage Soundscape Ambient Bell Audio Toggle */}
-            <HeritageSoundscape />
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Heritage Soundscape Ambient Bell Audio Toggle & Language Switcher Group */}
+            <div className="flex items-center gap-1.5 border border-brass/35 bg-paper-warm/90 px-1.5 py-1 rounded-[2px] shadow-2xs">
+              <HeritageSoundscape />
+              <span className="h-3.5 w-px bg-brass/30" />
+              <LanguageSwitcher variant="header" />
+            </div>
 
-            {/* Heritage Language Switcher for International Visitors */}
-            <LanguageSwitcher variant="header" />
+            {/* Standout Explorer CTA Button on Desktop */}
+            <Link
+              to="/collections"
+              className="hidden xl:inline-flex items-center gap-1.5 border border-brass bg-brass text-forest px-3.5 py-1.5 text-xs font-sans font-bold uppercase tracking-wider hover:bg-brass-light hover:shadow-xs transition-all rounded-[2px]"
+            >
+              <span>{t('nav.collections', 'Bộ Sưu Tập')}</span>
+            </Link>
 
             {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 border border-paper-border text-ink hover:border-brown-dark hover:text-brown-dark lg:hidden transition-colors rounded-[2px]"
+              className="p-2 border border-paper-border text-ink hover:border-brass hover:text-forest lg:hidden transition-colors rounded-[2px]"
               aria-label={mobileMenuOpen ? t('nav.close', 'Đóng menu') : t('header.openNavigation', 'Mở danh mục điều hướng')}
               aria-expanded={mobileMenuOpen}
             >
