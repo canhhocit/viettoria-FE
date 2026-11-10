@@ -30,6 +30,7 @@ export interface AudioGuideData {
   audioUrl: string;
   narrator?: string;
   transcript: string;
+  audioUrls?: Partial<Record<string, string>>;
 }
 
 export interface Product {

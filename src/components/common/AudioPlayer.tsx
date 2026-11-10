@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { 
   ChevronDown, 
@@ -12,6 +12,7 @@ import {
 import type { AudioGuideData } from '../../types';
 import { resolveAudioUrl } from '../../utils/mediaResolver';
 import { useLanguage } from '../../contexts/LanguageContext';
+import type { LanguageCode } from '../../locales';
 
 interface AudioPlayerProps {
   audioGuide: AudioGuideData;
@@ -39,27 +40,101 @@ const formatTime = (seconds: number) => {
     : `${minutes.toString().padStart(2, '0')}:${remainder.toString().padStart(2, '0')}`;
 };
 
+/**
+ * Calculates realistic narration duration for Text-to-Speech based on language and text volume
+ */
+const estimateSpeechDuration = (text: string, lang: LanguageCode): number => {
+  if (!text) return 20;
+  if (lang === 'zh' || lang === 'ja' || lang === 'ko') {
+    const chars = text.replace(/\s+/g, '').length;
+    return Math.max(12, Math.round(chars / 3.2));
+  }
+  const words = text.trim().split(/\s+/).length;
+  return Math.max(12, Math.round(words / 2.2));
+};
+
+/**
+ * Finds the highest quality native speech synthesis voice matching the requested language
+ */
+const findBestVoice = (voices: SpeechSynthesisVoice[], lang: LanguageCode): SpeechSynthesisVoice | null => {
+  if (!voices || voices.length === 0) return null;
+
+  const langPrefixMap: Record<LanguageCode, string[]> = {
+    vi: ['vi-VN', 'vi'],
+    en: ['en-US', 'en-GB', 'en-AU', 'en'],
+    fr: ['fr-FR', 'fr-CA', 'fr'],
+    zh: ['zh-CN', 'zh-TW', 'zh-HK', 'zh'],
+    ko: ['ko-KR', 'ko'],
+    ja: ['ja-JP', 'ja'],
+  };
+
+  const prefixes = langPrefixMap[lang] || ['en'];
+
+  // 1. Try to find natural/neural/Google voices
+  for (const prefix of prefixes) {
+    const match = voices.find(
+      (v) =>
+        v.lang.toLowerCase().replace('_', '-').startsWith(prefix.toLowerCase()) &&
+        (v.name.includes('Natural') ||
+          v.name.includes('Online') ||
+          v.name.includes('Neural') ||
+          v.name.includes('Google') ||
+          v.name.includes('Premium'))
+    );
+    if (match) return match;
+  }
+
+  // 2. Fallback to any voice matching the language prefix
+  for (const prefix of prefixes) {
+    const match = voices.find((v) =>
+      v.lang.toLowerCase().replace('_', '-').startsWith(prefix.toLowerCase())
+    );
+    if (match) return match;
+  }
+
+  return null;
+};
+
 export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageName }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const ttsTimerRef = useRef<number | null>(null);
+  const currentTimeRef = useRef(0);
+
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [audioFallbackActive, setAudioFallbackActive] = useState(false);
-  const configuredAudioUrl = resolveAudioUrl(audioGuide.audioUrl);
-  const audioUrl = configuredAudioUrl && !audioFallbackActive
+
+  // Check language-specific audio file if exists, else fallback to standard audio or TTS
+  const languageSpecificAudioUrl = audioGuide.audioUrls?.[language];
+  const configuredAudioUrl = resolveAudioUrl(languageSpecificAudioUrl || (language === 'vi' ? audioGuide.audioUrl : ''));
+  const activeAudioUrl = configuredAudioUrl && !audioFallbackActive
     ? configuredAudioUrl
-    : audioFallbackActive
+    : language === 'vi' && audioFallbackActive
       ? SAMPLE_AUDIO_URL
       : '';
+
+  const isUsingTts = !activeAudioUrl;
+
   const titleLabel = audioGuide.title || `${t('audioPlayer.speaking', 'Lời kể về')} ${heritageName}`;
   const transcriptLabel = audioGuide.transcript?.trim() || SAMPLE_TRANSCRIPT;
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(() => configuredAudioUrl ? parseDuration(audioGuide.duration) : 0);
+
+  const estimatedTtsDuration = useMemo(() => {
+    return estimateSpeechDuration(transcriptLabel, language);
+  }, [transcriptLabel, language]);
+
+  const [duration, setDuration] = useState(() => {
+    return activeAudioUrl ? parseDuration(audioGuide.duration) : estimatedTtsDuration;
+  });
+
   const [showTranscript, setShowTranscript] = useState(false);
   const [audioError, setAudioError] = useState(false);
 
-  const hasAudio = Boolean(audioUrl);
+  const hasAudio = Boolean(activeAudioUrl || (typeof window !== 'undefined' && 'speechSynthesis' in window));
 
   // Preload guide images into cache for immediate stutter-free animation
   useEffect(() => {
@@ -69,54 +144,214 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
     speakingImg.src = '/images/guide/guide-speaking.webp';
   }, []);
 
+  // Load available speech synthesis voices asynchronously
   useEffect(() => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+
+    const loadVoices = () => {
+      const v = window.speechSynthesis.getVoices();
+      if (v && v.length > 0) {
+        setAvailableVoices(v);
+      }
+    };
+
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    return () => {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = null;
+      }
+    };
+  }, []);
+
+  // Stop everything immediately and safely
+  const stopAllAudio = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    if (ttsTimerRef.current) {
+      window.clearInterval(ttsTimerRef.current);
+      ttsTimerRef.current = null;
+    }
     setIsPlaying(false);
     setCurrentTime(0);
-    setDuration(configuredAudioUrl ? parseDuration(audioGuide.duration) : 0);
+    currentTimeRef.current = 0;
+  }, []);
+
+  // When language switches, re-initialize narration in that language
+  useEffect(() => {
+    stopAllAudio();
     setAudioError(false);
     setAudioFallbackActive(false);
-    if (audioRef.current) audioRef.current.pause();
-  }, [configuredAudioUrl, audioGuide.duration]);
+
+    if (activeAudioUrl) {
+      setDuration(parseDuration(audioGuide.duration));
+    } else {
+      setDuration(estimatedTtsDuration);
+    }
+  }, [language, activeAudioUrl, audioGuide.duration, estimatedTtsDuration, stopAllAudio]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      stopAllAudio();
+    };
+  }, [stopAllAudio]);
+
+  // Web Speech Synthesis Narrator Engine
+  const speakWithTts = useCallback(() => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      setAudioError(true);
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    if (ttsTimerRef.current) {
+      window.clearInterval(ttsTimerRef.current);
+      ttsTimerRef.current = null;
+    }
+
+    const text = transcriptLabel;
+    if (!text) return;
+
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    const langTagMap: Record<LanguageCode, string> = {
+      vi: 'vi-VN',
+      en: 'en-US',
+      fr: 'fr-FR',
+      zh: 'zh-CN',
+      ko: 'ko-KR',
+      ja: 'ja-JP',
+    };
+    utterance.lang = langTagMap[language] || 'en-US';
+
+    const bestVoice = findBestVoice(availableVoices, language);
+    if (bestVoice) {
+      utterance.voice = bestVoice;
+    }
+
+    utterance.rate = 0.95; // Calm, respectful storytelling pace
+    utterance.pitch = 1.0;
+    utterance.volume = isMuted ? 0 : 1;
+
+    setDuration(estimatedTtsDuration);
+
+    utterance.onstart = () => {
+      setIsPlaying(true);
+      const startTime = Date.now() - currentTimeRef.current * 1000;
+      ttsTimerRef.current = window.setInterval(() => {
+        const elapsed = (Date.now() - startTime) / 1000;
+        if (elapsed >= estimatedTtsDuration) {
+          setCurrentTime(estimatedTtsDuration);
+          currentTimeRef.current = estimatedTtsDuration;
+        } else {
+          setCurrentTime(elapsed);
+          currentTimeRef.current = elapsed;
+        }
+      }, 100);
+    };
+
+    utterance.onend = () => {
+      setIsPlaying(false);
+      if (ttsTimerRef.current) {
+        window.clearInterval(ttsTimerRef.current);
+        ttsTimerRef.current = null;
+      }
+      setCurrentTime(0);
+      currentTimeRef.current = 0;
+    };
+
+    utterance.onerror = (e) => {
+      if (e.error !== 'interrupted' && e.error !== 'canceled') {
+        console.warn('Speech synthesis notice:', e);
+      }
+      setIsPlaying(false);
+      if (ttsTimerRef.current) {
+        window.clearInterval(ttsTimerRef.current);
+        ttsTimerRef.current = null;
+      }
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }, [transcriptLabel, language, availableVoices, isMuted, estimatedTtsDuration]);
 
   const togglePlay = async () => {
-    const audio = audioRef.current;
-    if (!audio || !hasAudio || audioError) return;
-    if (audio.paused) {
-      try {
-        if (audio.ended) audio.currentTime = 0;
-        await audio.play();
-      } catch {
-        if (audioUrl !== SAMPLE_AUDIO_URL) {
-          setAudioFallbackActive(true);
-          setAudioError(false);
-          setCurrentTime(0);
-        } else {
-          setAudioError(true);
+    if (!hasAudio || audioError) return;
+
+    if (isPlaying) {
+      // Pause action
+      if (!isUsingTts && audioRef.current) {
+        audioRef.current.pause();
+      } else if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        if (ttsTimerRef.current) {
+          window.clearInterval(ttsTimerRef.current);
+          ttsTimerRef.current = null;
         }
-        setIsPlaying(false);
+      }
+      setIsPlaying(false);
+      return;
+    }
+
+    // Play action
+    if (!isUsingTts && audioRef.current) {
+      try {
+        if (audioRef.current.ended) audioRef.current.currentTime = 0;
+        await audioRef.current.play();
+        setIsPlaying(true);
+      } catch {
+        // Fallback to TTS if audio file cannot be decoded or loaded
+        speakWithTts();
       }
     } else {
-      audio.pause();
+      speakWithTts();
     }
   };
 
   const seek = (event: React.ChangeEvent<HTMLInputElement>) => {
     const nextTime = Number(event.target.value);
     setCurrentTime(nextTime);
-    if (audioRef.current && Number.isFinite(nextTime)) audioRef.current.currentTime = nextTime;
+    currentTimeRef.current = nextTime;
+
+    if (!isUsingTts && audioRef.current && Number.isFinite(nextTime)) {
+      audioRef.current.currentTime = nextTime;
+    } else if (isUsingTts && isPlaying) {
+      speakWithTts();
+    }
   };
 
   const handleReset = () => {
-    if (!audioRef.current || !hasAudio) return;
-    audioRef.current.currentTime = 0;
     setCurrentTime(0);
+    currentTimeRef.current = 0;
+
+    if (!isUsingTts && audioRef.current) {
+      audioRef.current.currentTime = 0;
+    } else if (isUsingTts) {
+      if (isPlaying) {
+        speakWithTts();
+      }
+    }
   };
 
   const toggleMute = () => {
-    if (!audioRef.current || !hasAudio) return;
-    const muted = !audioRef.current.muted;
-    audioRef.current.muted = muted;
-    setIsMuted(muted);
+    const nextMuted = !isMuted;
+    setIsMuted(nextMuted);
+
+    if (!isUsingTts && audioRef.current) {
+      audioRef.current.muted = nextMuted;
+    } else if (isUsingTts && isPlaying) {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        if (!nextMuted) {
+          speakWithTts();
+        }
+      }
+    }
   };
 
   const durationLabel = duration > 0 ? formatTime(duration) : (configuredAudioUrl ? audioGuide.duration || '—:—' : '—:—');
@@ -131,11 +366,11 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
           <div className="absolute inset-0 bg-gradient-to-r from-forest-dark/85 via-forest-dark/55 to-forest-dark/30" />
         </div>
 
-        {hasAudio && (
+        {activeAudioUrl && (
           <audio
-            key={audioUrl}
+            key={`${language}-${activeAudioUrl}`}
             ref={audioRef}
-            src={audioUrl}
+            src={activeAudioUrl}
             preload="metadata"
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
@@ -150,15 +385,15 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
             }}
             onEnded={() => setIsPlaying(false)}
             onError={() => {
-              if (audioUrl !== SAMPLE_AUDIO_URL) {
+              if (activeAudioUrl !== SAMPLE_AUDIO_URL) {
                 setAudioFallbackActive(true);
                 setAudioError(false);
                 setIsPlaying(false);
                 setCurrentTime(0);
                 return;
               }
-              setAudioError(true);
-              setIsPlaying(false);
+              // If sample audio also fails, activate native TTS in that language
+              speakWithTts();
             }}
           />
         )}
@@ -169,12 +404,15 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
               <div className="min-w-0">
                 <p className="truncate font-serif text-base font-semibold text-paper sm:text-lg">{titleLabel}</p>
                 <p className="mt-1 truncate font-mono text-[10px] text-brass-light sm:text-[11px]">
-                  {t('audioPlayer.narrator', 'Thuyết minh viên Viettoria')} <span className="mx-1.5 text-brass">·</span>{durationLabel}
+                  {audioGuide.narrator || t('audioPlayer.narrator', 'Thuyết minh viên Viettoria')} <span className="mx-1.5 text-brass">·</span>{durationLabel}
                 </p>
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1 border border-brass/35 bg-black/45 text-[10px] font-mono text-brass shrink-0">
                 <span className={`w-1.5 h-1.5 rounded-full ${isPlaying ? 'bg-brass animate-pulse' : 'bg-paper/40'}`} />
-                <span>{isPlaying ? 'ĐANG THUYẾT MINH' : 'SẴN SÀNG'}</span>
+                <span>{isPlaying ? t('audioPlayer.speaking', 'ĐANG THUYẾT MINH') : t('audioPlayer.listen', 'SẴN SÀNG')}</span>
+                <span className="ml-1 text-brass-light border-l border-brass/30 pl-1.5 uppercase font-sans font-bold">
+                  {language.toUpperCase()}
+                </span>
               </div>
             </div>
 
