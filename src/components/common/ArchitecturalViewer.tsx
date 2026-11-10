@@ -27,7 +27,6 @@ import {
   VIETTORIA_IMAGES,
 } from '../../utils/mediaResolver';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { usePassport } from '../../contexts/PassportContext';
 import {
   getHotspotsForProduct,
   type ArchitecturalHotspot,
@@ -44,7 +43,6 @@ type LightingPreset = 'dawn' | 'noon' | 'dusk' | 'night';
 
 export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ product }) => {
   const { t, localizeHotspot } = useLanguage();
-  const { stampMonument } = usePassport();
   const [activeTab, setActiveTab] = useState<'3d' | 'photos'>('3d');
   const [isPhotoZoomOpen, setIsPhotoZoomOpen] = useState(false);
   const [viewerAvailable, setViewerAvailable] = useState(() =>
@@ -72,15 +70,6 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
 
   const viewportRef = useRef<HTMLDivElement>(null);
   const modelViewerRef = useRef<HTMLElement | null>(null);
-
-  // Auto-stamp monument in Heritage Passport after user engages with 3D model
-  useEffect(() => {
-    if (!modelLoaded) return;
-    const timer = window.setTimeout(() => {
-      stampMonument(product.slug, product.name, product.epoch);
-    }, 12000);
-    return () => window.clearTimeout(timer);
-  }, [modelLoaded, product.slug, product.name, product.epoch, stampMonument]);
 
   const lightingSettings = useMemo(() => {
     switch (lightingMode) {

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { Menu, X, Compass, QrCode } from 'lucide-react';
+import { Menu, X, QrCode } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { usePassport } from '../../contexts/PassportContext';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { HeritageSoundscape } from '../heritage/HeritageSoundscape';
 
@@ -14,7 +13,6 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQRModal }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const { t } = useLanguage();
-  const { totalStamped, totalAvailable, setIsPassportOpen } = usePassport();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,24 +73,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQRModal }) => {
             ))}
           </nav>
 
-          {/* Right Actions: Multi-language Switcher, Soundscape, Passport & Mobile Menu Toggle */}
+          {/* Right Actions: Multi-language Switcher, Soundscape & Mobile Menu Toggle */}
           <div className="flex items-center gap-1.5 sm:gap-2.5">
-            {/* Heritage Soundscape Ambient Audio Pill */}
+            {/* Heritage Soundscape Ambient Bell Audio Toggle */}
             <HeritageSoundscape />
-
-            {/* Heritage Passport Trigger */}
-            <button
-              type="button"
-              onClick={() => setIsPassportOpen(true)}
-              className="hidden sm:inline-flex items-center gap-1.5 border border-brass/50 bg-paper-warm/80 px-2.5 py-1.5 text-xs font-sans text-forest hover:border-brass hover:bg-paper transition-all rounded-[2px]"
-              title={t('passport.open', 'Mở Hộ Chiếu Di Sản')}
-              aria-label={t('passport.open', 'Mở Hộ Chiếu Di Sản')}
-            >
-              <Compass size={13} className="text-brass" />
-              <span className="font-cinzel text-[11px] font-bold text-forest">
-                {t('passport.title', 'Hộ Chiếu')} ({totalStamped}/{totalAvailable})
-              </span>
-            </button>
 
             {/* Heritage Language Switcher for International Visitors */}
             <LanguageSwitcher variant="header" />
@@ -131,24 +115,6 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQRModal }) => {
               </NavLink>
             ))}
           </nav>
-
-          {/* Mobile Passport Button */}
-          <button
-            type="button"
-            onClick={() => {
-              setMobileMenuOpen(false);
-              setIsPassportOpen(true);
-            }}
-            className="w-full py-2.5 px-3 border border-brass/60 bg-paper-warm flex items-center justify-between text-xs font-sans text-forest font-semibold rounded-[2px]"
-          >
-            <div className="flex items-center gap-2">
-              <Compass size={14} className="text-brass" />
-              <span>{t('passport.title', 'Hộ Chiếu Di Sản')}</span>
-            </div>
-            <span className="font-cinzel text-brass font-bold">
-              {totalStamped} / {totalAvailable} Châu Phê
-            </span>
-          </button>
 
           {/* Mobile Language Switcher */}
           <LanguageSwitcher variant="drawer" />
