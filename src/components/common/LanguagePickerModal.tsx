@@ -63,25 +63,17 @@ export const LanguagePickerModal: React.FC<LanguagePickerModalProps> = ({
         <div className="h-[3px] w-full bg-gradient-to-r from-transparent via-brass to-transparent opacity-70" />
 
         <div className="px-8 py-10">
-          {/* Heritage ornament */}
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="h-px flex-1 bg-brass/25" />
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path
-                d="M12 2L14.5 9H22L16 13.5L18.5 20.5L12 16L5.5 20.5L8 13.5L2 9H9.5L12 2Z"
-                stroke="#B88A44"
-                strokeWidth="1.2"
-                fill="none"
-              />
-            </svg>
-            <div className="h-px flex-1 bg-brass/25" />
+          {/* Viettoria Brand Logo from Header */}
+          <div className="flex justify-center mb-5">
+            <img
+              src="/viettoria-noback.svg"
+              alt="Viettoria"
+              className="h-10 sm:h-12 w-auto object-contain"
+            />
           </div>
 
           {/* Heading */}
           <div className="text-center mb-2">
-            <p className="font-sans text-xs tracking-[0.2em] text-brass uppercase mb-2 font-semibold">
-              Viettoria
-            </p>
             <h2
               id="lang-picker-title"
               className="font-serif text-2xl sm:text-3xl font-bold tracking-normal text-forest-dark"
