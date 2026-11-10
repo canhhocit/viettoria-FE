@@ -145,13 +145,28 @@ export const HeritageSoundscape: React.FC = () => {
   // Listen for the language-picker trigger so the bell starts exactly on that user gesture
   useEffect(() => {
     const handleBellTrigger = () => {
-      if (!isPlayingRef.current) return;
+      // Force playing to true on language pick
+      setIsPlaying(true);
+      isPlayingRef.current = true;
+      try {
+        sessionStorage.removeItem(STORAGE_KEY);
+      } catch {
+        // ignore
+      }
+
       const ctx = getAudioContext();
-      if (!ctx) return;
-      const dest = masterGainRef.current;
-      if (!dest) return;
+      const masterGain = masterGainRef.current;
+      if (!ctx || !masterGain) return;
+
+      const now = ctx.currentTime;
+      masterGain.gain.cancelScheduledValues(now);
+      masterGain.gain.setValueAtTime(0.0001, now);
+      masterGain.gain.linearRampToValueAtTime(DEFAULT_VOLUME, now + 0.4);
+
       if (ctx.state === 'suspended') {
-        ctx.resume().then(() => startBellAudio()).catch(() => {});
+        ctx.resume().then(() => {
+          startBellAudio();
+        }).catch(() => {});
       } else {
         startBellAudio();
       }

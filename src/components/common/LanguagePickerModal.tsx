@@ -3,10 +3,15 @@ import { LANGUAGES, type LanguageCode } from '../../locales';
 
 interface LanguagePickerModalProps {
   isOpen: boolean;
+  currentLanguage?: LanguageCode;
   onSelect: (lang: LanguageCode) => void;
 }
 
-export const LanguagePickerModal: React.FC<LanguagePickerModalProps> = ({ isOpen, onSelect }) => {
+export const LanguagePickerModal: React.FC<LanguagePickerModalProps> = ({
+  isOpen,
+  currentLanguage,
+  onSelect,
+}) => {
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
 
@@ -86,6 +91,9 @@ export const LanguagePickerModal: React.FC<LanguagePickerModalProps> = ({ isOpen
             <p className="font-cinzel text-sm tracking-widest text-ink/40 mt-1">
               Select Your Language
             </p>
+            <p className="font-sans text-xs tracking-wide text-ink/60 mt-2.5 max-w-sm mx-auto">
+              Lựa chọn ngôn ngữ để đánh thức không gian âm thanh chuông cổ tự.
+            </p>
           </div>
 
           {/* Divider */}
@@ -97,36 +105,54 @@ export const LanguagePickerModal: React.FC<LanguagePickerModalProps> = ({ isOpen
 
           {/* Language grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-            {LANGUAGES.map((lang) => (
-              <button
-                key={lang.code}
-                type="button"
-                onClick={() => onSelect(lang.code)}
-                className="
-                  group relative flex flex-col items-center gap-2 px-4 py-4
-                  border border-brass/25 bg-paper
-                  font-sans text-sm text-ink/70
-                  transition-all duration-200
-                  hover:border-brass/70 hover:bg-forest hover:text-brass
-                  focus:outline-none focus:border-brass focus:ring-1 focus:ring-brass/40
-                  active:scale-[0.97]
-                  rounded-[2px]
-                "
-              >
-                {/* Flag */}
-                <span className="text-2xl leading-none select-none" role="img" aria-label={lang.label}>
-                  {lang.flagSymbol}
-                </span>
-                {/* Label */}
-                <span className="font-cinzel text-xs tracking-[0.12em] uppercase leading-tight text-center group-hover:text-brass transition-colors duration-200">
-                  {lang.label}
-                </span>
-                {/* Short code badge */}
-                <span className="absolute top-1.5 right-1.5 font-cinzel text-[9px] tracking-widest text-brass/40 group-hover:text-brass/70 transition-colors duration-200">
-                  {lang.shortLabel}
-                </span>
-              </button>
-            ))}
+            {LANGUAGES.map((lang) => {
+              const isSelected = currentLanguage === lang.code;
+              return (
+                <button
+                  key={lang.code}
+                  type="button"
+                  onClick={() => onSelect(lang.code)}
+                  className={`
+                    group relative flex flex-col items-center gap-2 px-4 py-4
+                    border font-sans text-sm
+                    transition-all duration-200
+                    active:scale-[0.97]
+                    rounded-[2px]
+                    ${
+                      isSelected
+                        ? 'border-brass bg-forest text-brass shadow-sm ring-1 ring-brass/40'
+                        : 'border-brass/25 bg-paper text-ink/70 hover:border-brass/70 hover:bg-forest hover:text-brass focus:outline-none focus:border-brass focus:ring-1 focus:ring-brass/40'
+                    }
+                  `}
+                >
+                  {/* Flag */}
+                  <span className="text-2xl leading-none select-none" role="img" aria-label={lang.label}>
+                    {lang.flagSymbol}
+                  </span>
+                  {/* Label */}
+                  <span
+                    className={`font-cinzel text-xs tracking-[0.12em] uppercase leading-tight text-center transition-colors duration-200 ${
+                      isSelected ? 'text-brass font-semibold' : 'group-hover:text-brass'
+                    }`}
+                  >
+                    {lang.label}
+                  </span>
+                  {/* Short code badge */}
+                  <span
+                    className={`absolute top-1.5 right-1.5 font-cinzel text-[9px] tracking-widest transition-colors duration-200 ${
+                      isSelected ? 'text-brass/90 font-bold' : 'text-brass/40 group-hover:text-brass/70'
+                    }`}
+                  >
+                    {lang.shortLabel}
+                  </span>
+                  {isSelected && (
+                    <span className="text-[9px] font-sans text-brass/80 tracking-wider">
+                      ● Đang chọn
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
           {/* Footer note */}
