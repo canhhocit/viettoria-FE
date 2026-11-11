@@ -98,7 +98,6 @@ const findBestVoice = (voices: SpeechSynthesisVoice[], lang: LanguageCode): Spee
 export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageName }) => {
   const { t, language } = useLanguage();
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const guideVideoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const ttsTimerRef = useRef<number | null>(null);
   const currentTimeRef = useRef(0);
@@ -146,19 +145,13 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
 
   const hasAudio = Boolean(activeAudioUrl || (typeof window !== 'undefined' && 'speechSynthesis' in window));
 
-  // Synchronize guide video playback with narration audio state
+  // Preload transparent tour guide assets for seamless state transitions
   useEffect(() => {
-    const video = guideVideoRef.current;
-    if (!video) return;
-
-    if (isPlaying) {
-      void video.play().catch(() => {
-        // Autoplay may be restricted until user interaction; non-blocking
-      });
-    } else {
-      video.pause();
-    }
-  }, [isPlaying]);
+    const idleImg = new Image();
+    idleImg.src = '/images/guide/guide-idle.png';
+    const speakingImg = new Image();
+    speakingImg.src = '/images/guide/guide-speaking.webp';
+  }, []);
 
   // Load available speech synthesis voices asynchronously
   useEffect(() => {
@@ -185,10 +178,6 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
-    }
-    if (guideVideoRef.current) {
-      guideVideoRef.current.pause();
-      guideVideoRef.current.currentTime = 0;
     }
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
@@ -349,10 +338,6 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
     setCurrentTime(0);
     currentTimeRef.current = 0;
 
-    if (guideVideoRef.current) {
-      guideVideoRef.current.currentTime = 0;
-    }
-
     if (!isUsingTts && audioRef.current) {
       audioRef.current.currentTime = 0;
     } else if (isUsingTts) {
@@ -486,82 +471,50 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
         </div>
       </section>
 
-      {/* 2. Floating Tour Guide Companion at Bottom-Right Corner (Video Companion Synchronized with Audio) */}
+      {/* 2. Floating Tour Guide Companion at Bottom-Right Corner (Transparent Heritage Narrator) */}
       {typeof document !== 'undefined' && createPortal(
         <aside 
-          className="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 z-[9999] pointer-events-auto select-none"
+          className="fixed bottom-3 right-3 sm:bottom-6 sm:right-6 z-[9999] pointer-events-auto select-none"
           aria-label={t('audioPlayer.narrator', 'Hướng dẫn viên Viettoria')}
         >
-          <div className="relative w-[102px] h-[180px] sm:w-[124px] sm:h-[220px] group">
-            {/* Grounded Pedestal Shadow & Subtle Golden Ambient Glow */}
+          <div className="relative w-[110px] h-[195px] sm:w-[130px] sm:h-[230px] group">
+            {/* Grounded Pedestal Shadow & Warm Ambient Glow Beneath Avatar Feet */}
             <div 
-              className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-24 h-4 rounded-[100%] bg-black/75 blur-[4px] pointer-events-none" 
+              className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-20 sm:w-24 h-3.5 rounded-[100%] bg-black/45 blur-[4px] pointer-events-none" 
               aria-hidden="true" 
             />
             <div 
-              className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-20 h-3 rounded-[100%] bg-brass/35 blur-[6px] pointer-events-none transition-opacity duration-500 ${isPlaying ? 'opacity-100' : 'opacity-40'}`} 
+              className={`absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-16 sm:w-20 h-3 rounded-[100%] bg-brass/30 blur-[6px] pointer-events-none transition-opacity duration-500 ${isPlaying ? 'opacity-100' : 'opacity-0'}`} 
               aria-hidden="true" 
             />
 
-            {/* Clickable Guide Figure (Toggles Play/Pause) */}
+            {/* Clickable Transparent Guide Figure (Toggles Play/Pause) */}
             <button
               type="button"
               onClick={() => void togglePlay()}
               disabled={!hasAudio || audioError}
-              className="relative h-full w-full cursor-pointer overflow-hidden rounded-[2px] border-2 border-brass/50 bg-forest-dark shadow-[0_12px_36px_rgba(0,0,0,0.6)] transition-all duration-300 hover:border-brass hover:shadow-[0_16px_40px_rgba(184,138,56,0.35)] hover:scale-[1.025] active:scale-[0.98] disabled:cursor-not-allowed group/btn"
+              className="relative h-full w-full cursor-pointer bg-transparent border-0 p-0 transition-transform duration-300 hover:scale-[1.03] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 group/btn focus:outline-none"
               aria-label={isPlaying ? t('audioPlayer.pause') : t('audioPlayer.listen')}
               title={isPlaying ? t('audioPlayer.pause', 'Bấm vào hướng dẫn viên để tạm dừng') : t('audioPlayer.listen', 'Bấm vào hướng dẫn viên để nghe thuyết minh')}
             >
-              {/* Corner Frame Accents (Museum Atelier Framing) */}
-              <div className="pointer-events-none absolute top-1 left-1 w-2.5 h-2.5 border-t border-l border-brass z-20" aria-hidden="true" />
-              <div className="pointer-events-none absolute top-1 right-1 w-2.5 h-2.5 border-t border-r border-brass z-20" aria-hidden="true" />
-              <div className="pointer-events-none absolute bottom-1 left-1 w-2.5 h-2.5 border-b border-l border-brass z-20" aria-hidden="true" />
-              <div className="pointer-events-none absolute bottom-1 right-1 w-2.5 h-2.5 border-b border-r border-brass z-20" aria-hidden="true" />
-
-              {/* Top Status Pill */}
-              <div className="absolute top-2 inset-x-2 z-20 flex items-center justify-center pointer-events-none">
-                <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider font-bold backdrop-blur-sm border transition-all duration-300 ${
-                  isPlaying
-                    ? 'bg-forest/90 border-brass text-brass shadow-sm'
-                    : 'bg-forest-dark/85 border-paper/20 text-paper/80 group-hover/btn:border-brass/50 group-hover/btn:text-brass-light'
-                }`}>
-                  {isPlaying ? (
-                    <>
-                      <span className="relative flex h-1.5 w-1.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brass opacity-75" />
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-brass" />
-                      </span>
-                      <span>{t('audioPlayer.speaking', 'Đang kể')}</span>
-                    </>
-                  ) : (
-                    <>
-                      <Play className="w-2 h-2 text-brass fill-brass" />
-                      <span>{t('audioPlayer.listen', 'Nghe')}</span>
-                    </>
-                  )}
-                </span>
-              </div>
-
-              {/* Synchronized Guide Video */}
-              <video
-                ref={guideVideoRef}
-                src="/images/guide/Woman_speaking_as_tour_guide_6e120cf1.mp4"
-                poster="/images/guide/guide-poster.jpg"
-                muted
-                playsInline
-                loop
-                preload="auto"
-                className="h-full w-full object-cover object-center pointer-events-none"
+              {/* Transparent Avatar Cutout (Idle PNG vs Animated Speaking WebP) */}
+              <img
+                src={isPlaying ? '/images/guide/guide-speaking.webp' : '/images/guide/guide-idle.png'}
+                alt={t('audioPlayer.narrator', 'Hướng dẫn viên Viettoria')}
+                className="h-full w-full object-contain object-bottom pointer-events-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.45)] select-none"
+                draggable={false}
               />
 
-              {/* Subtle hover play overlay when paused */}
-              {!isPlaying && (
-                <div className="absolute inset-0 bg-forest-dark/25 flex items-center justify-center transition-opacity duration-300 opacity-0 group-hover/btn:opacity-100 pointer-events-none z-10">
-                  <div className="w-9 h-9 rounded-full bg-forest/90 border border-brass flex items-center justify-center shadow-lg backdrop-blur-xs">
-                    <Play className="w-4 h-4 text-brass fill-brass ml-0.5" />
-                  </div>
+              {/* Floating Action Orb on Hover */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200">
+                <div className="w-10 h-10 rounded-full bg-forest-dark/90 border border-brass text-brass-light flex items-center justify-center shadow-[0_8px_20px_rgba(0,0,0,0.5)] backdrop-blur-xs transition-transform duration-200 group-hover/btn:scale-105">
+                  {isPlaying ? (
+                    <Pause className="w-4 h-4 fill-current text-brass" />
+                  ) : (
+                    <Play className="w-4 h-4 fill-current text-brass ml-0.5" />
+                  )}
                 </div>
-              )}
+              </div>
             </button>
           </div>
         </aside>,
