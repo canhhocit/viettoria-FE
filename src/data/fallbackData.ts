@@ -251,49 +251,6 @@ export const FALLBACK_PRODUCTS: Product[] = [
     displayOrder: 5,
     status: 'published',
     isHeroRelease: false
-  },
-  {
-    id: 'prod-6',
-    code: 'VT-VN-006',
-    name: 'Lầu Gác Cung Đình',
-    subName: 'Kiến Trúc Lầu Đài Truyền Thống',
-    slug: 'lau-gac',
-    collectionId: 'col-2',
-    epoch: 'Thời Nguyễn (Thế Kỷ XIX)',
-    location: 'Hoàng Thành Thăng Long · Cố Đô Huế',
-    shortDescription: 'Lầu gác vọng cảnh truyền thống với hệ vì kèo chạm trổ tinh xảo, mái đao chồng diêm thanh thoát vươn lên giữa tầng không.',
-    modelSpecs: {
-      scale: '1:100',
-      heightCm: 14,
-      widthCm: 12,
-      weightGrams: 240,
-      material: 'Nhựa sinh thái BioPETG kết cấu mộng gỗ truyền thống',
-      partsCount: 26,
-      finishing: 'Sơn son thếp vàng, ngói âm dương nung thủ công'
-    },
-    heroImage: '/images/hoang-thanh-thang-long.webp',
-    model3dUrl: '/3D/lau_gac_web.glb',
-    galleryImages: [
-      '/images/hoang-thanh-thang-long.webp'
-    ],
-    audioGuide: {
-      title: 'Âm Vang Lầu Đài Cung Điện Xưa',
-      duration: '00:19',
-      audioUrl: '/audio/lau-gac-vi.mp3',
-      audioUrls: {
-        vi: '/audio/chua-mot-cot-vi.mp3',
-        en: '/audio/chua-mot-cot-en.mp3',
-        fr: '/audio/chua-mot-cot-fr.mp3',
-        zh: '/audio/chua-mot-cot-zh.mp3',
-        ko: '/audio/chua-mot-cot-ko.mp3',
-        ja: '/audio/chua-mot-cot-ja.mp3',
-      },
-      narrator: 'Thuyết minh Viettoria Atelier',
-      transcript: 'Lầu gác là nét đặc sắc trong kiến trúc đình đài Việt Nam, nơi tao nhân mặc khách đàm đạo ngắm trăng, đồng thời là đài quan sát phong thủy uy nghiêm của chốn hoàng cung.'
-    },
-    displayOrder: 6,
-    status: 'published',
-    isHeroRelease: false
   }
 ];
 
