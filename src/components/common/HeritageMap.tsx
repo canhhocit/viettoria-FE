@@ -387,21 +387,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
     <div className="heritage-map bg-paper border border-brass/40 corner-frame shadow-xl overflow-hidden flex flex-col lg:flex-row">
       {/* Cột Trái: Bộ điều hướng danh sách & Hồ sơ chi tiết Spotlight di sản */}
       <div className="w-full lg:w-[400px] xl:w-[430px] bg-paper-warm border-b lg:border-b-0 lg:border-r border-paper-border p-4 sm:p-5 flex flex-col shrink-0 z-20 space-y-4">
-        {/* 1. Header */}
-        <div className="space-y-1">
-          <div className="flex items-center gap-1.5 text-brass text-[11px] font-mono uppercase tracking-widest font-semibold">
-            <Compass className="w-3.5 h-3.5" />
-            <span>{t('mapPage.subtitle', 'Định Vị Tọa Độ Địa Lý')}</span>
-          </div>
-          <h3 className="font-serif text-xl sm:text-2xl font-bold text-forest">
-            {t('mapPage.selectedMonument', 'Bản Đồ Di Sản')}
-          </h3>
-          <p className="text-xs text-charcoal/80 font-normal leading-relaxed">
-            {t('home.mapDesc', 'Khảo cứu tọa độ địa lý, niên đại lịch sử và cấu trúc kiến trúc của các biểu tượng văn hóa.')}
-          </p>
-        </div>
-
-        {/* 2. Bộ lọc vùng miền */}
+        {/* 1. Bộ lọc vùng miền */}
         <div className="grid grid-cols-4 gap-1 p-1 bg-paper border border-paper-border text-xs font-mono">
           <button
             type="button"

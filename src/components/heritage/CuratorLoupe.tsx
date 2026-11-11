@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 
@@ -12,7 +12,7 @@ interface CuratorLoupeProps {
 export const CuratorLoupe: React.FC<CuratorLoupeProps> = ({
   imageSrc,
   altText,
-  zoomLevel = 2.5,
+  zoomLevel = 2,
   className = '',
 }) => {
   const { t } = useLanguage();
@@ -20,37 +20,109 @@ export const CuratorLoupe: React.FC<CuratorLoupeProps> = ({
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const [lensPos, setLensPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [bgPos, setBgPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [bgSize, setBgSize] = useState<{ w: number; h: number }>({ w: 0, h: 0 });
+
   const containerRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
 
-  const LENS_DIAMETER = 160;
+  const LENS_DIAMETER = 180;
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!isActive || !containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+  const updateLoupe = useCallback(
+    (clientX: number, clientY: number) => {
+      if (!isActive || !containerRef.current || !imgRef.current) return;
+      const container = containerRef.current;
+      const img = imgRef.current;
+      const containerRect = container.getBoundingClientRect();
 
-      // Ensure cursor is within image
-      if (x < 0 || y < 0 || x > rect.width || y > rect.height) {
+      // Check if cursor is outside container bounds
+      if (
+        clientX < containerRect.left ||
+        clientX > containerRect.right ||
+        clientY < containerRect.top ||
+        clientY > containerRect.bottom
+      ) {
+        setIsHovering(false);
+        return;
+      }
+
+      const cursorX = clientX - containerRect.left;
+      const cursorY = clientY - containerRect.top;
+
+      // Handle rendered image dimensions with object-contain
+      const nw = img.naturalWidth || containerRect.width;
+      const nh = img.naturalHeight || containerRect.height;
+      const containerAspect = containerRect.width / containerRect.height;
+      const imgAspect = nw / nh;
+
+      let renderedW = containerRect.width;
+      let renderedH = containerRect.height;
+      let renderedX = 0;
+      let renderedY = 0;
+
+      if (imgAspect > containerAspect) {
+        renderedH = containerRect.width / imgAspect;
+        renderedY = (containerRect.height - renderedH) / 2;
+      } else {
+        renderedW = containerRect.height * imgAspect;
+        renderedX = (containerRect.width - renderedW) / 2;
+      }
+
+      const imgCursorX = cursorX - renderedX;
+      const imgCursorY = cursorY - renderedY;
+
+      // Only show loupe if hovering over the actual photo area
+      if (
+        imgCursorX < 0 ||
+        imgCursorX > renderedW ||
+        imgCursorY < 0 ||
+        imgCursorY > renderedH
+      ) {
         setIsHovering(false);
         return;
       }
 
       setIsHovering(true);
-      setLensPos({ x, y });
+      setLensPos({ x: cursorX, y: cursorY });
 
-      // Calculate zoomed background position
-      const bgX = (x / rect.width) * 100;
-      const bgY = (y / rect.height) * 100;
+      // Magnified dimensions of the background image
+      const zoomW = renderedW * zoomLevel;
+      const zoomH = renderedH * zoomLevel;
+
+      // Center the point under cursor at the center of the circular lens
+      const bgX = LENS_DIAMETER / 2 - imgCursorX * zoomLevel;
+      const bgY = LENS_DIAMETER / 2 - imgCursorY * zoomLevel;
+
+      setBgSize({ w: zoomW, h: zoomH });
       setBgPos({ x: bgX, y: bgY });
     },
-    [isActive]
+    [isActive, zoomLevel]
   );
 
-  const handleMouseLeave = () => {
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      updateLoupe(e.clientX, e.clientY);
+    },
+    [updateLoupe]
+  );
+
+  const handleTouch = useCallback(
+    (e: React.TouchEvent<HTMLDivElement>) => {
+      if (!isActive || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      updateLoupe(touch.clientX, touch.clientY);
+    },
+    [isActive, updateLoupe]
+  );
+
+  const handleLeave = useCallback(() => {
     setIsHovering(false);
-  };
+  }, []);
+
+  useEffect(() => {
+    if (!isActive) {
+      setIsHovering(false);
+    }
+  }, [isActive]);
 
   return (
     <div className={`relative select-none ${className}`}>
@@ -77,12 +149,16 @@ export const CuratorLoupe: React.FC<CuratorLoupeProps> = ({
       <div
         ref={containerRef}
         onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
+        onMouseLeave={handleLeave}
+        onTouchStart={handleTouch}
+        onTouchMove={handleTouch}
+        onTouchEnd={handleLeave}
         className={`relative h-full w-full overflow-hidden ${
           isActive ? 'cursor-crosshair' : 'cursor-default'
         }`}
       >
         <img
+          ref={imgRef}
           src={imageSrc}
           alt={altText}
           className="h-full w-full object-contain pointer-events-none"
@@ -98,34 +174,17 @@ export const CuratorLoupe: React.FC<CuratorLoupeProps> = ({
               left: `${lensPos.x - LENS_DIAMETER / 2}px`,
               top: `${lensPos.y - LENS_DIAMETER / 2}px`,
               backgroundImage: `url(${imageSrc})`,
-              backgroundSize: `${zoomLevel * 100}%`,
-              backgroundPosition: `${bgPos.x}% ${bgPos.y}%`,
-              boxShadow: '0 0 0 2px rgba(20,40,32,0.4), 0 10px 25px -5px rgba(0,0,0,0.5)',
+              backgroundSize: `${bgSize.w}px ${bgSize.h}px`,
+              backgroundPosition: `${bgPos.x}px ${bgPos.y}px`,
+              boxShadow:
+                '0 0 0 2px rgba(20,40,32,0.5), inset 0 0 16px rgba(0,0,0,0.35), 0 12px 28px -4px rgba(0,0,0,0.6)',
             }}
           >
-            {/* Crosshair guidelines */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-40">
-              <div className="h-full w-px bg-brass/60" />
-              <div className="absolute w-full h-px bg-brass/60" />
-            </div>
-
-            {/* Inner Brass Rim Glow */}
-            <div className="absolute inset-0 rounded-full border border-brass-light/40" />
-
-            {/* Magnification Badge */}
-            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap border border-brass/80 bg-forest px-2 py-0.5 text-[9px] font-sans font-bold text-brass uppercase tracking-widest shadow-sm rounded-[1px]">
-              {zoomLevel}× Giám Định
-            </div>
+            {/* Inner Brass Rim Accent */}
+            <div className="absolute inset-0 rounded-full border border-brass-light/35 pointer-events-none" />
           </div>
         )}
       </div>
-
-      {/* Instructional helper text */}
-      {isActive && (
-        <div className="pointer-events-none absolute bottom-3 left-3 z-10 border border-paper-border/60 bg-paper/90 px-2.5 py-1 text-[11px] text-charcoal-muted font-sans rounded-[1px]">
-          Rê chuột để soi nét chạm khắc & vân vật liệu
-        </div>
-      )}
     </div>
   );
 };

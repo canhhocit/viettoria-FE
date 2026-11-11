@@ -776,7 +776,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
             <CuratorLoupe
               imageSrc={thumbnailPhoto.src}
               altText={`${product.name} · ${t('product.tabPhotos', 'Ảnh thực địa')}`}
-              zoomLevel={2.5}
+              zoomLevel={2}
               className="h-full w-full"
             />
           )}
