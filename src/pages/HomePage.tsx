@@ -1,15 +1,15 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowDown, ArrowRight, BookOpen, Pause, Play } from 'lucide-react';
+import { ArrowDown, ArrowRight, BookOpen } from 'lucide-react';
 import { publicApi } from '../services/api';
 import type { Product, Collection, BlogPost } from '../types';
 import { FALLBACK_BLOGS, FALLBACK_COLLECTIONS, FALLBACK_PRODUCTS } from '../data/fallbackData';
-import { resolve3DModelUrl, resolve3DPreview, resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
+import { resolve3DPreview, resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
 import { useLanguage } from '../contexts/LanguageContext';
 import { HeritageParticles } from '../components/effects/HeritageParticles';
-import { TiltCard } from '../components/effects/TiltCard';
 import { TimeTravelComparison } from '../components/heritage/TimeTravelComparison';
 import { ExplodedJoineryViewer } from '../components/heritage/ExplodedJoineryViewer';
+import { HeritageModelCarousel } from '../components/heritage/HeritageModelCarousel';
 
 const imageFor = (path?: string | null, slug?: string) =>
   resolveImageUrl(path || (slug ? resolve3DPreview(slug)?.poster : undefined));
@@ -62,304 +62,14 @@ const useHomeScrollReveal = (containerRef: React.RefObject<HTMLElement | null>, 
   }, [containerRef, reducedMotion]);
 };
 
-const InteractiveModelStage: React.FC<{ product: Product; reducedMotion: boolean; }> = ({ product, reducedMotion }) => {
-  const { t } = useLanguage();
-  const [viewerAvailable, setViewerAvailable] = useState(() =>
-    typeof window !== 'undefined' && Boolean(window.customElements?.get('model-viewer')),
-  );
-  const [loadedModelKey, setLoadedModelKey] = useState<string | null>(null);
-  const [failedModelKey, setFailedModelKey] = useState<string | null>(null);
-  const [previewPlaying, setPreviewPlaying] = useState(false);
-  const modelViewerRef = useRef<HTMLElement | null>(null);
-  const preview = resolve3DPreview(product.slug);
-  const poster = preview?.poster || imageFor(product.heroImage);
-  const modelUrl = resolve3DModelUrl(product.model3dUrl || product.slug);
-  const modelKey = `${product.id}:${modelUrl}`;
-  const modelLoaded = loadedModelKey === modelKey;
-  const modelFailed = failedModelKey === modelKey;
-  const turntable = preview?.turntable;
-
-  useEffect(() => {
-    if (window.customElements.get('model-viewer')) {
-      setViewerAvailable(true);
-      return;
-    }
-
-    let mounted = true;
-    const fallbackTimer = window.setTimeout(() => {
-      if (mounted) setViewerAvailable(false);
-    }, 4000);
-
-    void window.customElements.whenDefined('model-viewer').then(() => {
-      if (!mounted) return;
-      window.clearTimeout(fallbackTimer);
-      setViewerAvailable(true);
-    });
-
-    return () => {
-      mounted = false;
-      window.clearTimeout(fallbackTimer);
-    };
-  }, []);
-
-  useEffect(() => {
-    setPreviewPlaying(false);
-  }, [modelKey]);
-
-  useEffect(() => {
-    const modelViewer = modelViewerRef.current;
-    if (!viewerAvailable || !modelViewer) return;
-
-    const handleLoad = () => {
-      setLoadedModelKey(modelKey);
-      setFailedModelKey(null);
-    };
-    const handleError = () => setFailedModelKey(modelKey);
-
-    modelViewer.addEventListener('load', handleLoad);
-    modelViewer.addEventListener('error', handleError);
-    return () => {
-      modelViewer.removeEventListener('load', handleLoad);
-      modelViewer.removeEventListener('error', handleError);
-    };
-  }, [modelKey, viewerAvailable]);
-
-  useEffect(() => {
-    if (!viewerAvailable || modelLoaded || modelFailed) return;
-    const loadTimeout = window.setTimeout(() => setFailedModelKey(modelKey), 20000);
-    return () => window.clearTimeout(loadTimeout);
-  }, [modelFailed, modelKey, modelLoaded, viewerAvailable]);
-  const useTurntableFallback = previewPlaying && Boolean(turntable) && !modelLoaded;
-
-  return (
-    <>
-      <img
-        src={poster}
-        alt={`Hình ảnh mô hình ${product.name}`}
-        loading="lazy"
-        className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-700 ${modelLoaded ? 'opacity-0' : 'opacity-100'}`}
-        onError={(event) => handleImageFallback(event, resolveImageUrl(product.heroImage))}
-      />
-      {useTurntableFallback && (
-        <video
-          key={`${product.slug}-preview`}
-          src={turntable}
-          poster={poster}
-          autoPlay
-          muted
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-          onEnded={() => setPreviewPlaying(false)}
-          onError={() => setPreviewPlaying(false)}
-          className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-700 ${modelLoaded ? 'opacity-0' : 'opacity-100'}`}
-        />
-      )}
-      {viewerAvailable && !modelFailed && (
-        <model-viewer
-          key={`${product.slug}-model`}
-          src={modelUrl}
-          alt={`Mô hình 3D tương tác của ${product.name}`}
-          camera-controls
-          auto-rotate={!reducedMotion ? '' : undefined}
-          rotation-per-second="10deg"
-          shadow-intensity="1.2"
-          shadow-softness="0.75"
-          exposure="1.05"
-          interaction-prompt="none"
-          loading="eager"
-          reveal="auto"
-          ref={modelViewerRef}
-          style={{ width: '100%', height: '100%', backgroundColor: 'transparent', touchAction: 'pan-y' }}
-          className={`home-model-viewer absolute inset-0 h-full w-full transition-opacity duration-700 ${modelLoaded ? 'opacity-100' : 'opacity-0'}`}
-        />
-      )}
-      <div className="pointer-events-none absolute left-3 top-3 z-10 border border-brass/50 bg-[#121814]/90 px-2.5 py-1 text-[10px] font-sans font-semibold text-brass uppercase tracking-wider backdrop-blur-sm rounded-[1px] shadow-sm">
-        {modelLoaded
-          ? t('home.dragToRotate', 'Mô hình 3D · Kéo để xoay')
-          : previewPlaying
-            ? t('home.previewVideo', 'Video xem trước')
-            : modelFailed || !viewerAvailable
-              ? t('home.previewPhoto', 'Ảnh xem trước')
-              : t('home.loadingModel', 'Đang tải mô hình 3D…')}
-      </div>
-      {turntable && !reducedMotion && !modelLoaded && (
-        <button
-          type="button"
-          onClick={() => setPreviewPlaying((playing) => !playing)}
-          aria-label={previewPlaying ? t('home.stopVideo', 'Dừng video xem trước mô hình') : t('home.playVideo', 'Phát video xem trước mô hình')}
-          aria-pressed={previewPlaying}
-          className="absolute right-4 top-4 z-10 inline-flex min-h-8 items-center gap-2 border border-paper-border bg-header/95 px-3 text-xs font-sans uppercase tracking-[0.08em] text-brown-dark font-medium transition-colors hover:border-brass hover:text-forest focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass"
-        >
-          {previewPlaying ? <Pause size={13} /> : <Play size={13} />}
-          {previewPlaying ? t('home.stopVideo', 'Dừng video') : t('home.playVideo', 'Xem chuyển động')}
-        </button>
-      )}
-    </>
-  );
-};
-
-const ScrollyHeritage: React.FC<{ products: Product[]; }> = ({ products }) => {
-  const { t, localizeProduct } = useLanguage();
-  const reducedMotion = useReducedMotionPreference();
-  const [activeMobileIndex, setActiveMobileIndex] = useState(0);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-  if (products.length === 0) return null;
-
-  const scrollToCard = (index: number) => {
-    setActiveMobileIndex(index);
-    if (!scrollContainerRef.current) return;
-    const cards = scrollContainerRef.current.children;
-    if (cards[index]) {
-      (cards[index] as HTMLElement).scrollIntoView({
-        behavior: reducedMotion ? 'auto' : 'smooth',
-        inline: 'center',
-        block: 'nearest',
-      });
-    }
-  };
-
-  return (
-    <section id="hanh-trinh-di-san" className="home-story-section border-y border-paper-border bg-header">
-      <div className="mx-auto max-w-[1440px] px-5 py-14 sm:px-8 sm:py-20 lg:px-16 lg:py-24">
-        {/* Header Section */}
-        <div data-home-reveal className="mb-8 flex flex-col justify-between gap-5 sm:mb-10 lg:flex-row lg:items-end">
-          <div className="max-w-2xl">
-            <p className="mb-2.5 font-sans text-xs font-semibold uppercase tracking-wider text-brass">
-              {t('home.scrollyEyebrow', 'Một vòng qua di sản Việt')}
-            </p>
-            <h2 className="font-serif text-3xl font-bold leading-tight text-forest sm:text-4xl lg:text-5xl">
-              {t('home.scrollyHeading', 'Mỗi công trình, một câu chuyện')}
-            </h2>
-            <p className="mt-3.5 max-w-xl text-sm leading-relaxed text-charcoal-muted sm:text-base">
-              {t('home.scrollyDesc', 'Chiêm ngưỡng các mô hình 3D số hóa và khám phá câu chuyện lịch sử phía sau từng dấu ấn kiến trúc văn hiến.')}
-            </p>
-          </div>
-
-          {/* Quick Monument Navigation Pills */}
-          <nav className="flex flex-wrap items-center gap-2" aria-label={t('home.selectMonument', 'Chọn công trình đang xem')}>
-            {products.map((rawProduct, index) => {
-              const product = localizeProduct(rawProduct);
-              return (
-                <button
-                  key={product.id}
-                  type="button"
-                  onClick={() => scrollToCard(index)}
-                  aria-pressed={activeMobileIndex === index}
-                  className={`inline-flex items-center gap-1.5 border px-3 py-1.5 text-xs font-sans transition-all ${
-                    activeMobileIndex === index
-                      ? 'border-forest bg-forest text-brass font-bold shadow-xs'
-                      : 'border-paper-border bg-paper text-forest hover:border-brass hover:text-forest hover:bg-paper-warm font-medium'
-                  }`}
-                >
-                  <span className={`font-mono text-[10px] font-bold ${activeMobileIndex === index ? 'text-brass-light' : 'text-brass'}`}>
-                    0{index + 1}
-                  </span>
-                  <span>{product.name}</span>
-                </button>
-              );
-            })}
-          </nav>
-        </div>
-
-        {/* Horizontal Model Cards: Grid on Desktop, Swipe Track on Mobile */}
-        <div
-          ref={scrollContainerRef}
-          className="flex overflow-x-auto snap-x snap-mandatory gap-5 pb-4 no-scrollbar sm:gap-6 lg:grid lg:grid-cols-3 lg:gap-8 lg:overflow-visible lg:pb-0"
-        >
-          {products.map((rawProduct, index) => {
-            const product = localizeProduct(rawProduct);
-            return (
-              <TiltCard
-                key={product.id}
-                className="min-w-[85vw] sm:min-w-[360px] lg:min-w-0 snap-center h-full"
-                glareEffect={true}
-                tiltAmount={1.8}
-              >
-                <article
-                  id={`di-san-${product.slug}`}
-                  data-home-reveal
-                  className="home-story-card corner-frame group flex h-full flex-col border border-paper-border bg-paper-card shadow-xs transition-all duration-300 hover:border-brass/70 hover:shadow-xl"
-                >
-                {/* Card Plaque Top Bar - Imperial Forest Green & Brass */}
-                <div className="flex items-center justify-between border-b border-brass/40 bg-forest px-4 py-2.5 text-xs text-paper">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs font-bold text-brass">0{index + 1}</span>
-                    <span className="h-2.5 w-px bg-brass/40" />
-                    <span className="truncate max-w-[150px] font-sans text-[11px] uppercase tracking-wider text-paper/90 font-medium">
-                      {product.location}
-                    </span>
-                  </div>
-                  <span className="font-sans text-[10px] uppercase tracking-wider text-brass-light font-semibold">
-                    {product.epoch}
-                  </span>
-                </div>
-
-                {/* 3D Model Viewport */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-paper sm:aspect-[1.18/1]">
-                  {/* Exhibition Pedestal Spotlight */}
-                  <div className="heritage-pedestal-light pointer-events-none absolute inset-0 z-[1]" aria-hidden="true" />
-                  
-                  <InteractiveModelStage product={product} reducedMotion={reducedMotion} />
-
-                  {/* Bottom Overlay with Monument Name and Index */}
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between bg-gradient-to-t from-forest-dark/85 via-forest-dark/35 to-transparent px-4 pb-3 pt-12 text-paper-light">
-                    <p className="font-serif text-base sm:text-lg font-bold text-paper drop-shadow-xs">
-                      {product.name}
-                    </p>
-                    <span className="font-mono text-[11px] font-semibold text-white/90">
-                      0{index + 1} / 0{products.length}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Card Information Body */}
-                <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
-                  <div>
-                    <h3 className="font-serif text-xl sm:text-2xl font-bold leading-snug text-forest transition-colors group-hover:text-brass-dark">
-                      <Link to={`/products/${product.slug}`}>
-                        {product.name}
-                      </Link>
-                    </h3>
-                    <p className="mt-1 font-serif text-xs sm:text-sm italic text-brass-dark font-medium">
-                      {product.subName}
-                    </p>
-                    <p className="mt-3.5 text-xs sm:text-sm leading-relaxed text-charcoal/85 line-clamp-3">
-                      {product.shortDescription}
-                    </p>
-                  </div>
-
-                  {/* Card Action Link */}
-                  <div className="mt-6 flex items-center justify-between border-t border-paper-border pt-4">
-                    <span className="font-sans text-[10px] font-semibold uppercase tracking-wider text-charcoal-muted">
-                      {product.epoch}
-                    </span>
-                    <Link
-                      to={`/products/${product.slug}`}
-                      className="inline-flex items-center gap-1.5 text-xs font-sans font-bold uppercase tracking-wider text-forest transition-colors hover:text-brass"
-                    >
-                      <span>{t('common.exploreMonument', 'Tìm hiểu công trình')}</span>
-                      <ArrowRight size={13} strokeWidth={2} className="transition-transform group-hover:translate-x-1 text-brass" />
-                    </Link>
-                  </div>
-                </div>
-              </article>
-            </TiltCard>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-};
-
 export const HomePage: React.FC = () => {
   const { language, t, localizeCollection, localizeBlog } = useLanguage();
   const mainRef = useRef<HTMLElement>(null);
   const initialHero = FALLBACK_PRODUCTS.find((product) => product.isHeroRelease) || FALLBACK_PRODUCTS[0];
   const [heroProduct, setHeroProduct] = useState<Product | null>(initialHero || null);
-  const [featuredProducts, setFeaturedProducts] = useState<Product[]>(FALLBACK_PRODUCTS.filter((product) => !product.isHeroRelease).slice(0, 4));
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>(
+    FALLBACK_PRODUCTS.filter((product) => !product.isHeroRelease)
+  );
   const [collections, setCollections] = useState<Collection[]>(FALLBACK_COLLECTIONS);
   const [blogs, setBlogs] = useState<BlogPost[]>(FALLBACK_BLOGS);
   const [heroVideoReady, setHeroVideoReady] = useState(false);
@@ -367,9 +77,17 @@ export const HomePage: React.FC = () => {
   const prefersReducedMotion = useReducedMotionPreference();
   useHomeScrollReveal(mainRef, prefersReducedMotion);
 
+  // Present ALL available models in the catalog (no artificial 3-card cutoff)
   const storyProducts = useMemo(() => {
-    const products = [...(heroProduct ? [heroProduct] : []), ...featuredProducts];
-    return [...new Map(products.map((product) => [product.id, product])).values()].slice(0, 3);
+    const combined = [...(heroProduct ? [heroProduct] : []), ...featuredProducts];
+    const unique = [...new Map(combined.map((product) => [product.id, product])).values()];
+    // Ensure all catalog fallback products are incorporated
+    FALLBACK_PRODUCTS.forEach((fbProd) => {
+      if (!unique.some((p) => p.id === fbProd.id || p.slug === fbProd.slug)) {
+        unique.push(fbProd);
+      }
+    });
+    return unique;
   }, [featuredProducts, heroProduct]);
 
   useEffect(() => {
@@ -478,7 +196,7 @@ export const HomePage: React.FC = () => {
         </a>
       </section>
 
-      <ScrollyHeritage products={storyProducts} />
+      <HeritageModelCarousel products={storyProducts} />
 
       {/* Feature 1: Time-Travel 1900 <-> 2026 Comparison Showcase */}
       <TimeTravelComparison />

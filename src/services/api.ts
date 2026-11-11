@@ -314,7 +314,7 @@ export const publicApi = {
       // Fallback
     }
     const heroProduct = FALLBACK_PRODUCTS.find(p => p.isHeroRelease) || FALLBACK_PRODUCTS[0];
-    const featuredProducts = FALLBACK_PRODUCTS.filter(p => p.id !== heroProduct.id).slice(0, 4);
+    const featuredProducts = FALLBACK_PRODUCTS.filter(p => p.id !== heroProduct.id);
     const collections = FALLBACK_COLLECTIONS.slice(0, 3);
     const latestBlogs = FALLBACK_BLOGS.slice(0, 3);
 
