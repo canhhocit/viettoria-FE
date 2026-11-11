@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { X, QrCode, Copy, Check, Smartphone } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { X, QrCode, Copy, Check, Smartphone, Download } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 interface WebsiteQRModalProps {
@@ -22,24 +23,35 @@ export const WebsiteQRModal: React.FC<WebsiteQRModalProps> = ({ isOpen, onClose 
     setLoading(true);
 
     const generateQR = async () => {
+      let resolvedDataUrl = '';
+
       try {
-        const { default: QRCode } = await import('qrcode');
-        const dataUrl = await QRCode.toDataURL(websiteUrl, {
-          width: 320,
-          margin: 1.5,
-          color: {
-            dark: '#142820', // Imperial Forest Lacquer
-            light: '#FAF7F0', // Do Paper Warm Canvas
-          },
-          errorCorrectionLevel: 'M',
-        });
-        if (isMounted) {
-          setQrUrl(dataUrl);
-          setLoading(false);
+        const QRCodeMod = await import('qrcode');
+        const toDataURL = (QRCodeMod as any).toDataURL || (QRCodeMod as any).default?.toDataURL;
+
+        if (typeof toDataURL === 'function') {
+          resolvedDataUrl = await toDataURL(websiteUrl, {
+            width: 320,
+            margin: 1.5,
+            color: {
+              dark: '#142820', // Imperial Forest Lacquer
+              light: '#FAF7F0', // Do Paper Warm Canvas
+            },
+            errorCorrectionLevel: 'M',
+          });
         }
       } catch (err) {
-        console.error('Failed to generate website QR code:', err);
-        if (isMounted) setLoading(false);
+        console.warn('Local QRCode generation failed, engaging resilient fallback:', err);
+      }
+
+      // 100% Guaranteed High-Res Fallback in exact brand colors (#142820 on #FAF7F0)
+      if (!resolvedDataUrl) {
+        resolvedDataUrl = `https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=${encodeURIComponent(websiteUrl)}&color=20-40-32&bgcolor=250-247-240`;
+      }
+
+      if (isMounted) {
+        setQrUrl(resolvedDataUrl);
+        setLoading(false);
       }
     };
 
@@ -70,11 +82,39 @@ export const WebsiteQRModal: React.FC<WebsiteQRModalProps> = ({ isOpen, onClose 
     }
   };
 
-  if (!isOpen) return null;
+  const handleDownloadQR = async () => {
+    if (!qrUrl) return;
+    try {
+      if (qrUrl.startsWith('data:')) {
+        const link = document.createElement('a');
+        link.href = qrUrl;
+        link.download = 'viettoria-qr-code.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        const response = await fetch(qrUrl);
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = 'viettoria-qr-code.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+      }
+    } catch {
+      window.open(qrUrl, '_blank');
+    }
+  };
 
-  return (
+  if (!isOpen || typeof document === 'undefined') return null;
+
+  // Use createPortal to attach directly to document.body, escaping any header stacking context or backdrop-filter
+  return createPortal(
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-forest-dark/80 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-forest-dark/80 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
     >
       <div
@@ -84,17 +124,18 @@ export const WebsiteQRModal: React.FC<WebsiteQRModalProps> = ({ isOpen, onClose 
         aria-labelledby="website-qr-title"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close Button */}
+        {/* Close "X" Button */}
         <button
+          type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 p-1.5 text-charcoal/60 hover:text-forest hover:bg-paper-warm transition-colors rounded-[2px] focus:outline-none focus:ring-1 focus:ring-brass"
+          className="absolute top-3.5 right-3.5 p-2 text-charcoal/60 hover:text-forest hover:bg-paper-warm transition-colors rounded-[2px] focus:outline-none focus:ring-1 focus:ring-brass z-20 cursor-pointer"
           aria-label={t('nav.close', 'Đóng cửa sổ')}
         >
-          <X className="w-4 h-4" />
+          <X className="w-5 h-5" />
         </button>
 
         {/* Eyebrow & Title */}
-        <div className="text-center pr-6">
+        <div className="text-center pr-4">
           <div className="inline-flex items-center gap-1.5 text-brass text-[11px] font-sans font-semibold uppercase tracking-wider mb-1">
             <Smartphone className="w-3.5 h-3.5" />
             <span>{t('header.qrEyebrow', 'Trải Nghiệm Trên Di Động')}</span>
@@ -136,13 +177,28 @@ export const WebsiteQRModal: React.FC<WebsiteQRModalProps> = ({ isOpen, onClose 
             )}
           </div>
 
-          <span className="mt-2 text-[10px] font-mono text-charcoal-muted uppercase tracking-wider">
-            Viettoria Phygital Heritage
-          </span>
+          {/* Compact Download QR Button & Brand Identifier */}
+          <div className="mt-3 flex items-center justify-between w-full max-w-[230px] px-0.5">
+            <span className="text-[10px] font-mono text-charcoal-muted uppercase tracking-wider">
+              Viettoria Phygital
+            </span>
+
+            {qrUrl && (
+              <button
+                type="button"
+                onClick={handleDownloadQR}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-sans font-semibold bg-paper hover:bg-forest text-forest hover:text-brass border border-brass/50 rounded-[2px] shadow-2xs transition-all active:scale-95 cursor-pointer"
+                title={t('header.downloadQr', 'Tải ảnh mã QR về máy')}
+              >
+                <Download className="w-3.5 h-3.5 text-brass-dark" />
+                <span>{t('header.downloadQr', 'Tải xuống')}</span>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Copy Link Action Bar */}
-        <div className="border-t border-paper-border pt-4 space-y-2.5">
+        <div className="border-t border-paper-border pt-4">
           <div className="flex items-center gap-2 border border-paper-border bg-paper-warm px-3 py-2 rounded-[2px]">
             <span className="flex-1 truncate font-mono text-xs text-forest select-all">
               {websiteUrl}
@@ -150,7 +206,7 @@ export const WebsiteQRModal: React.FC<WebsiteQRModalProps> = ({ isOpen, onClose 
             <button
               type="button"
               onClick={handleCopyLink}
-              className="inline-flex items-center gap-1 shrink-0 px-2.5 py-1 text-xs font-sans font-semibold bg-brass text-forest hover:bg-brass-light transition-colors rounded-[1px] shadow-2xs"
+              className="inline-flex items-center gap-1 shrink-0 px-3 py-1.5 text-xs font-sans font-semibold bg-brass text-forest hover:bg-brass-light transition-colors rounded-[1px] shadow-2xs cursor-pointer"
             >
               {copied ? (
                 <>
@@ -167,6 +223,7 @@ export const WebsiteQRModal: React.FC<WebsiteQRModalProps> = ({ isOpen, onClose 
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
