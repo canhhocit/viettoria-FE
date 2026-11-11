@@ -138,16 +138,16 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQRModal }) => {
             />
           </Link>
 
-          {/* Desktop Navigation Links - Tone Be + Xanh with Sliding Heritage Indicator */}
+          {/* Desktop Navigation Links - Clean Heritage Editorial Style without clunky outer box */}
           <nav
             ref={navContainerRef}
             onMouseLeave={() => setHoveredPath(null)}
-            className="hidden lg:flex relative items-center gap-0.5 xl:gap-1.5 p-1 border border-forest/15 bg-paper-warm/70 rounded-[2px] shadow-2xs shrink-0"
+            className="hidden lg:flex relative items-center gap-6 xl:gap-8 shrink-0 py-1"
             aria-label={t('nav.menu', 'Menu chính')}
           >
-            {/* Sliding Heritage Magic Indicator (Tone Be + Xanh) */}
+            {/* Sliding Heritage Underline Indicator */}
             <div
-              className="absolute top-1 bottom-1 rounded-[2px] pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] border border-forest/25 bg-forest/[0.09] shadow-xs border-b-2 border-b-forest"
+              className="absolute bottom-0 h-[2px] bg-brass transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] pointer-events-none"
               style={{
                 transform: `translateX(${indicatorStyle.left}px)`,
                 width: `${indicatorStyle.width}px`,
@@ -171,23 +171,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQRModal }) => {
                     else linkRefs.current.delete(link.to);
                   }}
                   onMouseEnter={() => setHoveredPath(link.to)}
-                  className={`relative z-10 whitespace-nowrap px-3 py-1.5 text-[13px] font-sans tracking-wide transition-colors duration-200 rounded-[2px] select-none ${
+                  className={`relative py-1.5 whitespace-nowrap text-[13.5px] font-sans tracking-wide transition-colors duration-200 select-none ${
                     isItemActive
                       ? 'text-forest font-bold'
-                      : 'text-charcoal/75 hover:text-forest font-semibold'
+                      : 'text-charcoal/80 hover:text-forest font-medium'
                   }`}
                 >
-                  <span className="flex items-center gap-1.5">
-                    {isItemActive && (
-                      <span
-                        className="text-brass text-[9px] font-bold animate-fade-in"
-                        aria-hidden="true"
-                      >
-                        ✦
-                      </span>
-                    )}
-                    <span>{link.label}</span>
-                  </span>
+                  <span>{link.label}</span>
                 </NavLink>
               );
             })}
