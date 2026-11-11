@@ -17,6 +17,7 @@ interface LocalizedProductFields {
   finishing?: string;
   audioGuideTitle?: string;
   audioGuideNarrator?: string;
+  audioGuideDuration?: string;
   audioGuideTranscript?: string;
 }
 
@@ -133,6 +134,7 @@ export const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, L
       finishing: 'Beeswax satin sheen, hand-embossed ancient tiles, aged ironwood finish',
       audioGuideTitle: 'Thang Long Valor & The Dream of the Lotus Pavilion',
       audioGuideNarrator: 'Viettoria Heritage Narrator',
+      audioGuideDuration: '02:31',
       audioGuideTranscript: 'In the winter of 1049, morning mist enveloped the capital of Thang Long. King Ly Thai Tong dreamt of Bodhisattva Avalokiteshvara seated on a lotus throne, guiding him upward. Upon awakening, the royal court conceived the founding of Dien Huu Pagoda amidst the Linh Chieu lotus pond, its single stone column soaring like a pristine lotus blossom, blessing the kingdom with peace and millennial longevity.',
     },
     fr: {
@@ -195,6 +197,7 @@ export const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, L
       finishing: 'Handcrafted vermilion lacquer with gilded sunburst window trims and antique tiles',
       audioGuideTitle: 'Constellation of Literature Illuminating Trang An',
       audioGuideNarrator: 'Viettoria Atelier Narrator',
+      audioGuideDuration: '02:13',
       audioGuideTranscript: 'The Khue Van Pavilion reflects upon the tranquil surface of Thien Quang well, mirror of the scholar\'s soul. Erected in 1805 by Governor-General Nguyen Van Thanh, it stands as an enduring tribute to academic distinction and cultural enlightenment.',
     },
     fr: {
@@ -257,6 +260,7 @@ export const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, L
       finishing: 'Ancient brick red patina, 39 delicate floriated ventilation embrasures',
       audioGuideTitle: 'Valor of Thang Long Banner Bastion',
       audioGuideNarrator: 'Viettoria Atelier Narrator',
+      audioGuideDuration: '02:21',
       audioGuideTranscript: 'Constructed in 1812, the Hanoi Flag Tower is one of the rare monuments that remained intact within the Imperial Citadel, marking the sacred Liberation Day of the capital on October 10, 1954.',
     },
     fr: {
@@ -319,6 +323,7 @@ export const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, L
       finishing: 'Vibrant yellow imperial glazed tiles and jade-green glazed ceramic tiles',
       audioGuideTitle: 'Imperial Melodies Beside the Perfume River',
       audioGuideNarrator: 'Viettoria Ancient Capital Narrator',
+      audioGuideDuration: '02:35',
       audioGuideTranscript: 'Facing directly south according to geomantic principles, Ngo Mon Gate is where imperial authority converges with celestial light. Above sits the Five-Phoenix Pavilion, witness to major court proclamations and the historic abdication of 1945.',
     },
     fr: {
@@ -381,6 +386,7 @@ export const PRODUCT_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, L
       finishing: 'Ceramic dual-dragon moon-worshipping rooftop sculpture with glazed emerald hue',
       audioGuideTitle: 'Epic Ballad on Saigon Harbor',
       audioGuideNarrator: 'Viettoria Atelier Narrator',
+      audioGuideDuration: '02:41',
       audioGuideTranscript: 'On June 5, 1911, the steamship Amiral Latouche-Tréville cast off from Saigon Harbor, bearing the profound aspirations of 21-year-old patriot Nguyen Tat Thanh on his journey to find the path to national freedom.',
     },
     fr: {
@@ -914,6 +920,7 @@ export function getLocalizedProduct<T extends Product | Partial<Product>>(
       title: tr.audioGuideTitle || product.audioGuide.title,
       transcript: tr.audioGuideTranscript || product.audioGuide.transcript,
       narrator: tr.audioGuideNarrator || product.audioGuide.narrator,
+      duration: tr.audioGuideDuration || product.audioGuide.duration,
       audioUrl: langAudioUrl || product.audioGuide.audioUrl,
     };
   }

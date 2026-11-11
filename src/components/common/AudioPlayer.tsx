@@ -98,6 +98,7 @@ const findBestVoice = (voices: SpeechSynthesisVoice[], lang: LanguageCode): Spee
 export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageName }) => {
   const { t, language } = useLanguage();
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const guideVideoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const ttsTimerRef = useRef<number | null>(null);
   const currentTimeRef = useRef(0);
@@ -107,7 +108,16 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
 
   // Check language-specific audio file if exists, else fallback to standard audio or TTS
   const languageSpecificAudioUrl = audioGuide.audioUrls?.[language];
-  const configuredAudioUrl = resolveAudioUrl(languageSpecificAudioUrl || (language === 'vi' ? audioGuide.audioUrl : ''));
+  const isAudioMatchingCurrentLang = Boolean(
+    languageSpecificAudioUrl ||
+    language === 'vi' ||
+    (audioGuide.audioUrl && (
+      audioGuide.audioUrl.includes(`-${language}.`) ||
+      audioGuide.audioUrl.includes(`-${language}-`) ||
+      (language === 'en' && (audioGuide.audioUrl.includes('-en.') || audioGuide.audioUrl.includes('-eng.')))
+    ))
+  );
+  const configuredAudioUrl = resolveAudioUrl(languageSpecificAudioUrl || (isAudioMatchingCurrentLang ? audioGuide.audioUrl : ''));
   const activeAudioUrl = configuredAudioUrl && !audioFallbackActive
     ? configuredAudioUrl
     : language === 'vi' && audioFallbackActive
@@ -136,13 +146,19 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
 
   const hasAudio = Boolean(activeAudioUrl || (typeof window !== 'undefined' && 'speechSynthesis' in window));
 
-  // Preload guide images into cache for immediate stutter-free animation
+  // Synchronize guide video playback with narration audio state
   useEffect(() => {
-    const idleImg = new Image();
-    idleImg.src = '/images/guide/guide-idle.png';
-    const speakingImg = new Image();
-    speakingImg.src = '/images/guide/guide-speaking.webp';
-  }, []);
+    const video = guideVideoRef.current;
+    if (!video) return;
+
+    if (isPlaying) {
+      void video.play().catch(() => {
+        // Autoplay may be restricted until user interaction; non-blocking
+      });
+    } else {
+      video.pause();
+    }
+  }, [isPlaying]);
 
   // Load available speech synthesis voices asynchronously
   useEffect(() => {
@@ -169,6 +185,10 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
+    }
+    if (guideVideoRef.current) {
+      guideVideoRef.current.pause();
+      guideVideoRef.current.currentTime = 0;
     }
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
@@ -329,6 +349,10 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
     setCurrentTime(0);
     currentTimeRef.current = 0;
 
+    if (guideVideoRef.current) {
+      guideVideoRef.current.currentTime = 0;
+    }
+
     if (!isUsingTts && audioRef.current) {
       audioRef.current.currentTime = 0;
     } else if (isUsingTts) {
@@ -465,20 +489,20 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
         </div>
       </section>
 
-      {/* 2. Floating Tour Guide Companion at Bottom-Right Corner (Only the Guide herself, grounded with no up/down bobbing) */}
+      {/* 2. Floating Tour Guide Companion at Bottom-Right Corner (Video Companion Synchronized with Audio) */}
       {typeof document !== 'undefined' && createPortal(
         <aside 
           className="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 z-[9999] pointer-events-auto select-none"
           aria-label={t('audioPlayer.narrator', 'Hướng dẫn viên Viettoria')}
         >
-          <div className="relative h-[165px] w-[100px] sm:h-[210px] sm:w-[130px] group">
-            {/* Grounded Pedestal Shadow & Subtle Golden Ambient Glow (Static, no bobbing) */}
+          <div className="relative w-[102px] h-[180px] sm:w-[124px] sm:h-[220px] group">
+            {/* Grounded Pedestal Shadow & Subtle Golden Ambient Glow */}
             <div 
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-20 h-3 rounded-[100%] bg-black/70 blur-[3px] pointer-events-none" 
+              className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-24 h-4 rounded-[100%] bg-black/75 blur-[4px] pointer-events-none" 
               aria-hidden="true" 
             />
             <div 
-              className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-16 h-2 rounded-[100%] bg-brass/25 blur-[5px] pointer-events-none" 
+              className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-20 h-3 rounded-[100%] bg-brass/35 blur-[6px] pointer-events-none transition-opacity duration-500 ${isPlaying ? 'opacity-100' : 'opacity-40'}`} 
               aria-hidden="true" 
             />
 
@@ -487,28 +511,60 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
               type="button"
               onClick={() => void togglePlay()}
               disabled={!hasAudio || audioError}
-              className="relative h-full w-full cursor-pointer border-0 bg-transparent p-0 disabled:cursor-not-allowed transition-transform duration-300 hover:scale-[1.03] active:scale-[0.98]"
+              className="relative h-full w-full cursor-pointer overflow-hidden rounded-[2px] border-2 border-brass/50 bg-forest-dark shadow-[0_12px_36px_rgba(0,0,0,0.6)] transition-all duration-300 hover:border-brass hover:shadow-[0_16px_40px_rgba(184,138,56,0.35)] hover:scale-[1.025] active:scale-[0.98] disabled:cursor-not-allowed group/btn"
               aria-label={isPlaying ? t('audioPlayer.pause') : t('audioPlayer.listen')}
               title={isPlaying ? t('audioPlayer.pause', 'Bấm vào hướng dẫn viên để tạm dừng') : t('audioPlayer.listen', 'Bấm vào hướng dẫn viên để nghe thuyết minh')}
             >
-              {/* Layer 1: Idle Pose (Grounded, stable, no vertical bobbing) */}
-              <img
-                src="/images/guide/guide-idle.png"
-                alt="Hướng dẫn viên Viettoria trong tà áo dài đỏ"
-                className={`absolute inset-0 h-full w-full object-contain object-bottom transition-opacity duration-500 ease-in-out ${
-                  isPlaying ? 'opacity-0' : 'opacity-100'
-                }`}
-                draggable={false}
+              {/* Corner Frame Accents (Museum Atelier Framing) */}
+              <div className="pointer-events-none absolute top-1 left-1 w-2.5 h-2.5 border-t border-l border-brass z-20" aria-hidden="true" />
+              <div className="pointer-events-none absolute top-1 right-1 w-2.5 h-2.5 border-t border-r border-brass z-20" aria-hidden="true" />
+              <div className="pointer-events-none absolute bottom-1 left-1 w-2.5 h-2.5 border-b border-l border-brass z-20" aria-hidden="true" />
+              <div className="pointer-events-none absolute bottom-1 right-1 w-2.5 h-2.5 border-b border-r border-brass z-20" aria-hidden="true" />
+
+              {/* Top Status Pill */}
+              <div className="absolute top-2 inset-x-2 z-20 flex items-center justify-center pointer-events-none">
+                <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider font-bold backdrop-blur-sm border transition-all duration-300 ${
+                  isPlaying
+                    ? 'bg-forest/90 border-brass text-brass shadow-sm'
+                    : 'bg-forest-dark/85 border-paper/20 text-paper/80 group-hover/btn:border-brass/50 group-hover/btn:text-brass-light'
+                }`}>
+                  {isPlaying ? (
+                    <>
+                      <span className="relative flex h-1.5 w-1.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brass opacity-75" />
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-brass" />
+                      </span>
+                      <span>{t('audioPlayer.speaking', 'Đang kể')}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Play className="w-2 h-2 text-brass fill-brass" />
+                      <span>{t('audioPlayer.listen', 'Nghe')}</span>
+                    </>
+                  )}
+                </span>
+              </div>
+
+              {/* Synchronized Guide Video */}
+              <video
+                ref={guideVideoRef}
+                src="/images/guide/Woman_speaking_as_tour_guide_6e120cf1.mp4"
+                poster="/images/guide/guide-poster.jpg"
+                muted
+                playsInline
+                loop
+                preload="auto"
+                className="h-full w-full object-cover object-center pointer-events-none"
               />
-              {/* Layer 2: Animated Speaking WebP (Active speech gestures without vertical bobbing) */}
-              <img
-                src="/images/guide/guide-speaking.webp"
-                alt="Hướng dẫn viên Viettoria đang thuyết minh"
-                className={`absolute inset-0 h-full w-full object-contain object-bottom transition-opacity duration-500 ease-in-out ${
-                  isPlaying ? 'opacity-100' : 'opacity-0'
-                }`}
-                draggable={false}
-              />
+
+              {/* Subtle hover play overlay when paused */}
+              {!isPlaying && (
+                <div className="absolute inset-0 bg-forest-dark/25 flex items-center justify-center transition-opacity duration-300 opacity-0 group-hover/btn:opacity-100 pointer-events-none z-10">
+                  <div className="w-9 h-9 rounded-full bg-forest/90 border border-brass flex items-center justify-center shadow-lg backdrop-blur-xs">
+                    <Play className="w-4 h-4 text-brass fill-brass ml-0.5" />
+                  </div>
+                </div>
+              )}
             </button>
           </div>
         </aside>,

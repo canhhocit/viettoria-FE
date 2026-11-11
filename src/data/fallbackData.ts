@@ -67,7 +67,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
       audioUrl: '/audio/chua-mot-cot-vi.mp3',
       audioUrls: {
         vi: '/audio/chua-mot-cot-vi.mp3',
-        en: '/audio/chua-mot-cot-en.mp3',
+        en: '/audio/chua-mot-cot-en.wav',
         fr: '/audio/chua-mot-cot-fr.mp3',
         zh: '/audio/chua-mot-cot-zh.mp3',
         ko: '/audio/chua-mot-cot-ko.mp3',
@@ -110,7 +110,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
       audioUrl: '/audio/khue-van-cac-vi.mp3',
       audioUrls: {
         vi: '/audio/khue-van-cac-vi.mp3',
-        en: '/audio/khue-van-cac-en.mp3',
+        en: '/audio/khue-van-cac-en.wav',
         fr: '/audio/khue-van-cac-fr.mp3',
         zh: '/audio/khue-van-cac-zh.mp3',
         ko: '/audio/khue-van-cac-ko.mp3',
@@ -153,7 +153,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
       audioUrl: '/audio/cot-co-ha-noi-vi.mp3',
       audioUrls: {
         vi: '/audio/cot-co-ha-noi-vi.mp3',
-        en: '/audio/cot-co-ha-noi-en.mp3',
+        en: '/audio/cot-co-ha-noi-en.wav',
         fr: '/audio/cot-co-ha-noi-fr.mp3',
         zh: '/audio/cot-co-ha-noi-zh.mp3',
         ko: '/audio/cot-co-ha-noi-ko.mp3',
@@ -196,7 +196,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
       audioUrl: '/audio/ngo-mon-hue-vi.mp3',
       audioUrls: {
         vi: '/audio/ngo-mon-hue-vi.mp3',
-        en: '/audio/ngo-mon-hue-en.mp3',
+        en: '/audio/ngo-mon-hue-en.wav',
         fr: '/audio/ngo-mon-hue-fr.mp3',
         zh: '/audio/ngo-mon-hue-zh.mp3',
         ko: '/audio/ngo-mon-hue-ko.mp3',
@@ -239,7 +239,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
       audioUrl: '/audio/ben-nha-rong-vi.mp3',
       audioUrls: {
         vi: '/audio/ben-nha-rong-vi.mp3',
-        en: '/audio/ben-nha-rong-en.mp3',
+        en: '/audio/ben-nha-rong-en.wav',
         fr: '/audio/ben-nha-rong-fr.mp3',
         zh: '/audio/ben-nha-rong-zh.mp3',
         ko: '/audio/ben-nha-rong-ko.mp3',

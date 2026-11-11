@@ -9,7 +9,6 @@ import {
   Pause,
   Play,
   RotateCcw,
-  Stamp,
   Sun,
   Sunrise,
   Sunset,
@@ -31,8 +30,6 @@ import {
   getHotspotsForProduct,
   type ArchitecturalHotspot,
 } from '../../data/architecturalHotspots';
-import { ARLaunchModal } from '../heritage/ARLaunchModal';
-import { PostcardGeneratorModal } from '../heritage/PostcardGeneratorModal';
 import { CuratorLoupe } from '../heritage/CuratorLoupe';
 
 interface ArchitecturalViewerProps {
@@ -49,9 +46,6 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
     typeof window !== 'undefined' && Boolean(window.customElements?.get('model-viewer')),
   );
   const [lightingMode, setLightingMode] = useState<LightingPreset>('noon');
-  const [isARModalOpen, setIsARModalOpen] = useState(false);
-  const [isPostcardOpen, setIsPostcardOpen] = useState(false);
-  const [postcardSnapshot, setPostcardSnapshot] = useState<string | null>(null);
   const [modelLoaded, setModelLoaded] = useState(false);
   const [modelFailed, setModelFailed] = useState(false);
   const [previewFailed, setPreviewFailed] = useState(false);
@@ -64,7 +58,6 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
   const [showHotspots, setShowHotspots] = useState(true);
   const [activeHotspotId, setActiveHotspotId] = useState<string | null>(null);
   const [isTourActive, setIsTourActive] = useState(false);
-  const [isChronicleOpen, setIsChronicleOpen] = useState(false);
   const [tourTimerProgress, setTourTimerProgress] = useState(0);
   const TOUR_DURATION_MS = 6000;
 
@@ -100,33 +93,6 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
         };
     }
   }, [lightingMode]);
-
-  const handleOpenPostcard = async () => {
-    const mv = modelViewerRef.current as unknown as { toBlob?: (options: { idealAspect: boolean }) => Promise<Blob> };
-    if (mv && typeof mv.toBlob === 'function') {
-      try {
-        const blob = await mv.toBlob({ idealAspect: true });
-        const url = URL.createObjectURL(blob);
-        setPostcardSnapshot(url);
-      } catch {
-        setPostcardSnapshot(null);
-      }
-    }
-    setIsPostcardOpen(true);
-  };
-
-  const handleOpenAR = () => {
-    const mv = modelViewerRef.current as unknown as { canActivateAR?: boolean; activateAR?: () => void };
-    if (mv && mv.canActivateAR && typeof mv.activateAR === 'function') {
-      try {
-        mv.activateAR();
-        return;
-      } catch {
-        // fallback
-      }
-    }
-    setIsARModalOpen(true);
-  };
 
   const handleZoom = (direction: 'in' | 'out') => {
     const modelViewer = modelViewerRef.current;
@@ -378,13 +344,6 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
 
   const showTurntable = Boolean(turntableUrl && previewPlaying && !previewFailed && !modelLoaded);
   const isAutoRotating = autoRotate && !reducedMotion;
-  const stageLabel = modelLoaded
-    ? t('home.dragToRotate', 'Mô hình 3D · kéo để xoay')
-    : showTurntable
-      ? t('home.previewVideo', 'Video xem trước')
-      : modelFailed || !viewerAvailable
-        ? t('home.previewPhoto', 'Ảnh xem trước')
-        : t('product.loading3d', 'Đang tải mô hình 3D');
 
   return (
     <div className="architectural-viewer-shell relative overflow-hidden border border-paper-border bg-paper-card shadow-sm">
@@ -645,15 +604,9 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
             </div>
           )}
 
-          {/* Stage Loading Status */}
-          <div className="absolute left-3 top-3 z-10 flex items-center gap-2 border border-brass/40 bg-[#121814]/90 px-3 py-1.5 text-xs font-sans uppercase tracking-[0.15em] text-paper font-bold shadow-sm backdrop-blur-sm sm:left-4 sm:top-4">
-            <span className={`h-1.5 w-1.5 bg-brass ${!modelLoaded && !modelFailed && viewerAvailable ? 'animate-pulse' : ''}`} />
-            <span role="status" aria-live="polite">{stageLabel}</span>
-          </div>
-
           {/* 4 Time-of-Day Lighting Mode Presets */}
           {modelLoaded && (
-            <div className="absolute left-3 top-11 sm:top-3 sm:left-44 z-10 flex items-center border border-brass/40 bg-[#121814]/90 p-0.5 text-xs text-paper shadow-sm backdrop-blur-sm rounded-[2px]">
+            <div className="absolute left-3 top-3 z-10 flex items-center border border-brass/40 bg-[#121814]/90 p-0.5 text-xs text-paper shadow-sm backdrop-blur-sm rounded-[2px] sm:left-4 sm:top-4">
               <button
                 type="button"
                 onClick={() => setLightingMode('dawn')}
@@ -749,22 +702,10 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
             </div>
           )}
 
-          {/* Bottom Floating Pill Bar (From User Reference: ✦ ĐIỂN TÍCH LỊCH SỬ | ✦ ẨN CHI TIẾT | ◇ XOAY 3D) */}
+          {/* Bottom Floating Pill Bar: ✦ ẨN CHI TIẾT / HIỆN CHI TIẾT | ◇ XOAY 3D */}
           {modelLoaded && (
             <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20 flex justify-center px-3">
               <div className="pointer-events-auto heritage-viewer-pillbar">
-                <button
-                  type="button"
-                  onClick={() => setIsChronicleOpen(true)}
-                  className="heritage-pill-btn"
-                  title={t('hotspots.historicalChronicle', 'Điển tích lịch sử')}
-                >
-                  <span className="text-brass">✦</span>
-                  <span>{t('hotspots.historicalChronicle', 'ĐIỂN TÍCH LỊCH SỬ')}</span>
-                </button>
-
-                <span className="heritage-pill-divider" aria-hidden="true" />
-
                 <button
                   type="button"
                   onClick={() => {
@@ -800,30 +741,6 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                       ? t('hotspots.stopRotate', 'DỪNG XOAY')
                       : t('hotspots.rotate3d', 'XOAY 3D')}
                   </span>
-                </button>
-
-                <span className="heritage-pill-divider" aria-hidden="true" />
-
-                <button
-                  type="button"
-                  onClick={handleOpenAR}
-                  className="heritage-pill-btn"
-                  title={t('ar.launch', 'Đặt mô hình vào không gian thực (AR)')}
-                >
-                  <Box className="h-3.5 w-3.5 text-brass" />
-                  <span>{t('product.viewAr', 'XEM AR')}</span>
-                </button>
-
-                <span className="heritage-pill-divider" aria-hidden="true" />
-
-                <button
-                  type="button"
-                  onClick={handleOpenPostcard}
-                  className="heritage-pill-btn"
-                  title={t('postcard.btn', 'In bưu thiếp ký ức giấy dó')}
-                >
-                  <Stamp className="h-3.5 w-3.5 text-brass" />
-                  <span>{t('product.postcard', 'BƯU THIẾP')}</span>
                 </button>
               </div>
             </div>
@@ -892,110 +809,6 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
           <p className="mt-3 text-center font-sans text-xs uppercase tracking-wider text-paper/75">{product.name}</p>
         </div>
       )}
-
-      {/* Historical Chronicle Modal / Cultural Heritage Dossier */}
-      {isChronicleOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md animate-fade-in"
-          onClick={() => setIsChronicleOpen(false)}
-          role="dialog"
-          aria-modal="true"
-          aria-label={t('hotspots.chronicleTitle', 'Điển tích & Bối cảnh lịch sử')}
-        >
-          <div
-            className="relative max-h-[85vh] w-full max-w-xl overflow-y-auto border border-brass/50 bg-[#121915] p-6 text-paper shadow-2xl rounded-[3px]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-start justify-between border-b border-brass/30 pb-3">
-              <div>
-                <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-brass block">
-                  {product.epoch || t('hotspots.chronicleSubtitle', 'Hồ sơ di sản văn hóa')}
-                </span>
-                <h3 className="font-serif text-xl sm:text-2xl font-bold text-paper mt-1">
-                  {product.name}
-                </h3>
-                {product.subName && (
-                  <p className="font-sans text-xs text-brass-light/85 italic mt-0.5">
-                    {product.subName}
-                  </p>
-                )}
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsChronicleOpen(false)}
-                className="p-1.5 text-paper/70 hover:text-paper hover:bg-white/10 rounded transition-colors cursor-pointer"
-                aria-label={t('hotspots.closeChronicle', 'Đóng điển tích')}
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <div className="mt-4 space-y-4 font-sans text-sm text-paper/90 leading-relaxed">
-              {product.location && (
-                <div className="flex items-center gap-2 text-xs text-paper/80 bg-paper/5 px-3 py-2 border border-paper/10">
-                  <span className="font-semibold text-brass">{t('common.location', 'Địa điểm')}:</span>
-                  <span>{product.location}</span>
-                </div>
-              )}
-
-              <p>{product.shortDescription}</p>
-
-              {product.audioGuide?.transcript && (
-                <div className="border-l-2 border-brass pl-3.5 py-1 text-paper/85 italic bg-brass/5">
-                  <p>{product.audioGuide.transcript}</p>
-                </div>
-              )}
-
-              {product.collection?.description && (
-                <p className="text-xs text-paper/70">{product.collection.description}</p>
-              )}
-
-              <div className="pt-2 flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsChronicleOpen(false);
-                    const essayEl = document.getElementById('in-depth-essay') || document.querySelector('.story-blocks-container');
-                    if (essayEl) {
-                      essayEl.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
-                  className="inline-flex items-center gap-2 border border-brass bg-brass/20 px-4 py-2 text-xs font-sans font-medium text-brass-light hover:bg-brass hover:text-forest transition-colors cursor-pointer"
-                >
-                  <span>{t('hotspots.viewFullStory', 'Xem toàn bộ khảo cứu chuyên sâu')}</span>
-                  <ChevronRight className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Web AR Experience Modal */}
-      <ARLaunchModal
-        product={product}
-        isOpen={isARModalOpen}
-        onClose={() => setIsARModalOpen(false)}
-        canDirectAR={Boolean((modelViewerRef.current as unknown as { canActivateAR?: boolean })?.canActivateAR)}
-        onActivateDirectAR={() => {
-          try {
-            (modelViewerRef.current as unknown as { activateAR?: () => void })?.activateAR?.();
-          } catch {
-            // ignore
-          }
-        }}
-      />
-
-      {/* Bespoke Heritage Postcard Generator Modal */}
-      <PostcardGeneratorModal
-        product={product}
-        isOpen={isPostcardOpen}
-        onClose={() => {
-          setIsPostcardOpen(false);
-          setPostcardSnapshot(null);
-        }}
-        snapshotDataUrl={postcardSnapshot}
-      />
     </div>
   );
 };
