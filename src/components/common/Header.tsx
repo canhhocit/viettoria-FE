@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { NavLink, Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 import { Menu, X, QrCode } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { LanguageSwitcher } from './LanguageSwitcher';
@@ -16,17 +16,6 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQRModal }) => {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [scrollProgress, setScrollProgress] = useState<number>(0);
   const { t } = useLanguage();
-  const location = useLocation();
-
-  // Sliding Heritage Indicator refs & state
-  const navContainerRef = useRef<HTMLElement | null>(null);
-  const linkRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
-  const [hoveredPath, setHoveredPath] = useState<string | null>(null);
-  const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number; opacity: number }>({
-    left: 0,
-    width: 0,
-    opacity: 0,
-  });
 
   const navLinks = [
     { to: '/', label: t('nav.home', 'Trang Chủ') },
@@ -36,58 +25,6 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQRModal }) => {
     { to: '/blogs', label: t('nav.blogs', 'Góc Nhìn Di Sản') },
     { to: '/about', label: t('nav.about', 'Về Viettoria') },
   ];
-
-  // Helper to determine active link path
-  const getActiveLinkPath = useCallback(() => {
-    const current = location.pathname;
-    const match = navLinks.find((link) =>
-      link.to === '/' ? current === '/' : current.startsWith(link.to)
-    );
-    return match ? match.to : null;
-  }, [location.pathname, navLinks]);
-
-  // Update position of the sliding magic indicator
-  const updateIndicator = useCallback(
-    (targetPath: string | null) => {
-      const container = navContainerRef.current;
-      if (!container || !targetPath) {
-        setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
-        return;
-      }
-
-      const activeEl = linkRefs.current.get(targetPath);
-      if (!activeEl) {
-        setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
-        return;
-      }
-
-      const containerRect = container.getBoundingClientRect();
-      const elRect = activeEl.getBoundingClientRect();
-
-      setIndicatorStyle({
-        left: elRect.left - containerRect.left,
-        width: elRect.width,
-        opacity: 1,
-      });
-    },
-    []
-  );
-
-  // Re-measure indicator when route or hovered link changes
-  useEffect(() => {
-    const target = hoveredPath || getActiveLinkPath();
-    updateIndicator(target);
-  }, [hoveredPath, location.pathname, getActiveLinkPath, updateIndicator]);
-
-  // Re-calculate on window resize
-  useEffect(() => {
-    const handleResize = () => {
-      const target = hoveredPath || getActiveLinkPath();
-      updateIndicator(target);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [hoveredPath, getActiveLinkPath, updateIndicator]);
 
   // Scroll handler: Morphing header elevation & scroll progress calculation
   useEffect(() => {
@@ -138,49 +75,27 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQRModal }) => {
             />
           </Link>
 
-          {/* Desktop Navigation Links - Clean Heritage Editorial Style without clunky outer box */}
+          {/* Desktop Navigation Links - Clean Heritage Editorial Style */}
           <nav
-            ref={navContainerRef}
-            onMouseLeave={() => setHoveredPath(null)}
-            className="hidden lg:flex relative items-center gap-6 xl:gap-8 shrink-0 py-1"
+            className="hidden lg:flex items-center gap-6 xl:gap-8 shrink-0 py-1"
             aria-label={t('nav.menu', 'Menu chính')}
           >
-            {/* Sliding Heritage Underline Indicator */}
-            <div
-              className="absolute bottom-0 h-[2px] bg-brass transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] pointer-events-none"
-              style={{
-                transform: `translateX(${indicatorStyle.left}px)`,
-                width: `${indicatorStyle.width}px`,
-                opacity: indicatorStyle.opacity,
-              }}
-              aria-hidden="true"
-            />
-
-            {navLinks.map((link) => {
-              const isItemActive =
-                link.to === '/'
-                  ? location.pathname === '/'
-                  : location.pathname.startsWith(link.to);
-
-              return (
-                <NavLink
-                  key={link.to}
-                  to={link.to}
-                  ref={(el) => {
-                    if (el) linkRefs.current.set(link.to, el);
-                    else linkRefs.current.delete(link.to);
-                  }}
-                  onMouseEnter={() => setHoveredPath(link.to)}
-                  className={`relative py-1.5 whitespace-nowrap text-[13.5px] font-sans tracking-wide transition-colors duration-200 select-none ${
-                    isItemActive
-                      ? 'text-forest font-bold'
-                      : 'text-charcoal/80 hover:text-forest font-medium'
-                  }`}
-                >
-                  <span>{link.label}</span>
-                </NavLink>
-              );
-            })}
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.to === '/'}
+                className={({ isActive }) =>
+                  `relative py-1.5 whitespace-nowrap text-[13.5px] font-sans tracking-wide transition-all duration-200 select-none border-b-2 ${
+                    isActive
+                      ? 'border-forest text-forest font-bold'
+                      : 'border-transparent text-charcoal/80 hover:text-forest hover:border-brass/50 font-medium'
+                  }`
+                }
+              >
+                <span>{link.label}</span>
+              </NavLink>
+            ))}
           </nav>
 
           {/* Right Actions: Multi-language Switcher, Soundscape & Mobile Menu Toggle */}
