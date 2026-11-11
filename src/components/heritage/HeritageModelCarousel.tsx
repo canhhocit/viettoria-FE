@@ -2,14 +2,12 @@ import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom';
 import { 
   ArrowRight, 
-  Pause, 
-  Play, 
   Compass
 } from 'lucide-react';
 import type { Product } from '../../types';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { TiltCard } from '../effects/TiltCard';
-import { resolve3DModelUrl, resolve3DPreview, resolveImageUrl, handleImageFallback } from '../../utils/mediaResolver';
+import { resolve3DModelUrl, resolve3DPreview, resolveImageUrl } from '../../utils/mediaResolver';
 
 interface HeritageModelCarouselProps {
   products: Product[];
@@ -33,77 +31,12 @@ const useReducedMotion = (): boolean => {
 const CarouselInteractiveModelStage: React.FC<{ 
   product: Product; 
   reducedMotion: boolean;
+  loopIdx?: number;
   onInteractingChange?: (isInteracting: boolean) => void;
-}> = ({ product, reducedMotion, onInteractingChange }) => {
-  const { t } = useLanguage();
-  const [viewerAvailable, setViewerAvailable] = useState(() =>
-    typeof window !== 'undefined' && Boolean(window.customElements?.get('model-viewer'))
-  );
-  const [loadedModelKey, setLoadedModelKey] = useState<string | null>(null);
-  const [failedModelKey, setFailedModelKey] = useState<string | null>(null);
-  const [previewPlaying, setPreviewPlaying] = useState(false);
-  const modelViewerRef = useRef<HTMLElement | null>(null);
-
+}> = ({ product, reducedMotion, loopIdx = 0, onInteractingChange }) => {
   const preview = resolve3DPreview(product.slug);
   const poster = preview?.poster || resolveImageUrl(product.heroImage);
   const modelUrl = resolve3DModelUrl(product.model3dUrl || product.slug);
-  const modelKey = `${product.id}:${modelUrl}`;
-  const modelLoaded = loadedModelKey === modelKey;
-  const modelFailed = failedModelKey === modelKey;
-  const turntable = preview?.turntable;
-
-  useEffect(() => {
-    if (window.customElements.get('model-viewer')) {
-      setViewerAvailable(true);
-      return;
-    }
-
-    let mounted = true;
-    const fallbackTimer = window.setTimeout(() => {
-      if (mounted) setViewerAvailable(false);
-    }, 4000);
-
-    void window.customElements.whenDefined('model-viewer').then(() => {
-      if (!mounted) return;
-      window.clearTimeout(fallbackTimer);
-      setViewerAvailable(true);
-    });
-
-    return () => {
-      mounted = false;
-      window.clearTimeout(fallbackTimer);
-    };
-  }, []);
-
-  useEffect(() => {
-    setPreviewPlaying(false);
-  }, [modelKey]);
-
-  useEffect(() => {
-    const modelViewer = modelViewerRef.current;
-    if (!viewerAvailable || !modelViewer) return;
-
-    const handleLoad = () => {
-      setLoadedModelKey(modelKey);
-      setFailedModelKey(null);
-    };
-    const handleError = () => setFailedModelKey(modelKey);
-
-    modelViewer.addEventListener('load', handleLoad);
-    modelViewer.addEventListener('error', handleError);
-    return () => {
-      modelViewer.removeEventListener('load', handleLoad);
-      modelViewer.removeEventListener('error', handleError);
-    };
-  }, [modelKey, viewerAvailable]);
-
-  useEffect(() => {
-    if (!viewerAvailable || modelLoaded || modelFailed) return;
-    const loadTimeout = window.setTimeout(() => setFailedModelKey(modelKey), 20000);
-    return () => window.clearTimeout(loadTimeout);
-  }, [modelFailed, modelKey, modelLoaded, viewerAvailable]);
-
-  const useTurntableFallback = previewPlaying && Boolean(turntable) && !modelLoaded;
 
   return (
     <div 
@@ -115,79 +48,26 @@ const CarouselInteractiveModelStage: React.FC<{
       {/* Exhibition Pedestal Spotlight */}
       <div className="heritage-pedestal-light pointer-events-none absolute inset-0 z-[1]" aria-hidden="true" />
 
-      {/* Raytraced High-Fidelity Poster */}
-      <img
-        src={poster}
-        alt={`Mô hình ${product.name}`}
-        loading="lazy"
-        className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-700 ${modelLoaded ? 'opacity-0' : 'opacity-100'}`}
-        onError={(event) => handleImageFallback(event, resolveImageUrl(product.heroImage))}
+      {/* Realtime Interactive Auto-Rotating 3D Model Viewer */}
+      <model-viewer
+        key={`${product.slug}-carousel-${loopIdx}`}
+        src={modelUrl}
+        poster={poster}
+        alt={`Mô hình 3D tự động xoay của ${product.name}`}
+        camera-controls
+        auto-rotate={!reducedMotion ? '' : undefined}
+        rotation-per-second="12deg"
+        shadow-intensity="1.2"
+        shadow-softness="0.75"
+        exposure="1.05"
+        interaction-prompt="none"
+        loading="eager"
+        reveal="auto"
+        style={{ width: '100%', height: '100%', backgroundColor: 'transparent', touchAction: 'pan-y' }}
+        className="home-model-viewer absolute inset-0 h-full w-full"
       />
 
-      {/* Turntable 360 Video Fallback */}
-      {useTurntableFallback && (
-        <video
-          key={`${product.slug}-turntable`}
-          src={turntable}
-          poster={poster}
-          autoPlay
-          muted
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-          onEnded={() => setPreviewPlaying(false)}
-          onError={() => setPreviewPlaying(false)}
-          className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-700 ${modelLoaded ? 'opacity-0' : 'opacity-100'}`}
-        />
-      )}
-
-      {/* Realtime Interactive 3D Model Viewer */}
-      {viewerAvailable && !modelFailed && (
-        <model-viewer
-          key={`${product.slug}-model`}
-          src={modelUrl}
-          alt={`Mô hình 3D tương tác của ${product.name}`}
-          camera-controls
-          auto-rotate={!reducedMotion ? '' : undefined}
-          rotation-per-second="10deg"
-          shadow-intensity="1.2"
-          shadow-softness="0.75"
-          exposure="1.05"
-          interaction-prompt="none"
-          loading="lazy"
-          reveal="auto"
-          ref={modelViewerRef}
-          style={{ width: '100%', height: '100%', backgroundColor: 'transparent', touchAction: 'pan-y' }}
-          className={`home-model-viewer absolute inset-0 h-full w-full transition-opacity duration-700 ${modelLoaded ? 'opacity-100' : 'opacity-0'}`}
-        />
-      )}
-
-      {/* Top 3D Status Badge */}
-      <div className="pointer-events-none absolute left-3 top-3 z-10 border border-brass/50 bg-[#121814]/90 px-2.5 py-1 text-[10px] font-sans font-semibold text-brass uppercase tracking-wider backdrop-blur-sm rounded-[1px] shadow-sm">
-        {modelLoaded
-          ? t('home.dragToRotate', 'Mô hình 3D · Kéo để xoay')
-          : previewPlaying
-            ? t('home.previewVideo', 'Video xoay 360°')
-            : modelFailed || !viewerAvailable
-              ? t('home.previewPhoto', 'Bản dựng bảo tàng')
-              : t('home.loadingModel', 'Đang tải mô hình 3D…')}
-      </div>
-
-      {/* Turntable Video Toggle Button */}
-      {turntable && !reducedMotion && !modelLoaded && (
-        <button
-          type="button"
-          onClick={() => setPreviewPlaying((playing) => !playing)}
-          aria-label={previewPlaying ? t('home.stopVideo', 'Dừng video xoay mô hình') : t('home.playVideo', 'Xem chuyển động xoay 360°')}
-          aria-pressed={previewPlaying}
-          className="absolute right-3 top-3 z-10 inline-flex min-h-7 items-center gap-1.5 border border-paper-border bg-header/95 px-2.5 py-1 text-[11px] font-sans uppercase tracking-wider text-forest font-semibold transition-colors hover:border-brass hover:text-brass-dark focus-visible:outline focus-visible:outline-1 focus-visible:outline-brass rounded-[1px] shadow-2xs"
-        >
-          {previewPlaying ? <Pause size={12} /> : <Play size={12} />}
-          <span>{previewPlaying ? t('home.stopVideo', 'Dừng') : t('home.playVideo', 'Xoay 360°')}</span>
-        </button>
-      )}
-
-      {/* Bottom Overlay with Monument Name */}
+      {/* Bottom Overlay with Monument Name & Scale */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between bg-gradient-to-t from-forest-dark/85 via-forest-dark/35 to-transparent px-4 pb-3 pt-12 text-paper-light">
         <p className="font-serif text-base sm:text-lg font-bold text-paper drop-shadow-xs truncate max-w-[220px]">
           {product.name}
@@ -412,6 +292,7 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
                     <CarouselInteractiveModelStage 
                       product={product} 
                       reducedMotion={reducedMotion}
+                      loopIdx={loopIdx}
                       onInteractingChange={(interacting) => {
                         if (interacting) handleUserInteractionStart();
                         else handleUserInteractionEnd();
