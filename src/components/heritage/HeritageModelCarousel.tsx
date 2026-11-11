@@ -2,11 +2,8 @@ import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom';
 import { 
   ArrowRight, 
-  ChevronLeft, 
-  ChevronRight, 
   Pause, 
   Play, 
-  RotateCw,
   Compass
 } from 'lucide-react';
 import type { Product } from '../../types';
@@ -208,20 +205,18 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
   const reducedMotion = useReducedMotion();
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const sliderTrackRef = useRef<HTMLDivElement>(null);
   const animationFrameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
   const resumeTimerRef = useRef<number | null>(null);
 
-  const [isPaused, setIsPaused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [is3DInteracting, setIs3DInteracting] = useState(false);
-  const [isDraggingSlider, setIsDraggingSlider] = useState(false);
   const [isDraggingCards, setIsDraggingCards] = useState(false);
-  
-  // Progress from 0 to 1 representing position within one complete set of products
-  const [normalizedProgress, setNormalizedProgress] = useState(0);
-  const [activeModelIndex, setActiveModelIndex] = useState(0);
+
+  // Mouse drag tracking refs
+  const dragStartXRef = useRef<number>(0);
+  const dragScrollLeftRef = useRef<number>(0);
+  const isMouseDownRef = useRef<boolean>(false);
 
   // We duplicate the product list into 3 identical sets to achieve a truly seamless infinite circular loop
   const loopProducts = useMemo(() => {
@@ -244,7 +239,7 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
     return () => window.clearTimeout(timer);
   }, [products.length]);
 
-  // Update progress and active index from scroll position
+  // Seamless infinite wrap-around on scroll
   const handleScroll = useCallback(() => {
     const el = scrollContainerRef.current;
     if (!el || products.length === 0) return;
@@ -252,31 +247,20 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
     const singleWidth = el.scrollWidth / 3;
     if (singleWidth <= 0) return;
 
-    // Seamless infinite wrap-around boundaries
+    // Seamless infinite circular loop boundaries
     if (el.scrollLeft >= 2 * singleWidth) {
       el.scrollLeft -= singleWidth;
     } else if (el.scrollLeft <= 0.2 * singleWidth) {
       el.scrollLeft += singleWidth;
     }
-
-    const currentOffset = el.scrollLeft % singleWidth;
-    const progress = Math.max(0, Math.min(1, currentOffset / singleWidth));
-    setNormalizedProgress(progress);
-
-    const index = Math.min(
-      products.length - 1,
-      Math.floor(progress * products.length)
-    );
-    setActiveModelIndex(index);
   }, [products.length]);
 
-  // Continuous smooth auto-scroll loop
+  // Continuous smooth auto-scroll loop (kệ cho nó tự quay)
   useEffect(() => {
     if (reducedMotion || products.length === 0) return;
 
-    const shouldPause = isPaused || isHovered || is3DInteracting || isDraggingSlider || isDraggingCards;
-
-    const speedPxPerSecond = 32; // Graceful, museum-exhibition pace (approx 0.5px/frame at 60fps)
+    const shouldPause = isHovered || is3DInteracting || isDraggingCards;
+    const speedPxPerSecond = 32; // Graceful, stately exhibition pace (0.5px/frame at 60fps)
 
     const step = (time: number) => {
       if (lastTimeRef.current === null) {
@@ -287,7 +271,6 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
 
       const el = scrollContainerRef.current;
       if (el && !shouldPause) {
-        // Move steadily from left to right (forward loop)
         el.scrollLeft += speedPxPerSecond * deltaTime;
       }
 
@@ -303,9 +286,8 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
       }
       lastTimeRef.current = null;
     };
-  }, [isPaused, isHovered, is3DInteracting, isDraggingSlider, isDraggingCards, reducedMotion, products.length]);
+  }, [isHovered, is3DInteracting, isDraggingCards, reducedMotion, products.length]);
 
-  // Pause on user action with gentle delayed resume
   const handleUserInteractionStart = useCallback(() => {
     if (resumeTimerRef.current !== null) {
       window.clearTimeout(resumeTimerRef.current);
@@ -321,63 +303,28 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
       setIsHovered(false);
       setIs3DInteracting(false);
       setIsDraggingCards(false);
-      setIsDraggingSlider(false);
-    }, 1600);
+    }, 1500);
   }, []);
 
-  // Scroll to a specific product by index
-  const scrollToProductIndex = useCallback((targetIndex: number) => {
+  // Smooth mouse drag on the cards track
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const el = scrollContainerRef.current;
-    if (!el || products.length === 0) return;
-
-    const singleWidth = el.scrollWidth / 3;
-    const cardWidthWithGap = singleWidth / products.length;
-    const targetScrollLeft = singleWidth + targetIndex * cardWidthWithGap;
-
-    el.scrollTo({
-      left: targetScrollLeft,
-      behavior: 'smooth',
-    });
-  }, [products.length]);
-
-  // Directional step button (Left or Right arrow)
-  const handleStepDirection = useCallback((direction: -1 | 1) => {
-    const el = scrollContainerRef.current;
-    if (!el || products.length === 0) return;
-
-    const singleWidth = el.scrollWidth / 3;
-    const cardStep = singleWidth / products.length;
-
-    el.scrollBy({
-      left: direction * cardStep,
-      behavior: 'smooth',
-    });
-  }, [products.length]);
-
-  // Slider dragging logic
-  const handleSliderMove = useCallback((clientX: number) => {
-    const track = sliderTrackRef.current;
-    const el = scrollContainerRef.current;
-    if (!track || !el || products.length === 0) return;
-
-    const rect = track.getBoundingClientRect();
-    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-    const singleWidth = el.scrollWidth / 3;
-
-    el.scrollLeft = singleWidth + ratio * singleWidth;
-  }, [products.length]);
-
-  const handleSliderMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!el) return;
+    dragStartXRef.current = e.clientX;
+    dragScrollLeftRef.current = el.scrollLeft;
+    isMouseDownRef.current = true;
+    setIsDraggingCards(true);
     handleUserInteractionStart();
-    setIsDraggingSlider(true);
-    handleSliderMove(e.clientX);
 
     const onMouseMove = (moveEvent: MouseEvent) => {
-      handleSliderMove(moveEvent.clientX);
+      if (!isMouseDownRef.current || !el) return;
+      const walk = (moveEvent.clientX - dragStartXRef.current) * 1.2;
+      el.scrollLeft = dragScrollLeftRef.current - walk;
     };
 
     const onMouseUp = () => {
-      setIsDraggingSlider(false);
+      isMouseDownRef.current = false;
+      setIsDraggingCards(false);
       handleUserInteractionEnd();
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
@@ -387,113 +334,36 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
     window.addEventListener('mouseup', onMouseUp);
   };
 
-  const handleSliderTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (!e.touches[0]) return;
-    handleUserInteractionStart();
-    setIsDraggingSlider(true);
-    handleSliderMove(e.touches[0].clientX);
-
-    const onTouchMove = (moveEvent: TouchEvent) => {
-      if (moveEvent.touches[0]) {
-        handleSliderMove(moveEvent.touches[0].clientX);
-      }
-    };
-
-    const onTouchEnd = () => {
-      setIsDraggingSlider(false);
-      handleUserInteractionEnd();
-      window.removeEventListener('touchmove', onTouchMove);
-      window.removeEventListener('touchend', onTouchEnd);
-    };
-
-    window.addEventListener('touchmove', onTouchMove);
-    window.addEventListener('touchend', onTouchEnd);
-  };
-
-  // Keyboard navigation on slider track
-  const handleSliderKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      handleStepDirection(-1);
-    } else if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      handleStepDirection(1);
-    } else if (e.key === 'Home') {
-      e.preventDefault();
-      scrollToProductIndex(0);
-    } else if (e.key === 'End') {
-      e.preventDefault();
-      scrollToProductIndex(products.length - 1);
-    } else if (e.key === ' ') {
-      e.preventDefault();
-      setIsPaused((p) => !p);
-    }
-  };
-
   if (products.length === 0) return null;
-
-  const activeProduct = localizeProduct(products[activeModelIndex] || products[0]);
-  const thumbWidthPercent = Math.max(14, (1 / products.length) * 100);
-  const thumbLeftPercent = normalizedProgress * (100 - thumbWidthPercent);
 
   return (
     <section 
       id="hanh-trinh-di-san" 
-      className="home-story-section border-y border-paper-border bg-header relative overflow-hidden"
+      className="home-story-section border-y border-paper-border bg-header relative overflow-hidden py-14 sm:py-20 lg:py-24"
       aria-label={t('home.scrollyHeading', 'Mỗi công trình, một câu chuyện')}
     >
-      <div className="mx-auto max-w-[1440px] px-5 py-14 sm:px-8 sm:py-20 lg:px-16 lg:py-24">
-        {/* Section Header */}
-        <div data-home-reveal className="mb-8 flex flex-col justify-between gap-5 sm:mb-10 lg:flex-row lg:items-end">
-          <div className="max-w-2xl">
-            <div className="flex items-center gap-2 text-brass mb-2">
-              <Compass size={15} />
-              <p className="font-sans text-xs font-semibold uppercase tracking-wider text-brass">
-                {t('home.scrollyEyebrow', 'Một vòng qua di sản Việt · Triển lãm mô hình số hóa')}
-              </p>
-            </div>
-            <h2 className="font-serif text-3xl font-bold leading-tight text-forest sm:text-4xl lg:text-5xl">
-              {t('home.scrollyHeading', 'Mỗi công trình, một câu chuyện')}
-            </h2>
-            <p className="mt-3.5 max-w-xl text-sm leading-relaxed text-charcoal-muted sm:text-base">
-              {t('home.scrollyDesc', 'Chiêm ngưỡng toàn bộ các mô hình 3D số hóa và khám phá câu chuyện lịch sử phía sau từng dấu ấn kiến trúc văn hiến.')}
+      <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-16">
+        {/* Section Header: Clean, minimal, without numbered jump pills */}
+        <div data-home-reveal className="mb-8 max-w-2xl sm:mb-10">
+          <div className="flex items-center gap-2 text-brass mb-2">
+            <Compass size={15} />
+            <p className="font-sans text-xs font-semibold uppercase tracking-wider text-brass">
+              {t('home.scrollyEyebrow', 'Một vòng qua di sản Việt · Triển lãm mô hình số hóa')}
             </p>
           </div>
-
-          {/* Quick Monument Navigation Pills: Displays ALL models */}
-          <nav 
-            className="flex flex-wrap items-center gap-1.5 sm:gap-2" 
-            aria-label={t('home.selectMonument', 'Chọn công trình đang xem')}
-          >
-            {products.map((rawProduct, index) => {
-              const product = localizeProduct(rawProduct);
-              const isSelected = activeModelIndex === index;
-              return (
-                <button
-                  key={product.id}
-                  type="button"
-                  onClick={() => scrollToProductIndex(index)}
-                  aria-pressed={isSelected}
-                  className={`inline-flex items-center gap-1.5 border px-3 py-1.5 text-xs font-sans transition-all rounded-[2px] ${
-                    isSelected
-                      ? 'border-forest bg-forest text-brass font-bold shadow-xs'
-                      : 'border-paper-border bg-paper text-forest hover:border-brass hover:text-forest hover:bg-paper-warm font-medium'
-                  }`}
-                >
-                  <span className={`font-mono text-[10px] font-bold ${isSelected ? 'text-brass-light' : 'text-brass'}`}>
-                    0{index + 1}
-                  </span>
-                  <span>{product.name.split(' (')[0]}</span>
-                </button>
-              );
-            })}
-          </nav>
+          <h2 className="font-serif text-3xl font-bold leading-tight text-forest sm:text-4xl lg:text-5xl">
+            {t('home.scrollyHeading', 'Mỗi công trình, một câu chuyện')}
+          </h2>
+          <p className="mt-3.5 max-w-xl text-sm leading-relaxed text-charcoal-muted sm:text-base">
+            {t('home.scrollyDesc', 'Chiêm ngưỡng các mô hình 3D số hóa và khám phá câu chuyện lịch sử phía sau từng dấu ấn kiến trúc văn hiến.')}
+          </p>
         </div>
 
-        {/* FULL SINGLE ROW CAROUSEL TRACK (No wrapping, continuous infinite circular loop) */}
+        {/* FULL SINGLE ROW CAROUSEL TRACK (Continuous infinite circular loop, clean & unobstructed) */}
         <div
           ref={scrollContainerRef}
           onScroll={handleScroll}
+          onMouseDown={handleMouseDown}
           onMouseEnter={() => {
             handleUserInteractionStart();
             setIsHovered(true);
@@ -513,7 +383,6 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
         >
           {loopProducts.map((rawProduct, loopIdx) => {
             const product = localizeProduct(rawProduct);
-            const originalIndex = loopIdx % products.length;
             const uniqueKey = `${product.id}-loop-${loopIdx}`;
 
             return (
@@ -529,15 +398,11 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
                   <article
                     className="home-story-card corner-frame group flex h-full flex-col border border-paper-border bg-paper-card shadow-xs transition-all duration-300 hover:border-brass/70 hover:shadow-xl rounded-[2px]"
                   >
-                    {/* Card Plaque Top Bar - Imperial Forest Green & Brass */}
+                    {/* Card Plaque Top Bar: Clean location and epoch, NO ordinal numbers (bỏ hết số thứ tự) */}
                     <div className="flex items-center justify-between border-b border-brass/40 bg-forest px-4 py-2.5 text-xs text-paper">
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-xs font-bold text-brass">0{originalIndex + 1}</span>
-                        <span className="h-2.5 w-px bg-brass/40" />
-                        <span className="truncate max-w-[160px] font-sans text-[11px] uppercase tracking-wider text-paper/90 font-medium">
-                          {product.location}
-                        </span>
-                      </div>
+                      <span className="truncate max-w-[200px] font-sans text-[11px] uppercase tracking-wider text-paper/90 font-medium">
+                        {product.location}
+                      </span>
                       <span className="font-sans text-[10px] uppercase tracking-wider text-brass-light font-semibold">
                         {product.epoch}
                       </span>
@@ -604,112 +469,6 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
               </div>
             );
           })}
-        </div>
-
-        {/* TACTILE HERITAGE SLIDER TRACK & CONTROL BAR (Directly below the segment) */}
-        <div className="mt-8 pt-5 border-t border-paper-border flex flex-col gap-3.5">
-          {/* Controls Bar: Current Model Info, Counter, Navigation Arrows & Auto-scroll Toggle */}
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-mono font-bold uppercase tracking-wider bg-forest text-brass border border-brass/40 rounded-[2px] shadow-2xs">
-                <RotateCw size={12} className={!isPaused && !isHovered && !is3DInteracting ? "animate-spin" : ""} style={{ animationDuration: '8s' }} />
-                <span>{t('home.circularLoopBadge', 'VÒNG LẶP DI SẢN 360°')}</span>
-              </span>
-              <span className="font-serif text-sm font-bold text-forest hidden md:inline truncate max-w-[280px]">
-                {activeProduct.name}
-              </span>
-            </div>
-
-            {/* Stepper Buttons & Play/Pause */}
-            <div className="flex items-center gap-2">
-              {/* Play / Pause Auto-scroll Button */}
-              <button
-                type="button"
-                onClick={() => setIsPaused((prev) => !prev)}
-                aria-label={isPaused ? t('home.playAutoScroll', 'Bật tự động cuộn') : t('home.pauseAutoScroll', 'Tạm dừng tự động cuộn')}
-                className="p-2 border border-paper-border bg-paper hover:border-brass hover:bg-paper-warm text-forest hover:text-brass-dark transition-all rounded-[2px] focus:outline-none focus:ring-1 focus:ring-brass"
-                title={isPaused ? t('home.playAutoScroll', 'Bật tự động cuộn') : t('home.pauseAutoScroll', 'Tạm dừng tự động cuộn')}
-              >
-                {isPaused ? <Play size={14} className="text-brass-dark" /> : <Pause size={14} className="text-forest" />}
-              </button>
-
-              {/* Prev / Next Steppers */}
-              <button
-                type="button"
-                onClick={() => handleStepDirection(-1)}
-                aria-label={t('home.prevModel', 'Công trình trước')}
-                className="p-2 border border-paper-border bg-paper hover:border-brass hover:bg-paper-warm text-forest transition-all rounded-[2px] focus:outline-none focus:ring-1 focus:ring-brass"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <button
-                type="button"
-                onClick={() => handleStepDirection(1)}
-                aria-label={t('home.nextModel', 'Công trình kế tiếp')}
-                className="p-2 border border-paper-border bg-paper hover:border-brass hover:bg-paper-warm text-forest transition-all rounded-[2px] focus:outline-none focus:ring-1 focus:ring-brass"
-              >
-                <ChevronRight size={16} />
-              </button>
-
-              {/* Active Counter Display */}
-              <div className="ml-1 px-3 py-1 font-mono text-xs font-bold text-forest bg-paper-warm border border-paper-border rounded-[2px] shadow-2xs">
-                <span className="text-brass-dark">0{activeModelIndex + 1}</span>
-                <span className="text-charcoal-muted/60 mx-1">/</span>
-                <span>0{products.length}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Interactive Tactile Heritage Slider Track */}
-          <div
-            ref={sliderTrackRef}
-            onMouseDown={handleSliderMouseDown}
-            onTouchStart={handleSliderTouchStart}
-            onKeyDown={handleSliderKeyDown}
-            tabIndex={0}
-            role="slider"
-            aria-label={t('home.sliderAria', 'Thanh trượt duyệt danh sách toàn bộ mô hình di sản')}
-            aria-valuemin={0}
-            aria-valuemax={products.length - 1}
-            aria-valuenow={activeModelIndex}
-            className="relative h-3 sm:h-3.5 w-full bg-paper-warm border-2 border-brass/50 rounded-[2px] cursor-pointer select-none shadow-inner overflow-hidden focus:outline-none focus:ring-2 focus:ring-brass"
-          >
-            {/* Visual Tick Notches for each model in catalog */}
-            <div className="absolute inset-0 flex justify-between px-3 pointer-events-none items-center opacity-40">
-              {products.map((_, i) => (
-                <div 
-                  key={i} 
-                  className={`w-1 h-1.5 rounded-full transition-colors ${
-                    activeModelIndex === i ? 'bg-forest scale-125' : 'bg-brass-dark'
-                  }`} 
-                />
-              ))}
-            </div>
-
-            {/* Tactile Brass Thumb Handle */}
-            <div
-              className="absolute top-0 bottom-0 bg-brass hover:bg-brass-light active:bg-brass-dark border-x-2 border-forest/40 shadow-md rounded-[1px] cursor-grab active:cursor-grabbing flex items-center justify-center transition-all duration-75"
-              style={{
-                left: `${thumbLeftPercent}%`,
-                width: `${thumbWidthPercent}%`,
-              }}
-            >
-              {/* Three Tactile Micro-Grips */}
-              <div className="flex gap-0.5 pointer-events-none">
-                <div className="w-0.5 h-2 bg-forest/50" />
-                <div className="w-0.5 h-2 bg-forest/50" />
-                <div className="w-0.5 h-2 bg-forest/50" />
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Guidance Caption */}
-          <div className="flex items-center justify-between text-[11px] font-sans text-charcoal-muted pt-1">
-            <span>{t('home.sliderDragHint', 'Kéo thanh trượt hoặc dùng phím mũi tên để duyệt 360°')}</span>
-            <span className="font-mono text-[10px] text-brass uppercase font-semibold">
-              {products.length} {t('home.modelsCount', 'mô hình kiến trúc')}
-            </span>
-          </div>
         </div>
       </div>
     </section>
