@@ -3,7 +3,6 @@ import { createPortal } from 'react-dom';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { 
   MapPin, 
-  Ruler, 
   CheckCircle,
   Check,
   Copy,
@@ -17,7 +16,6 @@ import type { Product, StoryBlock } from '../types';
 import { ArchitecturalViewer } from '../components/common/ArchitecturalViewer';
 import { AudioPlayer } from '../components/common/AudioPlayer';
 import { StoryBlockRenderer } from '../components/story/StoryBlockRenderer';
-import { ScaleRuler } from '../components/common/ScaleRuler';
 import { PageLoadingHeritage } from '../components/common/HeritageSkeleton';
 import { TimeTravelComparison } from '../components/heritage/TimeTravelComparison';
 import { resolveImageUrl, handleImageFallback } from '../utils/mediaResolver';
@@ -322,56 +320,9 @@ export const ProductDetailPage: React.FC = () => {
           </section>
         )}
 
-        {/* Interactive Scale Ruler & Hand Perspective */}
-        <section className="space-y-4">
-          <ScaleRuler 
-            modelSpecs={product.modelSpecs} 
-            heritageName={product.name} 
-          />
-        </section>
-
         {/* Feature 1: Century Comparison for this Monument */}
         <section className="space-y-4">
           <TimeTravelComparison defaultId={product.slug} />
-        </section>
-
-        {/* Technical Specifications Sheet */}
-        <section className="bg-paper-warm border border-paper-border corner-frame p-5 sm:p-6 space-y-6">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 text-brass text-xs font-sans uppercase tracking-wider font-semibold">
-              <Ruler className="w-4 h-4" />
-              <span>{t('product.craftingSpecs', 'Tiêu Chuẩn Kỹ Thuật Chế Tác')}</span>
-            </div>
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-forest">
-              {t('product.craftingSpecs', 'Bảng Thông Số Mô Hình Thu Nhỏ')}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-4 border-t border-paper-border">
-            <div className="space-y-1">
-              <span className="text-xs font-sans text-charcoal-muted uppercase tracking-wider font-medium">{t('product.specScale', 'Tỷ Lệ Điêu Khắc')}</span>
-              <p className="font-mono text-xl font-bold text-forest">{product.modelSpecs.scale}</p>
-            </div>
-
-            <div className="space-y-1">
-              <span className="text-xs font-sans text-charcoal-muted uppercase tracking-wider font-medium">{t('common.dimensions', 'Kích Thước / Khối Lượng')}</span>
-              <p className="font-mono text-xl font-bold text-forest">
-                {product.modelSpecs.heightCm} × {product.modelSpecs.widthCm} cm · {product.modelSpecs.weightGrams} g
-              </p>
-            </div>
-
-            <div className="space-y-1">
-              <span className="text-xs font-sans text-charcoal-muted uppercase tracking-wider font-medium">{t('product.specMaterial', 'Vật Liệu Cốt Lõi')}</span>
-              <p className="font-serif text-lg font-bold text-forest">{product.modelSpecs.material}</p>
-            </div>
-
-            <div className="space-y-1">
-              <span className="text-xs font-sans text-charcoal-muted uppercase tracking-wider font-medium">{t('product.specParts', 'Số Cấu Kiện')}</span>
-              <p className="font-serif text-xl font-bold text-brass">
-                {product.modelSpecs.partsCount}
-              </p>
-            </div>
-          </div>
         </section>
 
         {/* Related Products Section */}

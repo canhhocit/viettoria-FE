@@ -427,9 +427,6 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
             <div className="flex items-center justify-between gap-3 border-b border-paper/10 pb-3.5">
               <div className="min-w-0">
                 <p className="truncate font-serif text-base font-semibold text-paper sm:text-lg">{titleLabel}</p>
-                <p className="mt-1 truncate font-mono text-[10px] text-brass-light sm:text-[11px]">
-                  {audioGuide.narrator || t('audioPlayer.narrator', 'Thuyết minh viên Viettoria')} <span className="mx-1.5 text-brass">·</span>{durationLabel}
-                </p>
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1 border border-brass/35 bg-black/45 text-[10px] font-mono text-brass shrink-0">
                 <span className={`w-1.5 h-1.5 rounded-full ${isPlaying ? 'bg-brass animate-pulse' : 'bg-paper/40'}`} />
