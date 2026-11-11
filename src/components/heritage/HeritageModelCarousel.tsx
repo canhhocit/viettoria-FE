@@ -314,21 +314,6 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
                         <p className="mt-3 text-xs sm:text-sm leading-relaxed text-charcoal/85 line-clamp-3">
                           {product.shortDescription}
                         </p>
-
-                        {/* Specifications Micro-Badges */}
-                        {product.modelSpecs && (
-                          <div className="mt-3.5 flex flex-wrap gap-1.5 pt-2 border-t border-paper-border/60">
-                            <span className="px-2 py-0.5 font-mono text-[10px] bg-paper-warm border border-paper-border text-forest font-semibold rounded-[1px]">
-                              {product.modelSpecs.scale}
-                            </span>
-                            <span className="px-2 py-0.5 font-mono text-[10px] bg-paper-warm border border-paper-border text-charcoal-muted rounded-[1px]">
-                              {product.modelSpecs.heightCm}cm · {product.modelSpecs.weightGrams}g
-                            </span>
-                            <span className="px-2 py-0.5 font-mono text-[10px] bg-paper-warm border border-paper-border text-brass-dark font-medium rounded-[1px]">
-                              {product.modelSpecs.partsCount} {t('common.partsCount', 'chi tiết mộng')}
-                            </span>
-                          </div>
-                        )}
                       </div>
 
                       {/* Card Action Link */}
