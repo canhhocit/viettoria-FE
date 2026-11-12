@@ -5,13 +5,9 @@ import {
   ChevronRight,
   Eye,
   Maximize2,
-  Moon,
   Pause,
   Play,
   RotateCcw,
-  Sun,
-  Sunrise,
-  Sunset,
   Target,
   X,
   ZoomIn,
@@ -36,8 +32,6 @@ interface ArchitecturalViewerProps {
   product: Product;
 }
 
-type LightingPreset = 'dawn' | 'noon' | 'dusk' | 'night';
-
 export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ product }) => {
   const { t, localizeHotspot } = useLanguage();
   const [activeTab, setActiveTab] = useState<'3d' | 'photos'>('3d');
@@ -45,7 +39,6 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
   const [viewerAvailable, setViewerAvailable] = useState(() =>
     typeof window !== 'undefined' && Boolean(window.customElements?.get('model-viewer')),
   );
-  const [lightingMode, setLightingMode] = useState<LightingPreset>('noon');
   const [modelLoaded, setModelLoaded] = useState(false);
   const [modelFailed, setModelFailed] = useState(false);
   const [previewFailed, setPreviewFailed] = useState(false);
@@ -64,35 +57,11 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
   const viewportRef = useRef<HTMLDivElement>(null);
   const modelViewerRef = useRef<HTMLElement | null>(null);
 
-  const lightingSettings = useMemo(() => {
-    switch (lightingMode) {
-      case 'dawn':
-        return {
-          exposure: '1.18',
-          shadowIntensity: '0.85',
-          bgClass: 'bg-gradient-to-b from-[#F7EFE2] via-[#EFE5D2] to-[#FAF7F0]',
-        };
-      case 'dusk':
-        return {
-          exposure: '0.90',
-          shadowIntensity: '0.95',
-          bgClass: 'bg-gradient-to-b from-[#EAD0B3] via-[#D8B998] to-[#142820]',
-        };
-      case 'night':
-        return {
-          exposure: '0.65',
-          shadowIntensity: '0.60',
-          bgClass: 'bg-gradient-to-b from-[#0D1C16] via-[#142820] to-[#07110D]',
-        };
-      case 'noon':
-      default:
-        return {
-          exposure: '1.05',
-          shadowIntensity: '1.25',
-          bgClass: 'bg-paper-card',
-        };
-    }
-  }, [lightingMode]);
+  const lightingSettings = useMemo(() => ({
+    exposure: '1.05',
+    shadowIntensity: '1.25',
+    bgClass: 'bg-paper-card',
+  }), []);
 
   const handleZoom = (direction: 'in' | 'out') => {
     const modelViewer = modelViewerRef.current;
@@ -600,56 +569,6 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                 aria-label={t('hotspots.close', 'Dừng')}
               >
                 <X className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          )}
-
-          {/* 4 Time-of-Day Lighting Mode Presets */}
-          {modelLoaded && (
-            <div className="absolute left-3 top-3 z-10 flex items-center border border-brass/40 bg-[#121814]/90 p-0.5 text-xs text-paper shadow-sm backdrop-blur-sm rounded-[2px] sm:left-4 sm:top-4">
-              <button
-                type="button"
-                onClick={() => setLightingMode('dawn')}
-                title={`${t('product.lightingDawn', 'Sớm Mai')}: ${t('product.lightingDawnDesc', 'Nắng dịu vàng sương')}`}
-                className={`px-2 py-1 flex items-center gap-1 font-sans text-[10px] uppercase font-bold transition-colors ${
-                  lightingMode === 'dawn' ? 'bg-brass text-forest' : 'text-paper/80 hover:text-brass'
-                }`}
-              >
-                <Sunrise size={11} />
-                <span className="hidden md:inline">{t('product.lightingDawn', 'Sớm Mai')}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setLightingMode('noon')}
-                title={`${t('product.lightingNoon', 'Chính Ngọ')}: ${t('product.lightingNoonDesc', 'Ánh sáng rõ nét')}`}
-                className={`px-2 py-1 flex items-center gap-1 font-sans text-[10px] uppercase font-bold transition-colors ${
-                  lightingMode === 'noon' ? 'bg-brass text-forest' : 'text-paper/80 hover:text-brass'
-                }`}
-              >
-                <Sun size={11} />
-                <span className="hidden md:inline">{t('product.lightingNoon', 'Chính Ngọ')}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setLightingMode('dusk')}
-                title={`${t('product.lightingDusk', 'Hoàng Hôn')}: ${t('product.lightingDuskDesc', 'Ráng chiều hổ phách')}`}
-                className={`px-2 py-1 flex items-center gap-1 font-sans text-[10px] uppercase font-bold transition-colors ${
-                  lightingMode === 'dusk' ? 'bg-brass text-forest' : 'text-paper/80 hover:text-brass'
-                }`}
-              >
-                <Sunset size={11} />
-                <span className="hidden md:inline">{t('product.lightingDusk', 'Hoàng Hôn')}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setLightingMode('night')}
-                title={`${t('product.lightingNight', 'Dạ Nguyệt')}: ${t('product.lightingNightDesc', 'Ánh trăng huyền ảo')}`}
-                className={`px-2 py-1 flex items-center gap-1 font-sans text-[10px] uppercase font-bold transition-colors ${
-                  lightingMode === 'night' ? 'bg-brass text-forest' : 'text-paper/80 hover:text-brass'
-                }`}
-              >
-                <Moon size={11} />
-                <span className="hidden md:inline">{t('product.lightingNight', 'Dạ Nguyệt')}</span>
               </button>
             </div>
           )}
