@@ -126,24 +126,7 @@ export const CuratorLoupe: React.FC<CuratorLoupeProps> = ({
 
   return (
     <div className={`relative select-none ${className}`}>
-      {/* Loupe Toggle Button */}
-      <div className="absolute right-3 top-3 z-20">
-        <button
-          type="button"
-          onClick={() => setIsActive((prev) => !prev)}
-          className={`inline-flex items-center gap-1.5 border px-2.5 py-1.5 text-xs font-sans font-semibold rounded-[2px] transition-all shadow-md ${
-            isActive
-              ? 'border-brass bg-forest text-brass'
-              : 'border-paper-border bg-paper/90 text-forest hover:border-brass'
-          }`}
-          title={isActive ? t('loupe.turnOff', 'Tắt kính lúp giám định') : t('loupe.turnOn', 'Bật kính lúp giám định')}
-        >
-          <Search size={13} className="text-brass" />
-          <span className="font-sans text-[11px] uppercase tracking-wider">
-            {isActive ? t('loupe.on', 'Kính Lúp: Bật') : t('loupe.off', 'Kính Lúp: Tắt')}
-          </span>
-        </button>
-      </div>
+      
 
       {/* Main Image Stage */}
       <div
