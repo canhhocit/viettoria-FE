@@ -271,10 +271,9 @@ export const FALLBACK_PRODUCTS: Product[] = [
       partsCount: 32,
       finishing: 'Sơn son thếp vàng, ngói lưu ly phục dựng khảo cổ Thăng Long'
     },
-    heroImage: '/3D/lau-gac-poster.webp',
+    heroImage: '/images/hoang-thanh-thang-long.webp',
     model3dUrl: '/3D/lau_gac_web.glb',
     galleryImages: [
-      '/3D/lau-gac-poster.webp',
       '/images/hoang-thanh-thang-long.webp'
     ],
     audioGuide: {
