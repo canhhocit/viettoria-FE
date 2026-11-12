@@ -1,6 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { Search } from 'lucide-react';
-import { useLanguage } from '../../contexts/LanguageContext';
+import React, { useState, useRef, useCallback } from 'react';
 
 interface CuratorLoupeProps {
   imageSrc: string;
@@ -15,8 +13,6 @@ export const CuratorLoupe: React.FC<CuratorLoupeProps> = ({
   zoomLevel = 2,
   className = '',
 }) => {
-  const { t } = useLanguage();
-  const [isActive, setIsActive] = useState<boolean>(true);
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const [lensPos, setLensPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [bgPos, setBgPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -29,7 +25,7 @@ export const CuratorLoupe: React.FC<CuratorLoupeProps> = ({
 
   const updateLoupe = useCallback(
     (clientX: number, clientY: number) => {
-      if (!isActive || !containerRef.current || !imgRef.current) return;
+      if (!containerRef.current || !imgRef.current) return;
       const container = containerRef.current;
       const img = imgRef.current;
       const containerRect = container.getBoundingClientRect();
@@ -95,7 +91,7 @@ export const CuratorLoupe: React.FC<CuratorLoupeProps> = ({
       setBgSize({ w: zoomW, h: zoomH });
       setBgPos({ x: bgX, y: bgY });
     },
-    [isActive, zoomLevel]
+    [zoomLevel]
   );
 
   const handleMouseMove = useCallback(
@@ -107,27 +103,19 @@ export const CuratorLoupe: React.FC<CuratorLoupeProps> = ({
 
   const handleTouch = useCallback(
     (e: React.TouchEvent<HTMLDivElement>) => {
-      if (!isActive || e.touches.length === 0) return;
+      if (e.touches.length === 0) return;
       const touch = e.touches[0];
       updateLoupe(touch.clientX, touch.clientY);
     },
-    [isActive, updateLoupe]
+    [updateLoupe]
   );
 
   const handleLeave = useCallback(() => {
     setIsHovering(false);
   }, []);
 
-  useEffect(() => {
-    if (!isActive) {
-      setIsHovering(false);
-    }
-  }, [isActive]);
-
   return (
     <div className={`relative select-none ${className}`}>
-      
-
       {/* Main Image Stage */}
       <div
         ref={containerRef}
@@ -136,9 +124,7 @@ export const CuratorLoupe: React.FC<CuratorLoupeProps> = ({
         onTouchStart={handleTouch}
         onTouchMove={handleTouch}
         onTouchEnd={handleLeave}
-        className={`relative h-full w-full overflow-hidden ${
-          isActive ? 'cursor-crosshair' : 'cursor-default'
-        }`}
+        className="relative h-full w-full overflow-hidden cursor-crosshair"
       >
         <img
           ref={imgRef}
@@ -148,7 +134,7 @@ export const CuratorLoupe: React.FC<CuratorLoupeProps> = ({
         />
 
         {/* Circular Antique Brass Bezel Loupe Lens */}
-        {isActive && isHovering && (
+        {isHovering && (
           <div
             className="pointer-events-none absolute z-30 rounded-full border-2 border-brass bg-no-repeat shadow-2xl transition-opacity duration-75"
             style={{
