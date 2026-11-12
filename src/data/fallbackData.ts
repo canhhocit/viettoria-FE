@@ -10,7 +10,7 @@ export const FALLBACK_COLLECTIONS: Collection[] = [
     heroImage: '/3D/cot-co-ha-noi-poster.webp',
     displayOrder: 1,
     status: 'published',
-    productsCount: 3
+    productsCount: 4
   },
   {
     id: 'col-2',
@@ -249,6 +249,50 @@ export const FALLBACK_PRODUCTS: Product[] = [
       transcript: 'Ngày 5 tháng 6 năm 1911, con tàu Đô đốc Latouche-Tréville rời bến cảng Sài Gòn chở theo khát vọng độc lập tự do cháy bỏng của người thanh niên 21 tuổi Nguyễn Tất Thành.'
     },
     displayOrder: 5,
+    status: 'published',
+    isHeroRelease: false
+  },
+  {
+    id: 'prod-6',
+    code: 'VT-HN-006',
+    name: 'Gác Lâu Thăng Long',
+    subName: 'Kiến Trúc Cung Đình Thời Lê Sơ',
+    slug: 'gac-lau-thang-long',
+    collectionId: 'col-1',
+    epoch: 'Thời Lê Sơ (Thế Kỷ XV)',
+    location: 'Hoàng Thành Thăng Long · Hà Nội',
+    shortDescription: 'Kiệt tác lầu gác Đại Việt phục dựng từ di vật đất nung khảo cổ Hoàng thành Thăng Long, mái đao chồng diêm vươn cao uy nghi chốn cung đình.',
+    modelSpecs: {
+      scale: '1:100',
+      heightCm: 19.6,
+      widthCm: 14.3,
+      weightGrams: 310,
+      material: 'Nhựa sinh thái BioPETG kết cấu mộng gỗ cung đình Đại Việt',
+      partsCount: 32,
+      finishing: 'Sơn son thếp vàng, ngói lưu ly phục dựng khảo cổ Thăng Long'
+    },
+    heroImage: '/3D/lau-gac-poster.webp',
+    model3dUrl: '/3D/lau_gac_web.glb',
+    galleryImages: [
+      '/3D/lau-gac-poster.webp',
+      '/images/hoang-thanh-thang-long.webp'
+    ],
+    audioGuide: {
+      title: 'Âm Vang Lầu Gác Cung Điện Lê Sơ',
+      duration: '00:30',
+      audioUrl: '',
+      audioUrls: {
+        vi: '',
+        en: '',
+        fr: '',
+        zh: '',
+        ko: '',
+        ja: '',
+      },
+      narrator: 'Thuyết minh Viettoria Atelier',
+      transcript: 'Hoàng thành Thăng Long thời Lê Sơ thế kỷ 15 là thời kỳ hoàng kim của nền văn hiến và nghệ thuật kiến trúc Đại Việt. Mô hình gác lâu được nghiên cứu và phục dựng từ những mảnh gốm men, ngói rồng và cấu kiện đất nung khai quật tại Hoàng thành Thăng Long, tái hiện hệ vì kèo mộng gỗ phức hợp, mái đao chồng diêm thanh thoát vươn lên giữa tầng không, thể hiện trọn vẹn khí phách vương triều và bàn tay tài hoa của người thợ thủ công Thăng Long xưa.'
+    },
+    displayOrder: 6,
     status: 'published',
     isHeroRelease: false
   }

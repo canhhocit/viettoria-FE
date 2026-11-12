@@ -265,6 +265,55 @@ export const ARCHITECTURAL_HOTSPOTS: Record<string, ArchitecturalHotspot[]> = {
       dy: 20,
     },
   ],
+
+  // 6. Gác Lâu Thăng Long (VT-HN-006)
+  'gac-lau-thang-long': [
+    {
+      id: 'mai-chong-diem',
+      number: '01',
+      title: 'Mái Chồng Diêm Ba Tầng',
+      shortTitle: 'MÁI CHỒNG DIÊM 3 TẦNG',
+      category: 'KIẾN TRÚC LẦU ĐÀI ĐẠI VIỆT',
+      detail: 'Ba tầng mái ngói mũi hài thanh thoát xếp lớp thu dần lên đỉnh, góc đao vươn cao mô phỏng cấu trúc lầu đài cung đình thời Lê Sơ.',
+      shortDesc: 'Ba tầng mái ngói mũi hài thanh thoát thu dần lên đỉnh.',
+      position: '0.00 0.85 0.35',
+      normal: '0 1 1',
+      orbit: '20deg 65deg 1.8m',
+      target: '0m 0.8m 0m',
+      dx: 140,
+      dy: -30,
+    },
+    {
+      id: 'dau-dao-uon-luon',
+      number: '02',
+      title: 'Đầu Đao Khắc Rồng Thời Lê',
+      shortTitle: 'ĐẦU ĐAO KHẮC RỒNG',
+      category: 'NGHỆ THUẬT ĐIÊU KHẮC LÊ SƠ',
+      detail: 'Đầu đao uốn lượn mạnh mẽ chạm khắc hoa văn lá lật và hình tượng rồng thời Lê Sơ dũng mãnh, biểu tượng uy quyền vương giả.',
+      shortDesc: 'Đầu đao uốn lượn chạm khắc hoa văn rồng thời Lê Sơ.',
+      position: '0.35 0.65 0.35',
+      normal: '1 0.5 1',
+      orbit: '45deg 70deg 1.8m',
+      target: '0.2m 0.65m 0.2m',
+      dx: -140,
+      dy: -30,
+    },
+    {
+      id: 'chan-de-khao-co',
+      number: '03',
+      title: 'Chân Bệ Đá Khảo Cổ Thăng Long',
+      shortTitle: 'BỆ ĐÁ KHẢO CỔ',
+      category: 'HIỆN VẬT KHẢO CỔ THẾ KỶ 15',
+      detail: 'Chân bệ mô phỏng tầng nền gạch vồ Thăng Long và chân đá tảng hoa sen khai quật tại trung tâm Hoàng thành.',
+      shortDesc: 'Chân bệ mô phỏng gạch vồ và đá tảng hoa sen khảo cổ.',
+      position: '0.00 0.15 0.40',
+      normal: '0 0 1',
+      orbit: '0deg 80deg 1.8m',
+      target: '0m 0.15m 0m',
+      dx: 140,
+      dy: 30,
+    },
+  ],
 };
 
 /**
@@ -295,6 +344,9 @@ export function getHotspotsForProduct(identifier?: string): ArchitecturalHotspot
   }
   if (clean.includes('005') || clean.includes('nha-rong') || clean.includes('ben-nha-rong')) {
     return ARCHITECTURAL_HOTSPOTS['ben-nha-rong'];
+  }
+  if (clean.includes('006') || clean.includes('gac-lau') || clean.includes('lau-gac')) {
+    return ARCHITECTURAL_HOTSPOTS['gac-lau-thang-long'];
   }
 
   // Mặc định trả về cấu kiện tiêu chuẩn

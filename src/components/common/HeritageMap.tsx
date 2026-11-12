@@ -119,6 +119,22 @@ export const HERITAGE_SITES: HeritageSiteLocation[] = [
     heroImage: '/images/ben-nha-rong.webp',
     description: 'Giao thoa giữa kiến trúc Pháp thuộc và hoa văn rồng Á Đông bên dòng sông Sài Gòn phồn hoa.',
   },
+  {
+    id: '6',
+    code: 'VT-HN-006',
+    mapLabel: 'GL',
+    name: 'Gác Lâu Thăng Long',
+    subName: 'Kiến Trúc Cung Đình Thời Lê Sơ',
+    slug: 'gac-lau-thang-long',
+    epoch: 'Thời Lê Sơ (Thế Kỷ XV)',
+    city: 'hanoi',
+    cityName: 'Thăng Long — Hà Nội',
+    location: 'Hoàng Thành Thăng Long, Ba Đình, Hà Nội',
+    lat: 21.03444,
+    lng: 105.84278,
+    heroImage: '/3D/lau-gac-poster.webp',
+    description: 'Kiệt tác kiến trúc lầu gác Đại Việt phục dựng từ hiện vật đất nung khảo cổ thế kỷ 15 tại Hoàng thành Thăng Long.',
+  },
 ];
 
 interface HeritageMapProps {
