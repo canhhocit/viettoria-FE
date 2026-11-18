@@ -130,12 +130,12 @@ export const HomePage: React.FC = () => {
 
   return (
     <main ref={mainRef} className="bg-paper text-ink">
-      <section id="hero" className="home-hero relative isolate flex min-h-0 sm:min-h-[540px] h-auto sm:h-[calc(100dvh-72px)] md:h-[calc(100dvh-80px)] max-h-none sm:max-h-[820px] overflow-hidden bg-forest-dark text-paper items-center pt-5 pb-7 sm:py-8">
+      <section id="hero" className="home-hero relative isolate flex min-h-0 sm:min-h-[540px] h-auto sm:h-[calc(100dvh-72px)] md:h-[calc(100dvh-80px)] max-h-none sm:max-h-[820px] overflow-hidden bg-forest-dark text-paper items-center pt-3 pb-2 sm:py-8">
         <img
           src="/videos/hero-background-poster.webp"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover object-top scale-[1.16] origin-top sm:scale-100 sm:object-center"
         />
         {!prefersReducedMotion && (
           <video
@@ -149,68 +149,61 @@ export const HomePage: React.FC = () => {
             aria-hidden="true"
             onLoadedData={() => setHeroVideoReady(true)}
             onCanPlay={() => setHeroVideoReady(true)}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${heroVideoReady ? 'opacity-100' : 'opacity-0'}`}
+            className={`absolute inset-0 h-full w-full object-cover object-top scale-[1.16] origin-top sm:scale-100 sm:object-center transition-opacity duration-700 ${heroVideoReady ? 'opacity-100' : 'opacity-0'}`}
           >
             <source src="/videos/hero-background.webm" type="video/webm" />
             <source src="/videos/hero-background.mp4" type="video/mp4" />
           </video>
         )}
         <div className="home-hero-scrim absolute inset-0" aria-hidden="true" />
+        <div className="absolute inset-x-0 bottom-0 h-10 sm:h-16 bg-gradient-to-t from-forest-dark to-transparent pointer-events-none z-[2]" aria-hidden="true" />
         <HeritageParticles className="absolute inset-0 pointer-events-none z-[3]" />
         <div className="home-hero-drum pointer-events-none absolute -right-[17vw] top-1/2 z-[1] h-[82vw] w-[82vw] max-h-[920px] max-w-[920px] -translate-y-1/2 sm:-right-[10vw] lg:right-[-5vw] lg:h-[64vw] lg:w-[64vw]" aria-hidden="true">
           <img src="/images/trong-dong.webp" alt="" className="home-dong-son home-dong-son-celestial h-full w-full object-contain opacity-35 mix-blend-screen" />
         </div>
 
-        <div className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center px-4 py-2 sm:px-8 sm:py-8 lg:px-16">
+        <div className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center px-4 py-1 sm:px-8 sm:py-8 lg:px-16">
           <div className="max-w-[880px] animate-fade-up">
             {/* Atelier Curatorial Pill for Mobile & Desktop */}
-            <div className="inline-flex items-center gap-2 border border-brass/50 bg-[#0D1C16]/80 px-3 py-1 mb-3 backdrop-blur-sm rounded-[2px] shadow-sm">
+            <div className="inline-flex items-center gap-2 border border-brass/50 bg-[#0D1C16]/80 px-2.5 py-0.5 sm:px-3 sm:py-1 mb-2.5 backdrop-blur-sm rounded-[2px] shadow-sm">
               <span className="text-brass text-xs animate-pulse">✦</span>
-              <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.18em] text-brass-light font-semibold">
+              <span className="font-mono text-[9.5px] sm:text-[11px] uppercase tracking-[0.18em] text-brass-light font-semibold">
                 DI SẢN KIẾN TRÚC VIỆT · TỶ LỆ 1:120
               </span>
             </div>
 
-            <h1 className="font-serif text-[clamp(2.15rem,5.5vw,5.5rem)] font-normal leading-[1.14] tracking-tight text-paper">
+            <h1 className="font-serif text-[clamp(1.95rem,5.2vw,5.5rem)] font-normal leading-[1.12] tracking-tight text-paper">
               <span className="block">{t('home.heroTitleLine1', 'Văn Minh')}</span>
               <span className="heritage-gold-foil font-normal italic pb-1">{t('home.heroTitleLine2', 'Di Sản Việt')}</span>
             </h1>
 
-            <p className="mt-3 sm:mt-5 max-w-[700px] text-[13.5px] sm:text-lg leading-relaxed sm:leading-8 text-white/90">
+            <p className="mt-2.5 sm:mt-5 max-w-[700px] text-[13px] sm:text-lg leading-snug sm:leading-8 text-white/90">
               {t('home.heroSubtitle', 'Hành trình số hóa bảo tàng, di tích và ký ức văn hóa Việt Nam qua các câu chuyện lịch sử')}
             </p>
 
-            <div className="mt-4 sm:mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
+            <div className="mt-3 sm:mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
               <Link
                 to="/collections"
-                className="animate-gold-glint inline-flex min-h-11 sm:min-h-12 items-center justify-center gap-3 bg-brass px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-sans font-bold uppercase tracking-wider text-forest transition-all hover:bg-brass-light shadow-[0_0_20px_rgba(184,138,68,0.25)] hover:shadow-[0_0_35px_rgba(184,138,68,0.5)] rounded-[2px] active:scale-[0.98]"
+                className="animate-gold-glint inline-flex min-h-10 sm:min-h-12 items-center justify-center gap-2.5 bg-brass px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm font-sans font-bold uppercase tracking-wider text-forest transition-all hover:bg-brass-light shadow-[0_0_20px_rgba(184,138,68,0.25)] hover:shadow-[0_0_35px_rgba(184,138,68,0.5)] rounded-[2px] active:scale-[0.98]"
               >
                 <span>{t('home.heroCtaCollection', 'Khám phá bộ sưu tập')}</span>
-                <ArrowRight size={15} strokeWidth={2} />
+                <ArrowRight size={14} strokeWidth={2} />
               </Link>
               <Link
                 to="/about"
-                className="group relative inline-flex min-h-11 sm:min-h-12 items-center justify-center gap-2.5 border-2 border-brass/70 bg-[#FAF7F0] px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-sans font-bold uppercase tracking-wider text-forest shadow-[0_0_20px_rgba(184,138,68,0.2)] transition-all duration-300 hover:bg-white hover:border-brass hover:text-brown rounded-[2px] active:scale-[0.98]"
+                className="group relative inline-flex min-h-10 sm:min-h-12 items-center justify-center gap-2.5 border-2 border-brass/70 bg-[#FAF7F0] px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm font-sans font-bold uppercase tracking-wider text-forest shadow-[0_0_20px_rgba(184,138,68,0.2)] transition-all duration-300 hover:bg-white hover:border-brass hover:text-brown rounded-[2px] active:scale-[0.98]"
               >
-                <BookOpen size={15} strokeWidth={2} className="text-brass transition-transform duration-300 group-hover:scale-110" />
+                <BookOpen size={14} strokeWidth={2} className="text-brass transition-transform duration-300 group-hover:scale-110" />
                 <span>{t('home.heroCtaStory', 'Câu chuyện Viettoria')}</span>
               </Link>
             </div>
 
-            <div className="mt-4 sm:mt-8 flex flex-wrap items-center gap-x-3.5 sm:gap-x-6 gap-y-1.5 sm:gap-y-2 border-t border-white/20 pt-3 sm:pt-4 text-[11px] sm:text-xs tracking-wide text-white/80">
+            <div className="mt-3 sm:mt-8 flex flex-wrap items-center gap-x-3 sm:gap-x-6 gap-y-1 sm:gap-y-2 border-t border-white/20 pt-2.5 sm:pt-4 text-[10.5px] sm:text-xs tracking-wide text-white/80">
               <span className="flex items-center gap-1.5"><span className="text-brass">◇</span>{t('home.heroBadge1', 'Mô hình kiến trúc')}</span>
               <span className="h-1 w-1 bg-brass hidden sm:inline-block" />
               <span className="flex items-center gap-1.5"><span className="text-brass">◇</span>{t('home.heroBadge2', 'Câu chuyện di sản')}</span>
               <span className="h-1 w-1 bg-brass hidden sm:inline-block" />
               <span className="flex items-center gap-1.5"><span className="text-brass">◇</span>{t('home.heroBadge3', 'Trải nghiệm 3D')}</span>
-            </div>
-
-            {/* Mobile Scroll Indicator (compact, right under badges) */}
-            <div className="mt-3.5 sm:hidden flex items-center">
-              <a href="#hanh-trinh-di-san" className="inline-flex items-center gap-1.5 text-[11px] font-mono tracking-wider uppercase text-brass-light/90 hover:text-brass transition-colors">
-                <span>{t('home.scrollDown', 'Cuộn để khám phá')}</span>
-                <ArrowDown size={12} strokeWidth={2} className="animate-bounce text-brass" />
-              </a>
             </div>
           </div>
         </div>
