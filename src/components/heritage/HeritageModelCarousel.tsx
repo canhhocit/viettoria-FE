@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom';
 import { 
   ArrowRight, 
-  Compass,
-  RotateCw
+  Compass
 } from 'lucide-react';
 import type { Product } from '../../types';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -38,7 +37,6 @@ const CarouselInteractiveModelStage: React.FC<{
   const preview = resolve3DPreview(product.slug);
   const poster = preview?.poster || resolveImageUrl(product.heroImage);
   const modelUrl = resolve3DModelUrl(product.model3dUrl || product.slug);
-  const [mobile3DActive, setMobile3DActive] = useState(false);
 
   return (
     <div 
@@ -50,70 +48,24 @@ const CarouselInteractiveModelStage: React.FC<{
       {/* Exhibition Pedestal Spotlight */}
       <div className="heritage-pedestal-light pointer-events-none absolute inset-0 z-[1]" aria-hidden="true" />
 
-      {/* Desktop view: Model-viewer is always loaded */}
-      <div className="hidden sm:block absolute inset-0 h-full w-full">
-        <model-viewer
-          key={`${product.slug}-carousel-${loopIdx}`}
-          src={modelUrl}
-          poster={poster}
-          alt={`Mô hình 3D tự động xoay của ${product.name}`}
-          camera-controls
-          auto-rotate={!reducedMotion ? '' : undefined}
-          rotation-per-second="12deg"
-          shadow-intensity="1.2"
-          shadow-softness="0.75"
-          exposure="1.05"
-          interaction-prompt="none"
-          loading="lazy"
-          reveal="auto"
-          style={{ width: '100%', height: '100%', backgroundColor: 'transparent', touchAction: 'pan-y' }}
-          className="home-model-viewer absolute inset-0 h-full w-full"
-        />
-      </div>
-
-      {/* Mobile view: Lightweight high-res poster with tap-to-load 3D (prevents 15 concurrent WebGL crashes) */}
-      <div className="sm:hidden absolute inset-0 h-full w-full flex items-center justify-center">
-        {mobile3DActive ? (
-          <model-viewer
-            key={`${product.slug}-mobile-3d-${loopIdx}`}
-            src={modelUrl}
-            poster={poster}
-            alt={`Mô hình 3D của ${product.name}`}
-            camera-controls
-            auto-rotate=""
-            rotation-per-second="10deg"
-            shadow-intensity="1.2"
-            exposure="1.05"
-            interaction-prompt="none"
-            loading="eager"
-            reveal="auto"
-            style={{ width: '100%', height: '100%', backgroundColor: 'transparent', touchAction: 'pan-y' }}
-            className="home-model-viewer absolute inset-0 h-full w-full"
-          />
-        ) : (
-          <div className="relative h-full w-full flex items-center justify-center bg-paper-warm/50">
-            <img
-              src={poster}
-              alt={product.name}
-              className="h-full w-full object-contain p-3 select-none"
-              loading="lazy"
-            />
-            {/* Tap to activate 3D on mobile */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setMobile3DActive(true);
-                onInteractingChange?.(true);
-              }}
-              className="absolute bottom-11 z-20 inline-flex items-center gap-1.5 border border-brass bg-forest px-3 py-1.5 text-[10.5px] font-sans font-bold uppercase tracking-wider text-brass shadow-lg backdrop-blur-sm active:scale-95 cursor-pointer rounded-[2px]"
-            >
-              <RotateCw size={12} className="text-brass animate-spin-slow" />
-              <span>Chạm để xoay 3D</span>
-            </button>
-          </div>
-        )}
-      </div>
+      {/* Model-viewer is directly active and interactable on all screen sizes */}
+      <model-viewer
+        key={`${product.slug}-carousel-${loopIdx}`}
+        src={modelUrl}
+        poster={poster}
+        alt={`Mô hình 3D tự động xoay của ${product.name}`}
+        camera-controls
+        auto-rotate={!reducedMotion ? '' : undefined}
+        rotation-per-second="12deg"
+        shadow-intensity="1.2"
+        shadow-softness="0.75"
+        exposure="1.05"
+        interaction-prompt="none"
+        loading="lazy"
+        reveal="auto"
+        style={{ width: '100%', height: '100%', backgroundColor: 'transparent', touchAction: 'pan-y' }}
+        className="home-model-viewer absolute inset-0 h-full w-full"
+      />
 
       {/* Bottom Overlay with Monument Name & Scale */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between bg-gradient-to-t from-forest-dark/90 via-forest-dark/40 to-transparent px-4 pb-2.5 pt-10 text-paper-light">
@@ -286,16 +238,12 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
             {t('home.scrollyDesc', 'Chiêm ngưỡng các mô hình 3D số hóa và khám phá câu chuyện lịch sử phía sau từng dấu ấn kiến trúc văn hiến.')}
           </p>
 
-          {/* Mobile Swipe Hint Bar */}
-          <div className="sm:hidden flex items-center justify-between mt-4 pt-3 border-t border-paper-border text-[11px] font-mono text-brass-dark">
-            <span className="flex items-center gap-1">
-              <span>←</span>
-              <span>Kéo hoặc vuốt ngang</span>
-              <span>→</span>
-            </span>
+          {/* Subtle exhibition indicator */}
+          <div className="mt-3 flex items-center gap-2 text-[11px] font-mono text-brass-dark">
             <span className="font-bold text-forest bg-paper-warm px-2 py-0.5 border border-brass/40 rounded-[2px]">
               {products.length} TÁC PHẨM 1:120
             </span>
+            <span className="text-charcoal-muted hidden sm:inline">· Triển lãm 3D trượt vô hạn</span>
           </div>
         </div>
 
@@ -318,7 +266,7 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
           onTouchEnd={() => {
             handleUserInteractionEnd();
           }}
-          className="flex flex-row flex-nowrap overflow-x-auto gap-5 sm:gap-8 pb-4 no-scrollbar items-stretch cursor-grab active:cursor-grabbing select-none snap-x snap-mandatory sm:snap-none"
+          className="flex flex-row flex-nowrap overflow-x-auto gap-5 sm:gap-8 pb-4 no-scrollbar items-stretch cursor-grab active:cursor-grabbing select-none"
           style={{ scrollBehavior: 'auto' }}
         >
           {loopProducts.map((rawProduct, loopIdx) => {
@@ -328,7 +276,7 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
             return (
               <div
                 key={uniqueKey}
-                className="w-[84vw] max-w-[340px] sm:w-[350px] md:w-[380px] lg:w-[400px] shrink-0 h-full snap-center"
+                className="w-[84vw] max-w-[340px] sm:w-[350px] md:w-[380px] lg:w-[400px] shrink-0 h-full"
               >
                 <TiltCard
                   className="h-full"
