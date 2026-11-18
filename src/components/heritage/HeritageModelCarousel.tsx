@@ -267,7 +267,7 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
   return (
     <section 
       id="hanh-trinh-di-san" 
-      className="home-story-section border-y border-paper-border bg-header relative overflow-hidden py-14 sm:py-20 lg:py-24"
+      className="home-story-section border-y border-paper-border bg-header relative overflow-hidden pt-8 pb-12 sm:py-20 lg:py-24"
       aria-label={t('home.scrollyHeading', 'Mỗi công trình, một câu chuyện')}
     >
       <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-16">
