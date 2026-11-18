@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom';
 import { 
   ArrowRight, 
-  Compass
+  Compass,
+  RotateCw
 } from 'lucide-react';
 import type { Product } from '../../types';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -37,10 +38,11 @@ const CarouselInteractiveModelStage: React.FC<{
   const preview = resolve3DPreview(product.slug);
   const poster = preview?.poster || resolveImageUrl(product.heroImage);
   const modelUrl = resolve3DModelUrl(product.model3dUrl || product.slug);
+  const [mobile3DActive, setMobile3DActive] = useState(false);
 
   return (
     <div 
-      className="relative aspect-[4/3] w-full overflow-hidden bg-paper sm:aspect-[1.18/1]"
+      className="relative aspect-[4/3] w-full overflow-hidden bg-[#FAF7F0] sm:aspect-[1.18/1]"
       onPointerDown={() => onInteractingChange?.(true)}
       onPointerUp={() => onInteractingChange?.(false)}
       onPointerCancel={() => onInteractingChange?.(false)}
@@ -48,31 +50,77 @@ const CarouselInteractiveModelStage: React.FC<{
       {/* Exhibition Pedestal Spotlight */}
       <div className="heritage-pedestal-light pointer-events-none absolute inset-0 z-[1]" aria-hidden="true" />
 
-      {/* Realtime Interactive Auto-Rotating 3D Model Viewer */}
-      <model-viewer
-        key={`${product.slug}-carousel-${loopIdx}`}
-        src={modelUrl}
-        poster={poster}
-        alt={`Mô hình 3D tự động xoay của ${product.name}`}
-        camera-controls
-        auto-rotate={!reducedMotion ? '' : undefined}
-        rotation-per-second="12deg"
-        shadow-intensity="1.2"
-        shadow-softness="0.75"
-        exposure="1.05"
-        interaction-prompt="none"
-        loading="eager"
-        reveal="auto"
-        style={{ width: '100%', height: '100%', backgroundColor: 'transparent', touchAction: 'pan-y' }}
-        className="home-model-viewer absolute inset-0 h-full w-full"
-      />
+      {/* Desktop view: Model-viewer is always loaded */}
+      <div className="hidden sm:block absolute inset-0 h-full w-full">
+        <model-viewer
+          key={`${product.slug}-carousel-${loopIdx}`}
+          src={modelUrl}
+          poster={poster}
+          alt={`Mô hình 3D tự động xoay của ${product.name}`}
+          camera-controls
+          auto-rotate={!reducedMotion ? '' : undefined}
+          rotation-per-second="12deg"
+          shadow-intensity="1.2"
+          shadow-softness="0.75"
+          exposure="1.05"
+          interaction-prompt="none"
+          loading="lazy"
+          reveal="auto"
+          style={{ width: '100%', height: '100%', backgroundColor: 'transparent', touchAction: 'pan-y' }}
+          className="home-model-viewer absolute inset-0 h-full w-full"
+        />
+      </div>
+
+      {/* Mobile view: Lightweight high-res poster with tap-to-load 3D (prevents 15 concurrent WebGL crashes) */}
+      <div className="sm:hidden absolute inset-0 h-full w-full flex items-center justify-center">
+        {mobile3DActive ? (
+          <model-viewer
+            key={`${product.slug}-mobile-3d-${loopIdx}`}
+            src={modelUrl}
+            poster={poster}
+            alt={`Mô hình 3D của ${product.name}`}
+            camera-controls
+            auto-rotate=""
+            rotation-per-second="10deg"
+            shadow-intensity="1.2"
+            exposure="1.05"
+            interaction-prompt="none"
+            loading="eager"
+            reveal="auto"
+            style={{ width: '100%', height: '100%', backgroundColor: 'transparent', touchAction: 'pan-y' }}
+            className="home-model-viewer absolute inset-0 h-full w-full"
+          />
+        ) : (
+          <div className="relative h-full w-full flex items-center justify-center bg-paper-warm/50">
+            <img
+              src={poster}
+              alt={product.name}
+              className="h-full w-full object-contain p-3 select-none"
+              loading="lazy"
+            />
+            {/* Tap to activate 3D on mobile */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setMobile3DActive(true);
+                onInteractingChange?.(true);
+              }}
+              className="absolute bottom-11 z-20 inline-flex items-center gap-1.5 border border-brass bg-forest px-3 py-1.5 text-[10.5px] font-sans font-bold uppercase tracking-wider text-brass shadow-lg backdrop-blur-sm active:scale-95 cursor-pointer rounded-[2px]"
+            >
+              <RotateCw size={12} className="text-brass animate-spin-slow" />
+              <span>Chạm để xoay 3D</span>
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* Bottom Overlay with Monument Name & Scale */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between bg-gradient-to-t from-forest-dark/85 via-forest-dark/35 to-transparent px-4 pb-3 pt-12 text-paper-light">
-        <p className="font-serif text-base sm:text-lg font-bold text-paper drop-shadow-xs truncate max-w-[220px]">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between bg-gradient-to-t from-forest-dark/90 via-forest-dark/40 to-transparent px-4 pb-2.5 pt-10 text-paper-light">
+        <p className="font-serif text-sm sm:text-lg font-bold text-paper drop-shadow-xs truncate max-w-[200px] sm:max-w-[240px]">
           {product.name}
         </p>
-        <span className="font-mono text-[10px] font-semibold text-brass-light shrink-0">
+        <span className="font-mono text-[9.5px] sm:text-[10px] font-semibold text-brass-light shrink-0">
           {product.modelSpecs?.scale || 'TỶ LỆ 1:120'}
         </span>
       </div>
@@ -224,19 +272,31 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
     >
       <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-16">
         {/* Section Header: Clean, minimal, without numbered jump pills */}
-        <div data-home-reveal className="mb-8 max-w-2xl sm:mb-10">
+        <div data-home-reveal className="mb-6 sm:mb-10 max-w-2xl">
           <div className="flex items-center gap-2 text-brass mb-2">
             <Compass size={15} />
             <p className="font-sans text-xs font-semibold uppercase tracking-wider text-brass">
               {t('home.scrollyEyebrow', 'Một vòng qua di sản Việt · Triển lãm mô hình số hóa')}
             </p>
           </div>
-          <h2 className="font-serif text-3xl font-bold leading-tight text-forest sm:text-4xl lg:text-5xl">
+          <h2 className="font-serif text-2xl sm:text-4xl lg:text-5xl font-bold leading-tight text-forest">
             {t('home.scrollyHeading', 'Mỗi công trình, một câu chuyện')}
           </h2>
-          <p className="mt-3.5 max-w-xl text-sm leading-relaxed text-charcoal-muted sm:text-base">
+          <p className="mt-2.5 sm:mt-3.5 max-w-xl text-xs sm:text-base leading-relaxed text-charcoal-muted">
             {t('home.scrollyDesc', 'Chiêm ngưỡng các mô hình 3D số hóa và khám phá câu chuyện lịch sử phía sau từng dấu ấn kiến trúc văn hiến.')}
           </p>
+
+          {/* Mobile Swipe Hint Bar */}
+          <div className="sm:hidden flex items-center justify-between mt-4 pt-3 border-t border-paper-border text-[11px] font-mono text-brass-dark">
+            <span className="flex items-center gap-1">
+              <span>←</span>
+              <span>Kéo hoặc vuốt ngang</span>
+              <span>→</span>
+            </span>
+            <span className="font-bold text-forest bg-paper-warm px-2 py-0.5 border border-brass/40 rounded-[2px]">
+              {products.length} TÁC PHẨM 1:120
+            </span>
+          </div>
         </div>
 
         {/* FULL SINGLE ROW CAROUSEL TRACK (Continuous infinite circular loop, clean & unobstructed) */}
@@ -258,7 +318,7 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
           onTouchEnd={() => {
             handleUserInteractionEnd();
           }}
-          className="flex flex-row flex-nowrap overflow-x-auto gap-6 sm:gap-8 pb-4 no-scrollbar items-stretch cursor-grab active:cursor-grabbing select-none"
+          className="flex flex-row flex-nowrap overflow-x-auto gap-5 sm:gap-8 pb-4 no-scrollbar items-stretch cursor-grab active:cursor-grabbing select-none snap-x snap-mandatory sm:snap-none"
           style={{ scrollBehavior: 'auto' }}
         >
           {loopProducts.map((rawProduct, loopIdx) => {
@@ -268,7 +328,7 @@ export const HeritageModelCarousel: React.FC<HeritageModelCarouselProps> = ({ pr
             return (
               <div
                 key={uniqueKey}
-                className="w-[84vw] sm:w-[350px] md:w-[380px] lg:w-[400px] shrink-0 h-full"
+                className="w-[84vw] max-w-[340px] sm:w-[350px] md:w-[380px] lg:w-[400px] shrink-0 h-full snap-center"
               >
                 <TiltCard
                   className="h-full"

@@ -25,23 +25,23 @@ export const CollectionsPage: React.FC = () => {
   }
 
   return (
-    <div className="bg-paper min-h-screen py-10 sm:py-16 lg:py-20 space-y-16 lg:space-y-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 lg:space-y-20">
+    <div className="bg-paper min-h-screen py-8 sm:py-16 lg:py-20 space-y-10 sm:space-y-16 lg:space-y-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-16 lg:space-y-20">
         
         {/* Curated Museum Editorial Header */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end border-b border-paper-border pb-10 sm:pb-14">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-end border-b border-paper-border pb-8 sm:pb-14">
           {/* Main Title & Manifesto */}
-          <div className="lg:col-span-8 space-y-4">
-            <div className="inline-flex items-center gap-2.5 text-brass text-xs font-sans uppercase tracking-wider font-semibold">
+          <div className="lg:col-span-8 space-y-3 sm:space-y-4">
+            <div className="inline-flex items-center gap-2 text-brass text-xs font-sans uppercase tracking-wider font-semibold">
               <Layers className="w-4 h-4 text-brass" />
               <span>{t('collectionsPage.eyebrow', 'Phân Loại Niên Đại & Kiến Trúc')}</span>
             </div>
 
-            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-forest leading-[1.2] tracking-tight">
+            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-forest leading-tight tracking-tight">
               {t('collectionsPage.title', 'Các Tuyển Tập Di Sản')}
             </h1>
 
-            <p className="text-base sm:text-lg text-charcoal/80 font-sans font-normal leading-relaxed max-w-2xl pt-1">
+            <p className="text-sm sm:text-lg text-charcoal/80 font-sans font-normal leading-relaxed max-w-2xl pt-1">
               {t(
                 'collectionsPage.pageSubtitle',
                 'Mỗi bộ sưu tập đại diện cho một thời kỳ hoàng kim của kiến trúc Việt Nam. Chúng tôi tái hiện từng cấu kiện với lòng thành kính và tiêu chuẩn kỹ thuật số bảo tàng học.'
@@ -50,7 +50,7 @@ export const CollectionsPage: React.FC = () => {
           </div>
 
           {/* Curatorial Seal & Archive Badge */}
-          <div className="lg:col-span-4 bg-paper-card border border-brass/40 corner-frame p-5 sm:p-6 space-y-3 shadow-sm">
+          <div className="lg:col-span-4 bg-paper-card border border-brass/40 corner-frame p-4 sm:p-6 space-y-3 shadow-sm rounded-[2px]">
             <div className="flex items-center justify-between text-[11px] font-mono text-brass uppercase font-bold tracking-widest border-b border-paper-border pb-2">
               <span className="flex items-center gap-1.5">
                 <Landmark className="w-3.5 h-3.5 text-brass" />
@@ -64,7 +64,7 @@ export const CollectionsPage: React.FC = () => {
                 <span className="text-[10px] font-mono uppercase text-charcoal-muted tracking-wider block">
                   {t('collectionsPage.researchScope', 'Quy Mô Khảo Cứu')}
                 </span>
-                <span className="font-serif text-base font-bold text-forest">
+                <span className="font-serif text-sm sm:text-base font-bold text-forest">
                   {t('collectionsPage.goldenEras', '5 Mốc Hoàng Kim')}
                 </span>
               </div>
@@ -72,7 +72,7 @@ export const CollectionsPage: React.FC = () => {
                 <span className="text-[10px] font-mono uppercase text-charcoal-muted tracking-wider block">
                   {t('collectionsPage.timelineAxis', 'Trục Niên Biểu')}
                 </span>
-                <span className="font-serif text-base font-bold text-forest">
+                <span className="font-serif text-sm sm:text-base font-bold text-forest">
                   1049 — 1863
                 </span>
               </div>

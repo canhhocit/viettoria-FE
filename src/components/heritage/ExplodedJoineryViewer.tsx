@@ -607,9 +607,9 @@ export const ExplodedJoineryViewer: React.FC = () => {
           </div>
 
           {/* Top Actions: Monument Selector & Mode Toggle */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-            {/* Monument Selector Tabs */}
-            <nav className="flex flex-wrap items-center gap-2" aria-label={t('joinery.selectMonument', 'Chọn công trình bóc tách')}>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 w-full lg:w-auto">
+            {/* Monument Selector Tabs with Smooth Horizontal Touch Scroll */}
+            <nav className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 -mx-1 px-1 select-none" aria-label={t('joinery.selectMonument', 'Chọn công trình bóc tách')}>
               {EXPLODED_MONUMENTS.map((monument) => (
                 <button
                   key={monument.id}
@@ -618,7 +618,7 @@ export const ExplodedJoineryViewer: React.FC = () => {
                     setSelectedMonumentId(monument.id);
                     setActiveTierIndex(0);
                   }}
-                  className={`border px-3 py-2 text-xs font-sans transition-all rounded-[2px] ${
+                  className={`whitespace-nowrap border px-3 py-1.5 text-xs font-sans transition-all rounded-[2px] active:scale-95 shrink-0 cursor-pointer ${
                     selectedMonumentId === monument.id
                       ? 'border-forest bg-forest text-brass font-bold shadow-xs'
                       : 'border-paper-border bg-paper text-forest hover:border-brass hover:bg-paper-warm font-medium'
@@ -630,7 +630,7 @@ export const ExplodedJoineryViewer: React.FC = () => {
             </nav>
 
             {/* View Mode Toggle: Exploded Diagram vs Interactive 3D */}
-            <div className="inline-flex items-center border border-brass/50 bg-paper p-0.5 rounded-[2px]">
+            <div className="inline-flex self-start sm:self-auto items-center border border-brass/50 bg-paper p-0.5 rounded-[2px] shrink-0">
               <button
                 type="button"
                 onClick={() => setViewMode('diagram')}
@@ -656,15 +656,15 @@ export const ExplodedJoineryViewer: React.FC = () => {
         </div>
 
         {/* Master Joinery Interactive Stage */}
-        <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] items-stretch">
+        <div className="grid gap-6 lg:gap-8 lg:grid-cols-[1.15fr_0.85fr] items-stretch">
           {/* Left: Exploded Stage Visualizer */}
-          <div className="corner-frame border-2 border-brass/50 bg-paper-card p-4 sm:p-6 shadow-xl relative flex flex-col justify-between overflow-hidden">
+          <div className="corner-frame border-2 border-brass/50 bg-paper-card p-3 sm:p-6 shadow-xl relative flex flex-col justify-between overflow-hidden">
             {/* Atelier Grid Texture */}
             <div className="absolute inset-0 bg-[radial-gradient(#B88A38_1px,transparent_1px)] [background-size:24px_24px] opacity-15 pointer-events-none" />
 
             {/* Mode 1: Authentic Exploded Blueprint Diagram */}
             {viewMode === 'diagram' ? (
-              <div className="relative aspect-[3/4] sm:aspect-[4/3] w-full overflow-hidden bg-[#1B1814] border border-brass/40 shadow-inner flex items-center justify-center p-2 sm:p-4 rounded-[1px]">
+              <div className="relative aspect-[1/1] sm:aspect-[4/3] w-full overflow-hidden bg-[#1B1814] border border-brass/40 shadow-inner flex items-center justify-center p-1 sm:p-4 rounded-[1px]">
                 <img
                   src={currentMonument.diagramImage}
                   alt={`${t('joinery.blueprintMode', 'Bản vẽ bóc tách cấu kiện')} ${currentMonument.name}`}
@@ -673,20 +673,20 @@ export const ExplodedJoineryViewer: React.FC = () => {
 
                 {/* Target Beacon Overlay for Active Tier */}
                 <div
-                  className="pointer-events-none absolute left-1/2 -translate-x-1/2 flex items-center gap-2 border border-brass bg-forest/90 px-3 py-1.5 text-xs text-brass shadow-2xl backdrop-blur-sm transition-all duration-300 rounded-[2px]"
+                  className="pointer-events-none absolute left-1/2 -translate-x-1/2 flex items-center gap-1.5 sm:gap-2 border border-brass bg-forest/90 px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs text-brass shadow-2xl backdrop-blur-sm transition-all duration-300 rounded-[2px] max-w-[90%] truncate"
                   style={{ top: activeTier.pinY }}
                 >
-                  <span className="flex h-5 w-5 shrink-0 items-center justify-center bg-brass text-forest text-[11px] font-bold rounded-full">
+                  <span className="flex h-4 w-4 sm:h-5 sm:w-5 shrink-0 items-center justify-center bg-brass text-forest text-[10px] sm:text-[11px] font-bold rounded-full">
                     {activeTier.letter}
                   </span>
-                  <span className="font-sans font-bold text-paper text-xs">
+                  <span className="font-sans font-bold text-paper text-[11px] sm:text-xs truncate">
                     {activeTier.name}
                   </span>
                 </div>
               </div>
             ) : (
               /* Mode 2: Live Interactive 3D Model Viewer */
-              <div className="relative aspect-[3/4] sm:aspect-[4/3] w-full overflow-hidden bg-paper border border-brass/40 shadow-inner rounded-[1px]">
+              <div className="relative aspect-[1/1] sm:aspect-[4/3] w-full overflow-hidden bg-paper border border-brass/40 shadow-inner rounded-[1px]">
                 <model-viewer
                   src={currentMonument.model3dUrl}
                   alt={`3D: ${currentMonument.name}`}
@@ -699,33 +699,33 @@ export const ExplodedJoineryViewer: React.FC = () => {
                   style={{ width: '100%', height: '100%', backgroundColor: 'transparent' }}
                   className="h-full w-full"
                 />
-                <div className="pointer-events-none absolute left-3 top-3 border border-brass/40 bg-forest/90 px-2.5 py-1 text-[11px] font-sans text-brass font-semibold uppercase tracking-wider rounded-[1px]">
-                  {t('joinery.realtime3dBadge', 'MÔ HÌNH 3D THỜI GIAN THỰC · KÉO ĐỂ XOAY')}
+                <div className="pointer-events-none absolute left-2.5 top-2.5 sm:left-3 sm:top-3 border border-brass/40 bg-forest/90 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-[11px] font-sans text-brass font-semibold uppercase tracking-wider rounded-[1px]">
+                  {t('joinery.realtime3dBadge', 'MÔ HÌNH 3D · KÉO ĐỂ XOAY')}
                 </div>
               </div>
             )}
 
             {/* Tiers Navigation Selector Pills */}
-            <div className="mt-4 border-t border-paper-border pt-4">
-              <span className="font-sans text-[11px] uppercase font-bold text-charcoal-muted block mb-2 tracking-wider">
+            <div className="mt-4 border-t border-paper-border pt-3.5">
+              <span className="font-sans text-[10px] sm:text-[11px] uppercase font-bold text-charcoal-muted block mb-2 tracking-wider">
                 {t('joinery.selectTier', 'Chọn Cấu Kiện Khảo Cứu:')}
               </span>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">
                 {currentMonument.tiers.map((tier, idx) => (
                   <button
                     key={tier.letter}
                     type="button"
                     onClick={() => setActiveTierIndex(idx)}
-                    className={`p-2 text-left text-xs rounded-[2px] border transition-all ${
+                    className={`p-2 text-left text-xs rounded-[2px] border transition-all active:scale-[0.98] ${
                       activeTierIndex === idx
                         ? 'border-forest bg-forest text-paper font-semibold shadow-xs'
                         : 'border-paper-border bg-paper hover:border-brass text-forest'
                     }`}
                   >
-                    <span className="font-mono text-[10px] text-brass font-bold block">
+                    <span className="font-mono text-[9.5px] sm:text-[10px] text-brass font-bold block">
                       {t('joinery.tierPrefix', 'Tầng')} [{tier.letter}]
                     </span>
-                    <span className="truncate block font-medium mt-0.5">{tier.name.split(' (')[0]}</span>
+                    <span className="truncate block font-medium mt-0.5 text-[11px] sm:text-xs">{tier.name.split(' (')[0]}</span>
                   </button>
                 ))}
               </div>

@@ -489,15 +489,15 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                       <span className="heritage-anchor-core" />
                     </div>
 
-                    {/* 2. SVG Dashed Golden Leader Line */}
-                    <svg className="heritage-leader-svg" aria-hidden="true">
+                    {/* 2. SVG Dashed Golden Leader Line (Desktop only) */}
+                    <svg className="heritage-leader-svg hidden sm:block" aria-hidden="true">
                       <path d={pathD} className="heritage-leader-path" />
                       <circle cx={jointX} cy={jointY} r="3" className="heritage-leader-joint" />
                     </svg>
 
-                    {/* 3. Floating Callout Card */}
+                    {/* 3. Floating Callout Card (Desktop only, mobile uses docked curatorial bottom sheet) */}
                     <div
-                      className="heritage-callout-card"
+                      className="heritage-callout-card hidden sm:block"
                       style={{
                         left: `${dx}px`,
                         top: `${dy}px`,
@@ -526,6 +526,69 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
                 );
               })}
             </model-viewer>
+          )}
+
+          {/* Mobile Dedicated Curatorial Bottom Sheet Drawer */}
+          {modelLoaded && showHotspots && activeHotspot && (
+            <div className="sm:hidden absolute inset-x-3 bottom-3 z-30 animate-fade-up">
+              <div className="border border-brass/70 bg-[#0D1C16]/96 backdrop-blur-md p-3.5 shadow-2xl text-paper rounded-[2px]">
+                <div className="flex items-center justify-between border-b border-brass/30 pb-2">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="text-brass text-xs">✦</span>
+                    <span className="font-mono text-[9.5px] uppercase tracking-wider text-brass font-bold truncate">
+                      {activeHotspot.category || 'CẤU KIỆN'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="font-mono text-[10px] text-paper/70 font-semibold">
+                      {currentHotspotIndex + 1}/{hotspots.length}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setActiveHotspotId(null)}
+                      className="p-1 text-paper/70 hover:text-brass transition-colors"
+                      aria-label="Đóng bảng cấu kiện"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="mt-2">
+                  <h4 className="font-serif text-sm font-bold text-paper leading-snug">
+                    {activeHotspot.title}
+                  </h4>
+                  <p className="font-sans text-[11px] text-paper/85 mt-1 leading-relaxed line-clamp-3">
+                    {activeHotspot.detail || activeHotspot.shortDesc}
+                  </p>
+                </div>
+
+                {/* Mobile Stepper Controls */}
+                <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={handlePrevHotspot}
+                    className="inline-flex items-center gap-1 text-[10.5px] font-sans font-bold uppercase tracking-wider text-brass hover:text-brass-light p-1"
+                  >
+                    <ChevronLeft className="h-3.5 w-3.5" />
+                    <span>Trước</span>
+                  </button>
+
+                  <span className="text-[10px] font-sans text-paper/50 italic">
+                    Chạm để xoay 360°
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={handleNextHotspot}
+                    className="inline-flex items-center gap-1 text-[10.5px] font-sans font-bold uppercase tracking-wider text-brass hover:text-brass-light p-1"
+                  >
+                    <span>Tiếp theo</span>
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
 
           {/* Tour Active Stepper Indicator at Top Center */}
@@ -623,7 +686,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
 
           {/* Bottom Floating Pill Bar: ✦ ẨN CHI TIẾT / HIỆN CHI TIẾT | ◇ XOAY 3D */}
           {modelLoaded && (
-            <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20 flex justify-center px-3">
+            <div className={`pointer-events-none absolute inset-x-0 bottom-4 z-20 justify-center px-3 ${activeHotspot ? 'hidden sm:flex' : 'flex'}`}>
               <div className="pointer-events-auto heritage-viewer-pillbar">
                 <button
                   type="button"
@@ -667,7 +730,7 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
 
           {/* Bottom-Right Zoom Controls (From User Reference: ⊕ ZoomIn / ⊖ ZoomOut) */}
           {modelLoaded && (
-            <div className="heritage-zoom-controls">
+            <div className={`heritage-zoom-controls transition-all duration-300 ${activeHotspot ? 'bottom-36 sm:bottom-6' : 'bottom-4 sm:bottom-6'}`}>
               <button
                 type="button"
                 onClick={() => handleZoom('in')}

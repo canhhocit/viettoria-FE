@@ -239,10 +239,21 @@ export const TimeTravelComparison: React.FC<{ defaultId?: string }> = ({ default
     updatePosition(e.clientX);
   };
 
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    setIsDragging(true);
+    if (e.touches[0]) {
+      updatePosition(e.touches[0].clientX);
+    }
+  };
+
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
     if (e.touches[0]) {
       updatePosition(e.touches[0].clientX);
     }
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
   };
 
   const currentPresentImage = presentMode === '3d' ? activeItem.present3DImageSrc : activeItem.presentRealImageSrc;
@@ -268,19 +279,20 @@ export const TimeTravelComparison: React.FC<{ defaultId?: string }> = ({ default
           </div>
 
           {/* Controls: Monument Selector & Present Mode Toggle */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-            {/* Monument Selector Tabs */}
-            <nav className="flex flex-wrap items-center gap-2" aria-label={t('timetravel.selectMonument', 'Chọn công trình so sánh')}>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 w-full lg:w-auto">
+            {/* Monument Selector Tabs with Smooth Horizontal Touch Scroll */}
+            <nav className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 -mx-1 px-1 select-none" aria-label={t('timetravel.selectMonument', 'Chọn công trình so sánh')}>
               {COMPARISON_DATA.map((item) => {
                 const loc = TIME_TRAVEL_LOCALES[item.id]?.[language];
                 const displayName = loc?.name || item.name;
+                const isSelected = selectedId === item.id;
                 return (
                   <button
                     key={item.id}
                     type="button"
                     onClick={() => setSelectedId(item.id)}
-                    className={`border px-3 py-2 text-xs font-sans transition-all rounded-[2px] ${
-                      selectedId === item.id
+                    className={`whitespace-nowrap border px-3 py-1.5 text-xs font-sans transition-all rounded-[2px] active:scale-95 shrink-0 cursor-pointer ${
+                      isSelected
                         ? 'border-forest bg-forest text-brass font-bold shadow-xs'
                         : 'border-paper-border bg-paper text-forest hover:border-brass hover:bg-paper-warm font-medium'
                     }`}
@@ -292,7 +304,7 @@ export const TimeTravelComparison: React.FC<{ defaultId?: string }> = ({ default
             </nav>
 
             {/* View Mode Toggle: Real Photo vs 3D Model */}
-            <div className="inline-flex items-center border border-brass/50 bg-paper p-0.5 rounded-[2px]">
+            <div className="inline-flex self-start sm:self-auto items-center border border-brass/50 bg-paper p-0.5 rounded-[2px] shrink-0">
               <button
                 type="button"
                 onClick={() => setPresentMode('real')}
@@ -318,59 +330,62 @@ export const TimeTravelComparison: React.FC<{ defaultId?: string }> = ({ default
         </div>
 
         {/* Interactive Comparison Slider Frame */}
-        <div className="corner-frame border-2 border-brass/50 bg-paper p-3 sm:p-5 shadow-xl">
+        <div className="corner-frame border-2 border-brass/50 bg-paper p-2.5 sm:p-5 shadow-xl">
           <div
             ref={containerRef}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
             onMouseMove={handleMouseMove}
+            onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
-            className="relative aspect-[16/10] sm:aspect-[21/10] w-full overflow-hidden select-none cursor-ew-resize bg-paper-card"
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchEnd}
+            className="relative aspect-[16/11] sm:aspect-[21/10] w-full overflow-hidden select-none cursor-ew-resize bg-paper-card touch-none"
           >
-            {/* 1. Present / Restored Layer (Underneath / Right side) */}
+            {/* 1. Present / Restored Layer (Underneath / Full Width) */}
             <div className="absolute inset-0 h-full w-full bg-[#F4EFE6] flex items-center justify-center">
               <img
                 src={currentPresentImage}
                 alt={`${activeItem.name} ${presentMode === '3d' ? '3D' : ''} 2026`}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover select-none pointer-events-none"
               />
               {/* Right Tag */}
-              <div className="pointer-events-none absolute bottom-4 right-4 z-10 border border-brass/60 bg-forest/90 px-3 py-1.5 text-xs text-paper backdrop-blur-sm rounded-[1px] shadow-md">
-                <span className="font-sans text-[10px] font-semibold text-brass uppercase tracking-wider block">
+              <div className="pointer-events-none absolute bottom-2 right-2 sm:bottom-4 sm:right-4 z-10 border border-brass/60 bg-forest/90 px-2 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs text-paper backdrop-blur-sm rounded-[1px] shadow-md max-w-[150px] sm:max-w-none text-right">
+                <span className="font-sans text-[9px] sm:text-[10px] font-semibold text-brass uppercase tracking-wider block">
                   {t('timetravel.present', 'Hiện Tại')} · {activeItem.presentYear}
                 </span>
-                <span className="font-sans text-[11px] font-medium text-paper">
-                  {presentMode === '3d' ? t('timetravel.model3dLabel', 'Mô hình 3D phục dựng số hóa') : activeItem.presentLabel}
+                <span className="font-sans text-[10px] sm:text-[11px] font-medium text-paper block truncate">
+                  {presentMode === '3d' ? t('timetravel.model3dLabel', 'Mô hình 3D số hóa') : activeItem.presentLabel}
                 </span>
               </div>
             </div>
 
-            {/* 2. Past / Archival Layer (Clipped / Left side) */}
+            {/* 2. Past / Archival Layer (Clipped with 1:1 Pixel Alignment via clipPath) */}
             <div
-              className="absolute inset-0 h-full overflow-hidden transition-none border-r border-brass/70"
-              style={{ width: `${sliderPosition}%` }}
+              className="absolute inset-0 h-full w-full pointer-events-none overflow-hidden transition-none border-r border-brass/70"
+              style={{ clipPath: `inset(0 ${Math.max(0, 100 - sliderPosition)}% 0 0)` }}
             >
               <div className="relative h-full w-full bg-[#1B1E1B] flex items-center justify-center">
-                {/* Authentic Historical Archival Photo */}
+                {/* Authentic Historical Archival Photo (Identical scale to Present) */}
                 <img
                   src={activeItem.pastImageSrc}
                   alt={`${activeItem.name} ${activeItem.pastYear}`}
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover select-none pointer-events-none"
                 />
 
                 {/* EFEO Archival Watermark Seal */}
-                <div className="pointer-events-none absolute top-4 left-4 z-10 flex items-center gap-1.5 border border-charcoal/50 bg-[#1B1E1B]/85 px-2.5 py-1 text-[10px] font-sans font-semibold text-brass backdrop-blur-xs rounded-[1px]">
-                  <Clock size={11} className="text-brass" />
-                  <span>{t('timetravel.originalArchivalPhoto', 'ẢNH GỐC LỊCH SỬ · NĂM')} {activeItem.pastYear}</span>
+                <div className="pointer-events-none absolute top-2 left-2 sm:top-4 sm:left-4 z-10 flex items-center gap-1 border border-charcoal/50 bg-[#1B1E1B]/85 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-sans font-semibold text-brass backdrop-blur-xs rounded-[1px]">
+                  <Clock size={10} className="text-brass shrink-0" />
+                  <span className="truncate">{t('timetravel.originalArchivalPhoto', 'ẢNH GỐC LỊCH SỬ')} {activeItem.pastYear}</span>
                 </div>
 
                 {/* Left Tag */}
-                <div className="pointer-events-none absolute bottom-4 left-4 z-10 border border-charcoal/60 bg-[#142820]/90 px-3 py-1.5 text-xs text-paper backdrop-blur-sm rounded-[1px] shadow-md">
-                  <span className="font-sans text-[10px] font-semibold text-brass uppercase tracking-wider block">
+                <div className="pointer-events-none absolute bottom-2 left-2 sm:bottom-4 sm:left-4 z-10 border border-charcoal/60 bg-[#142820]/90 px-2 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs text-paper backdrop-blur-sm rounded-[1px] shadow-md max-w-[150px] sm:max-w-none">
+                  <span className="font-sans text-[9px] sm:text-[10px] font-semibold text-brass uppercase tracking-wider block">
                     {t('timetravel.past', 'Ký Ức')} · {activeItem.pastYear}
                   </span>
-                  <span className="font-sans text-[11px] font-medium text-paper/95">
+                  <span className="font-sans text-[10px] sm:text-[11px] font-medium text-paper/95 block truncate">
                     {activeItem.pastLabel}
                   </span>
                 </div>
@@ -379,12 +394,14 @@ export const TimeTravelComparison: React.FC<{ defaultId?: string }> = ({ default
 
             {/* 3. Divider Line & Brass Knob */}
             <div
-              className="pointer-events-none absolute inset-y-0 z-20 w-1 bg-brass shadow-2xl"
+              className="pointer-events-none absolute inset-y-0 z-20 w-1 bg-brass shadow-[0_0_12px_rgba(184,138,56,0.8)]"
               style={{ left: `${sliderPosition}%` }}
             >
-              {/* Antique Engraved Medallion Handle */}
-              <div className="pointer-events-auto absolute top-1/2 -translate-x-1/2 -translate-y-1/2 flex h-11 w-11 sm:h-13 sm:w-13 items-center justify-center rounded-full border-2 border-brass bg-forest text-brass shadow-2xl hover:scale-110 transition-transform cursor-ew-resize">
-                <span className="font-mono text-[9px] sm:text-[10px] font-bold tracking-tight text-center leading-tight">
+              {/* Antique Engraved Medallion Handle with Touch-optimized Target */}
+              <div
+                className="pointer-events-auto absolute top-1/2 -translate-x-1/2 -translate-y-1/2 flex h-11 w-11 sm:h-13 sm:w-13 items-center justify-center rounded-full border-2 border-brass bg-forest text-brass shadow-2xl hover:scale-110 active:scale-95 transition-transform cursor-ew-resize touch-none select-none"
+              >
+                <span className="font-mono text-[8px] sm:text-[10px] font-bold tracking-tight text-center leading-tight">
                   {activeItem.pastYear}<br />◄►<br />2026
                 </span>
               </div>

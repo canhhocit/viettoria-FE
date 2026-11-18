@@ -139,27 +139,27 @@ export const ProductDetailPage: React.FC = () => {
   }
 
   return (
-    <div className="bg-paper min-h-screen py-8 sm:py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <div className="bg-paper min-h-screen py-6 sm:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
         {/* Breadcrumb Navigation */}
-        <nav aria-label="Đường dẫn điều hướng" className="flex items-center gap-2 text-xs font-mono text-charcoal-muted uppercase tracking-wider">
-          <Link to="/" className="hover:text-forest transition-colors">{t('nav.home', 'Trang Chủ')}</Link>
-          <span>/</span>
-          <Link to="/products" className="hover:text-forest transition-colors">{t('nav.products', 'Tác Phẩm')}</Link>
-          <span>/</span>
-          <span className="text-brass font-bold">{product.name}</span>
+        <nav aria-label="Đường dẫn điều hướng" className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-mono text-charcoal-muted uppercase tracking-wider overflow-x-auto no-scrollbar pb-1">
+          <Link to="/" className="hover:text-forest transition-colors shrink-0">{t('nav.home', 'Trang Chủ')}</Link>
+          <span className="shrink-0">/</span>
+          <Link to="/products" className="hover:text-forest transition-colors shrink-0">{t('nav.products', 'Tác Phẩm')}</Link>
+          <span className="shrink-0">/</span>
+          <span className="text-brass font-bold truncate max-w-[160px] sm:max-w-none">{product.name}</span>
         </nav>
 
         {/* QR Deep-link Welcome Toast/Banner (When code parameter is present) */}
         {codeParam && (
-          <div className="p-4 sm:p-5 bg-forest text-paper border border-brass corner-frame flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl animate-fadeIn">
+          <div className="p-3.5 sm:p-5 bg-forest text-paper border border-brass corner-frame flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 shadow-xl animate-fadeIn rounded-[2px]">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 flex-none bg-brass text-forest flex items-center justify-center font-bold">
-                <CheckCircle className="w-6 h-6" />
+              <div className="w-9 h-9 sm:w-10 sm:h-10 flex-none bg-brass text-forest flex items-center justify-center font-bold rounded-[1px]">
+                <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs uppercase tracking-wider text-brass font-bold">
+                  <span className="text-[11px] sm:text-xs uppercase tracking-wider text-brass font-bold">
                     {t('product.qrDeepLinkTitle')}
                   </span>
                 </div>
@@ -169,44 +169,46 @@ export const ProductDetailPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="text-xs font-sans text-brass-subtle uppercase tracking-wider shrink-0 font-semibold">
+            <div className="text-[10px] sm:text-xs font-sans text-brass-subtle uppercase tracking-wider shrink-0 font-semibold">
               {t('product.qrDeepLinkIdBadge')}
             </div>
           </div>
         )}
 
         {/* Product Identity Header */}
-        <div className="space-y-4 max-w-4xl">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="px-3 py-1 bg-paper-warm border border-paper-border text-forest text-xs uppercase tracking-wider font-sans font-semibold">
+        <div className="space-y-3 sm:space-y-4 max-w-4xl">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 bg-paper-warm border border-paper-border text-forest text-[11px] sm:text-xs uppercase tracking-wider font-sans font-semibold rounded-[1px]">
               {product.epoch}
             </span>
             <span className="flex items-center gap-1.5 text-xs text-charcoal-muted">
-              <MapPin className="w-3.5 h-3.5 text-brass" />
+              <MapPin className="w-3.5 h-3.5 text-brass shrink-0" />
               <span>{product.location}</span>
             </span>
           </div>
 
-          <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-forest">
+          <h1 className="font-serif text-2xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-forest leading-tight">
             {product.name}
           </h1>
 
-          <p className="font-serif italic text-brass-dark text-lg sm:text-xl">
+          <p className="font-serif italic text-brass-dark text-base sm:text-xl">
             {product.subName}
           </p>
 
-          <p className="text-base sm:text-lg text-charcoal/85 font-normal leading-relaxed max-w-3xl">
+          <p className="text-xs sm:text-base text-charcoal/85 font-normal leading-relaxed max-w-3xl">
             {product.shortDescription}
           </p>
 
-          <button
-            type="button"
-            onClick={() => setIsShareOpen(true)}
-            className="inline-flex items-center gap-2 border border-paper-border bg-paper-warm px-4 py-2.5 text-xs font-sans uppercase tracking-wider text-forest font-semibold transition-colors hover:border-brass hover:bg-paper"
-          >
-            <Share2 className="h-4 w-4 text-brass" />
-            {t('common.share', 'Chia sẻ tác phẩm')}
-          </button>
+          <div className="pt-1">
+            <button
+              type="button"
+              onClick={() => setIsShareOpen(true)}
+              className="inline-flex items-center gap-2 border border-paper-border bg-paper-warm px-3.5 py-2 text-xs font-sans uppercase tracking-wider text-forest font-semibold transition-colors hover:border-brass hover:bg-paper rounded-[2px] active:scale-95"
+            >
+              <Share2 className="h-3.5 w-3.5 text-brass" />
+              <span>{t('common.share', 'Chia sẻ tác phẩm')}</span>
+            </button>
+          </div>
         </div>
 
         {isShareOpen && createPortal(

@@ -5,6 +5,7 @@ import { Footer } from '../components/common/Footer';
 import { QRScanModal } from '../components/common/QRScanModal';
 import { PageScrollProgress } from '../components/common/PageScrollProgress';
 import { LanguagePickerModal } from '../components/common/LanguagePickerModal';
+import { MobileBottomNav } from '../components/common/MobileBottomNav';
 import { useLanguage } from '../contexts/LanguageContext';
 import type { LanguageCode } from '../locales';
 
@@ -42,12 +43,15 @@ export const MainLayout: React.FC = () => {
       <Header onOpenQRModal={() => setIsQRModalOpen(true)} />
 
       {/* Main Outlet with Page Transition */}
-      <main key={location.pathname} className="flex-1 animate-fade-up">
+      <main key={location.pathname} className="flex-1 pb-16 md:pb-0 animate-fade-up">
         <Outlet />
       </main>
 
       {/* Universal Footer */}
       <Footer />
+
+      {/* Mobile Dedicated Bottom Navigation Dock */}
+      <MobileBottomNav onOpenQRModal={() => setIsQRModalOpen(true)} />
 
       {/* QR Code Scanner / Resolver Modal */}
       <QRScanModal 

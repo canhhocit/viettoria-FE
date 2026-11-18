@@ -157,6 +157,8 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
   );
   const [activeRegion, setActiveRegion] = useState<'all' | 'hanoi' | 'hue' | 'saigon'>('all');
   const [mapLayerType, setMapLayerType] = useState<'standard' | 'satellite'>('standard');
+  const [mobileTab, setMobileTab] = useState<'map' | 'list'>('map');
+  const [mobileCardOpen, setMobileCardOpen] = useState(true);
   const [isFullscreen3D, setIsFullscreen3D] = useState<boolean>(false);
 
   const getLocalizedSite = (site: HeritageSiteLocation): HeritageSiteLocation => {
@@ -206,6 +208,7 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
   // Tập trung vào một công trình di sản cụ thể
   const focusSite = (site: HeritageSiteLocation) => {
     setActiveSite(site);
+    setMobileCardOpen(true);
 
     const map = mapRef.current;
     if (!map) return;
@@ -399,10 +402,51 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
     });
   }, [language, t]);
 
+  // Khi chuyển tab trên mobile, điều chỉnh lại kích thước viewport của Leaflet
+  useEffect(() => {
+    if (mobileTab === 'map' && mapRef.current) {
+      const timer = window.setTimeout(() => {
+        mapRef.current?.invalidateSize();
+      }, 120);
+      return () => window.clearTimeout(timer);
+    }
+  }, [mobileTab]);
+
   return (
-    <div className="heritage-map bg-paper border border-brass/40 corner-frame shadow-xl overflow-hidden flex flex-col lg:flex-row">
-      {/* Cột Trái: Bộ điều hướng danh sách & Hồ sơ chi tiết Spotlight di sản */}
-      <div className="w-full lg:w-[400px] xl:w-[430px] bg-paper-warm border-b lg:border-b-0 lg:border-r border-paper-border p-4 sm:p-5 flex flex-col shrink-0 z-20 space-y-4">
+    <div className="heritage-map bg-paper border border-brass/40 corner-frame shadow-xl overflow-hidden flex flex-col">
+      {/* 0. Mobile Switcher: Map View vs List View */}
+      <div className="lg:hidden flex border-b border-paper-border bg-paper-warm p-1.5 gap-1.5">
+        <button
+          type="button"
+          onClick={() => setMobileTab('map')}
+          className={`flex-1 py-2 text-xs font-sans font-bold uppercase tracking-wider rounded-[2px] transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+            mobileTab === 'map'
+              ? 'bg-forest text-brass shadow-xs border border-brass/50'
+              : 'text-charcoal hover:bg-paper'
+          }`}
+        >
+          <Compass className="w-3.5 h-3.5" />
+          <span>{t('mapPage.mapViewTab', 'Bản Đồ Di Sản')}</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileTab('list')}
+          className={`flex-1 py-2 text-xs font-sans font-bold uppercase tracking-wider rounded-[2px] transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+            mobileTab === 'list'
+              ? 'bg-forest text-brass shadow-xs border border-brass/50'
+              : 'text-charcoal hover:bg-paper'
+          }`}
+        >
+          <Layers className="w-3.5 h-3.5" />
+          <span>{t('mapPage.listViewTab', 'Danh Sách Di Tích')} ({HERITAGE_SITES.length})</span>
+        </button>
+      </div>
+
+      <div className="flex flex-col lg:flex-row flex-1">
+        {/* Cột Trái: Bộ điều hướng danh sách & Hồ sơ chi tiết Spotlight di sản */}
+        <div className={`w-full lg:w-[400px] xl:w-[430px] bg-paper-warm border-b lg:border-b-0 lg:border-r border-paper-border p-4 sm:p-5 flex-col shrink-0 z-20 space-y-4 ${
+          mobileTab === 'list' ? 'flex' : 'hidden lg:flex'
+        }`}>
         {/* 1. Bộ lọc vùng miền */}
         <div className="grid grid-cols-4 gap-1 p-1 bg-paper border border-paper-border text-xs font-mono">
           <button
@@ -562,8 +606,8 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
       {/* Cột Phải: Khung nhìn Bản đồ Leaflet (100% THOÁNG ĐÃNG, KHÔNG BỊ CHE) */}
       <div 
         className={`relative flex-1 bg-paper-warm overflow-hidden ${
-          compactHeight ? 'min-h-[440px] lg:min-h-[520px]' : 'min-h-[500px] lg:min-h-[640px]'
-        }`}
+          compactHeight ? 'min-h-[440px] lg:min-h-[520px]' : 'min-h-[480px] lg:min-h-[640px]'
+        } ${mobileTab === 'map' ? 'block h-[68svh] lg:h-auto' : 'hidden lg:block'}`}
       >
         {/* Container DOM Bản đồ Leaflet */}
         <div 
@@ -615,14 +659,58 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
           </button>
         </div>
 
-        {/* Huy hiệu thông báo công trình đang chọn góc dưới bên trái (Gọn gàng, không che bản đồ) */}
-        <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-20 pointer-events-none bg-paper/95 border border-paper-border px-3.5 py-2 shadow-md backdrop-blur-sm flex items-center gap-2.5 text-xs text-forest max-w-[calc(100%-2rem)] sm:max-w-md">
+        {/* Huy hiệu thông báo công trình đang chọn góc dưới bên trái (Desktop view) */}
+        <div className="hidden lg:flex absolute bottom-4 left-4 z-20 pointer-events-none bg-paper/95 border border-paper-border px-3.5 py-2 shadow-md backdrop-blur-sm items-center gap-2.5 text-xs text-forest max-w-md">
           <span className="h-2 w-2 rounded-full bg-brass shrink-0 animate-ping" />
           <div className="min-w-0 truncate">
             <span className="font-serif font-bold">{currentSite.name}</span>
-            <span className="text-charcoal-muted ml-1.5 text-[11px] truncate hidden sm:inline">({currentSite.location})</span>
+            <span className="text-charcoal-muted ml-1.5 text-[11px] truncate">({currentSite.location})</span>
           </div>
         </div>
+
+        {/* Mobile Floating Site Preview Card on Map */}
+        {mobileCardOpen && activeSite && (
+          <div className="lg:hidden absolute bottom-3 inset-x-3 z-30 animate-fade-up">
+            <div className="bg-[#FAF7F0] border-2 border-brass/60 p-3 shadow-2xl rounded-[2px] relative flex gap-3 items-center">
+              <img
+                src={resolveImageUrl(activeSite.heroImage, VIETTORIA_IMAGES.productHighlight)}
+                alt={currentSite.name}
+                className="w-16 h-16 object-cover rounded-[1px] border border-paper-border shrink-0 bg-forest"
+              />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[9.5px] uppercase tracking-wider text-brass-dark font-bold truncate">
+                    {currentSite.cityName.split('—')[0].trim()} · {activeSite.mapLabel}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setMobileCardOpen(false)}
+                    className="text-charcoal-muted hover:text-forest p-1 cursor-pointer"
+                    aria-label="Đóng xem trước"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+                <h4 className="font-serif text-sm font-bold text-forest truncate mt-0.5">
+                  {currentSite.name}
+                </h4>
+                <div className="mt-1 flex items-center justify-between">
+                  <span className="text-[10px] text-charcoal-muted font-mono truncate">
+                    {activeSite.epoch.split('(')[0].trim()}
+                  </span>
+                  <Link
+                    to={`/products/${activeSite.slug}`}
+                    className="inline-flex items-center gap-1 text-[10.5px] font-sans font-bold uppercase tracking-wider text-forest hover:text-brass"
+                  >
+                    <span>Khảo cứu 3D</span>
+                    <ArrowRight className="w-3 h-3 text-brass" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
       </div>
 
       {/* Modal Triển Lãm 3D Toàn Màn Hình (Khi người dùng bấm Phóng To 3D) */}

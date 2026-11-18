@@ -161,38 +161,54 @@ export const HomePage: React.FC = () => {
           <img src="/images/trong-dong.webp" alt="" className="home-dong-son home-dong-son-celestial h-full w-full object-contain opacity-35 mix-blend-screen" />
         </div>
 
-        <div className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center px-5 py-4 sm:px-8 sm:py-6 lg:px-16">
+        <div className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center px-4 py-6 sm:px-8 sm:py-8 lg:px-16">
           <div className="max-w-[880px] animate-fade-up">
-            <h1 className="font-serif text-[clamp(2.75rem,5.8vw,5.5rem)] font-normal leading-[1.18] tracking-normal text-paper">
+            {/* Atelier Curatorial Pill for Mobile & Desktop */}
+            <div className="inline-flex items-center gap-2 border border-brass/50 bg-[#0D1C16]/80 px-3 py-1 mb-3.5 backdrop-blur-sm rounded-[2px] shadow-sm">
+              <span className="text-brass text-xs animate-pulse">✦</span>
+              <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.18em] text-brass-light font-semibold">
+                DI SẢN KIẾN TRÚC VIỆT · TỶ LỆ 1:120
+              </span>
+            </div>
+
+            <h1 className="font-serif text-[clamp(2.35rem,6vw,5.5rem)] font-normal leading-[1.16] tracking-tight text-paper">
               <span className="block">{t('home.heroTitleLine1', 'Văn Minh')}</span>
               <span className="heritage-gold-foil font-normal italic pb-1">{t('home.heroTitleLine2', 'Di Sản Việt')}</span>
             </h1>
-            <p className="mt-4 sm:mt-5 max-w-[700px] text-lg leading-8 text-white/90 sm:text-xl sm:leading-9">
+
+            <p className="mt-3.5 sm:mt-5 max-w-[700px] text-sm sm:text-lg leading-relaxed sm:leading-8 text-white/90">
               {t('home.heroSubtitle', 'Hành trình số hóa bảo tàng, di tích và ký ức văn hóa Việt Nam qua các câu chuyện lịch sử')}
             </p>
-            <div className="mt-6 sm:mt-7 flex flex-wrap items-center gap-3">
-              <Link to="/collections" className="animate-gold-glint inline-flex min-h-12 items-center gap-3 bg-brass px-6 py-3 text-sm font-semibold text-forest transition-all hover:bg-brass-light shadow-[0_0_20px_rgba(184,138,68,0.25)] hover:shadow-[0_0_35px_rgba(184,138,68,0.5)]">
-                {t('home.heroCtaCollection', 'Khám phá bộ sưu tập')} <ArrowRight size={16} strokeWidth={1.7} />
+
+            <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <Link
+                to="/collections"
+                className="animate-gold-glint inline-flex min-h-12 items-center justify-center gap-3 bg-brass px-6 py-3 text-xs sm:text-sm font-sans font-bold uppercase tracking-wider text-forest transition-all hover:bg-brass-light shadow-[0_0_20px_rgba(184,138,68,0.25)] hover:shadow-[0_0_35px_rgba(184,138,68,0.5)] rounded-[2px] active:scale-[0.98]"
+              >
+                <span>{t('home.heroCtaCollection', 'Khám phá bộ sưu tập')}</span>
+                <ArrowRight size={15} strokeWidth={2} />
               </Link>
               <Link
                 to="/about"
-                className="group relative inline-flex min-h-12 items-center gap-2.5 border-2 border-brass bg-paper px-6 py-3 text-sm font-semibold text-forest shadow-[0_0_25px_rgba(184,138,68,0.35)] transition-all duration-300 hover:bg-white hover:border-brass-light hover:text-brown hover:shadow-[0_0_35px_rgba(184,138,68,0.6)] hover:-translate-y-0.5"
+                className="group relative inline-flex min-h-12 items-center justify-center gap-2.5 border-2 border-brass/70 bg-[#FAF7F0] px-6 py-3 text-xs sm:text-sm font-sans font-bold uppercase tracking-wider text-forest shadow-[0_0_20px_rgba(184,138,68,0.2)] transition-all duration-300 hover:bg-white hover:border-brass hover:text-brown rounded-[2px] active:scale-[0.98]"
               >
-                <BookOpen size={16} strokeWidth={1.8} className="text-brass transition-transform duration-300 group-hover:scale-110" />
+                <BookOpen size={15} strokeWidth={2} className="text-brass transition-transform duration-300 group-hover:scale-110" />
                 <span>{t('home.heroCtaStory', 'Câu chuyện Viettoria')}</span>
               </Link>
             </div>
-            <div className="mt-7 sm:mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/25 pt-3.5 sm:pt-4 text-xs tracking-wide text-white/75">
-              <span>{t('home.heroBadge1', 'Mô hình kiến trúc')}</span>
-              <span className="h-1 w-1 bg-brass" />
-              <span>{t('home.heroBadge2', 'Câu chuyện di sản')}</span>
-              <span className="h-1 w-1 bg-brass" />
-              <span>{t('home.heroBadge3', 'Trải nghiệm 3D')}</span>
+
+            <div className="mt-6 sm:mt-8 flex flex-wrap items-center gap-x-4 sm:gap-x-6 gap-y-2 border-t border-white/20 pt-3.5 sm:pt-4 text-[11px] sm:text-xs tracking-wide text-white/80">
+              <span className="flex items-center gap-1.5"><span className="text-brass">◇</span>{t('home.heroBadge1', 'Mô hình kiến trúc')}</span>
+              <span className="h-1 w-1 bg-brass hidden sm:inline-block" />
+              <span className="flex items-center gap-1.5"><span className="text-brass">◇</span>{t('home.heroBadge2', 'Câu chuyện di sản')}</span>
+              <span className="h-1 w-1 bg-brass hidden sm:inline-block" />
+              <span className="flex items-center gap-1.5"><span className="text-brass">◇</span>{t('home.heroBadge3', 'Trải nghiệm 3D')}</span>
             </div>
           </div>
         </div>
-        <a href="#hanh-trinh-di-san" className="absolute bottom-3 sm:bottom-4 left-5 z-10 inline-flex items-center gap-2 text-xs tracking-wide text-white/80 transition-colors hover:text-white sm:left-8 lg:left-16">
-          {t('home.scrollDown', 'Cuộn để khám phá')} <ArrowDown size={14} strokeWidth={1.5} />
+        <a href="#hanh-trinh-di-san" className="absolute bottom-3 sm:bottom-4 left-4 sm:left-8 lg:left-16 z-10 inline-flex items-center gap-2 text-xs tracking-wide text-white/80 transition-colors hover:text-brass group">
+          <span>{t('home.scrollDown', 'Cuộn để khám phá')}</span>
+          <ArrowDown size={14} strokeWidth={1.8} className="transition-transform group-hover:translate-y-1 animate-bounce text-brass" />
         </a>
       </section>
 

@@ -110,7 +110,7 @@ export const QRScanModal: React.FC<QRScanModalProps> = ({ isOpen, onClose }) => 
 
           <button
             type="submit"
-            className="w-full py-3 px-4 bg-brown-dark text-white hover:bg-brown-dark transition-colors font-mono text-xs uppercase tracking-widest font-semibold flex items-center justify-center gap-2 shadow-sm rounded-[2px] mt-6"
+            className="w-full py-3 px-4 bg-forest text-paper hover:bg-forest-light border border-brass/50 transition-all font-mono text-xs uppercase tracking-widest font-semibold flex items-center justify-center gap-2 shadow-md rounded-[2px] mt-6 active:scale-95 cursor-pointer"
           >
             <span>{t('qr.btnUnlock')}</span>
             <ArrowRight className="w-4 h-4" />

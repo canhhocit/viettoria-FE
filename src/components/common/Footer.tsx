@@ -21,7 +21,7 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="border-t-2 border-brass/45 bg-forest-dark text-paper px-4 py-12 sm:px-6 lg:px-8 select-none">
+    <footer className="border-t-2 border-brass/45 bg-forest-dark text-paper px-4 pt-10 pb-24 md:py-12 sm:px-6 lg:px-8 select-none">
       <div className="mx-auto max-w-7xl">
         {/* Main 4-Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 pb-8">
