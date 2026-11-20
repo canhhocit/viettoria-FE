@@ -278,15 +278,15 @@ export const FALLBACK_PRODUCTS: Product[] = [
     ],
     audioGuide: {
       title: 'Âm Vang Lầu Gác Cung Điện Lê Sơ',
-      duration: '00:30',
-      audioUrl: '',
+      duration: '00:23',
+      audioUrl: '/audio/gac-lau-thang-long-vi.mp3',
       audioUrls: {
-        vi: '',
-        en: '',
-        fr: '',
-        zh: '',
-        ko: '',
-        ja: '',
+        vi: '/audio/gac-lau-thang-long-vi.mp3',
+        en: '/audio/gac-lau-thang-long-en.mp3',
+        fr: '/audio/gac-lau-thang-long-fr.mp3',
+        zh: '/audio/gac-lau-thang-long-zh.mp3',
+        ko: '/audio/gac-lau-thang-long-ko.mp3',
+        ja: '/audio/gac-lau-thang-long-ja.mp3',
       },
       narrator: 'Thuyết minh Viettoria Atelier',
       transcript: 'Hoàng thành Thăng Long thời Lê Sơ thế kỷ 15 là thời kỳ hoàng kim của nền văn hiến và nghệ thuật kiến trúc Đại Việt. Mô hình gác lâu được nghiên cứu và phục dựng từ những mảnh gốm men, ngói rồng và cấu kiện đất nung khai quật tại Hoàng thành Thăng Long, tái hiện hệ vì kèo mộng gỗ phức hợp, mái đao chồng diêm thanh thoát vươn lên giữa tầng không, thể hiện trọn vẹn khí phách vương triều và bàn tay tài hoa của người thợ thủ công Thăng Long xưa.'
@@ -347,6 +347,29 @@ export const FALLBACK_STORY_BLOCKS: StoryBlock[] = [
     subtitle: 'Đóa sen nở từ bùn đen tượng trưng cho sự thanh tịnh vô nhiễm',
     content: 'Trong văn hóa Phật giáo Đại Việt, hoa sen là biểu tượng của sự thuần khiết, vượt lên trên mọi cám dỗ và thăng trầm của cõi tục. Chùa Một Cột ngự giữa lòng hồ nước không chỉ là một công trình tín ngưỡng, mà là tuyên ngôn về bản sắc văn hóa tự chủ, dung dị nhưng thâm sâu của cha ông ta nghìn năm trước.',
     displayOrder: 4,
+    status: 'published'
+  },
+  {
+    id: 'block-gac-lau-1',
+    productId: 'prod-6',
+    type: 'text_image',
+    title: 'Khai Quật Hoàng Thành Thăng Long & Dấu Ấn Kiến Trúc Lê Sơ',
+    subtitle: 'Từ những mảnh gốm ngói rồng nghìn năm đến mô hình phục dựng',
+    content: 'Các cuộc khai quật khảo cổ học tại trung tâm Hoàng thành Thăng Long (18 Hoàng Diệu) đã phát lộ hàng vạn hiện vật gốm men, đầu rồng đất nung, ngói mũi sen và ngói lưu ly thời Lê Sơ thế kỷ 15. Đây là cứ liệu lịch sử vô giá chứng minh quy mô nguy nga, tráng lệ của các cung điện, lầu các thời Lê - thời kỳ đỉnh cao về thiết chế quốc gia và bản sắc văn hóa Đại Việt.',
+    mediaUrl: '/images/hoang-thanh-thang-long.webp',
+    mediaCaption: 'Dấu tích kiến trúc và hiện vật đất nung thời Lê Sơ khai quật tại Hoàng thành Thăng Long.',
+    displayOrder: 1,
+    status: 'published'
+  },
+  {
+    id: 'block-gac-lau-2',
+    productId: 'prod-6',
+    type: 'highlight',
+    title: 'Nghệ Thuật Mái Đao Chồng Diêm & Ngàm Mộng Phức Hợp',
+    subtitle: 'Đỉnh cao kỹ thuật mộc cung đình và hoa văn rồng thời Lê',
+    content: 'Kết cấu chồng diêm nhiều tầng mái không chỉ tạo nét thanh thoát vươn lên mà còn giúp điều hòa ánh sáng, thông gió chốn lầu gác. Từng đầu đao chạm khắc rồng thời Lê với thân uốn lượn hình sin mềm mại, mũi sư tử và bờm uy nghiêm, thể hiện trọn vẹn khí phách của một vương triều hưng thịnh bậc nhất lịch sử dân tộc.',
+    highlightBadge: 'Kiệt tác cung đình Lê Sơ',
+    displayOrder: 2,
     status: 'published'
   }
 ];

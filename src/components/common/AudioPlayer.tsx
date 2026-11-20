@@ -118,9 +118,13 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
     ))
   );
   const configuredAudioUrl = resolveAudioUrl(languageSpecificAudioUrl || (isAudioMatchingCurrentLang ? audioGuide.audioUrl : ''));
+  const hasVietnameseVoice = useMemo(() => {
+    return Boolean(findBestVoice(availableVoices, 'vi'));
+  }, [availableVoices]);
+
   const activeAudioUrl = configuredAudioUrl && !audioFallbackActive
     ? configuredAudioUrl
-    : language === 'vi' && audioFallbackActive
+    : language === 'vi' && (audioFallbackActive || (!configuredAudioUrl && (!hasVietnameseVoice || availableVoices.length === 0)))
       ? SAMPLE_AUDIO_URL
       : '';
 
@@ -253,6 +257,10 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
     const bestVoice = findBestVoice(availableVoices, language);
     if (bestVoice) {
       utterance.voice = bestVoice;
+    } else if (language === 'vi') {
+      // Guard: OS/browser missing Vietnamese TTS voice; don't let English voice speak Vietnamese text
+      setAudioFallbackActive(true);
+      return;
     }
 
     utterance.rate = 0.95; // Calm, respectful storytelling pace

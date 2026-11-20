@@ -27,6 +27,7 @@ import {
   type ArchitecturalHotspot,
 } from '../../data/architecturalHotspots';
 import { CuratorLoupe } from '../heritage/CuratorLoupe';
+import { LiquidMediaSelector } from './LiquidMediaSelector';
 
 interface ArchitecturalViewerProps {
   product: Product;
@@ -317,26 +318,25 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
   return (
     <div className="architectural-viewer-shell relative overflow-hidden border border-paper-border bg-paper-card shadow-sm">
       <header className="flex flex-wrap items-center justify-between gap-3 border-b border-paper-border bg-header p-3.5 sm:p-4">
-        <div className="flex items-center gap-1.5" role="group" aria-label={t('product.tab3d', 'Chế độ xem sản phẩm')}>
-          <button
-            type="button"
-            aria-pressed={activeTab === '3d'}
-            onClick={() => setActiveTab('3d')}
-            className={`inline-flex min-h-9 items-center gap-2 border px-3 text-xs font-sans uppercase tracking-wider font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass ${activeTab === '3d' ? 'border-forest bg-forest text-paper' : 'border-paper-border bg-paper text-forest hover:border-brass hover:bg-paper-warm'}`}
-          >
-            <Box className="h-3.5 w-3.5" />
-            {t('product.tab3d', 'Mô hình 3D')}
-          </button>
-          <button
-            type="button"
-            aria-pressed={activeTab === 'photos'}
-            onClick={() => setActiveTab('photos')}
-            className={`inline-flex min-h-9 items-center gap-2 border px-3 text-xs font-sans uppercase tracking-wider font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-brass ${activeTab === 'photos' ? 'border-forest bg-forest text-paper' : 'border-paper-border bg-paper text-forest hover:border-brass hover:bg-paper-warm'}`}
-          >
-            <Eye className="h-3.5 w-3.5" />
-            {t('product.tabPhotos', 'Ảnh thực địa')}
-          </button>
-        </div>
+        <LiquidMediaSelector<'3d' | 'photos'>
+          options={[
+            {
+              id: '3d',
+              label: t('product.tab3d', 'Mô hình 3D'),
+              icon: Box,
+            },
+            {
+              id: 'photos',
+              label: t('product.tabPhotos', 'Ảnh thực địa'),
+              icon: Eye,
+            },
+          ]}
+          activeId={activeTab}
+          onChange={(newTab) => setActiveTab(newTab)}
+          variant="paper"
+          size="sm"
+          ariaLabel={t('product.tab3d', 'Chế độ xem sản phẩm')}
+        />
 
         {/* Nút bật/tắt điểm khảo cứu cấu kiện kiến trúc & Tour tự động */}
         {activeTab === '3d' && hotspots.length > 0 && (

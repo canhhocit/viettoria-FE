@@ -24,9 +24,9 @@
 
 ### A. Giao Diện & Trải Nghiệm Mobile (UI/UX Pro Max)
 1. **Thanh Điều Hướng Đáy Di Động Đẳng Cấp Hoàng Gia ([MobileBottomNav.tsx](file:///c:/personal/viettoria/viettoria-FE/src/components/common/MobileBottomNav.tsx)):**
-   * Thiết kế kính mờ sơn then cổ (`bg-[#0D1C16]/96 backdrop-blur-lg border-t border-brass/35`).
-   * 4 điểm chạm chính: Khám Phá (Home), Tác Phẩm (3D Models), Bộ Sưu Tập (Collections), Bản Đồ (Map).
-   * Tâm điểm nút tròn vàng thếp nhô cao: Quét Tem QR với hiệu ứng tỏa sóng (radar pulse) hỗ trợ tra cứu trực tiếp tem phygital trên mô hình vật lý.
+   * Thiết kế chuẩn nền giấy điệp/parchment cao cấp (`bg-[#FAF7F0] border-t border-[#D8CFBC] shadow-[0_-4px_20px_rgba(20,40,32,0.08)]`), đồng bộ tuyệt đối với Header và phong cách toàn trang.
+   * 4 điểm chạm chính: Khám Phá (Home), Tác Phẩm (3D Models), Bộ Sưu Tập (Collections), Bản Đồ (Map). Trạng thái Active nổi bật màu xanh gỗ lim (`text-forest`) kèm chấm tròn vàng đồng (`bg-brass`), trạng thái Inactive dùng `text-charcoal-muted` độ tương phản cao, khắc phục hoàn toàn tình trạng chữ trắng chìm trên nền sáng.
+   * Tâm điểm nút tròn vàng thếp nhô cao: Quét Tem QR với nền xanh lim viền đồng (`bg-forest text-brass border-2 border-brass`) kèm hiệu ứng tỏa sóng (radar pulse) hỗ trợ tra cứu trực tiếp tem phygital trên mô hình vật lý.
    * Hỗ trợ chuẩn safe-area cho iOS / Android gesture navigation.
 
 2. **Tủ Điều Hướng Thư Viện Chuyên Sâu ([Header.tsx](file:///c:/personal/viettoria/viettoria-FE/src/components/common/Header.tsx)):**
@@ -34,16 +34,19 @@
    * Mỗi danh mục có biểu tượng SVG chuyên biệt và chú thích bối cảnh lịch sử, huy hiệu trạng thái "Đang xem".
    * Tích hợp bảng chuyển đổi nhanh đa ngữ (6 quốc gia) và trình phát không gian âm thanh chuông chùa / âm vang di sản.
 
-3. **Hero Section Cô Đọng & Tinh Tế ([HomePage.tsx](file:///c:/personal/viettoria/viettoria-FE/src/pages/HomePage.tsx)):**
+3. **Hero Section Thu Gọn Khoảng Trống, Tối Ưu Above-The-Fold ([HomePage.tsx](file:///c:/personal/viettoria/viettoria-FE/src/pages/HomePage.tsx)):**
+   * **Thu ngắn chiều cao và loại bỏ lộ chữ chìm của video:**
+     - Tinh chỉnh chiều cao section và khoảng đệm di động xuống siêu gọn: `pt-3 pb-2 sm:py-8`, tiêu đề `text-[clamp(1.95rem,5.2vw,5.5rem)]`, nút bấm chuẩn ngón tay cái `min-h-10 px-4 py-2`.
+     - Loại bỏ dòng chữ *"Cuộn để khám phá"* riêng lẻ trên mobile để tránh chiếm diện tích, giúp nội dung khối hero ôm sát huy hiệu kiến trúc.
+     - Áp dụng `scale-[1.16] origin-top sm:scale-100` trên video và ảnh poster nền kết hợp cùng lớp mặt nạ chuyển màu đáy `bg-gradient-to-t from-forest-dark to-transparent`. Cơ chế này đẩy toàn bộ phần chữ phụ đề/watermark của tư liệu gốc ("Điện Kiến Trung", "Đại Nội Huế") ra khỏi mép khung nhìn (`overflow-hidden`), bảo đảm tuyệt đối không còn bị lộ bất kỳ chữ chìm nào ở chân hero.
    * Typography `clamp` linh hoạt, bảo đảm không bị rớt dòng ngắt dấu tiếng Việt trên màn hình nhỏ.
    * Bổ sung nhãn giám tuyển: `✦ DI SẢN KIẾN TRÚC VIỆT · TỶ LỆ 1:120`.
-   * Cụm nút bấm kép kích thước chuẩn ngón tay cái (min-height 48px) kèm vệt sáng vàng lá (gold glint).
-   * Mũi tên chỉ dẫn cuộn trang chuyển động nhịp nhàng (bouncing brass chevron).
+   * Cụm nút bấm kép kích thước chuẩn ngón tay cái kèm vệt sáng vàng lá (gold glint).
 
-4. **Băng Chuyền Mô Hình 3D Vòng Lặp Vô Tận ([HeritageModelCarousel.tsx](file:///c:/personal/viettoria/viettoria-FE/src/components/heritage/HeritageModelCarousel.tsx)):**
-   * Cơ chế Hybrid Mobile 3D: hiển thị poster độ nét cao kèm nút "Chạm để xoay 3D", kích hoạt WebGL theo nhu cầu (On-demand WebGL), loại bỏ hoàn toàn nguy cơ sập context GPU trên Safari/Chrome mobile.
-   * Hỗ trợ vuốt chạm bắt dính (`snap-x snap-mandatory snap-center`).
-   * Thanh chỉ thị số lượng tác phẩm và hướng dẫn cử chỉ trực quan.
+4. **Băng Chuyền Mô Hình 3D Vòng Lặp Vô Tận Trượt Mượt Mà ([HeritageModelCarousel.tsx](file:///c:/personal/viettoria/viettoria-FE/src/components/heritage/HeritageModelCarousel.tsx)):**
+   * **Bỏ nút "Chạm để xoay 3D":** Kích hoạt trực tiếp `<model-viewer>` trên cả điện thoại di động và máy tính với `camera-controls` và `auto-rotate` tự động xoay 12°/giây. Người dùng có thể chạm tay xoay 360° mọi góc nhìn công trình một cách trực tiếp, tự nhiên.
+   * **Khôi phục hiệu ứng trượt vô hạn từ phải sang trái (Infinite Auto-scroll):** Loại bỏ cơ chế `snap-x snap-mandatory` trên mobile để vòng lặp `requestAnimationFrame` lướt êm ái liên tục qua 3 cụm tác phẩm vòng tròn. Khi người dùng chạm tay vào thẻ hoặc xoay mô hình 3D, hệ thống tự động tạm dừng lướt và tiếp tục trôi mượt mà sau 1.5 giây buông tay.
+   * Tinh chỉnh padding di động xuống `pt-8 pb-12 sm:py-20` tiếp nối nhịp nhàng sau hero section.
 
 5. **Khảo Cứu Xuyên Thế Kỷ 1900 ↔ 2026 ([TimeTravelComparison.tsx](file:///c:/personal/viettoria/viettoria-FE/src/components/heritage/TimeTravelComparison.tsx)):**
    * Sử dụng thuật toán CSS `clip-path: inset(...)` bảo đảm ảnh cổ 1896 và ảnh phục dựng 2026 đồng nhất tỉ lệ 1:1 từng điểm ảnh khi kéo thanh trượt.

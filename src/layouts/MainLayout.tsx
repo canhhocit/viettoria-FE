@@ -6,6 +6,7 @@ import { QRScanModal } from '../components/common/QRScanModal';
 import { PageScrollProgress } from '../components/common/PageScrollProgress';
 import { LanguagePickerModal } from '../components/common/LanguagePickerModal';
 import { MobileBottomNav } from '../components/common/MobileBottomNav';
+import { PWAInstallPrompt } from '../components/common/PWAInstallPrompt';
 import { useLanguage } from '../contexts/LanguageContext';
 import type { LanguageCode } from '../locales';
 
@@ -65,6 +66,9 @@ export const MainLayout: React.FC = () => {
         currentLanguage={language}
         onSelect={handleLanguageSelect}
       />
+
+      {/* PWA Install Banner / Offline Capability Prompt */}
+      <PWAInstallPrompt />
     </div>
   );
 };

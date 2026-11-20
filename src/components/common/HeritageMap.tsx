@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { getLocalizedProduct } from '../../utils/localizedEntities';
+import { LiquidMediaSelector } from './LiquidMediaSelector';
 import {
   resolve3DModelUrl,
   resolve3DPreview,
@@ -414,32 +415,29 @@ export const HeritageMap: React.FC<HeritageMapProps> = ({
 
   return (
     <div className="heritage-map bg-paper border border-brass/40 corner-frame shadow-xl overflow-hidden flex flex-col">
-      {/* 0. Mobile Switcher: Map View vs List View */}
-      <div className="lg:hidden flex border-b border-paper-border bg-paper-warm p-1.5 gap-1.5">
-        <button
-          type="button"
-          onClick={() => setMobileTab('map')}
-          className={`flex-1 py-2 text-xs font-sans font-bold uppercase tracking-wider rounded-[2px] transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-            mobileTab === 'map'
-              ? 'bg-forest text-brass shadow-xs border border-brass/50'
-              : 'text-charcoal hover:bg-paper'
-          }`}
-        >
-          <Compass className="w-3.5 h-3.5" />
-          <span>{t('mapPage.mapViewTab', 'Bản Đồ Di Sản')}</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => setMobileTab('list')}
-          className={`flex-1 py-2 text-xs font-sans font-bold uppercase tracking-wider rounded-[2px] transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-            mobileTab === 'list'
-              ? 'bg-forest text-brass shadow-xs border border-brass/50'
-              : 'text-charcoal hover:bg-paper'
-          }`}
-        >
-          <Layers className="w-3.5 h-3.5" />
-          <span>{t('mapPage.listViewTab', 'Danh Sách Di Tích')} ({HERITAGE_SITES.length})</span>
-        </button>
+      {/* 0. Mobile Switcher: Map View vs List View with Liquid Animation */}
+      <div className="lg:hidden flex justify-center border-b border-paper-border bg-paper-warm py-2 px-3">
+        <LiquidMediaSelector<'map' | 'list'>
+          options={[
+            {
+              id: 'map',
+              label: t('mapPage.mapViewTab', 'Bản Đồ Di Sản'),
+              icon: Compass,
+            },
+            {
+              id: 'list',
+              label: t('mapPage.listViewTab', 'Danh Sách Di Tích'),
+              icon: Layers,
+              badge: HERITAGE_SITES.length,
+            },
+          ]}
+          activeId={mobileTab}
+          onChange={(newTab) => setMobileTab(newTab)}
+          variant="paper"
+          size="sm"
+          className="w-full max-w-sm justify-center"
+          ariaLabel={t('mapPage.mapViewTab', 'Chuyển chế độ xem bản đồ')}
+        />
       </div>
 
       <div className="flex flex-col lg:flex-row flex-1">
