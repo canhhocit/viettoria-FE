@@ -16,6 +16,9 @@ export default defineConfig({
         'maskable-icon-512x512.png',
         'icons.svg',
         'viettoria.svg',
+        'images/laugacLeso/2D-laugac.jpg',
+        'images/laugacLeso/2D-laugac2.jpg',
+        'images/laugacLeso/camhunglaugac.jpg',
       ],
       manifest: {
         name: 'VIETTORIA — Di Sản Văn Hóa & Kiến Trúc Việt',
@@ -48,7 +51,7 @@ export default defineConfig({
       },
       workbox: {
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024, // 6 MB to allow high-res heritage imagery
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,jpg,jpeg}'],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

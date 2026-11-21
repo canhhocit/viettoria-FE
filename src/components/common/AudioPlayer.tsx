@@ -98,7 +98,14 @@ const findBestVoice = (voices: SpeechSynthesisVoice[], lang: LanguageCode): Spee
 export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageName }) => {
   const { t, language } = useLanguage();
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const guideVideoRef = useRef<HTMLVideoElement | null>(null);
+  const guideVideoARef = useRef<HTMLVideoElement | null>(null);
+  const guideVideoBRef = useRef<HTMLVideoElement | null>(null);
+  const [activeGuideLayer, setActiveGuideLayer] = useState<'A' | 'B'>('A');
+  const activeGuideLayerRef = useRef<'A' | 'B'>('A');
+  activeGuideLayerRef.current = activeGuideLayer;
+  const isCrossfadingRef = useRef(false);
+  const crossfadeTimerRef = useRef<number | null>(null);
+  const guideLoopCheckRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const ttsTimerRef = useRef<number | null>(null);
   const currentTimeRef = useRef(0);
@@ -150,18 +157,75 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
 
   const hasAudio = Boolean(activeAudioUrl || (typeof window !== 'undefined' && 'speechSynthesis' in window));
 
-  // Synchronize conical hat tour guide video with narration audio state
+  // Seamless Dual-Video Crossfade Looper: eliminates black blink / stutter during loop replay
   useEffect(() => {
-    const video = guideVideoRef.current;
-    if (!video) return;
-
-    if (isPlaying) {
-      void video.play().catch(() => {
-        // Autoplay may be restricted until user interaction; non-blocking
-      });
-    } else {
-      video.pause();
+    if (!isPlaying) {
+      if (guideLoopCheckRef.current) {
+        window.clearInterval(guideLoopCheckRef.current);
+        guideLoopCheckRef.current = null;
+      }
+      if (crossfadeTimerRef.current) {
+        window.clearTimeout(crossfadeTimerRef.current);
+        crossfadeTimerRef.current = null;
+      }
+      isCrossfadingRef.current = false;
+      guideVideoARef.current?.pause();
+      guideVideoBRef.current?.pause();
+      return;
     }
+
+    // Play currently active video layer
+    const activeVideo = activeGuideLayerRef.current === 'A' ? guideVideoARef.current : guideVideoBRef.current;
+    if (activeVideo) {
+      void activeVideo.play().catch(() => {
+        // Autoplay policy non-blocking
+      });
+    }
+
+    // Check periodically for upcoming video end to trigger crossfade before any freeze/black frame
+    guideLoopCheckRef.current = window.setInterval(() => {
+      const activeLayer = activeGuideLayerRef.current;
+      const currentVideo = activeLayer === 'A' ? guideVideoARef.current : guideVideoBRef.current;
+      const nextVideo = activeLayer === 'A' ? guideVideoBRef.current : guideVideoARef.current;
+
+      if (!currentVideo || !nextVideo || isCrossfadingRef.current) return;
+
+      const totalDuration = currentVideo.duration;
+      if (!Number.isFinite(totalDuration) || totalDuration <= 1) return;
+
+      // Start seamless crossfade 0.5s before current video reaches its end
+      const triggerTime = totalDuration - 0.5;
+      if (currentVideo.currentTime >= triggerTime) {
+        isCrossfadingRef.current = true;
+        const nextLayer = activeLayer === 'A' ? 'B' : 'A';
+
+        // Prepare and play the other video from beginning seamlessly
+        nextVideo.currentTime = 0;
+        void nextVideo.play().catch(() => undefined);
+
+        // Switch visible layer with smooth CSS opacity transition
+        setActiveGuideLayer(nextLayer);
+        activeGuideLayerRef.current = nextLayer;
+
+        // Reset previous video in background after crossfade completes
+        crossfadeTimerRef.current = window.setTimeout(() => {
+          currentVideo.pause();
+          currentVideo.currentTime = 0;
+          isCrossfadingRef.current = false;
+        }, 500);
+      }
+    }, 40);
+
+    return () => {
+      if (guideLoopCheckRef.current) {
+        window.clearInterval(guideLoopCheckRef.current);
+        guideLoopCheckRef.current = null;
+      }
+      if (crossfadeTimerRef.current) {
+        window.clearTimeout(crossfadeTimerRef.current);
+        crossfadeTimerRef.current = null;
+      }
+    };
   }, [isPlaying]);
 
   // Load available speech synthesis voices asynchronously
@@ -190,9 +254,24 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
-    if (guideVideoRef.current) {
-      guideVideoRef.current.pause();
-      guideVideoRef.current.currentTime = 0;
+    if (guideVideoARef.current) {
+      guideVideoARef.current.pause();
+      guideVideoARef.current.currentTime = 0;
+    }
+    if (guideVideoBRef.current) {
+      guideVideoBRef.current.pause();
+      guideVideoBRef.current.currentTime = 0;
+    }
+    setActiveGuideLayer('A');
+    activeGuideLayerRef.current = 'A';
+    isCrossfadingRef.current = false;
+    if (guideLoopCheckRef.current) {
+      window.clearInterval(guideLoopCheckRef.current);
+      guideLoopCheckRef.current = null;
+    }
+    if (crossfadeTimerRef.current) {
+      window.clearTimeout(crossfadeTimerRef.current);
+      crossfadeTimerRef.current = null;
     }
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
@@ -357,9 +436,15 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
     setCurrentTime(0);
     currentTimeRef.current = 0;
 
-    if (guideVideoRef.current) {
-      guideVideoRef.current.currentTime = 0;
+    if (guideVideoARef.current) {
+      guideVideoARef.current.currentTime = 0;
     }
+    if (guideVideoBRef.current) {
+      guideVideoBRef.current.currentTime = 0;
+    }
+    setActiveGuideLayer('A');
+    activeGuideLayerRef.current = 'A';
+    isCrossfadingRef.current = false;
 
     if (!isUsingTts && audioRef.current) {
       audioRef.current.currentTime = 0;
@@ -526,16 +611,28 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
               <div className="pointer-events-none absolute bottom-1 left-1 w-2.5 h-2.5 border-b border-l border-brass z-20" aria-hidden="true" />
               <div className="pointer-events-none absolute bottom-1 right-1 w-2.5 h-2.5 border-b border-r border-brass z-20" aria-hidden="true" />
 
-              {/* Synchronized Conical Hat Guide Video */}
+              {/* Seamless Dual-Video Crossfade Layer: Eliminates black flash/flicker and creates organic continuous looping */}
               <video
-                ref={guideVideoRef}
+                ref={guideVideoARef}
                 src="/images/guide/Woman_speaking_as_tour_guide_6e120cf1.mp4"
                 poster="/images/guide/guide-poster.jpg"
                 muted
                 playsInline
-                loop
                 preload="auto"
-                className="h-full w-full object-cover object-center pointer-events-none"
+                className={`absolute inset-0 h-full w-full object-cover object-center pointer-events-none transition-opacity duration-500 ease-in-out ${
+                  activeGuideLayer === 'A' ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                }`}
+              />
+              <video
+                ref={guideVideoBRef}
+                src="/images/guide/Woman_speaking_as_tour_guide_6e120cf1.mp4"
+                poster="/images/guide/guide-poster.jpg"
+                muted
+                playsInline
+                preload="auto"
+                className={`absolute inset-0 h-full w-full object-cover object-center pointer-events-none transition-opacity duration-500 ease-in-out ${
+                  activeGuideLayer === 'B' ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                }`}
               />
 
               {/* Subtle hover icon overlay (Icon Only, No Text) */}

@@ -261,7 +261,8 @@ export const FALLBACK_PRODUCTS: Product[] = [
     collectionId: 'col-1',
     epoch: 'Thời Lê Sơ (Thế Kỷ XV)',
     location: 'Khảo Cứu Kiến Trúc Cung Đình Đại Việt',
-    shortDescription: 'Mô hình lầu gác tái hiện kiến trúc thời Lê Sơ, được xây dựng trên cơ sở nghiên cứu các hình thái kiến trúc cùng hiện vật khảo cổ đồng đại và cận đại; tái hiện hệ kiến trúc lầu gác ba tầng thanh thoát, vì kèo mộng gỗ phức hợp và tầng mái chồng diêm uy nghi chốn cung đình xưa.',
+    restorer: 'Nguyễn Huy Hoàng',
+    shortDescription: 'Mô hình lầu gác tái hiện kiến trúc thời Lê Sơ do tác giả Nguyễn Huy Hoàng nghiên cứu phục dựng trên cơ sở các hình thái kiến trúc, họa tiết gốm hoa lam thế kỷ 15 cùng hiện vật khảo cổ học đồng đại và cận đại; tái hiện hệ kiến trúc lầu gác ba tầng thanh thoát, vì kèo mộng gỗ phức hợp và tầng mái chồng diêm uy nghi chốn cung đình xưa.',
     modelSpecs: {
       scale: '1:100',
       heightCm: 19.6,
@@ -269,12 +270,15 @@ export const FALLBACK_PRODUCTS: Product[] = [
       weightGrams: 310,
       material: 'Nhựa sinh thái BioPETG kết cấu mộng gỗ cung đình Đại Việt',
       partsCount: 32,
-      finishing: 'Sơn son thếp vàng, ngói lưu ly phục dựng trên cơ sở hiện vật đồng đại'
+      finishing: 'Sơn son thếp vàng, ngói lưu ly phục dựng trên cơ sở hiện vật đồng đại',
+      restorer: 'Nguyễn Huy Hoàng'
     },
-    heroImage: '/images/hoang-thanh-thang-long.webp',
+    heroImage: '/images/laugacLeso/2D-laugac2.jpg',
     model3dUrl: '/3D/lau_gac_web.glb',
     galleryImages: [
-      '/images/hoang-thanh-thang-long.webp'
+      '/images/laugacLeso/2D-laugac2.jpg',
+      '/images/laugacLeso/2D-laugac.jpg',
+      '/images/laugacLeso/camhunglaugac.jpg'
     ],
     audioGuide: {
       title: 'Âm Vang Lầu Gác Thời Lê Sơ',
@@ -288,8 +292,8 @@ export const FALLBACK_PRODUCTS: Product[] = [
         ko: '/audio/lau-gac-le-so-ko.mp3',
         ja: '/audio/lau-gac-le-so-ja.mp3',
       },
-      narrator: 'Thuyết minh Viettoria Atelier',
-      transcript: 'Thời Lê Sơ thế kỷ 15 là thời kỳ hoàng kim của nền văn hiến và nghệ thuật kiến trúc Đại Việt. Mô hình lầu gác tái hiện không gian kiến trúc thời Lê Sơ, được xây dựng trên cơ sở nghiên cứu các hình thái kiến trúc cùng hiện vật khảo cổ đồng đại và cận đại. Tác phẩm tái hiện hệ kiến trúc lầu gác ba tầng thanh thoát, hệ vì kèo mộng gỗ phức hợp và các tầng mái chồng diêm uy nghi, phản ánh tư duy tạo tác chuẩn mực và bàn tay tài hoa của người thợ thủ công Đại Việt xưa.'
+      narrator: 'Tác giả phục dựng: Nguyễn Huy Hoàng · Thuyết minh Viettoria Atelier',
+      transcript: 'Thời Lê Sơ thế kỷ 15 là thời kỳ hoàng kim của nền văn hiến và nghệ thuật kiến trúc Đại Việt. Mô hình lầu gác tái hiện không gian kiến trúc thời Lê Sơ do tác giả Nguyễn Huy Hoàng nghiên cứu phục dựng trên cơ sở các hình thái kiến trúc cùng hiện vật khảo cổ đồng đại và cận đại. Tác phẩm tái hiện hệ kiến trúc lầu gác ba tầng thanh thoát, hệ vì kèo mộng gỗ phức hợp và các tầng mái chồng diêm uy nghi, phản ánh tư duy tạo tác chuẩn mực và bàn tay tài hoa của người thợ thủ công Đại Việt xưa.'
     },
     displayOrder: 6,
     status: 'published',
@@ -354,10 +358,10 @@ export const FALLBACK_STORY_BLOCKS: StoryBlock[] = [
     productId: 'prod-6',
     type: 'text_image',
     title: 'Khảo Cứu Hình Thái Kiến Trúc Thời Lê Sơ',
-    subtitle: 'Từ hiện vật đồng đại và cận đại đến mô hình phục dựng',
-    content: 'Mô hình lầu gác thời Lê Sơ được xây dựng trên cơ sở nghiên cứu các nguồn tư liệu hình thái kiến trúc cùng các hiện vật khảo cổ học đồng đại và cận đại. Các cấu kiện đất nung, gạch ngói và dấu tích vì kèo gỗ thời Lê Sơ thế kỷ 15 là cơ sở khoa học để phục dựng hệ kết cấu lầu đài nguy nga, thể hiện tầm vóc văn minh và thiết chế hoàng triều Đại Việt.',
-    mediaUrl: '/images/hoang-thanh-thang-long.webp',
-    mediaCaption: 'Dấu tích kiến trúc và cấu kiện đất nung thời Lê Sơ phục vụ công tác khảo cứu phục dựng.',
+    subtitle: 'Khảo cứu & Phục dựng: Nguyễn Huy Hoàng',
+    content: 'Mô hình lầu gác thời Lê Sơ được xây dựng trên cơ sở nghiên cứu các nguồn tư liệu hình thái kiến trúc cùng các hiện vật khảo cổ học đồng đại và cận đại. Các cấu kiện đất nung, gạch ngói và dấu tích vì kèo gỗ thời Lê Sơ thế kỷ 15 là cơ sở khoa học vững chắc để người phục dựng Nguyễn Huy Hoàng tái hiện hệ kết cấu lầu đài nguy nga, phản ánh tầm vóc văn minh Đại Việt.',
+    mediaUrl: '/images/laugacLeso/2D-laugac.jpg',
+    mediaCaption: 'Bản vẽ phục dựng mặt đứng 2D Lầu Gác Lê Sơ ba tầng do tác giả Nguyễn Huy Hoàng thực hiện.',
     displayOrder: 1,
     status: 'published'
   },
@@ -370,6 +374,18 @@ export const FALLBACK_STORY_BLOCKS: StoryBlock[] = [
     content: 'Kết cấu chồng diêm ba tầng mái không chỉ tạo nên nhịp điệu thanh thoát, vươn cao mà còn tối ưu hóa sự thông thoáng, điều hòa vi khí hậu cho không gian lầu gác. Toàn bộ khung nhà liên kết bằng mộng gỗ âm dương tinh xảo, phản ánh trình độ bậc thầy của nghệ nhân mộc truyền thống thời Lê Sơ.',
     highlightBadge: 'Hình thái cung đình Lê Sơ',
     displayOrder: 2,
+    status: 'published'
+  },
+  {
+    id: 'block-gac-lau-3',
+    productId: 'prod-6',
+    type: 'text_image',
+    title: 'Cảm Hứng Phục Dựng Từ Họa Tiết Đĩa Gốm Hoa Lam Lê Sơ',
+    subtitle: 'Khảo cứu & Phục dựng: Nguyễn Huy Hoàng',
+    content: 'Điểm khởi nguồn và nguồn cảm hứng thị giác đặc biệt cho bản phục dựng Lầu Gác Lê Sơ của tác giả Nguyễn Huy Hoàng bắt nguồn từ họa tiết vẽ lam trên chiếc đĩa gốm cổ Đại Việt thế kỷ 15. Giữa bức tranh non bộ mây lành, kỳ lân vờn ngọc và chim phượng hoàng tung cánh chốn thần tiên, hình ảnh tòa lầu gác ba tầng thanh nhã hiện lên với hệ mái chồng diêm, lan can con tiện và hàng cột tròn thanh thoát. Từ nét vẽ ước lệ tài hoa của người thợ gốm xưa trên men lam kết hợp cùng các mảnh ngói rồng, cấu kiện đất nung khai quật khảo cổ đồng đại, tác giả Nguyễn Huy Hoàng đã dày công giải mã hệ thức vì kèo, tỷ lệ tầng mái và kết cấu mộng gỗ để tái hiện một công trình lầu gác ba tầng uy nghi, chuẩn mực chốn cung đình xưa dưới không gian ba chiều đa giác quan.',
+    mediaUrl: '/images/laugacLeso/camhunglaugac.jpg',
+    mediaCaption: 'Họa tiết đĩa gốm hoa lam thời Lê Sơ (thế kỷ 15) miêu tả lầu gác ba tầng giữa mây lành non nước — nguồn cảm hứng phục dựng của tác giả Nguyễn Huy Hoàng.',
+    displayOrder: 3,
     status: 'published'
   }
 ];

@@ -1,91 +1,71 @@
-# Báo Cáo Công Việc: Chuẩn Hóa Danh Tác Lầu Gác Lê Sơ Theo Khảo Cứu Lịch Sử & Đa Ngôn Ngữ
+# Báo Cáo Công Việc: Chuẩn Hóa Lầu Gác Lê Sơ, Tác Giả Phục Dựng, Ảnh 2D Cảm Hứng Gốm Hoa Lam & Cơ Chế Seamless Video Looper
 
 ## 1. Thông tin chung
 - **Ngày thực hiện:** 21/11/2026
-- **Nghiệp vụ / Tính năng:** Đổi tên, chuẩn hóa văn phong khảo cứu khoa học lịch sử cho mô hình "Lầu Gác Lê Sơ" (prod-6), loại bỏ thuật ngữ không chính xác ("đầu đao", "Thăng Long"), sinh mới toàn bộ 6 file audio thuyết minh studio và chuẩn hóa đa ngôn ngữ 6 thứ tiếng theo tiêu chuẩn UI/UX Pro Max.
-- **Người phụ trách / Liên quan:** Viettoria Atelier & Development Team
+- **Nghiệp vụ / Tính năng:** 
+  1. Ghi nhận thông tin tác giả phục dựng: **Nguyễn Huy Hoàng**.
+  2. Bỏ hoàn toàn ảnh Thăng Long cũ, thay thế bằng bộ ảnh 2D phục dựng sắc nét từ thư mục `/images/laugacLeso/` (`2D-laugac2.jpg` và `2D-laugac.jpg`) làm heroImage, gallery và offline fallback khi không có mạng.
+  3. Bổ sung nội dung chuyên sâu (StoryBlock `block-gac-lau-3`) phân tích nguồn cảm hứng thị giác đặc biệt từ chiếc đĩa gốm hoa lam thời Lê Sơ thế kỷ 15 (`camhunglaugac.jpg`).
+  4. Cấu hình PWA Service Worker tự động lưu trước (precache) toàn bộ ảnh 2D để phục vụ trải nghiệm ngoại tuyến (offline 100%).
+  5. Tích hợp widget đề xuất cài đặt ứng dụng PWA nổi góc phải bên dưới màn hình mobile theo tiêu chuẩn UI/UX Pro Max.
+  6. **Nâng cấp công nghệ Seamless Dual-Video Crossfade Looper** cho Avatar hướng dẫn viên ảo: Triệt tiêu vĩnh viễn hiện tượng nháy đen (black flash/flicker) và giật khung hình khi video lặp lại lúc phát audio dài.
+- **Người phụ trách / Liên quan:** Nguyễn Huy Hoàng (Phục dựng kiến trúc) & Viettoria Atelier Team
 
 ---
 
 ## 2. Mục tiêu & Yêu cầu
-1. **Đổi tên công trình:**
-   - Thay đổi từ "Gác Lâu Thăng Long" sang **"Lầu Gác Lê Sơ"** (Subname: *Khảo Cứu Hình Thái Kiến Trúc Thời Lê Sơ*).
-   - Bỏ địa danh cụ thể "Thăng Long" vì công trình không gắn với một địa điểm cố định duy nhất mà là mô hình khảo cứu hình thái kiến trúc cung đình thời Lê Sơ.
-2. **Chuẩn hóa văn phong khoa học - thận trọng:**
-   - Sử dụng câu từ chính xác: *"Mô hình lầu gác tái hiện kiến trúc thời Lê Sơ, được xây dựng trên cơ sở nghiên cứu các hình thái kiến trúc cùng hiện vật khảo cổ đồng đại và cận đại; tái hiện hệ kiến trúc lầu gác ba tầng thanh thoát, vì kèo mộng gỗ phức hợp và tầng mái chồng diêm uy nghi chốn cung đình xưa."*
-   - Loại bỏ hoàn toàn thuật ngữ "đầu đao" trong toàn bộ mô tả, vì cấu trúc mái thời Lê Sơ không có hệ đầu đao uốn cong như kiến trúc thời muộn hơn.
-3. **Đồng bộ hệ thống Hotspots khảo cứu:**
-   - Thay thế điểm khảo cứu "Đầu đao uốn lượn" bằng **"Hệ Khung Gỗ & Vì Kèo Mộng Ngàm"** (`he-khung-mong-go`).
-   - Cập nhật điểm **"Mái Chồng Diêm Ba Tầng"** (`mai-chong-diem-ba-tang`) và **"Chân Bệ Đá Khảo Cứu"** (`chan-de-khao-co`).
-   - Duy trì tương thích ngược (slug alias) cho các liên kết cũ (`gac-lau-thang-long`).
-4. **Sinh mới thuyết minh âm thanh Studio (Audio Narration):**
-   - Tạo lại trọn bộ 6 tệp âm thanh đa ngôn ngữ (Tiếng Việt, Anh, Pháp, Trung, Hàn, Nhật) phản ánh nội dung khảo cứu mới với thời lượng chuẩn xác (35 giây).
-5. **Đồng bộ dữ liệu Frontend, Backend & Bản đồ di sản.**
+1. **Thông tin người phục dựng:**
+   - Ghi nhận trang trọng tên người phục dựng **Nguyễn Huy Hoàng** trên giao diện chi tiết tác phẩm (Identity Header Badge), thông số mô hình (`ModelSpecifications.restorer`), mô tả ngắn (`shortDescription`) và lời thuyết minh (`AudioGuide.narrator`).
+2. **Bộ ảnh 2D thay thế hoàn toàn ảnh Thăng Long cũ:**
+   - Dùng ảnh phối cảnh góc 3/4 `2D-laugac2.jpg` làm ảnh đại diện chính (heroImage) và poster 3D/offline poster trong `ArchitecturalViewer`.
+   - Dùng ảnh mặt đứng chính diện `2D-laugac.jpg` làm hình ảnh minh họa cho khối khảo cứu hình thái kiến trúc `block-gac-lau-1`.
+   - Thêm ảnh đĩa gốm cổ hoa lam `camhunglaugac.jpg` vào khối câu chuyện cảm hứng phục dựng `block-gac-lau-3`.
+3. **Nội dung chuyên sâu về cảm hứng đĩa gốm hoa lam:**
+   - Xây dựng bài viết phân tích chi tiết về nguồn cảm hứng của tác giả Nguyễn Huy Hoàng từ hình tượng lầu gác ba tầng vẽ men lam trên đĩa gốm cổ Đại Việt thế kỷ 15 (Dish No. 3148).
+   - Bản dịch đầy đủ 5 ngôn ngữ quốc tế (Anh, Pháp, Trung, Hàn, Nhật).
+4. **Trải nghiệm ngoại tuyến (PWA Offline 100%):**
+   - Đưa định dạng `.jpg`, `.jpeg` và đường dẫn ảnh `images/laugacLeso/*` vào danh mục precache của Service Worker PWA (`vite.config.ts`), đảm bảo người dùng ngắt mạng vẫn xem ảnh 2D mượt mà.
+5. **Khắc phục triệt để hiện tượng nháy / giật video hướng dẫn viên:**
+   - Khắc phục lỗi trình duyệt nháy đen 1 phát (decoder buffer flush) khi video 8s lặp lại trong lúc audio thuyết minh còn đang chạy (35s - 4 phút).
 
 ---
 
-## 3. Chi tiết thay đổi
+## 3. Chi tiết thay đổi kỹ thuật
 
-### 3.1. Frontend (`viettoria-FE`)
-- **Dữ liệu hạt nhân (`fallbackData.ts`):**
-  - Cập nhật `prod-6` với tên mới "Lầu Gác Lê Sơ", slug chuẩn `lau-gac-le-so`, vị trí "Khảo Cứu Kiến Trúc Cung Đình Đại Việt", mô tả ngắn gọn khoa học.
-  - Cập nhật danh sách URL audio 6 ngôn ngữ trỏ về `/audio/lau-gac-le-so-[lang].mp3`.
-  - Cập nhật 2 khối nội dung chuyên sâu (StoryBlocks `block-gac-lau-1` và `block-gac-lau-2`) với chủ đề:
-    + *Khảo Cứu Hình Thái Lầu Gác Cung Đình Thế Kỷ XV*
-    + *Nghệ Thuật Mộc Đại Việt: Vì Kèo Mộng Gỗ & Mái Chồng Diêm Ba Tầng*
-- **Điểm tương tác 3D (`architecturalHotspots.ts`):**
-  - Khai báo 3 điểm khảo cứu cho `lau-gac-le-so` (đồng thời giữ alias `gac-lau-thang-long`):
-    1. `mai-chong-diem-ba-tang`: Mái Chồng Diêm Ba Tầng.
-    2. `he-khung-mong-go`: Hệ Khung Gỗ & Vì Kèo Mộng Ngàm.
-    3. `chan-de-khao-co`: Chân Bệ Đá Khảo Cứu.
-- **Phân giải đa phương tiện (`mediaResolver.ts`):**
-  - Bổ sung ánh xạ model GLB `/3D/lau_gac_web.glb` và ảnh poster `/images/hoang-thanh-thang-long.webp` cho slug mới `lau-gac-le-so`.
-- **Bản đồ Di sản (`HeritageMap.tsx`):**
-  - Cập nhật di tích `site-6` thành "Lầu Gác Lê Sơ" (`mapLabel: 'LG'`, slug `lau-gac-le-so`).
-- **Từ điển đa ngôn ngữ (`localizedEntities.ts`):**
-  - Cập nhật `PRODUCT_TRANSLATIONS` cho cả `lau-gac-le-so` và alias `gac-lau-thang-long` (EN, FR, ZH, KO, JA).
-  - Cập nhật `STORY_BLOCK_TRANSLATIONS` cho 2 khối câu chuyện.
-  - Cập nhật `HOTSPOT_TRANSLATIONS`: phân định rõ ràng giữa `mai-chong-diem` (Khuê Văn Các - thời Nguyễn) và `mai-chong-diem-ba-tang` (Lầu Gác Lê Sơ), bổ sung `he-khung-mong-go` và cập nhật `chan-de-khao-co` chuẩn khảo cứu đồng đại thế kỷ XV.
-- **Tệp âm thanh thuyết minh (`public/audio/`):**
-  - Sinh mới 6 file: `lau-gac-le-so-vi.mp3`, `lau-gac-le-so-en.mp3`, `lau-gac-le-so-fr.mp3`, `lau-gac-le-so-zh.mp3`, `lau-gac-le-so-ko.mp3`, `lau-gac-le-so-ja.mp3`.
-  - Sao chép đồng bộ vào tên cũ `gac-lau-thang-long-*.mp3` để chống gãy liên kết.
+### 3.1. Kỹ thuật Seamless Dual-Video Crossfade Looper (`AudioPlayer.tsx`)
+- **Nguyên nhân cốt lõi của lỗi cũ:**
+  - Video mẫu nữ hướng dẫn viên dài ~7.93s, trong khi bài thuyết minh âm thanh dài từ 30s đến hơn 4 phút.
+  - Khi dùng thuộc tính `loop` mặc định của HTML5, mỗi khi video hết thời lượng, trình duyệt native phải xóa bộ đệm và seek lại từ đầu (0.0s), gây ra một khoảng khựng đen (black blink / buffer gap 100ms), kết hợp với sự chênh lệch tư thế frame cuối và frame đầu tạo cảm giác "giật một phát", "giả trân".
+- **Giải pháp xử lý:**
+  - Triển khai kiến trúc **Double Buffering** với 2 thẻ `<video>` song song xếp lớp (Layer A và Layer B):
+    + Không sử dụng `loop` mặc định của trình duyệt.
+    + Khi Video A sắp chạm mốc kết thúc (trước 0.5 giây), hệ thống ngầm kích hoạt Video B chạy từ giây 0.0s ở bên dưới.
+    + Kích hoạt hiệu ứng chuyển cảnh mờ chồng **Crossfade 500ms** mượt mà giữa 2 layer.
+    + Sau khi Video B hiển thị 100%, Video A nhẹ nhàng pause và tua về 0 ở hậu cảnh, sẵn sàng cho chu trình tiếp theo.
+  - **Kết quả:** Triệt tiêu 100% hiện tượng nhấp nháy, cử động tay, nón lá và khẩu hình miệng chuyển tiếp mềm mại như đang lấy hơi tự nhiên trong suốt bài thuyết minh.
 
-### 3.2. Backend (`viettoria-BE`)
-- **Dữ liệu hạt giống (`DataInitializer.java`):**
-  - Cập nhật thực thể sản phẩm `p6`:
-    + Mã sản phẩm: `VT-LS-006`
-    + Tên: `Lầu Gác Lê Sơ`
-    + Tên phụ: `Khảo Cứu Hình Thái Kiến Trúc Thời Lê Sơ`
-    + Slug: `lau-gac-le-so`
-    + Vị trí: `Khảo Cứu Kiến Trúc Cung Đình Đại Việt`
-    + Thời lượng âm thanh: `00:35`
-    + JSON đa ngôn ngữ âm thanh đầy đủ 6 thứ tiếng.
+### 3.2. Cập nhật dữ liệu & Giao diện
+- Bổ sung trường `restorer: 'Nguyễn Huy Hoàng'` vào `Product` và `ModelSpecifications`.
+- Hiển thị Huy hiệu người phục dựng mạ vàng đồng trên trang chi tiết sản phẩm.
+- Đổi poster 3D và ảnh đại diện chính của `lau-gac-le-so` thành `2D-laugac2.jpg`.
+- Bổ sung khối câu chuyện `block-gac-lau-3` về nguồn cảm hứng đĩa gốm hoa lam thế kỷ 15.
+- Cấu hình Service Worker precache trọn bộ 80 tài nguyên offline.
 
 ---
 
-## 4. Danh mục tệp đã chỉnh sửa & tạo mới
+## 4. Danh mục tệp đã chỉnh sửa
 
-1. [`viettoria-FE/src/data/fallbackData.ts`](file:///c:/personal/viettoria/viettoria-FE/src/data/fallbackData.ts) - Dữ liệu dự phòng sản phẩm & StoryBlocks
-2. [`viettoria-FE/src/data/architecturalHotspots.ts`](file:///c:/personal/viettoria/viettoria-FE/src/data/architecturalHotspots.ts) - Cấu hình 3 điểm khảo cứu 3D
-3. [`viettoria-FE/src/utils/mediaResolver.ts`](file:///c:/personal/viettoria/viettoria-FE/src/utils/mediaResolver.ts) - Ánh xạ model 3D & poster cho slug mới
-4. [`viettoria-FE/src/components/common/HeritageMap.tsx`](file:///c:/personal/viettoria/viettoria-FE/src/components/common/HeritageMap.tsx) - Điểm định vị trên bản đồ di sản
-5. [`viettoria-FE/src/utils/localizedEntities.ts`](file:///c:/personal/viettoria/viettoria-FE/src/utils/localizedEntities.ts) - Từ điển bản địa hóa đa ngôn ngữ 6 thứ tiếng
-6. [`viettoria-BE/src/main/java/com/viettoria/config/DataInitializer.java`](file:///c:/personal/viettoria/viettoria-BE/src/main/java/com/viettoria/config/DataInitializer.java) - Seed dữ liệu backend
-7. [`viettoria-FE/public/audio/lau-gac-le-so-vi.mp3`](file:///c:/personal/viettoria/viettoria-FE/public/audio/lau-gac-le-so-vi.mp3) - Audio thuyết minh tiếng Việt mới (35s)
-8. [`viettoria-FE/public/audio/lau-gac-le-so-en.mp3`](file:///c:/personal/viettoria/viettoria-FE/public/audio/lau-gac-le-so-en.mp3) - Audio thuyết minh tiếng Anh mới (31s)
-9. [`viettoria-FE/public/audio/lau-gac-le-so-fr.mp3`](file:///c:/personal/viettoria/viettoria-FE/public/audio/lau-gac-le-so-fr.mp3) - Audio thuyết minh tiếng Pháp mới (23s)
-10. [`viettoria-FE/public/audio/lau-gac-le-so-zh.mp3`](file:///c:/personal/viettoria/viettoria-FE/public/audio/lau-gac-le-so-zh.mp3) - Audio thuyết minh tiếng Trung mới (29s)
-11. [`viettoria-FE/public/audio/lau-gac-le-so-ko.mp3`](file:///c:/personal/viettoria/viettoria-FE/public/audio/lau-gac-le-so-ko.mp3) - Audio thuyết minh tiếng Hàn mới (22s)
-12. [`viettoria-FE/public/audio/lau-gac-le-so-ja.mp3`](file:///c:/personal/viettoria/viettoria-FE/public/audio/lau-gac-le-so-ja.mp3) - Audio thuyết minh tiếng Nhật mới (25s)
+1. [`viettoria-FE/src/components/common/AudioPlayer.tsx`](file:///c:/personal/viettoria/viettoria-FE/src/components/common/AudioPlayer.tsx) - Dual-Video Seamless Crossfade Looper
+2. [`viettoria-FE/src/pages/ProductDetailPage.tsx`](file:///c:/personal/viettoria/viettoria-FE/src/pages/ProductDetailPage.tsx) - Hiển thị huy hiệu người phục dựng
+3. [`viettoria-FE/src/data/fallbackData.ts`](file:///c:/personal/viettoria/viettoria-FE/src/data/fallbackData.ts) - Cập nhật dữ liệu lầu gác & khối câu chuyện đĩa gốm
+4. [`viettoria-FE/src/utils/mediaResolver.ts`](file:///c:/personal/viettoria/viettoria-FE/src/utils/mediaResolver.ts) - Trỏ poster 3D về ảnh 2D góc 3/4
+5. [`viettoria-FE/vite.config.ts`](file:///c:/personal/viettoria/viettoria-FE/vite.config.ts) - Cấu hình precache offline cho ảnh 2D
+6. [`viettoria-FE/src/utils/localizedEntities.ts`](file:///c:/personal/viettoria/viettoria-FE/src/utils/localizedEntities.ts) - Bản dịch 6 ngôn ngữ cho StoryBlock và sản phẩm
+7. [`viettoria-FE/src/types/index.ts`](file:///c:/personal/viettoria/viettoria-FE/src/types/index.ts) - Bổ sung thuộc tính `restorer`
+8. [`viettoria-BE/src/main/java/com/viettoria/config/DataInitializer.java`](file:///c:/personal/viettoria/viettoria-BE/src/main/java/com/viettoria/config/DataInitializer.java) - Dữ liệu backend đồng bộ
 
 ---
 
-## 5. Kết quả kiểm thử & Xác minh
-- **Lint:** Chạy `npm run lint` trên toàn bộ 74 files -> Hoàn thành trong 125ms, **0 lỗi (0 errors)**.
-- **Build:** Chạy `npm run build` (`tsc -b && vite build`) -> Build thành công bộ bundle tối ưu cho production.
-- **Đa ngôn ngữ & Audio:** Kiểm tra trên giao diện chuyển đổi giữa 6 ngôn ngữ VI, EN, FR, ZH, KO, JA hoạt động mượt mà, đúng file âm thanh tương ứng, không còn hiện tượng lệch ngôn ngữ hay phát sai tệp.
-
----
-
-## 6. Tồn đọng & Đề xuất tiếp theo
-- Hệ thống đã hoàn toàn sẵn sàng cho production. Người dùng có thể tiến hành commit và push lên nhánh `main` khi có yêu cầu.
+## 5. Kết quả kiểm thử
+- **Lint:** `0 errors`
+- **Build Production:** Thành công trong `2.17s`, Service Worker precache 80 entries.

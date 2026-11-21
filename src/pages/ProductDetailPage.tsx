@@ -9,6 +9,7 @@ import {
   Download,
   QrCode,
   Share2,
+  Sparkles,
   X,
 } from 'lucide-react';
 import { publicApi } from '../services/api';
@@ -185,6 +186,12 @@ export const ProductDetailPage: React.FC = () => {
               <MapPin className="w-3.5 h-3.5 text-brass shrink-0" />
               <span>{product.location}</span>
             </span>
+            {(product.restorer || product.modelSpecs?.restorer) && (
+              <span className="flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 bg-paper-warm border border-brass/40 text-forest text-[11px] sm:text-xs font-sans rounded-[1px]">
+                <Sparkles className="w-3.5 h-3.5 text-brass shrink-0" />
+                <span>{t('product.restorer', 'Người phục dựng')}: <strong className="text-brass-dark font-semibold">{product.restorer || product.modelSpecs?.restorer}</strong></span>
+              </span>
+            )}
           </div>
 
           <h1 className="font-serif text-2xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-forest leading-tight">

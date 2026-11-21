@@ -43,9 +43,9 @@ const KNOWN_3D_PREVIEWS: Record<string, { poster: string; turntable: string }> =
   'cot-co-ha-noi': { poster: '/3D/cot-co-ha-noi-poster.webp', turntable: '/3D/cot-co-ha-noi-card.webm' },
   'ngo-mon-hue': { poster: '/3D/ngo-mon-hue-poster.webp', turntable: '/3D/ngo-mon-hue-card.webm' },
   'ben-nha-rong': { poster: '/3D/ben-nha-rong-poster.webp', turntable: '/3D/ben-nha-rong-card.webm' },
-  'lau-gac-le-so': { poster: '/images/hoang-thanh-thang-long.webp', turntable: '' },
-  'gac-lau-thang-long': { poster: '/images/hoang-thanh-thang-long.webp', turntable: '' },
-  'lau-gac': { poster: '/images/hoang-thanh-thang-long.webp', turntable: '' },
+  'lau-gac-le-so': { poster: '/images/laugacLeso/2D-laugac2.jpg', turntable: '' },
+  'gac-lau-thang-long': { poster: '/images/laugacLeso/2D-laugac2.jpg', turntable: '' },
+  'lau-gac': { poster: '/images/laugacLeso/2D-laugac2.jpg', turntable: '' },
 };
 
 export function resolve3DPreview(slug?: string | null) {

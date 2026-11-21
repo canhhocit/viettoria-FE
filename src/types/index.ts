@@ -22,6 +22,7 @@ export interface ModelSpecifications {
   material: string;
   partsCount: number;
   finishing: string;
+  restorer?: string;
 }
 
 export interface AudioGuideData {
@@ -54,6 +55,7 @@ export interface Product {
   collection?: Collection;
   storyBlocks?: StoryBlock[];
   relatedProducts?: Product[];
+  restorer?: string;
   createdAt?: string;
   updatedAt?: string;
 }
