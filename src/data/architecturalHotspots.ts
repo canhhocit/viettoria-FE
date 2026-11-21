@@ -266,16 +266,16 @@ export const ARCHITECTURAL_HOTSPOTS: Record<string, ArchitecturalHotspot[]> = {
     },
   ],
 
-  // 6. Gác Lâu Thăng Long (VT-HN-006)
-  'gac-lau-thang-long': [
+  // 6. Lầu Gác Lê Sơ (VT-HN-006)
+  'lau-gac-le-so': [
     {
-      id: 'mai-chong-diem',
+      id: 'mai-chong-diem-ba-tang',
       number: '01',
       title: 'Mái Chồng Diêm Ba Tầng',
       shortTitle: 'MÁI CHỒNG DIÊM 3 TẦNG',
       category: 'KIẾN TRÚC LẦU ĐÀI ĐẠI VIỆT',
-      detail: 'Ba tầng mái ngói mũi hài thanh thoát xếp lớp thu dần lên đỉnh, góc đao vươn cao mô phỏng cấu trúc lầu đài cung đình thời Lê Sơ.',
-      shortDesc: 'Ba tầng mái ngói mũi hài thanh thoát thu dần lên đỉnh.',
+      detail: 'Ba tầng mái ngói mũi hài thanh thoát xếp lớp thu dần lên đỉnh, lớp lang nghiêm cẩn tái hiện cấu trúc lầu đài cung đình thời Lê Sơ.',
+      shortDesc: 'Ba tầng mái ngói mũi hài thanh thoát xếp lớp thu dần lên đỉnh.',
       position: '0.00 18.50 3.20',
       normal: '0 0.8 0.6',
       orbit: '20deg 60deg 30m',
@@ -284,13 +284,13 @@ export const ARCHITECTURAL_HOTSPOTS: Record<string, ArchitecturalHotspot[]> = {
       dy: -30,
     },
     {
-      id: 'dau-dao-uon-luon',
+      id: 'he-khung-mong-go',
       number: '02',
-      title: 'Đầu Đao Khắc Rồng Thời Lê',
-      shortTitle: 'ĐẦU ĐAO KHẮC RỒNG',
-      category: 'NGHỆ THUẬT ĐIÊU KHẮC LÊ SƠ',
-      detail: 'Đầu đao uốn lượn mạnh mẽ chạm khắc hoa văn lá lật và hình tượng rồng thời Lê Sơ dũng mãnh, biểu tượng uy quyền vương giả.',
-      shortDesc: 'Đầu đao uốn lượn chạm khắc hoa văn rồng thời Lê Sơ.',
+      title: 'Hệ Khung Gỗ & Vì Kèo Mộng Ngàm',
+      shortTitle: 'VÌ KÈO MỘNG GỖ',
+      category: 'KỸ THUẬT MỘNG GỖ ĐẠI VIỆT',
+      detail: 'Hệ thống cột xà liên kết bằng ngàm mộng âm dương chuẩn mực, thanh thoát nâng đỡ các tầng mái lầu gác mà không dùng đinh kim loại, thể hiện kỹ thuật mộc cung đình thời Lê Sơ.',
+      shortDesc: 'Hệ cột xà và vì kèo liên kết mộng gỗ chuẩn mực thời Lê Sơ.',
       position: '-5.80 8.50 5.80',
       normal: '-0.7 0.4 0.7',
       orbit: '-35deg 70deg 30m',
@@ -301,11 +301,58 @@ export const ARCHITECTURAL_HOTSPOTS: Record<string, ArchitecturalHotspot[]> = {
     {
       id: 'chan-de-khao-co',
       number: '03',
-      title: 'Chân Bệ Đá Khảo Cổ Thăng Long',
-      shortTitle: 'BỆ ĐÁ KHẢO CỔ',
-      category: 'HIỆN VẬT KHẢO CỔ THẾ KỶ 15',
-      detail: 'Chân bệ mô phỏng tầng nền gạch vồ Thăng Long và chân đá tảng hoa sen khai quật tại trung tâm Hoàng thành.',
-      shortDesc: 'Chân bệ mô phỏng gạch vồ và đá tảng hoa sen khảo cổ.',
+      title: 'Chân Bệ Đá Khảo Cứu',
+      shortTitle: 'CHÂN BỆ ĐÁ',
+      category: 'HIỆN VẬT KHẢO CỨU ĐỒNG ĐẠI',
+      detail: 'Chân bệ được xây dựng dựa trên nghiên cứu hiện vật đá tảng chạm hoa sen và gạch vồ đồng đại, tạo điểm tựa vững chãi cho toàn bộ lầu gác.',
+      shortDesc: 'Chân bệ nghiên cứu từ hiện vật đá hoa sen đồng đại.',
+      position: '0.00 0.80 6.60',
+      normal: '0 0.4 1',
+      orbit: '0deg 80deg 36m',
+      target: '0m 1.0m 0m',
+      dx: 140,
+      dy: 30,
+    },
+  ],
+  'gac-lau-thang-long': [
+    {
+      id: 'mai-chong-diem-ba-tang',
+      number: '01',
+      title: 'Mái Chồng Diêm Ba Tầng',
+      shortTitle: 'MÁI CHỒNG DIÊM 3 TẦNG',
+      category: 'KIẾN TRÚC LẦU ĐÀI ĐẠI VIỆT',
+      detail: 'Ba tầng mái ngói mũi hài thanh thoát xếp lớp thu dần lên đỉnh, lớp lang nghiêm cẩn tái hiện cấu trúc lầu đài cung đình thời Lê Sơ.',
+      shortDesc: 'Ba tầng mái ngói mũi hài thanh thoát xếp lớp thu dần lên đỉnh.',
+      position: '0.00 18.50 3.20',
+      normal: '0 0.8 0.6',
+      orbit: '20deg 60deg 30m',
+      target: '0m 18.0m 0m',
+      dx: 140,
+      dy: -30,
+    },
+    {
+      id: 'he-khung-mong-go',
+      number: '02',
+      title: 'Hệ Khung Gỗ & Vì Kèo Mộng Ngàm',
+      shortTitle: 'VÌ KÈO MỘNG GỖ',
+      category: 'KỸ THUẬT MỘNG GỖ ĐẠI VIỆT',
+      detail: 'Hệ thống cột xà liên kết bằng ngàm mộng âm dương chuẩn mực, thanh thoát nâng đỡ các tầng mái lầu gác mà không dùng đinh kim loại, thể hiện kỹ thuật mộc cung đình thời Lê Sơ.',
+      shortDesc: 'Hệ cột xà và vì kèo liên kết mộng gỗ chuẩn mực thời Lê Sơ.',
+      position: '-5.80 8.50 5.80',
+      normal: '-0.7 0.4 0.7',
+      orbit: '-35deg 70deg 30m',
+      target: '-4.0m 8.5m 4.0m',
+      dx: -140,
+      dy: -30,
+    },
+    {
+      id: 'chan-de-khao-co',
+      number: '03',
+      title: 'Chân Bệ Đá Khảo Cứu',
+      shortTitle: 'CHÂN BỆ ĐÁ',
+      category: 'HIỆN VẬT KHẢO CỨU ĐỒNG ĐẠI',
+      detail: 'Chân bệ được xây dựng dựa trên nghiên cứu hiện vật đá tảng chạm hoa sen và gạch vồ đồng đại, tạo điểm tựa vững chãi cho toàn bộ lầu gác.',
+      shortDesc: 'Chân bệ nghiên cứu từ hiện vật đá hoa sen đồng đại.',
       position: '0.00 0.80 6.60',
       normal: '0 0.4 1',
       orbit: '0deg 80deg 36m',
@@ -345,8 +392,8 @@ export function getHotspotsForProduct(identifier?: string): ArchitecturalHotspot
   if (clean.includes('005') || clean.includes('nha-rong') || clean.includes('ben-nha-rong')) {
     return ARCHITECTURAL_HOTSPOTS['ben-nha-rong'];
   }
-  if (clean.includes('006') || clean.includes('gac-lau') || clean.includes('lau-gac')) {
-    return ARCHITECTURAL_HOTSPOTS['gac-lau-thang-long'];
+  if (clean.includes('006') || clean.includes('lau-gac') || clean.includes('gac-lau') || clean.includes('le-so')) {
+    return ARCHITECTURAL_HOTSPOTS['lau-gac-le-so'];
   }
 
   // Mặc định trả về cấu kiện tiêu chuẩn

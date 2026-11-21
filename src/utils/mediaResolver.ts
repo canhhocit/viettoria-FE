@@ -30,6 +30,7 @@ const KNOWN_3D_MODELS: Record<string, string> = {
   'VT-HUE-004': '/3D/ngo-mon-hue.glb',
   'ben-nha-rong': '/3D/ben-nha-rong.glb',
   'VT-SG-005': '/3D/ben-nha-rong.glb',
+  'lau-gac-le-so': '/3D/lau_gac_web.glb',
   'gac-lau-thang-long': '/3D/lau_gac_web.glb',
   'lau-gac': '/3D/lau_gac_web.glb',
   'VT-HN-006': '/3D/lau_gac_web.glb',
@@ -42,6 +43,7 @@ const KNOWN_3D_PREVIEWS: Record<string, { poster: string; turntable: string }> =
   'cot-co-ha-noi': { poster: '/3D/cot-co-ha-noi-poster.webp', turntable: '/3D/cot-co-ha-noi-card.webm' },
   'ngo-mon-hue': { poster: '/3D/ngo-mon-hue-poster.webp', turntable: '/3D/ngo-mon-hue-card.webm' },
   'ben-nha-rong': { poster: '/3D/ben-nha-rong-poster.webp', turntable: '/3D/ben-nha-rong-card.webm' },
+  'lau-gac-le-so': { poster: '/images/hoang-thanh-thang-long.webp', turntable: '' },
   'gac-lau-thang-long': { poster: '/images/hoang-thanh-thang-long.webp', turntable: '' },
   'lau-gac': { poster: '/images/hoang-thanh-thang-long.webp', turntable: '' },
 };

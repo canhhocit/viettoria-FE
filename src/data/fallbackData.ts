@@ -255,13 +255,13 @@ export const FALLBACK_PRODUCTS: Product[] = [
   {
     id: 'prod-6',
     code: 'VT-HN-006',
-    name: 'Gác Lâu Thăng Long',
-    subName: 'Kiến Trúc Cung Đình Thời Lê Sơ',
-    slug: 'gac-lau-thang-long',
+    name: 'Lầu Gác Lê Sơ',
+    subName: 'Khảo Cứu Hình Thái Kiến Trúc Thời Lê Sơ',
+    slug: 'lau-gac-le-so',
     collectionId: 'col-1',
     epoch: 'Thời Lê Sơ (Thế Kỷ XV)',
-    location: 'Hoàng Thành Thăng Long · Hà Nội',
-    shortDescription: 'Kiệt tác lầu gác Đại Việt phục dựng từ di vật đất nung khảo cổ Hoàng thành Thăng Long, mái đao chồng diêm vươn cao uy nghi chốn cung đình.',
+    location: 'Khảo Cứu Kiến Trúc Cung Đình Đại Việt',
+    shortDescription: 'Mô hình lầu gác tái hiện kiến trúc thời Lê Sơ, được xây dựng trên cơ sở nghiên cứu các hình thái kiến trúc cùng hiện vật khảo cổ đồng đại và cận đại; tái hiện hệ kiến trúc lầu gác ba tầng thanh thoát, vì kèo mộng gỗ phức hợp và tầng mái chồng diêm uy nghi chốn cung đình xưa.',
     modelSpecs: {
       scale: '1:100',
       heightCm: 19.6,
@@ -269,7 +269,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
       weightGrams: 310,
       material: 'Nhựa sinh thái BioPETG kết cấu mộng gỗ cung đình Đại Việt',
       partsCount: 32,
-      finishing: 'Sơn son thếp vàng, ngói lưu ly phục dựng khảo cổ Thăng Long'
+      finishing: 'Sơn son thếp vàng, ngói lưu ly phục dựng trên cơ sở hiện vật đồng đại'
     },
     heroImage: '/images/hoang-thanh-thang-long.webp',
     model3dUrl: '/3D/lau_gac_web.glb',
@@ -277,19 +277,19 @@ export const FALLBACK_PRODUCTS: Product[] = [
       '/images/hoang-thanh-thang-long.webp'
     ],
     audioGuide: {
-      title: 'Âm Vang Lầu Gác Cung Điện Lê Sơ',
-      duration: '00:23',
-      audioUrl: '/audio/gac-lau-thang-long-vi.mp3',
+      title: 'Âm Vang Lầu Gác Thời Lê Sơ',
+      duration: '00:35',
+      audioUrl: '/audio/lau-gac-le-so-vi.mp3',
       audioUrls: {
-        vi: '/audio/gac-lau-thang-long-vi.mp3',
-        en: '/audio/gac-lau-thang-long-en.mp3',
-        fr: '/audio/gac-lau-thang-long-fr.mp3',
-        zh: '/audio/gac-lau-thang-long-zh.mp3',
-        ko: '/audio/gac-lau-thang-long-ko.mp3',
-        ja: '/audio/gac-lau-thang-long-ja.mp3',
+        vi: '/audio/lau-gac-le-so-vi.mp3',
+        en: '/audio/lau-gac-le-so-en.mp3',
+        fr: '/audio/lau-gac-le-so-fr.mp3',
+        zh: '/audio/lau-gac-le-so-zh.mp3',
+        ko: '/audio/lau-gac-le-so-ko.mp3',
+        ja: '/audio/lau-gac-le-so-ja.mp3',
       },
       narrator: 'Thuyết minh Viettoria Atelier',
-      transcript: 'Hoàng thành Thăng Long thời Lê Sơ thế kỷ 15 là thời kỳ hoàng kim của nền văn hiến và nghệ thuật kiến trúc Đại Việt. Mô hình gác lâu được nghiên cứu và phục dựng từ những mảnh gốm men, ngói rồng và cấu kiện đất nung khai quật tại Hoàng thành Thăng Long, tái hiện hệ vì kèo mộng gỗ phức hợp, mái đao chồng diêm thanh thoát vươn lên giữa tầng không, thể hiện trọn vẹn khí phách vương triều và bàn tay tài hoa của người thợ thủ công Thăng Long xưa.'
+      transcript: 'Thời Lê Sơ thế kỷ 15 là thời kỳ hoàng kim của nền văn hiến và nghệ thuật kiến trúc Đại Việt. Mô hình lầu gác tái hiện không gian kiến trúc thời Lê Sơ, được xây dựng trên cơ sở nghiên cứu các hình thái kiến trúc cùng hiện vật khảo cổ đồng đại và cận đại. Tác phẩm tái hiện hệ kiến trúc lầu gác ba tầng thanh thoát, hệ vì kèo mộng gỗ phức hợp và các tầng mái chồng diêm uy nghi, phản ánh tư duy tạo tác chuẩn mực và bàn tay tài hoa của người thợ thủ công Đại Việt xưa.'
     },
     displayOrder: 6,
     status: 'published',
@@ -353,11 +353,11 @@ export const FALLBACK_STORY_BLOCKS: StoryBlock[] = [
     id: 'block-gac-lau-1',
     productId: 'prod-6',
     type: 'text_image',
-    title: 'Khai Quật Hoàng Thành Thăng Long & Dấu Ấn Kiến Trúc Lê Sơ',
-    subtitle: 'Từ những mảnh gốm ngói rồng nghìn năm đến mô hình phục dựng',
-    content: 'Các cuộc khai quật khảo cổ học tại trung tâm Hoàng thành Thăng Long (18 Hoàng Diệu) đã phát lộ hàng vạn hiện vật gốm men, đầu rồng đất nung, ngói mũi sen và ngói lưu ly thời Lê Sơ thế kỷ 15. Đây là cứ liệu lịch sử vô giá chứng minh quy mô nguy nga, tráng lệ của các cung điện, lầu các thời Lê - thời kỳ đỉnh cao về thiết chế quốc gia và bản sắc văn hóa Đại Việt.',
+    title: 'Khảo Cứu Hình Thái Kiến Trúc Thời Lê Sơ',
+    subtitle: 'Từ hiện vật đồng đại và cận đại đến mô hình phục dựng',
+    content: 'Mô hình lầu gác thời Lê Sơ được xây dựng trên cơ sở nghiên cứu các nguồn tư liệu hình thái kiến trúc cùng các hiện vật khảo cổ học đồng đại và cận đại. Các cấu kiện đất nung, gạch ngói và dấu tích vì kèo gỗ thời Lê Sơ thế kỷ 15 là cơ sở khoa học để phục dựng hệ kết cấu lầu đài nguy nga, thể hiện tầm vóc văn minh và thiết chế hoàng triều Đại Việt.',
     mediaUrl: '/images/hoang-thanh-thang-long.webp',
-    mediaCaption: 'Dấu tích kiến trúc và hiện vật đất nung thời Lê Sơ khai quật tại Hoàng thành Thăng Long.',
+    mediaCaption: 'Dấu tích kiến trúc và cấu kiện đất nung thời Lê Sơ phục vụ công tác khảo cứu phục dựng.',
     displayOrder: 1,
     status: 'published'
   },
@@ -365,10 +365,10 @@ export const FALLBACK_STORY_BLOCKS: StoryBlock[] = [
     id: 'block-gac-lau-2',
     productId: 'prod-6',
     type: 'highlight',
-    title: 'Nghệ Thuật Mái Đao Chồng Diêm & Ngàm Mộng Phức Hợp',
-    subtitle: 'Đỉnh cao kỹ thuật mộc cung đình và hoa văn rồng thời Lê',
-    content: 'Kết cấu chồng diêm nhiều tầng mái không chỉ tạo nét thanh thoát vươn lên mà còn giúp điều hòa ánh sáng, thông gió chốn lầu gác. Từng đầu đao chạm khắc rồng thời Lê với thân uốn lượn hình sin mềm mại, mũi sư tử và bờm uy nghiêm, thể hiện trọn vẹn khí phách của một vương triều hưng thịnh bậc nhất lịch sử dân tộc.',
-    highlightBadge: 'Kiệt tác cung đình Lê Sơ',
+    title: 'Nghệ Thuật Lầu Gác Ba Tầng & Mộng Gỗ Phức Hợp',
+    subtitle: 'Kỹ thuật kết cấu mộc cung đình và tầng mái chồng diêm',
+    content: 'Kết cấu chồng diêm ba tầng mái không chỉ tạo nên nhịp điệu thanh thoát, vươn cao mà còn tối ưu hóa sự thông thoáng, điều hòa vi khí hậu cho không gian lầu gác. Toàn bộ khung nhà liên kết bằng mộng gỗ âm dương tinh xảo, phản ánh trình độ bậc thầy của nghệ nhân mộc truyền thống thời Lê Sơ.',
+    highlightBadge: 'Hình thái cung đình Lê Sơ',
     displayOrder: 2,
     status: 'published'
   }
