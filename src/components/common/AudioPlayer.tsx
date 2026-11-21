@@ -3,11 +3,15 @@ import { createPortal } from 'react-dom';
 import { 
   ChevronDown, 
   ChevronUp, 
+  Maximize2,
   Pause, 
   Play, 
   RotateCcw, 
+  Video,
+  VideoOff,
   Volume2, 
-  VolumeX 
+  VolumeX,
+  X 
 } from 'lucide-react';
 import type { AudioGuideData } from '../../types';
 import { resolveAudioUrl } from '../../utils/mediaResolver';
@@ -109,6 +113,24 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
   const containerRef = useRef<HTMLDivElement | null>(null);
   const ttsTimerRef = useRef<number | null>(null);
   const currentTimeRef = useRef(0);
+
+  // Floating tour guide companion visibility: 'expanded' | 'minimized' | 'hidden'
+  const [guideMode, setGuideMode] = useState<'expanded' | 'minimized' | 'hidden'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = sessionStorage.getItem('viettoria_guide_mode');
+      if (saved === 'minimized' || saved === 'hidden' || saved === 'expanded') {
+        return saved;
+      }
+    }
+    return 'expanded';
+  });
+
+  const handleSetGuideMode = (mode: 'expanded' | 'minimized' | 'hidden') => {
+    setGuideMode(mode);
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('viettoria_guide_mode', mode);
+    }
+  };
 
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [audioFallbackActive, setAudioFallbackActive] = useState(false);
@@ -567,6 +589,20 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
                 <button type="button" onClick={handleReset} disabled={!hasAudio || audioError} className="flex h-8 w-8 items-center justify-center border border-paper/15 text-paper/75 hover:border-brass hover:text-brass-light disabled:opacity-35 sm:w-auto sm:gap-1.5 sm:px-2 cursor-pointer" title={t('audioPlayer.replay')}>
                   <RotateCcw className="h-3.5 w-3.5" strokeWidth={1.5} /><span className="hidden sm:inline text-xs">{t('audioPlayer.replay')}</span>
                 </button>
+                <button 
+                  type="button" 
+                  onClick={() => handleSetGuideMode(guideMode === 'expanded' ? 'minimized' : 'expanded')} 
+                  disabled={!hasAudio || audioError} 
+                  className={`flex h-8 w-8 items-center justify-center border transition-colors cursor-pointer ${
+                    guideMode === 'expanded' 
+                      ? 'border-brass bg-brass/15 text-brass' 
+                      : 'border-paper/15 text-paper/75 hover:border-brass hover:text-brass-light'
+                  }`} 
+                  title={guideMode === 'expanded' ? t('audioPlayer.hideNarrator', 'Ẩn video hướng dẫn viên') : t('audioPlayer.showNarrator', 'Hiện video hướng dẫn viên')} 
+                  aria-label={guideMode === 'expanded' ? t('audioPlayer.hideNarrator', 'Ẩn video hướng dẫn viên') : t('audioPlayer.showNarrator', 'Hiện video hướng dẫn viên')}
+                >
+                  {guideMode === 'expanded' ? <Video className="h-4 w-4" strokeWidth={1.5} /> : <VideoOff className="h-4 w-4" strokeWidth={1.5} />}
+                </button>
                 <button type="button" onClick={() => setShowTranscript((shown) => !shown)} aria-expanded={showTranscript} className="flex h-8 w-8 items-center justify-center border border-paper/15 text-paper/75 hover:border-brass hover:text-brass-light cursor-pointer" title={showTranscript ? t('audioPlayer.collapseTranscript') : t('audioPlayer.expandTranscript')} aria-label={showTranscript ? t('audioPlayer.collapseTranscript') : t('audioPlayer.expandTranscript')}>
                   {showTranscript ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </button>
@@ -580,12 +616,56 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
       </section>
 
       {/* 2. Floating Tour Guide Companion at Bottom-Right Corner (Conical Hat Guide Video, No Text) */}
-      {typeof document !== 'undefined' && createPortal(
+      {typeof document !== 'undefined' && guideMode !== 'hidden' && createPortal(
         <aside 
           className="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 z-[9999] pointer-events-auto select-none"
           aria-label={t('audioPlayer.narrator', 'Hướng dẫn viên Viettoria')}
         >
-          <div className="relative w-[104px] h-[184px] sm:w-[126px] sm:h-[224px] group">
+          {/* A. Minimized Pill Badge */}
+          {guideMode === 'minimized' && (
+            <div className="flex items-center gap-1.5 p-1 pl-1.5 pr-2 rounded-full bg-forest-dark/95 border border-brass/70 shadow-[0_8px_24px_rgba(0,0,0,0.6)] backdrop-blur-md animate-fadeIn">
+              <button
+                type="button"
+                onClick={() => handleSetGuideMode('expanded')}
+                className="flex items-center gap-2 group cursor-pointer focus:outline-none"
+                aria-label={t('audioPlayer.showNarrator', 'Mở lại video hướng dẫn viên')}
+                title={t('audioPlayer.showNarrator', 'Mở lại video hướng dẫn viên')}
+              >
+                <div className="relative w-6 h-6 rounded-full overflow-hidden border border-brass shrink-0">
+                  <img src="/images/guide/guide-poster.jpg" alt="" className="w-full h-full object-cover" />
+                  {isPlaying && (
+                    <span className="absolute inset-0 bg-forest/40 flex items-center justify-center">
+                      <span className="w-1.5 h-1.5 rounded-full bg-brass animate-ping" />
+                    </span>
+                  )}
+                </div>
+                <span className="font-serif text-[11px] sm:text-xs text-paper/90 group-hover:text-brass font-medium transition-colors">
+                  {t('audioPlayer.narratorShort', 'HDV')}
+                </span>
+                <Maximize2 className="w-3 h-3 text-brass/70 group-hover:text-brass transition-colors" />
+              </button>
+
+              <div className="w-[1px] h-3.5 bg-paper/20 ml-0.5" />
+              <button
+                type="button"
+                onClick={() => handleSetGuideMode('hidden')}
+                className="p-1 text-paper/60 hover:text-brass transition-colors cursor-pointer rounded-full"
+                aria-label={t('audioPlayer.dismissNarrator', 'Tắt hẳn')}
+                title={t('audioPlayer.dismissNarrator', 'Tắt hẳn')}
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </div>
+          )}
+
+          {/* B. Expanded Video Card (Kept in DOM so dual-video refs & playback stay uninterrupted) */}
+          <div 
+            className={`relative w-[104px] h-[184px] sm:w-[126px] sm:h-[224px] group transition-all duration-300 ease-in-out ${
+              guideMode === 'expanded' 
+                ? 'opacity-100 scale-100' 
+                : 'opacity-0 scale-90 pointer-events-none absolute -bottom-96'
+            }`}
+          >
             {/* Grounded Pedestal Shadow & Subtle Golden Ambient Glow */}
             <div 
               className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-24 h-4 rounded-[100%] bg-black/75 blur-[4px] pointer-events-none" 
@@ -595,6 +675,20 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
               className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-20 h-3 rounded-[100%] bg-brass/35 blur-[6px] pointer-events-none transition-opacity duration-500 ${isPlaying ? 'opacity-100' : 'opacity-40'}`} 
               aria-hidden="true" 
             />
+
+            {/* Prominent Close/Minimize Button at Top-Right Corner */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSetGuideMode('minimized');
+              }}
+              className="absolute -top-2.5 -right-2.5 sm:-top-3 sm:-right-3 z-30 flex items-center justify-center w-7 h-7 rounded-full bg-forest-dark border border-brass/80 text-brass hover:text-paper hover:bg-forest hover:border-brass hover:scale-110 active:scale-95 shadow-[0_4px_12px_rgba(0,0,0,0.6)] transition-all cursor-pointer focus:outline-none"
+              aria-label={t('audioPlayer.hideNarrator', 'Ẩn hướng dẫn viên')}
+              title={t('audioPlayer.hideNarrator', 'Ẩn hướng dẫn viên')}
+            >
+              <X className="w-3.5 h-3.5 stroke-[2.5]" />
+            </button>
 
             {/* Clickable Guide Video (Toggles Play/Pause, No Text Overlays) */}
             <button

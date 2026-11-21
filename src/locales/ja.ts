@@ -289,6 +289,10 @@ export const ja: TranslationSchema = {
 
   audioPlayer: {
     narrator: 'Viettoria 解説員',
+    hideNarrator: 'バーチャル解説員を非表示',
+    showNarrator: 'バーチャル解説員を表示',
+    narratorShort: '解説',
+    dismissNarrator: '完全に閉じる',
     audioError: '音声を再生できません。',
     audioUpdating: '音声資料を更新中です。',
     replay: '最初から再生',

@@ -289,6 +289,10 @@ export const en: TranslationSchema = {
 
   audioPlayer: {
     narrator: 'Viettoria Guide',
+    hideNarrator: 'Hide virtual tour guide',
+    showNarrator: 'Show virtual tour guide',
+    narratorShort: 'Guide',
+    dismissNarrator: 'Dismiss completely',
     audioError: 'Unable to stream recording.',
     audioUpdating: 'Audio recording updating.',
     replay: 'Replay',

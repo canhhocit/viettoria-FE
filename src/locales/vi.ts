@@ -309,6 +309,10 @@ export const vi = {
   // Audio Player
   audioPlayer: {
     narrator: 'Hướng dẫn viên Viettoria',
+    hideNarrator: 'Ẩn video hướng dẫn viên',
+    showNarrator: 'Hiện video hướng dẫn viên',
+    narratorShort: 'HDV',
+    dismissNarrator: 'Tắt hẳn',
     audioError: 'Không mở được bản thu.',
     audioUpdating: 'Đang cập nhật âm thanh.',
     replay: 'Phát lại',

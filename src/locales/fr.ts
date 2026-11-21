@@ -289,6 +289,10 @@ export const fr: TranslationSchema = {
 
   audioPlayer: {
     narrator: 'Guide Viettoria',
+    hideNarrator: 'Masquer le guide virtuel',
+    showNarrator: 'Afficher le guide virtuel',
+    narratorShort: 'Guide',
+    dismissNarrator: 'Fermer définitivement',
     audioError: 'Impossible de diffuser l’enregistrement.',
     audioUpdating: 'Mise à jour du document sonore en cours.',
     replay: 'Rejouer',

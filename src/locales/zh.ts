@@ -289,6 +289,10 @@ export const zh: TranslationSchema = {
 
   audioPlayer: {
     narrator: 'Viettoria 讲解员',
+    hideNarrator: '隐藏虚拟讲解员',
+    showNarrator: '显示虚拟讲解员',
+    narratorShort: '讲解',
+    dismissNarrator: '完全关闭',
     audioError: '无法播放音频录音。',
     audioUpdating: '音频档案正在更新中。',
     replay: '重新播放',

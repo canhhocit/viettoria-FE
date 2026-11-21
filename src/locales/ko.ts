@@ -289,6 +289,10 @@ export const ko: TranslationSchema = {
 
   audioPlayer: {
     narrator: '비에토리아 해설자',
+    hideNarrator: '가상 해설자 숨기기',
+    showNarrator: '가상 해설자 표시',
+    narratorShort: '해설',
+    dismissNarrator: '완전히 닫기',
     audioError: '음원을 재생할 수 없습니다.',
     audioUpdating: '음원 아카이브가 업데이트 중입니다.',
     replay: '처음부터 재생',
