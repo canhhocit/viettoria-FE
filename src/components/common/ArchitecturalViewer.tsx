@@ -221,10 +221,20 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
   const posterUrl = preview?.poster || resolveImageUrl(product.heroImage, VIETTORIA_IMAGES.productHighlight);
   const turntableUrl = preview?.turntable;
 
+  const galleryList = useMemo(() => {
+    if (product.galleryImages && product.galleryImages.length > 0) {
+      return product.galleryImages;
+    }
+    return [product.heroImage];
+  }, [product.galleryImages, product.heroImage]);
+
+  const [activePhotoIdx, setActivePhotoIdx] = useState(0);
+  const currentPhotoSrc = resolveImageUrl(galleryList[activePhotoIdx] || product.heroImage, VIETTORIA_IMAGES.productHighlight);
+
   const thumbnailPhoto = useMemo(() => ({
     label: product.name,
-    src: resolveImageUrl(product.heroImage, VIETTORIA_IMAGES.productHighlight),
-  }), [product.heroImage, product.name]);
+    src: currentPhotoSrc,
+  }), [currentPhotoSrc, product.name]);
 
   useEffect(() => {
     if (window.customElements.get('model-viewer')) {
@@ -753,14 +763,42 @@ export const ArchitecturalViewer: React.FC<ArchitecturalViewerProps> = ({ produc
           )}
         </div>
       ) : (
-        <div className="relative aspect-[16/10] overflow-hidden bg-paper">
-          {thumbnailPhoto && (
-            <CuratorLoupe
-              imageSrc={thumbnailPhoto.src}
-              altText={`${product.name} · ${t('product.tabPhotos', 'Ảnh thực địa')}`}
-              zoomLevel={2}
-              className="h-full w-full"
-            />
+        <div className="relative aspect-[16/10] overflow-hidden bg-paper flex flex-col justify-between">
+          <div className="relative flex-1 w-full h-full overflow-hidden">
+            {thumbnailPhoto && (
+              <CuratorLoupe
+                imageSrc={thumbnailPhoto.src}
+                altText={`${product.name} · ${t('product.tabPhotos', 'Ảnh thực địa')}`}
+                zoomLevel={2}
+                className="h-full w-full"
+              />
+            )}
+          </div>
+
+          {galleryList.length > 1 && (
+            <div className="absolute bottom-3 inset-x-0 z-20 flex justify-center items-center gap-2 px-3 pointer-events-auto">
+              <div className="flex items-center gap-2 p-1.5 rounded-full bg-forest-dark/90 backdrop-blur-md border border-brass/60 shadow-xl">
+                {galleryList.map((imgUrl, idx) => (
+                  <button
+                    key={imgUrl}
+                    type="button"
+                    onClick={() => setActivePhotoIdx(idx)}
+                    className={`relative w-9 h-9 sm:w-11 sm:h-11 rounded-full overflow-hidden border-2 transition-all cursor-pointer ${
+                      activePhotoIdx === idx 
+                        ? 'border-brass scale-110 shadow-md ring-2 ring-brass/40' 
+                        : 'border-paper/40 opacity-70 hover:opacity-100 hover:border-paper'
+                    }`}
+                    title={`Ảnh ${idx + 1}`}
+                  >
+                    <img 
+                      src={resolveImageUrl(imgUrl)} 
+                      alt="" 
+                      className="w-full h-full object-cover" 
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       )}

@@ -202,34 +202,80 @@ export const publicApi = {
 
   async getProductBySlugOrCode(slugOrCode: string, langOverride?: LanguageCode): Promise<Product | null> {
     const lang = langOverride || getActiveLanguage();
+    const lower = slugOrCode.toLowerCase();
+    const normalizedInput = (lower === 'gac-lau-thang-long' || lower === 'gac-lau') ? 'lau-gac-le-so' : slugOrCode;
+    const normalizedLower = normalizedInput.toLowerCase();
+
+    const fallbackProd = FALLBACK_PRODUCTS.find(p => 
+      p.slug.toLowerCase() === normalizedLower || 
+      p.code.toLowerCase() === normalizedLower ||
+      (normalizedLower === 'lau-gac-le-so' && p.id === 'prod-6')
+    );
+
+    let productData: Product | null = null;
     try {
-      const res = await fetch(`${API_BASE}/public/products/${slugOrCode}`, {
+      const res = await fetch(`${API_BASE}/public/products/${normalizedInput}`, {
         headers: { 'Accept-Language': lang }
       });
       if (res.ok) {
         const json = await res.json();
-        return getLocalizedProduct(json.data, lang);
+        if (json.data) {
+          productData = json.data as Product;
+        }
       }
     } catch {
       // Fallback
     }
-    const lower = slugOrCode.toLowerCase();
-    const prod = FALLBACK_PRODUCTS.find(p => 
-      p.slug.toLowerCase() === lower || p.code.toLowerCase() === lower
-    );
-    if (!prod) return null;
 
-    const col = FALLBACK_COLLECTIONS.find(c => c.id === prod.collectionId);
-    const storyBlocks = FALLBACK_STORY_BLOCKS.filter(b => b.productId === prod.id && b.status === 'published');
-    const relatedProducts = FALLBACK_PRODUCTS.filter(p => p.collectionId === prod.collectionId && p.id !== prod.id).slice(0, 3);
+    if (!productData) {
+      if (!fallbackProd) return null;
+      productData = { ...fallbackProd };
+    } else if (fallbackProd) {
+      // Merge critical curatorial metadata if backend DB has older/partial data
+      if (!productData.restorer && fallbackProd.restorer) {
+        productData.restorer = fallbackProd.restorer;
+      }
+      if (productData.modelSpecs && !productData.modelSpecs.restorer && fallbackProd.modelSpecs?.restorer) {
+        productData.modelSpecs.restorer = fallbackProd.modelSpecs.restorer;
+      }
+      if (fallbackProd.id === 'prod-6' || normalizedLower === 'lau-gac-le-so') {
+        productData.restorer = fallbackProd.restorer;
+        if (productData.modelSpecs) {
+          productData.modelSpecs.restorer = fallbackProd.restorer;
+        }
+        productData.heroImage = fallbackProd.heroImage;
+        productData.galleryImages = fallbackProd.galleryImages;
+        productData.name = fallbackProd.name;
+        productData.subName = fallbackProd.subName;
+        productData.shortDescription = fallbackProd.shortDescription;
+        if (productData.audioGuide && fallbackProd.audioGuide) {
+          productData.audioGuide.title = fallbackProd.audioGuide.title;
+          productData.audioGuide.narrator = fallbackProd.audioGuide.narrator;
+          productData.audioGuide.transcript = fallbackProd.audioGuide.transcript;
+        }
+      }
+    }
 
-    const fullProd: Product = {
-      ...prod,
-      collection: col,
-      storyBlocks,
-      relatedProducts
-    };
-    return getLocalizedProduct(fullProd, lang);
+    // Always ensure storyBlocks are populated from fallback if backend returned none or empty
+    if (!productData.storyBlocks || productData.storyBlocks.length === 0) {
+      const targetId = productData.id || fallbackProd?.id;
+      const fallbackStoryBlocks = FALLBACK_STORY_BLOCKS.filter(b => b.productId === targetId && b.status === 'published');
+      if (fallbackStoryBlocks.length > 0) {
+        productData.storyBlocks = fallbackStoryBlocks;
+      }
+    }
+
+    // Always ensure collection & related products are populated
+    if (!productData.collection && productData.collectionId) {
+      productData.collection = FALLBACK_COLLECTIONS.find(c => c.id === productData!.collectionId);
+    }
+    if (!productData.relatedProducts || productData.relatedProducts.length === 0) {
+      productData.relatedProducts = FALLBACK_PRODUCTS.filter(
+        p => p.collectionId === productData!.collectionId && p.id !== productData!.id
+      ).slice(0, 3);
+    }
+
+    return getLocalizedProduct(productData, lang);
   },
 
   async resolveQR(code: string): Promise<{ targetUrl: string; product: Product } | null> {

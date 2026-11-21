@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { 
-  ChevronDown, 
-  ChevronUp, 
+import {
+  ChevronDown,
+  ChevronUp,
   Maximize2,
-  Pause, 
-  Play, 
-  RotateCcw, 
+  Pause,
+  Play,
+  RotateCcw,
   Video,
   VideoOff,
-  Volume2, 
+  Volume2,
   VolumeX,
-  X 
+  X
 } from 'lucide-react';
 import type { AudioGuideData } from '../../types';
 import { resolveAudioUrl } from '../../utils/mediaResolver';
@@ -558,17 +558,17 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
               </p>
             </div>
 
-            <input 
-              type="range" 
-              min={0} 
-              max={Math.max(duration, 1)} 
-              step="0.1" 
-              value={Math.min(currentTime, Math.max(duration, 1))} 
-              onChange={seek} 
-              disabled={!hasAudio || audioError || duration <= 0} 
-              style={{ background: `linear-gradient(90deg, var(--heritage-brass) ${progressPercent}%, color-mix(in srgb, var(--color-paper) 20%, transparent) ${progressPercent}%)` }} 
-              className="audio-guide-seek w-full cursor-pointer disabled:cursor-not-allowed disabled:opacity-40" 
-              aria-label="Tiến trình thuyết minh" 
+            <input
+              type="range"
+              min={0}
+              max={Math.max(duration, 1)}
+              step="0.1"
+              value={Math.min(currentTime, Math.max(duration, 1))}
+              onChange={seek}
+              disabled={!hasAudio || audioError || duration <= 0}
+              style={{ background: `linear-gradient(90deg, var(--heritage-brass) ${progressPercent}%, color-mix(in srgb, var(--color-paper) 20%, transparent) ${progressPercent}%)` }}
+              className="audio-guide-seek w-full cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="Tiến trình thuyết minh"
             />
             <div className="mt-1 flex justify-between font-mono text-[10px] text-paper/65">
               <span>{formatTime(currentTime)}</span>
@@ -589,16 +589,15 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
                 <button type="button" onClick={handleReset} disabled={!hasAudio || audioError} className="flex h-8 w-8 items-center justify-center border border-paper/15 text-paper/75 hover:border-brass hover:text-brass-light disabled:opacity-35 sm:w-auto sm:gap-1.5 sm:px-2 cursor-pointer" title={t('audioPlayer.replay')}>
                   <RotateCcw className="h-3.5 w-3.5" strokeWidth={1.5} /><span className="hidden sm:inline text-xs">{t('audioPlayer.replay')}</span>
                 </button>
-                <button 
-                  type="button" 
-                  onClick={() => handleSetGuideMode(guideMode === 'expanded' ? 'minimized' : 'expanded')} 
-                  disabled={!hasAudio || audioError} 
-                  className={`flex h-8 w-8 items-center justify-center border transition-colors cursor-pointer ${
-                    guideMode === 'expanded' 
-                      ? 'border-brass bg-brass/15 text-brass' 
+                <button
+                  type="button"
+                  onClick={() => handleSetGuideMode(guideMode === 'expanded' ? 'minimized' : 'expanded')}
+                  disabled={!hasAudio || audioError}
+                  className={`flex h-8 w-8 items-center justify-center border transition-colors cursor-pointer ${guideMode === 'expanded'
+                      ? 'border-brass bg-brass/15 text-brass'
                       : 'border-paper/15 text-paper/75 hover:border-brass hover:text-brass-light'
-                  }`} 
-                  title={guideMode === 'expanded' ? t('audioPlayer.hideNarrator', 'Ẩn video hướng dẫn viên') : t('audioPlayer.showNarrator', 'Hiện video hướng dẫn viên')} 
+                    }`}
+                  title={guideMode === 'expanded' ? t('audioPlayer.hideNarrator', 'Ẩn video hướng dẫn viên') : t('audioPlayer.showNarrator', 'Hiện video hướng dẫn viên')}
                   aria-label={guideMode === 'expanded' ? t('audioPlayer.hideNarrator', 'Ẩn video hướng dẫn viên') : t('audioPlayer.showNarrator', 'Hiện video hướng dẫn viên')}
                 >
                   {guideMode === 'expanded' ? <Video className="h-4 w-4" strokeWidth={1.5} /> : <VideoOff className="h-4 w-4" strokeWidth={1.5} />}
@@ -617,7 +616,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
 
       {/* 2. Floating Tour Guide Companion at Bottom-Right Corner (Conical Hat Guide Video, No Text) */}
       {typeof document !== 'undefined' && guideMode !== 'hidden' && createPortal(
-        <aside 
+        <aside
           className="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 z-[9999] pointer-events-auto select-none"
           aria-label={t('audioPlayer.narrator', 'Hướng dẫn viên Viettoria')}
         >
@@ -659,21 +658,20 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
           )}
 
           {/* B. Expanded Video Card (Kept in DOM so dual-video refs & playback stay uninterrupted) */}
-          <div 
-            className={`relative w-[104px] h-[184px] sm:w-[126px] sm:h-[224px] group transition-all duration-300 ease-in-out ${
-              guideMode === 'expanded' 
-                ? 'opacity-100 scale-100' 
+          <div
+            className={`relative w-[104px] h-[184px] sm:w-[126px] sm:h-[224px] group transition-all duration-300 ease-in-out ${guideMode === 'expanded'
+                ? 'opacity-100 scale-100'
                 : 'opacity-0 scale-90 pointer-events-none absolute -bottom-96'
-            }`}
+              }`}
           >
             {/* Grounded Pedestal Shadow & Subtle Golden Ambient Glow */}
-            <div 
-              className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-24 h-4 rounded-[100%] bg-black/75 blur-[4px] pointer-events-none" 
-              aria-hidden="true" 
+            <div
+              className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-24 h-4 rounded-[100%] bg-black/75 blur-[4px] pointer-events-none"
+              aria-hidden="true"
             />
-            <div 
-              className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-20 h-3 rounded-[100%] bg-brass/35 blur-[6px] pointer-events-none transition-opacity duration-500 ${isPlaying ? 'opacity-100' : 'opacity-40'}`} 
-              aria-hidden="true" 
+            <div
+              className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-20 h-3 rounded-[100%] bg-brass/35 blur-[6px] pointer-events-none transition-opacity duration-500 ${isPlaying ? 'opacity-100' : 'opacity-40'}`}
+              aria-hidden="true"
             />
 
             {/* Prominent Close/Minimize Button at Top-Right Corner */}
@@ -713,9 +711,8 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
                 muted
                 playsInline
                 preload="auto"
-                className={`absolute inset-0 h-full w-full object-cover object-center pointer-events-none transition-opacity duration-500 ease-in-out ${
-                  activeGuideLayer === 'A' ? 'opacity-100 z-10' : 'opacity-0 z-0'
-                }`}
+                className={`absolute inset-0 h-full w-full object-cover object-center pointer-events-none transition-opacity duration-500 ease-in-out ${activeGuideLayer === 'A' ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                  }`}
               />
               <video
                 ref={guideVideoBRef}
@@ -724,9 +721,8 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioGuide, heritageNa
                 muted
                 playsInline
                 preload="auto"
-                className={`absolute inset-0 h-full w-full object-cover object-center pointer-events-none transition-opacity duration-500 ease-in-out ${
-                  activeGuideLayer === 'B' ? 'opacity-100 z-10' : 'opacity-0 z-0'
-                }`}
+                className={`absolute inset-0 h-full w-full object-cover object-center pointer-events-none transition-opacity duration-500 ease-in-out ${activeGuideLayer === 'B' ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                  }`}
               />
 
               {/* Subtle hover icon overlay (Icon Only, No Text) */}
