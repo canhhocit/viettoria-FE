@@ -166,12 +166,20 @@ export const ProductsPage: React.FC = () => {
                   className="h-full bg-paper-warm border border-paper-border hover:border-brass transition-all corner-frame overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-xl rounded-[2px]"
                 >
                   <div>
-                    <div className="aspect-[16/10] overflow-hidden bg-forest relative">
+                    <div className={`aspect-[16/10] overflow-hidden relative ${
+                      product.heroImage?.includes('laugac') || product.slug?.includes('lau-gac')
+                        ? 'bg-white'
+                        : 'bg-forest'
+                    }`}>
                       <img
                         src={resolveImageUrl(product.heroImage)}
                         alt={product.name}
                         onError={(e) => handleImageFallback(e)}
-                        className="w-full h-full object-cover brightness-110 group-hover:scale-[1.025] transition-transform duration-500"
+                        className={`w-full h-full transition-transform duration-500 ${
+                          product.heroImage?.includes('laugac') || product.slug?.includes('lau-gac')
+                            ? 'object-contain p-2 group-hover:scale-105'
+                            : 'object-cover brightness-110 group-hover:scale-[1.025]'
+                        }`}
                       />
                       {product.isHeroRelease ? (
                         <div className="absolute top-2.5 right-2.5 bg-brass text-forest px-2.5 py-1 text-[10.5px] font-sans uppercase font-bold shadow-sm rounded-[1px]">

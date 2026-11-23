@@ -95,12 +95,20 @@ export const CollectionDetailPage: React.FC = () => {
                 className="bg-paper-card border border-brass/25 hover:border-brass transition-all corner-frame overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-md duration-300"
               >
                 <div>
-                  <div className="aspect-[16/10] overflow-hidden bg-forest relative">
+                  <div className={`aspect-[16/10] overflow-hidden relative ${
+                    product.heroImage?.includes('laugac') || product.slug?.includes('lau-gac')
+                      ? 'bg-white'
+                      : 'bg-forest'
+                  }`}>
                     <img
                       src={resolveImageUrl(product.heroImage)}
                       alt={product.name}
                       onError={(e) => handleImageFallback(e)}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className={`w-full h-full transition-transform duration-500 ${
+                        product.heroImage?.includes('laugac') || product.slug?.includes('lau-gac')
+                          ? 'object-contain p-2 group-hover:scale-105'
+                          : 'object-cover group-hover:scale-105'
+                      }`}
                     />
                     <div className="absolute top-3 left-3 bg-forest/90 border border-brass/50 px-2.5 py-1 text-[11px] font-serif uppercase tracking-wider text-brass">
                       {product.epoch}

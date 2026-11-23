@@ -350,12 +350,20 @@ export const ProductDetailPage: React.FC = () => {
                   to={`/products/${rel.slug}`}
                   className="group bg-paper-warm border border-paper-border hover:border-brass transition-all corner-frame p-5 block space-y-3"
                 >
-                  <div className="aspect-[16/10] overflow-hidden bg-forest">
+                  <div className={`aspect-[16/10] overflow-hidden ${
+                    rel.heroImage?.includes('laugac') || rel.slug?.includes('lau-gac')
+                      ? 'bg-white'
+                      : 'bg-forest'
+                  }`}>
                     <img
                       src={resolveImageUrl(rel.heroImage)}
                       alt={rel.name}
                       onError={(e) => handleImageFallback(e)}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className={`w-full h-full transition-transform duration-500 ${
+                        rel.heroImage?.includes('laugac') || rel.slug?.includes('lau-gac')
+                          ? 'object-contain p-2 group-hover:scale-105'
+                          : 'object-cover group-hover:scale-105'
+                      }`}
                     />
                   </div>
                   <div>
